@@ -5,7 +5,7 @@ import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Command, InvalidArgumentError } from 'commander'
-import { confirm, intro, log, outro, spinner } from '@clack/prompts'
+import { confirm, intro, isCancel, log, outro, spinner } from '@clack/prompts'
 import { execa } from 'execa'
 import { render } from 'ejs'
 
@@ -268,6 +268,12 @@ async function createApp(projectName: string, options: Required<Options>) {
     message: 'Would you like to initialize a git repository?',
     initialValue: true,
   })
+
+  // Check if user cancelled Git initialization
+  if (isCancel(shouldInitGit)) {
+    outro('Operation cancelled')
+    process.exit(0)
+  }
 
   // Initialize git repository if requested
   if (shouldInitGit) {
