@@ -6,18 +6,30 @@ To help accelerate the migration away from `create-react-app` we created the `cr
 
 ## Quick Start
 
-The simplest way to create a new app is to run:
+To maintain compatability with `create-react-app` you can build a new application by running:
+
+| Command                                                        | Description                 |
+| -------------------------------------------------------------- | --------------------------- |
+| `npx create-tsrouter-app@latest my-app`                        | Create a new app            |
+| `npx create-tsrouter-app@latest my-app --template file-router` | Create a new file based app |
+| `npx create-tsrouter-app@latest my-app --template typescript`  | Create a new TypeScript app |
+| `npx create-tsrouter-app@latest my-app --template javascript`  | Create a new JavaScript app |
+| `npx create-tsrouter-app@latest my-app --tailwind`             | Add Tailwind CSS support    |
+
+If you don't specify a project name, the CLI will walk you through an interactive setup process:
 
 ```bash
-npx create-tsrouter-app@latest my-app
+npx create-tsrouter-app@latest
 ```
 
 This will start an interactive CLI that guides you through the setup process, allowing you to choose:
 
+- Project Name
 - Router Type (File-based or Code-based routing)
 - TypeScript support
 - Tailwind CSS integration
 - Package manager
+- Git initialization
 
 ## Command Line Options
 
@@ -32,6 +44,7 @@ Available options:
 - `--template <type>`: Choose between `file-router`, `typescript`, or `javascript`
 - `--tailwind`: Enable Tailwind CSS
 - `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, or `bun`)
+- `--no-git`: Do not initialize a git repository
 
 When using flags, the CLI will display which options were provided and only prompt for the remaining choices.
 
