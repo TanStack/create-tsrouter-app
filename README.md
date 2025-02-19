@@ -36,6 +36,8 @@ If you want Tailwind then just add `--tailwind` and that will automatically conf
 
 You can also specify your preferred package manager with `--package-manager` such as `npm`, `bun`, `yarn`, or `pnpm`.
 
+During project creation, you'll be prompted to initialize a git repository. You can use the space bar to toggle this option, and press enter to confirm your choice.
+
 Extensive documentation on using the TanStack Router, migrating to a File Base Routing approach, as well as integrating [@tanstack/react-query](https://tanstack.com/query/latest) and [@tanstack/store](https://tanstack.com/store/latest) be found in the generated `README.md` for your project.
 
 ## File Based Routing

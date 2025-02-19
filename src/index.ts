@@ -5,7 +5,7 @@ import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Command, InvalidArgumentError } from 'commander'
-import { intro, outro, spinner, log } from '@clack/prompts'
+import { confirm, intro, log, outro, spinner } from '@clack/prompts'
 import { execa } from 'execa'
 import { render } from 'ejs'
 
@@ -262,6 +262,21 @@ async function createApp(projectName: string, options: Required<Options>) {
   s.start(`Installing dependencies via ${options.packageManager}...`)
   await execa(options.packageManager, ['install'], { cwd: targetDir })
   s.stop(`Installed dependencies`)
+
+  // Ask user if they want to initialize git repository
+  const shouldInitGit = await confirm({
+    message: 'Would you like to initialize a git repository?',
+    initialValue: true,
+  })
+
+  // Initialize git repository if requested
+  if (shouldInitGit) {
+    s.start('Initializing git repository...')
+    await execa('git', ['init'], { cwd: targetDir })
+    await execa('git', ['add', '.'], { cwd: targetDir })
+    await execa('git', ['commit', '-m', 'Initial commit'], { cwd: targetDir })
+    s.stop('Initialized git repository')
+  }
 
   outro(`Created your new TanStack app in ${targetDir}.
 
