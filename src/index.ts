@@ -286,6 +286,17 @@ async function promptForOptions(
 ): Promise<Required<Options>> {
   intro(`Creating a new TanStack app in ${projectName}...`)
 
+  // Show info about provided flags
+  if (cliOptions.template) {
+    log.info(`Template: ${cliOptions.template}`)
+  }
+  if (cliOptions.packageManager) {
+    log.info(`Package Manager: ${cliOptions.packageManager}`)
+  }
+  if (cliOptions.tailwind !== undefined) {
+    log.info(`Tailwind CSS: ${cliOptions.tailwind ? 'enabled' : 'disabled'}`)
+  }
+
   // If all CLI options are provided, use them directly
   if (cliOptions.template && cliOptions.packageManager !== undefined && cliOptions.tailwind !== undefined) {
     const typescript = cliOptions.template === 'typescript' || cliOptions.template === 'file-router'
