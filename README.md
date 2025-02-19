@@ -4,43 +4,80 @@ This CLI applications builds Tanstack Router applications that are the functiona
 
 To help accelerate the migration away from `create-react-app` we created the `create-tsrouter-app` CLI which is a plug-n-play replacement for CRA.
 
-Instead of:
+## Quick Start
 
-```bash
-npx create-react-app my-app
-```
-
-You can now run:
+The simplest way to create a new app is to run:
 
 ```bash
 npx create-tsrouter-app@latest my-app
 ```
 
-Instead of using:
+This will start an interactive CLI that guides you through the setup process, allowing you to choose:
+
+- Router Type (File-based or Code-based routing)
+- TypeScript support
+- Tailwind CSS integration
+- Package manager
+
+## Command Line Options
+
+You can also use command line flags to specify your preferences directly:
 
 ```bash
-npx create-react-app my-app --template typescript
+npx create-tsrouter-app@latest my-app --template file-router --tailwind --package-manager pnpm
 ```
 
-To create a SPA application using TypeScript. You can now run:
+Available options:
 
-```bash
-npx create-tsrouter-app@latest my-app --template typescript
-```
+- `--template <type>`: Choose between `file-router`, `typescript`, or `javascript`
+- `--tailwind`: Enable Tailwind CSS
+- `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, or `bun`)
+
+When using flags, the CLI will display which options were provided and only prompt for the remaining choices.
+
+## Features
 
 What you'll get is a Vite application that uses TanStack Router. All the files will still be in the same place as in CRA, but you'll get a fully functional Router setup under in `app/main.tsx`.
 
 `create-tsrouter-app` is everything you loved about CRA but implemented with modern tools and best practices, on top of the popular TanStack set of libraries. Which includes [@tanstack/react-query](https://tanstack.com/query/latest) and [@tanstack/react-router](https://tanstack.com/router/latest).
 
-If you want Tailwind then just add `--tailwind` and that will automatically configure [Tailwind V4](https://tailwindcss.com/).
+## Routing Options
 
-You can also specify your preferred package manager with `--package-manager` such as `npm`, `bun`, `yarn`, or `pnpm`.
+### File Based Routing (Recommended)
 
-Extensive documentation on using the TanStack Router, migrating to a File Base Routing approach, as well as integrating [@tanstack/react-query](https://tanstack.com/query/latest) and [@tanstack/store](https://tanstack.com/store/latest) be found in the generated `README.md` for your project.
+File Based Routing is the default option when using the interactive CLI. The location of the home page will be `app/routes/index.tsx`. This approach provides a more intuitive and maintainable way to structure your routes.
 
-## File Based Routing
+To explicitly choose File Based Routing, use:
 
-By default `create-tsrouter-app` will create a Code Based Routing application. If you want to use File Based Routing then you can specify `--template file-router`. The location of the home page will be `app/routes/index.tsx`.
+```bash
+npx create-tsrouter-app@latest my-app --template file-router
+```
+
+### Code Based Routing
+
+If you prefer traditional code-based routing, you can select it in the interactive CLI or specify it by using either the `typescript` or `javascript` template:
+
+```bash
+npx create-tsrouter-app@latest my-app --template typescript
+```
+
+## Additional Configuration
+
+### TypeScript
+
+- File Based Routing always uses TypeScript
+- For Code Based Routing, you can choose between TypeScript and JavaScript
+- Enable TypeScript explicitly with `--template typescript`
+
+### Tailwind CSS
+
+Enable Tailwind CSS either through the interactive CLI or by adding the `--tailwind` flag. This will automatically configure [Tailwind V4](https://tailwindcss.com/).
+
+### Package Manager
+
+Choose your preferred package manager (`npm`, `bun`, `yarn`, or `pnpm`) either through the interactive CLI or using the `--package-manager` flag.
+
+Extensive documentation on using the TanStack Router, migrating to a File Base Routing approach, as well as integrating [@tanstack/react-query](https://tanstack.com/query/latest) and [@tanstack/store](https://tanstack.com/store/latest) can be found in the generated `README.md` for your project.
 
 # Contributing
 
