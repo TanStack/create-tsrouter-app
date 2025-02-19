@@ -5,7 +5,7 @@ import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Command, InvalidArgumentError } from 'commander'
-import { intro, outro, spinner, log } from '@clack/prompts'
+import { confirm, intro, log, outro, select, spinner } from '@clack/prompts'
 import { execa } from 'execa'
 import { render } from 'ejs'
 
@@ -26,6 +26,12 @@ interface Options {
   tailwind: boolean
   packageManager: PackageManager
   mode: typeof CODE_ROUTER | typeof FILE_ROUTER
+}
+
+interface CliOptions {
+  template?: 'typescript' | 'javascript' | 'file-router'
+  tailwind?: boolean
+  packageManager?: PackageManager
 }
 
 function sortObject(obj: Record<string, string>): Record<string, string> {
@@ -274,6 +280,75 @@ Please read README.md for more information on testing, styling, adding routes, r
 `)
 }
 
+async function promptForOptions(
+  projectName: string,
+  cliOptions: CliOptions,
+): Promise<Required<Options>> {
+  intro(`Creating a new TanStack app in ${projectName}...`)
+
+  // If all CLI options are provided, use them directly
+  if (cliOptions.template && cliOptions.packageManager !== undefined && cliOptions.tailwind !== undefined) {
+    const typescript = cliOptions.template === 'typescript' || cliOptions.template === 'file-router'
+    return {
+      typescript,
+      tailwind: cliOptions.tailwind,
+      packageManager: cliOptions.packageManager,
+      mode: cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
+    }
+  }
+
+  // Router type selection (if not provided via CLI)
+  const routerType = cliOptions.template === 'file-router'
+    ? FILE_ROUTER
+    : cliOptions.template === 'typescript' || cliOptions.template === 'javascript'
+    ? CODE_ROUTER
+    : await select({
+        message: 'Select the router type:',
+        options: [
+          { value: FILE_ROUTER, label: 'File Router - File-based routing structure' },
+          { value: CODE_ROUTER, label: 'Code Router - Traditional code-based routing' },
+        ],
+        initialValue: FILE_ROUTER,
+      }) as typeof CODE_ROUTER | typeof FILE_ROUTER
+
+  // TypeScript selection (if not provided via CLI)
+  const typescript = routerType === FILE_ROUTER 
+    ? true 
+    : cliOptions.template === 'typescript'
+    ? true
+    : cliOptions.template === 'javascript'
+    ? false
+    : await confirm({
+        message: 'Would you like to use TypeScript?',
+        initialValue: false,
+      }) as boolean
+
+  // Tailwind selection (if not provided via CLI)
+  const tailwind = cliOptions.tailwind ?? await confirm({
+    message: 'Would you like to use Tailwind CSS?',
+    initialValue: false,
+  }) as boolean
+
+  // Package manager selection (if not provided via CLI)
+  const detectedPackageManager = getPackageManager()
+  const packageManager = cliOptions.packageManager ?? await select({
+    message: 'Select package manager:',
+    options: SUPPORTED_PACKAGE_MANAGERS.map(pm => ({
+      value: pm,
+      label: pm,
+      hint: pm === detectedPackageManager ? '(detected)' : undefined
+    })),
+    initialValue: detectedPackageManager
+  }) as PackageManager
+
+  return {
+    typescript,
+    tailwind,
+    packageManager,
+    mode: routerType
+  }
+}
+
 program
   .name('create-tsrouter-app')
   .description('CLI to create a new TanStack application')
@@ -293,7 +368,6 @@ program
       }
       return value
     },
-    'javascript',
   )
   .option<PackageManager>(
     `--package-manager <${SUPPORTED_PACKAGE_MANAGERS.join('|')}>`,
@@ -308,28 +382,16 @@ program
       }
       return value as PackageManager
     },
-    getPackageManager(),
   )
-  .option('--tailwind', 'add Tailwind CSS', false)
-  .action(
-    (
-      projectName: string,
-      options: {
-        template: 'typescript' | 'javascript' | 'file-router'
-        tailwind: boolean
-        packageManager: PackageManager
-      },
-    ) => {
-      const typescript =
-        options.template === 'typescript' || options.template === 'file-router'
-
-      createApp(projectName, {
-        typescript,
-        tailwind: options.tailwind,
-        packageManager: options.packageManager,
-        mode: options.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
-      })
-    },
-  )
+  .option('--tailwind', 'add Tailwind CSS')
+  .action(async (projectName: string, options: CliOptions) => {
+    try {
+      const finalOptions = await promptForOptions(projectName, options)
+      await createApp(projectName, finalOptions)
+    } catch (error) {
+      log.error(error instanceof Error ? error.message : 'An unknown error occurred')
+      process.exit(1)
+    }
+  })
 
 program.parse()
