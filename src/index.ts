@@ -348,82 +348,105 @@ async function promptForOptions(
   }
 
   // Router type selection
-  const routerType = await select({
-    message: 'Select the router type:',
-    options: [
-      {
-        value: FILE_ROUTER,
-        label: 'File Router - File-based routing structure',
-      },
-      {
-        value: CODE_ROUTER,
-        label: 'Code Router - Traditional code-based routing',
-      },
-    ],
-    initialValue: FILE_ROUTER,
-  })
-  if (isCancel(routerType)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
-  }
-  options.mode = routerType as typeof CODE_ROUTER | typeof FILE_ROUTER
-
-  // TypeScript selection (if using Code Router)
-  if (options.mode === CODE_ROUTER) {
-    const typescriptEnable = await confirm({
-      message: 'Would you like to use TypeScript?',
-      initialValue: true,
+  if (!cliOptions.template) {
+    const routerType = await select({
+      message: 'Select the router type:',
+      options: [
+        {
+          value: FILE_ROUTER,
+          label: 'File Router - File-based routing structure',
+        },
+        {
+          value: CODE_ROUTER,
+          label: 'Code Router - Traditional code-based routing',
+        },
+      ],
+      initialValue: FILE_ROUTER,
     })
-    if (isCancel(typescriptEnable)) {
+    if (isCancel(routerType)) {
       cancel('Operation cancelled.')
       process.exit(0)
     }
-    options.typescript = typescriptEnable
+    options.mode = routerType as typeof CODE_ROUTER | typeof FILE_ROUTER
   } else {
-    options.typescript = true
+    options.mode = cliOptions.template as
+      | typeof CODE_ROUTER
+      | typeof FILE_ROUTER
+    if (options.mode === FILE_ROUTER) {
+      options.typescript = true
+    }
+  }
+
+  // TypeScript selection (if using Code Router)
+  if (!options.typescript) {
+    if (options.mode === CODE_ROUTER) {
+      const typescriptEnable = await confirm({
+        message: 'Would you like to use TypeScript?',
+        initialValue: true,
+      })
+      if (isCancel(typescriptEnable)) {
+        cancel('Operation cancelled.')
+        process.exit(0)
+      }
+      options.typescript = typescriptEnable
+    } else {
+      options.typescript = true
+    }
   }
 
   // Tailwind selection
-  const tailwind = await confirm({
-    message: 'Would you like to use Tailwind CSS?',
-    initialValue: true,
-  })
-  if (isCancel(tailwind)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
-  }
-  options.tailwind = tailwind
-
-  // Package manager selection
-  const detectedPackageManager = getPackageManager()
-  if (!detectedPackageManager) {
-    const pm = await select({
-      message: 'Select package manager:',
-      options: SUPPORTED_PACKAGE_MANAGERS.map((pm) => ({
-        value: pm,
-        label: pm,
-      })),
-      initialValue: DEFAULT_PACKAGE_MANAGER,
+  if (cliOptions.tailwind === undefined) {
+    const tailwind = await confirm({
+      message: 'Would you like to use Tailwind CSS?',
+      initialValue: true,
     })
-    if (isCancel(pm)) {
+    if (isCancel(tailwind)) {
       cancel('Operation cancelled.')
       process.exit(0)
     }
-    options.packageManager = pm
+    options.tailwind = tailwind
   } else {
-    options.packageManager = detectedPackageManager
+    options.tailwind = cliOptions.tailwind
+  }
+
+  // Package manager selection
+  if (cliOptions.packageManager === undefined) {
+    const detectedPackageManager = getPackageManager()
+    if (!detectedPackageManager) {
+      const pm = await select({
+        message: 'Select package manager:',
+        options: SUPPORTED_PACKAGE_MANAGERS.map((pm) => ({
+          value: pm,
+          label: pm,
+        })),
+        initialValue: DEFAULT_PACKAGE_MANAGER,
+      })
+      if (isCancel(pm)) {
+        cancel('Operation cancelled.')
+        process.exit(0)
+      }
+      options.packageManager = pm
+    } else {
+      options.packageManager = detectedPackageManager
+    }
+  } else {
+    options.packageManager = cliOptions.packageManager
   }
 
   // Git selection
-  const git = await confirm({
-    message: 'Would you like to initialize a new git repository?',
-    initialValue: true,
-  })
-  if (isCancel(git)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
+  if (cliOptions.git === undefined) {
+    const git = await confirm({
+      message: 'Would you like to initialize a new git repository?',
+      initialValue: true,
+    })
+    if (isCancel(git)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+    options.git = git
+  } else {
+    options.git = !!cliOptions.git
   }
-  options.git = git
 
   return options
 }
