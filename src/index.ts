@@ -36,6 +36,7 @@ interface Options {
   projectName: string
   typescript: boolean
   tailwind: boolean
+  query: boolean
   packageManager: PackageManager
   mode: typeof CODE_ROUTER | typeof FILE_ROUTER
   git: boolean
@@ -44,6 +45,7 @@ interface Options {
 interface CliOptions {
   template?: 'typescript' | 'javascript' | 'file-router'
   tailwind?: boolean
+  query?: boolean
   packageManager?: PackageManager
   projectName?: string
   git?: boolean
@@ -85,6 +87,7 @@ function createTemplateFile(
       projectName: projectName,
       typescript: options.typescript,
       tailwind: options.tailwind,
+      query: options.query,
       js: options.typescript ? 'ts' : 'js',
       jsx: options.typescript ? 'tsx' : 'jsx',
       fileRouter: options.mode === FILE_ROUTER,
@@ -133,6 +136,22 @@ async function createPackageJSON(
       },
     }
   }
+  if (options.query) {
+    const qrPackageJSON = JSON.parse(
+      await readFile(resolve(templateDir, 'package.qr.json'), 'utf8'),
+    )
+    packageJSON = {
+      ...packageJSON,
+      dependencies: {
+        ...packageJSON.dependencies,
+        ...qrPackageJSON.dependencies,
+      },
+      devDependencies: {
+        ...packageJSON.devDependencies,
+        ...qrPackageJSON.devDependencies,
+      },
+    }
+  }
   if (options.mode === FILE_ROUTER) {
     const frPackageJSON = JSON.parse(
       await readFile(resolve(routerDir, 'package.fr.json'), 'utf8'),
@@ -145,6 +164,7 @@ async function createPackageJSON(
       },
     }
   }
+  
   packageJSON.dependencies = sortObject(
     packageJSON.dependencies as Record<string, string>,
   )
@@ -217,7 +237,11 @@ async function createApp(options: Required<Options>) {
 
   // Setup the app component. There are four variations, typescript/javascript and tailwind/non-tailwind.
   if (options.mode === FILE_ROUTER) {
-    copyFiles(templateDirRouter, ['./src/routes/__root.tsx'])
+    await templateFile(
+      templateDirRouter,
+      './src/routes/__root.tsx.ejs',
+      './src/routes/__root.tsx',
+    )
     await templateFile(
       templateDirBase,
       './src/App.tsx.ejs',
@@ -317,6 +341,7 @@ function normalizeOptions(
     return {
       projectName: cliOptions.projectName,
       typescript,
+      query: !!cliOptions.query,
       tailwind: !!cliOptions.tailwind,
       packageManager: cliOptions.packageManager || DEFAULT_PACKAGE_MANAGER,
       mode: cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
@@ -409,6 +434,20 @@ async function promptForOptions(
     options.tailwind = cliOptions.tailwind
   }
 
+  if (cliOptions.query === undefined) {
+    const query = await confirm({
+      message: 'Would you like to use Tanstack Query?',
+      initialValue: true,
+    })
+    if (isCancel(query)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+    options.query = query
+  } else {
+    options.query = cliOptions.query
+  }
+
   // Package manager selection
   if (cliOptions.packageManager === undefined) {
     const detectedPackageManager = getPackageManager()
@@ -466,7 +505,7 @@ program
         value !== 'file-router'
       ) {
         throw new InvalidArgumentError(
-          `Invalid template: ${value}. Only the following are allowed: typescript, javascript, file-router`,
+          `Invalid template: ${value}. Only the following are allowed: typescript, javascript, file-router, query`,
         )
       }
       return value
@@ -487,6 +526,7 @@ program
     },
   )
   .option('--tailwind', 'add Tailwind CSS')
+  .option('--query', 'add Tanstack Query')
   .action(async (projectName: string, options: CliOptions) => {
     try {
       const cliOptions = {

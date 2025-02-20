@@ -336,10 +336,52 @@ You can find out everything you need to know on how to use file based routing in
 <% } %>
 ## Data Fetching
 
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
+<% if (query) { %>
+You can use React Query to fetch data in route loader, and then use the data in the component.
+%> 
 
-For example:
+```tsx
+const peopleQueryOptions = {
+  queryFn: async () => {
+    const response = await fetch("https://swapi.dev/api/people");<% if (typescript) { %>
+    return response.json() as Promise<{
+      results: {
+        name: string;
+      }[];
+    }>;
+<% } else { %>
+    return response.json();
+<% } %>  },
+  queryKey: ["people"],
+};
+<% if (fileRouter) { %>
+const peopleRoute = createFileRoute({
+  loader: ({ context: { queryClient } }) =>
+    queryClient.ensureQueryData(peopleQueryOptions),
+  component: People,
+});
+<% } else { %>
+const peopleRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/people",
+  loader: ({ context: { queryClient } }) =>
+    queryClient.ensureQueryData(peopleQueryOptions),
+  component: People,
+});
+<% } %>
+function People() {
+  const { data } = useSuspenseQuery(peopleQueryOptions);
+  return (
+    <ul>
+      {data.results.map((person) => (
+        <li key={person.name}>{person.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
 
+<% } else { %> 
 ```tsx
 const peopleRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -449,7 +491,7 @@ function App() {
 
 export default App;
 ```
-
+<% } %> 
 You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
 
 ## State Management

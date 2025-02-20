@@ -3,22 +3,34 @@ import ReactDOM from "react-dom/client";
 import {
   Outlet,
   RouterProvider,
-  createRootRoute,
+  <% if (query) { %>createRootRouteWithContext,
+  <% } else { %>createRootRoute,<% } %> 
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+<% if (query) { %>import { QueryClient, QueryClientProvider } from "@tanstack/react-query";<% } %> 
+<% if (query) { %>import { ReactQueryDevtools } from "@tanstack/react-query-devtools" <% } %>
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.<%= js %>";
 
 import App from "./App.<%= jsx %>";
 
+<% if (query && typescript) { %>
+const rootRoute = createRootRouteWithContext<{
+  queryClient: QueryClient
+}>()({
+<% } else if (query) { %>
+const rootRoute = createRootRouteWithContext()({
+<% } else { %>  
 const rootRoute = createRootRoute({
+<% } %> 
   component: () => (
     <>
       <Outlet />
       <TanStackRouterDevtools />
+      <% if (query) { %> <ReactQueryDevtools /> <% } %>
     </>
   ),
 });
@@ -30,12 +42,22 @@ const indexRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([indexRoute]);
+<% if (query) { %>const queryClient = new QueryClient();<% } %>
 
 const router = createRouter({
   routeTree,
+  <% if (query) { %> 
+  context: {
+    queryClient,
+  },
+  // Since we're using React Query, we don't want loader calls to ever be stale
+  // This will ensure that the loader is always called when the route is preloaded or visited
+  defaultPreloadStaleTime: 0,
+  <% } %>
   defaultPreload: "intent",
   scrollRestoration: true,
 });
+
 <% if (typescript) { %>
 declare module "@tanstack/react-router" {
   interface Register {
@@ -49,9 +71,17 @@ const rootElement = document.getElementById("app");
 <% } %>if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
+    <% if (query) { %> 
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>,
+    </StrictMode>
+    <% } else { %>
     <StrictMode>
       <RouterProvider router={router} />
     </StrictMode>
+    <% } %>
   );
 }
 

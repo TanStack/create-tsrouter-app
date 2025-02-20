@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc && node dist/index.js",
-    "test": "npm run test:lint",
+    "test": "npm run test:lint && node scripts/test.js",
     "cipublish": "node scripts/publish.js",
     "test:lint": "eslint ./src"
   },

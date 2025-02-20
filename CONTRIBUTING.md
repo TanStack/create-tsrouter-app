@@ -22,13 +22,16 @@
 
 # Testing combinations
 
-These must all product running applications that can be built (`pnpm build`) and tested (`pnpm test`).
+Run `pnpm test` which will lint the repo, then run the tests on all the below combinations by building them (`pnpm build`) and testing them (`pnpm test`).
 
 | Command                                                  | Description                                                        |
 | -------------------------------------------------------- | ------------------------------------------------------------------ |
 | `pnpm start app-js`                                      | Creates a JavaScript app                                           |
 | `pnpm start app-ts --template typescript`                | Creates a TypeScript app                                           |
 | `pnpm start app-js-tw --tailwind`                        | Creates a JavaScript app with Tailwind CSS                         |
+| `pnpm start app-qr --query`                              | Creates a JavaScript app with File Based Routing with React Query  |
 | `pnpm start app-ts-tw --template typescript --tailwind`  | Creates a TypeScript app with Tailwind CSS                         |
+| `pnpm start app-ts-qr --template typescript --query`     | Creates a TypeScript app with File Based Routing with React Query  |
 | `pnpm start app-fr --template file-router`               | Creates a TypeScript app with File Based Routing                   |
 | `pnpm start app-fr-tw --template file-router --tailwind` | Creates a TypeScript app with File Based Routing with Tailwind CSS |
+| `pnpm start app-fr-qr --template file-router --query`    | Creates a TypeScript app with File Based Routing with React Query  |

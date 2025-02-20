@@ -6,5 +6,8 @@ app-js-tw
 app-ts-tw
 app-fr
 app-fr-tw
+app-js-qr
+app-ts-qr
+app-fr-qr
 my-app
 .DS_Store

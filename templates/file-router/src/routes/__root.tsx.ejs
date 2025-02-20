@@ -1,0 +1,19 @@
+<% if (query) { %>import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+<% } else { %>import { createRootRoute, Outlet } from '@tanstack/react-router'
+<% } %>import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+<% if (query) { %>import { ReactQueryDevtools } from '@tanstack/react-query-devtools' <% } %>
+<% if (query) { %>import type { QueryClient } from '@tanstack/react-query'<% } %> 
+
+<% if (query) { %> 
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient
+}>()({<% } else { %>export const Route = createRootRoute({ <% } %> 
+  component: () => (
+    <>
+      <Outlet />
+      <TanStackRouterDevtools />
+      <% if (query) { %> <ReactQueryDevtools /> <% } %>
+    </>
+  ),
+})
+

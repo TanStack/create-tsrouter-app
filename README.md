@@ -15,6 +15,7 @@ To maintain compatability with `create-react-app` you can build a new applicatio
 | `npx create-tsrouter-app@latest my-app --template typescript`  | Create a new TypeScript app |
 | `npx create-tsrouter-app@latest my-app --template javascript`  | Create a new JavaScript app |
 | `npx create-tsrouter-app@latest my-app --tailwind`             | Add Tailwind CSS support    |
+| `npx create-tsrouter-app@latest my-app --query`                | Add React Query support     |
 
 If you don't specify a project name, the CLI will walk you through an interactive setup process:
 
@@ -43,6 +44,7 @@ Available options:
 
 - `--template <type>`: Choose between `file-router`, `typescript`, or `javascript`
 - `--tailwind`: Enable Tailwind CSS
+- `--query`: Enable React Query Query
 - `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, or `bun`)
 - `--no-git`: Do not initialize a git repository
 
