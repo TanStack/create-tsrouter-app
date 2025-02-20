@@ -88,7 +88,7 @@ Enable Tailwind CSS either through the interactive CLI or by adding the `--tailw
 
 ### Package Manager
 
-Choose your preferred package manager (`npm`, `bun`, `yarn`, or `pnpm`) either through the interactive CLI or using the `--package-manager` flag.
+Choose your preferred package manager (`npm`, `bun`, `yarn`,`pnpm`, or `deno`) either through the interactive CLI or using the `--package-manager` flag.
 
 Extensive documentation on using the TanStack Router, migrating to a File Base Routing approach, as well as integrating [@tanstack/react-query](https://tanstack.com/query/latest) and [@tanstack/store](https://tanstack.com/store/latest) can be found in the generated `README.md` for your project.
 
