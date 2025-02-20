@@ -3,6 +3,7 @@ export const SUPPORTED_PACKAGE_MANAGERS = [
   'yarn',
   'pnpm',
   'bun',
+  'deno'
 ] as const
 export type PackageManager = (typeof SUPPORTED_PACKAGE_MANAGERS)[number]
 export const DEFAULT_PACKAGE_MANAGER: PackageManager = 'npm'
