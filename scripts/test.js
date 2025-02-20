@@ -1,5 +1,5 @@
-import { spawnSync } from 'node:child_process';
-import { rm } from 'node:fs';
+import { spawn } from 'node:child_process';
+import fs from 'node:fs/promises'; // Use promises for async operations
 import { join } from 'node:path';
 
 // List of commands to test with `--package-manager pnpm`
@@ -15,71 +15,77 @@ const commands = [
   'pnpm start app-fr-qr --template file-router --query --package-manager pnpm'
 ];
 
-// Function to run shell commands
+// Stores the result of each test
+const results = [];
+
+// Function to run shell commands asynchronously, suppressing output
 const runCommand = (command, cwd = process.cwd()) => {
-  console.log(`Running command: ${command} in directory: ${cwd}`);
+  return new Promise((resolve, reject) => {
+    const [cmd, ...args] = command.split(' ');
 
-  // Split the command into command and arguments
-  const [cmd, ...args] = command.split(' ');
+    const child = spawn(cmd, args, { stdio: 'ignore', cwd }); // Suppress output
 
-  const result = spawnSync(cmd, args, { stdio: 'inherit', cwd });
+    child.on('error', (err) => {
+      reject(`Error executing command: ${err.message}`);
+    });
 
-  if (result.error) {
-    console.error(`Failed to execute command: ${result.error.message}`);
-    throw result.error;
-  }
-
-  return result;
+    child.on('exit', (code) => {
+      if (code !== 0) {
+        reject(`Command failed with exit code ${code}`);
+      } else {
+        resolve();
+      }
+    });
+  });
 };
 
-// Function to remove the generated directory
-const removeGeneratedDir = (dir) => {
+// Function to remove the generated directory asynchronously
+const removeGeneratedDir = async (dir) => {
   try {
-    console.log(`Removing generated directory: ${dir}`);
-    rm(dir, { recursive: true });
-    console.log(`Successfully removed: ${dir}`);
+    await fs.rm(dir, { recursive: true, force: true }); // Ignore errors if the dir doesn't exist
   } catch (err) {
     console.error(`Failed to remove directory: ${err.message}`);
   }
 };
 
-// Function to run build and tests
-const buildAndTestApp = (command) => {
-  // Assuming the generated directory is the name of the app
-  const appName = command.split(' ')[2];  // Extract app name from the command
+// Function to run build and tests asynchronously
+const buildAndTestApp = async (command) => {
+  const appName = command.split(' ')[2]; // Extract app name from the command
   const appDir = join(process.cwd(), appName); // Path to the generated app directory
 
   try {
-    // Run the start command
-    runCommand(command);
-
-    // Build the app inside the generated directory
-    console.log('Building app...');
-    runCommand('pnpm build', appDir);
-
-    // Test the app inside the generated directory
-    console.log('Running tests...');
-    if (appDir.includes("fr")){
-      console.log('Test is not implemented for file based routing');
+    await runCommand(command);
+    await runCommand('pnpm build', appDir);
+    
+    if (appDir.includes("fr")) {
+      results.push({ appName, status: 'Skipped (file-based routing)' });
     } else {
-      runCommand('pnpm test', appDir);
-      console.log(`Success: ${command}`);
+      await runCommand('pnpm test', appDir);
+      results.push({ appName, status: 'Success' });
     }
-  } catch {
-    console.log(`Failed: ${command}`);
+  } catch (error) {
+    results.push({ appName, status: `Failed: ${error}` });
   } finally {
-    // Remove the generated directory after each test
-    removeGeneratedDir(appDir);
-    console.log('----------------------------------------');
+    await removeGeneratedDir(appDir);
   }
 };
 
-// Function to run all tests
+// Function to run all tests concurrently
 const runTests = async () => {
-  for (const command of commands) {
-    buildAndTestApp(command);
-  }
+  const testPromises = commands.map(command => {
+    console.log(`Running test for command: ${command}`);
+    return buildAndTestApp(command)
+  }); // Map each command to an async function
 
+  await Promise.all(testPromises); // Run all tests concurrently
+
+  // Print the final report
+  console.log('Test Report:');
+  results.forEach(result => {
+    console.log(`${result.appName}: ${result.status}`);
+  });
+
+  console.log('----------------------------------------');
   console.log('All combinations tested.');
 };
 
