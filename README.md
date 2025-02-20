@@ -43,7 +43,7 @@ Available options:
 
 - `--template <type>`: Choose between `file-router`, `typescript`, or `javascript`
 - `--tailwind`: Enable Tailwind CSS
-- `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, or `bun`)
+- `--package-manager`: Specify your preferred package manager (`npm`, `bun`, `yarn`,`pnpm`, or `deno`)
 - `--no-git`: Do not initialize a git repository
 
 When using flags, the CLI will display which options were provided and only prompt for the remaining choices.
