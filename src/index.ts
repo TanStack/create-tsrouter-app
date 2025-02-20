@@ -299,7 +299,7 @@ async function createApp(options: Required<Options>) {
 Use the following commands to start your app:
 
 % cd ${options.projectName}
-% ${options.packageManager} start
+% ${options.packageManager === "deno" ? "deno run start" : options.packageManager} start
 
 Please read README.md for more information on testing, styling, adding routes, react-query, etc.
 `)
