@@ -335,7 +335,6 @@ Now you've got a file based routing setup in your project! Let's have some fun w
 You can find out everything you need to know on how to use file based routing in the [File Based Routing](https://tanstack.com/router/latest/docs/framework/react/guide/file-based-routing) documentation.
 <% } %>
 ## Data Fetching
-
 <% if (query) { %>
 You can use React Query to fetch data in route loader, and then use the data in the component.
 %> 
@@ -382,6 +381,8 @@ function People() {
 ```
 
 <% } else { %> 
+There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
+For example:
 ```tsx
 const peopleRoute = createRoute({
   getParentRoute: () => rootRoute,

@@ -505,7 +505,7 @@ program
         value !== 'file-router'
       ) {
         throw new InvalidArgumentError(
-          `Invalid template: ${value}. Only the following are allowed: typescript, javascript, file-router, query`,
+          `Invalid template: ${value}. Only the following are allowed: typescript, javascript, file-router`,
         )
       }
       return value
