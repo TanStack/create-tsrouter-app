@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div class="p-4 flex flex-col gap-2">
-      <p class="text-2xl">Global Count: {count}</p>
+      <p class="text-2xl">Global Count: {count()}</p>
       <button
         onClick={() => {
           store.setState((state) => ({
