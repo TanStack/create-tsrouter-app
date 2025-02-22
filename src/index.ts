@@ -318,7 +318,7 @@ function normalizeOptions(
       projectName: cliOptions.projectName,
       typescript,
       tailwind: !!cliOptions.tailwind,
-      packageManager: cliOptions.packageManager || DEFAULT_PACKAGE_MANAGER,
+      packageManager: cliOptions.packageManager || getPackageManager(),
       mode: cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
       git: !!cliOptions.git,
     }
