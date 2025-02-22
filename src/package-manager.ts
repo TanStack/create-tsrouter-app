@@ -8,7 +8,7 @@ export const SUPPORTED_PACKAGE_MANAGERS = [
 export type PackageManager = (typeof SUPPORTED_PACKAGE_MANAGERS)[number]
 export const DEFAULT_PACKAGE_MANAGER: PackageManager = 'npm'
 
-export function getPackageManager(): PackageManager | undefined {
+export function getPackageManager(): PackageManager {
   const userAgent = process.env.npm_config_user_agent
 
   if (userAgent === undefined) {
