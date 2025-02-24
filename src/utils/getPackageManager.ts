@@ -18,5 +18,5 @@ export function getPackageManager(): PackageManager | undefined {
     userAgent.startsWith(manager),
   )
 
-  return packageManager || DEFAULT_PACKAGE_MANAGER
+  return packageManager
 }
