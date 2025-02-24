@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@module-federation/vite": "^1.1.9"
+  }
+}

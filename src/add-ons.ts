@@ -34,6 +34,7 @@ export type AddOn = {
   name: string
   description: string
   link: string
+  templates: Array<string>
   main?: Array<{
     imports: Array<string>
     initialize: Array<string>
@@ -78,6 +79,7 @@ function isDirectory(path: string): boolean {
 
 export async function getAllAddOns(
   framework: Framework,
+  template: string,
 ): Promise<Array<AddOn>> {
   const addOns: Array<AddOn> = []
 
@@ -95,6 +97,11 @@ export async function getAllAddOns(
     )) {
       const filePath = resolve(addOnsBase, dir, 'info.json')
       const fileContent = await readFile(filePath, 'utf-8')
+      const info = JSON.parse(fileContent)
+
+      if (!info.templates.includes(template)) {
+        continue
+      }
 
       let packageAdditions: Record<string, string> = {}
       if (existsSync(resolve(addOnsBase, dir, 'package.json'))) {
@@ -109,9 +116,9 @@ export async function getAllAddOns(
       }
 
       addOns.push({
+        ...info,
         id: dir,
         type,
-        ...JSON.parse(fileContent),
         directory: resolve(addOnsBase, dir),
         packageAdditions,
         readme,
@@ -125,11 +132,12 @@ export async function getAllAddOns(
 // Turn the list of chosen add-on IDs into a final list of add-ons by resolving dependencies
 export async function finalizeAddOns(
   framework: Framework,
+  template: string,
   chosenAddOnIDs: Array<string>,
 ): Promise<Array<AddOn>> {
   const finalAddOnIDs = new Set(chosenAddOnIDs)
 
-  const addOns = await getAllAddOns(framework)
+  const addOns = await getAllAddOns(framework, template)
 
   for (const addOnID of finalAddOnIDs) {
     const addOn = addOns.find((a) => a.id === addOnID)

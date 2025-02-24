@@ -203,10 +203,10 @@ export async function promptForOptions(
   }
 
   // Select any add-ons
-  const allAddOns = await getAllAddOns(options.framework)
+  const allAddOns = await getAllAddOns(options.framework, options.mode)
   const addOns = allAddOns.filter((addOn) => addOn.type === 'add-on')
   let selectedAddOns: Array<string> = []
-  if (options.mode === FILE_ROUTER && cliOptions.addOns && addOns.length > 0) {
+  if (options.typescript && cliOptions.addOns && addOns.length > 0) {
     const value = await multiselect({
       message: 'What add-ons would you like for your project:',
       options: addOns.map((addOn) => ({
@@ -217,21 +217,17 @@ export async function promptForOptions(
       required: false,
     })
 
-    if (isCancel(selectedAddOns)) {
+    if (isCancel(value)) {
       cancel('Operation cancelled.')
       process.exit(0)
     }
-    selectedAddOns = value as Array<string>
+    selectedAddOns = value
   }
 
   // Select any examples
   const examples = allAddOns.filter((addOn) => addOn.type === 'example')
   let selectedExamples: Array<string> = []
-  if (
-    options.mode === FILE_ROUTER &&
-    cliOptions.addOns &&
-    examples.length > 0
-  ) {
+  if (options.typescript && cliOptions.addOns && examples.length > 0) {
     const value = await multiselect({
       message: 'Would you like any examples?',
       options: examples.map((addOn) => ({
@@ -250,10 +246,11 @@ export async function promptForOptions(
   }
 
   if (selectedAddOns.length > 0 || selectedExamples.length > 0) {
-    options.chosenAddOns = await finalizeAddOns(options.framework, [
-      ...selectedAddOns,
-      ...selectedExamples,
-    ])
+    options.chosenAddOns = await finalizeAddOns(
+      options.framework,
+      options.mode,
+      [...selectedAddOns, ...selectedExamples],
+    )
     options.tailwind = true
   } else {
     options.chosenAddOns = []
