@@ -2,6 +2,7 @@
   "name": "Form",
   "description": "TansStack Form",
   "phase": "add-on",
+  "templates": ["file-router"],
   "link": "https://tanstack.com/form/latest",
   "routes": [
     {

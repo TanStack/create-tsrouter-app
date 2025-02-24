@@ -3,6 +3,7 @@
   "description": "Add TanStack Store to your application.",
   "phase": "add-on",
   "link": "https://tanstack.com/store/latest",
+  "templates": ["file-router"],
   "routes": [
     {
       "url": "/demo/store/page1",

@@ -3,3 +3,5 @@ dist
 app-*
 my-app
 .DS_Store
+
+.vscode

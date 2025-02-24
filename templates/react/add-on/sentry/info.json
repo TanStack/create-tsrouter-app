@@ -3,6 +3,7 @@
   "phase": "setup",
   "description": "Add Sentry for error monitoring, tracing, and session replays (requires Start).",
   "link": "https://sentry.com/",
+  "templates": ["file-router"],
   "routes": [
     {
       "url": "/demo/sentry/testing",

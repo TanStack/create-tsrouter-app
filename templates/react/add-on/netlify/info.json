@@ -2,5 +2,6 @@
   "name": "Netlify",
   "description": "Netlify deployment setup",
   "link": "https://docs.netlify.com",
-  "phase": "add-on"
+  "phase": "add-on",
+  "templates": ["file-router", "code-router"]
 }

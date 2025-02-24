@@ -3,6 +3,7 @@
   "description": "Add the Convex database to your application.",
   "link": "https://convex.dev",
   "phase": "add-on",
+  "templates": ["file-router"],
   "main": {
     "imports": [
       "import { ConvexProvider } from 'convex/react'",
