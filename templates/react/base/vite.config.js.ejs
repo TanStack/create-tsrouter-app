@@ -10,7 +10,7 @@ import federationConfig from "./module-federation.config.js";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [<% if(fileRouter) { %>TanStackRouterVite(), <% } %>viteReact()<% if (tailwind) { %>, tailwindcss()<% } %><% if (addOnEnabled['module-federation']) { %>, federation(federationConfig)<% } %>],
+  plugins: [<% if(fileRouter) { %>TanStackRouterVite({ autoCodeSplitting: true }), <% } %>viteReact()<% if (tailwind) { %>, tailwindcss()<% } %><% if (addOnEnabled['module-federation']) { %>, federation(federationConfig)<% } %>],
   test: {
     globals: true,
     environment: "jsdom",
