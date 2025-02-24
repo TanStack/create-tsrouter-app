@@ -1,11 +1,11 @@
 {
   "name": "Sentry",
   "phase": "setup",
-  "description": "Add Sentry for error monitoring and crash reporting (requires Start).",
+  "description": "Add Sentry for error monitoring, tracing, and session replays (requires Start).",
   "link": "https://sentry.com/",
   "routes": [
     {
-      "url": "/demo/sentry/bad-server-func",
+      "url": "/demo/sentry/testing",
       "name": "Sentry"
     }
   ],

@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "@sentry/react": "^8.50.0"
+    "@sentry/node": "^9.1.0",
+    "@sentry/profiling-node": "^9.1.0",
+    "@sentry/react": "^9.1.0"
   }
 }
