@@ -60,7 +60,7 @@ export const genAIResponse = createServerFn({ method: 'GET' })
     // .middleware([loggingMiddleware])
     .handler(async ({ data }) => {
         const anthropic = new Anthropic({
-            apiKey: process.env.ANTHROPIC_API_KEY || '',
+            apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
         });
 
         // Filter out error messages and empty messages
