@@ -1,5 +1,7 @@
 import { createRouter as createTanstackRouter } from '@tanstack/react-router'<% if (addOnEnabled.sentry) { %>
 import * as Sentry from '@sentry/react'
+import * as SentryServer from '@sentry/node'
+import { createIsomorphicFn } from '@tanstack/start'
 <% } %>
 
 // Import the generated route tree
@@ -10,25 +12,41 @@ import './styles.css'
 // Create a new router instance
 export const createRouter = () => {
   const router = createTanstackRouter({ routeTree })
-  <% if (addOnEnabled.sentry) { %>
-  Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [Sentry.replayIntegration(), Sentry.tanstackRouterBrowserTracingIntegration(router)],
-
-    // Setting a sample rate is required for sending performance data.
-    // We recommend adjusting this value in production, or using tracesSampler
-    // for finer control.
-    tracesSampleRate: 1.0,
-    replaysSessionSampleRate: 1.0, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-    replaysOnErrorSampleRate: 1.0,
-  });
-  <% } %>
-  return router;
+  return router
 }
+
+const router = createRouter()
+
+<% if (addOnEnabled.sentry) { %>
+  createIsomorphicFn().server(() => {
+    console.log('Sentry init server')
+    SentryServer.init({
+      dsn: import.meta.env.VITE_SENTRY_DSN,
+      tracesSampleRate: 1.0,
+      profilesSampleRate: 1.0,
+    })
+  }).client(() => {
+    Sentry.init({
+      dsn: import.meta.env.VITE_SENTRY_DSN,
+      integrations: [
+        Sentry.replayIntegration({
+          maskAllText: false,
+          blockAllMedia: false,
+        }),
+        Sentry.tanstackRouterBrowserTracingIntegration(router),
+      ],
+      tracesSampleRate: 1.0,
+      replaysSessionSampleRate: 1.0,
+      replaysOnErrorSampleRate: 1.0,
+    })
+  })()
+<% } %>
+
+
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
-    router: ReturnType<typeof createRouter>
+    router: router
   }
 }
