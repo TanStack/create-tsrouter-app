@@ -1,10 +1,12 @@
 import { Command, InvalidArgumentError } from 'commander'
 import { intro, log } from '@clack/prompts'
+import chalk from 'chalk'
 
 import { createApp } from './create-app.js'
 import { normalizeOptions, promptForOptions } from './options.js'
 import { SUPPORTED_PACKAGE_MANAGERS } from './package-manager.js'
 
+import { getAllAddOns, listAddOns } from './add-ons.js'
 import { DEFAULT_FRAMEWORK, SUPPORTED_FRAMEWORKS } from './constants.js'
 import type { PackageManager } from './package-manager.js'
 import type { CliOptions, Framework } from './types.js'
@@ -63,26 +65,44 @@ export function cli() {
       },
     )
     .option('--tailwind', 'add Tailwind CSS', false)
-    .option('--add-ons', 'pick from a list of available add-ons', false)
-    .action(async (projectName: string, options: CliOptions) => {
-      try {
-        const cliOptions = {
-          projectName,
-          ...options,
-        } as CliOptions
-        let finalOptions = normalizeOptions(cliOptions)
-        if (finalOptions) {
-          intro(`Creating a new TanStack app in ${projectName}...`)
-        } else {
-          intro("Let's configure your TanStack application")
-          finalOptions = await promptForOptions(cliOptions)
+    .option<Array<string> | boolean>(
+      '--add-ons [...add-ons]',
+      'pick from a list of available add-ons (comma separated list)',
+      (value: string) => {
+        let addOns: Array<string> | boolean = !!value
+        if (typeof value === 'string') {
+          addOns = value.split(',').map((addon) => addon.trim())
         }
-        await createApp(finalOptions)
-      } catch (error) {
-        log.error(
-          error instanceof Error ? error.message : 'An unknown error occurred',
-        )
-        process.exit(1)
+        return addOns
+      },
+    )
+    .option('--list-add-ons', 'list all available add-ons', false)
+    .action(async (projectName: string, options: CliOptions) => {
+      if (options.listAddOns) {
+        await listAddOns(options)
+      } else {
+        try {
+          const cliOptions = {
+            projectName,
+            ...options,
+          } as CliOptions
+
+          let finalOptions = await normalizeOptions(cliOptions)
+          if (finalOptions) {
+            intro(`Creating a new TanStack app in ${projectName}...`)
+          } else {
+            intro("Let's configure your TanStack application")
+            finalOptions = await promptForOptions(cliOptions)
+          }
+          await createApp(finalOptions)
+        } catch (error) {
+          log.error(
+            error instanceof Error
+              ? error.message
+              : 'An unknown error occurred',
+          )
+          process.exit(1)
+        }
       }
     })
 

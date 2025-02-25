@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/solid-router'
+import { <% if (fileRouter) { %>createFileRoute<% } else { %>createRoute<% } %> } from '@tanstack/solid-router'
 
 import { createForm } from '@tanstack/solid-form'
 import type { AnyFieldApi } from '@tanstack/solid-form'
@@ -7,10 +7,13 @@ interface FieldInfoProps {
   field: AnyFieldApi
 }
 
+<% if (codeRouter) { %>
+import type { RootRoute } from '@tanstack/react-router'
+<% } else { %>
 export const Route = createFileRoute('/demo/form')({
   component: FormExample,
 })
-
+<% } %>
 function FieldInfo(props: FieldInfoProps) {
   return (
     <>
@@ -134,3 +137,12 @@ function FormExample() {
     </div>
   )
 }
+
+<% if (codeRouter) { %>
+export default (parentRoute: RootRoute) => createRoute({
+  path: '/demo/form',
+  component: FormExample,
+  getParentRoute: () => parentRoute,
+})
+<% } %>
+    

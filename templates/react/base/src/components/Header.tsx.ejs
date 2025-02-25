@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router'
-<% for(const addOn of addOns) {
-  if(addOn?.userUi?.import) { %>
-<%- addOn.userUi.import %>
-<% } } %>
-  
+<% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
+import <%= integration.name %> from "../<%= integration.path %>";
+<% } %>
+
 export default function Header() {
   return (
     <header className="p-2 flex gap-2 bg-white text-black justify-between">
@@ -17,11 +16,10 @@ export default function Header() {
 <% } } %>
       </nav>
       <div>
-<% for(const addOn of addOns) {
-  if(addOn?.userUi) { %>
-<%- addOn.userUi.jsx %>
-<% } } %>
-      </div>
+<% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
+  <<%= integration.name %> />
+<% } %>
+        </div>
     </header>
   )
 }

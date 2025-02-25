@@ -1,11 +1,7 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/solid-router'
-// import { TanStackRouterDevtools } from '@tanstack/router-devtools'<% for(const addOn of addOns) {
-  for(const imp of addOn.main?.imports || []) { %>
-<%- imp %>
-<% } } %><% for(const addOn of addOns) {
-  for(const imp of addOn.layout?.imports || []) { %>
-<%- imp %>
-<% } } %>
+// import { TanStackRouterDevtools } from '@tanstack/router-devtools'<% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
+import <%= integration.name %> from "../<%= integration.path %>";
+<% } %>
 
 <% if (addOnEnabled['solid-ui']) { %>
 import "@fontsource/inter"
@@ -25,23 +21,21 @@ export const Route = createRootRouteWithContext<{}>()({
 function RootComponent() {
   return (
     <>
-    <% for(const addOn of addOns) {
-      for(const provider of addOn.main?.providers || []) { %>
-      <%- provider.open %>
-      <% } } %>
-      
+      <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
+        <<%= integration.name %>>
+      <% } %>
+        
       <Header />
       <Outlet />
       {/* <TanStackRouterDevtools /> */}
       
-      <% for(const addOn of addOns) { %>
-        <%- addOn.layout?.jsx %>
-        <% } %>
+      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
+        <<%= integration.name %> />
+      <% } %>
 
-        <% for(const addOn of addOns.toReversed()) {
-        for(const provider of addOn.main?.providers?.toReversed() || []) { %>
-        <%- provider.close %>
-        <% } } %>        
+      <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+        </<%= integration.name %>>
+      <% } %>
     </>
   )
 }

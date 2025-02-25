@@ -24,5 +24,6 @@ export interface CliOptions {
   packageManager?: PackageManager
   projectName?: string
   git?: boolean
-  addOns?: boolean
+  addOns?: Array<string> | boolean
+  listAddOns?: boolean
 }

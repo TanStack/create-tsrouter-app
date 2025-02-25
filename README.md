@@ -43,7 +43,7 @@ Available options:
 
 - `--template <type>`: Choose between `file-router`, `typescript`, or `javascript`
 - `--tailwind`: Enable Tailwind CSS
-- `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, or `bun`)
+- `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, `bun`, or `deno`)
 - `--no-git`: Do not initialize a git repository
 
 When using flags, the CLI will display which options were provided and only prompt for the remaining choices.
@@ -88,7 +88,7 @@ Enable Tailwind CSS either through the interactive CLI or by adding the `--tailw
 
 ### Package Manager
 
-Choose your preferred package manager (`npm`, `bun`, `yarn`, or `pnpm`) either through the interactive CLI or using the `--package-manager` flag.
+Choose your preferred package manager (`npm`, `bun`, `yarn`, `pnpm`, or `deno`) either through the interactive CLI or using the `--package-manager` flag.
 
 Extensive documentation on using the TanStack Router, migrating to a File Base Routing approach, as well as integrating [@tanstack/react-query](https://tanstack.com/query/latest) and [@tanstack/store](https://tanstack.com/store/latest) can be found in the generated `README.md` for your project.
 

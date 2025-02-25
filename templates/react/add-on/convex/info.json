@@ -3,21 +3,7 @@
   "description": "Add the Convex database to your application.",
   "link": "https://convex.dev",
   "phase": "add-on",
-  "main": {
-    "imports": [
-      "import { ConvexProvider } from 'convex/react'",
-      "import { ConvexQueryClient } from '@convex-dev/react-query'"
-    ],
-    "initialize": [
-      "const CONVEX_URL = (import.meta as any).env.VITE_CONVEX_URL!\nif (!CONVEX_URL) {\n  console.error(\"missing envar CONVEX_URL\");\n}\nconst convexQueryClient = new ConvexQueryClient(CONVEX_URL);"
-    ],
-    "providers": [
-      {
-        "open": "<ConvexProvider client={convexQueryClient.convexClient}>",
-        "close": "</ConvexProvider>"
-      }
-    ]
-  },
+  "templates": ["file-router"],
   "routes": [
     {
       "url": "/demo/convex",

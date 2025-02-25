@@ -2,23 +2,8 @@
   "name": "Clerk",
   "description": "Add Clerk authentication to your application.",
   "phase": "add-on",
+  "templates": ["file-router"],
   "link": "https://clerk.com",
-  "main": {
-    "imports": ["import { ClerkProvider } from '@clerk/clerk-react'"],
-    "initialize": [
-      "const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY\nif (!PUBLISHABLE_KEY) {\n  throw new Error('Add your Clerk Publishable Key to the .env.local file');\n}"
-    ],
-    "providers": [
-      {
-        "open": "<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl=\"/\">",
-        "close": "</ClerkProvider>"
-      }
-    ]
-  },
-  "userUi": {
-    "import": "import { SignedIn, SignInButton, SignedOut, UserButton } from '@clerk/clerk-react'",
-    "jsx": "<SignedIn><UserButton /></SignedIn><SignedOut><SignInButton /></SignedOut>"
-  },
   "routes": [
     {
       "url": "/demo/clerk",

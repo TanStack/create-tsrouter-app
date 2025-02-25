@@ -2,8 +2,10 @@ import { readFile } from 'node:fs/promises'
 import { existsSync, readdirSync, statSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import chalk from 'chalk'
 
-import type { Framework } from './types.js'
+import { DEFAULT_FRAMEWORK } from './constants.js'
+import type { CliOptions, Framework } from './types.js'
 
 type BooleanVariable = {
   name: string
@@ -34,26 +36,11 @@ export type AddOn = {
   name: string
   description: string
   link: string
-  main?: Array<{
-    imports: Array<string>
-    initialize: Array<string>
-    providers: Array<{
-      open: string
-      close: string
-    }>
-  }>
-  layout?: {
-    imports: Array<string>
-    jsx: string
-  }
+  templates: Array<string>
   routes: Array<{
     url: string
     name: string
   }>
-  userUi?: {
-    import: string
-    jsx: string
-  }
   directory: string
   packageAdditions: {
     dependencies?: Record<string, string>
@@ -78,6 +65,7 @@ function isDirectory(path: string): boolean {
 
 export async function getAllAddOns(
   framework: Framework,
+  template: string,
 ): Promise<Array<AddOn>> {
   const addOns: Array<AddOn> = []
 
@@ -95,6 +83,11 @@ export async function getAllAddOns(
     )) {
       const filePath = resolve(addOnsBase, dir, 'info.json')
       const fileContent = await readFile(filePath, 'utf-8')
+      const info = JSON.parse(fileContent)
+
+      if (!info.templates.includes(template)) {
+        continue
+      }
 
       let packageAdditions: Record<string, string> = {}
       if (existsSync(resolve(addOnsBase, dir, 'package.json'))) {
@@ -109,9 +102,9 @@ export async function getAllAddOns(
       }
 
       addOns.push({
+        ...info,
         id: dir,
         type,
-        ...JSON.parse(fileContent),
         directory: resolve(addOnsBase, dir),
         packageAdditions,
         readme,
@@ -125,11 +118,12 @@ export async function getAllAddOns(
 // Turn the list of chosen add-on IDs into a final list of add-ons by resolving dependencies
 export async function finalizeAddOns(
   framework: Framework,
+  template: string,
   chosenAddOnIDs: Array<string>,
 ): Promise<Array<AddOn>> {
   const finalAddOnIDs = new Set(chosenAddOnIDs)
 
-  const addOns = await getAllAddOns(framework)
+  const addOns = await getAllAddOns(framework, template)
 
   for (const addOnID of finalAddOnIDs) {
     const addOn = addOns.find((a) => a.id === addOnID)
@@ -147,4 +141,16 @@ export async function finalizeAddOns(
   }
 
   return [...finalAddOnIDs].map((id) => addOns.find((a) => a.id === id)!)
+}
+
+export async function listAddOns(options: CliOptions) {
+  const mode =
+    options.template === 'file-router' ? 'file-router' : 'code-router'
+  const addOns = await getAllAddOns(
+    options.framework || DEFAULT_FRAMEWORK,
+    mode,
+  )
+  for (const addOn of addOns) {
+    console.log(`${chalk.bold(addOn.id)}: ${addOn.description}`)
+  }
 }

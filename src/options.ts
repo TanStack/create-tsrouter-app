@@ -14,35 +14,47 @@ import {
 } from './package-manager.js'
 import { CODE_ROUTER, DEFAULT_FRAMEWORK, FILE_ROUTER } from './constants.js'
 import { finalizeAddOns, getAllAddOns } from './add-ons.js'
-import type { Variable } from './add-ons.js'
+import type { AddOn, Variable } from './add-ons.js'
 
 import type { CliOptions, Options } from './types.js'
 
 // If all CLI options are provided, use them directly
-export function normalizeOptions(
+export async function normalizeOptions(
   cliOptions: CliOptions,
-): Required<Options> | undefined {
+): Promise<Required<Options> | undefined> {
   if (cliOptions.projectName) {
     const typescript =
       cliOptions.template === 'typescript' ||
       cliOptions.template === 'file-router' ||
       cliOptions.framework === 'solid'
 
-    const tailwind =
+    let tailwind =
       cliOptions.tailwind === undefined
         ? cliOptions.framework === 'solid'
         : cliOptions.tailwind
+
+    let addOns = false
+    let chosenAddOns: Array<AddOn> = []
+    if (Array.isArray(cliOptions.addOns)) {
+      addOns = true
+      chosenAddOns = await finalizeAddOns(
+        cliOptions.framework || DEFAULT_FRAMEWORK,
+        cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
+        cliOptions.addOns,
+      )
+      tailwind = true
+    }
 
     return {
       framework: cliOptions.framework || 'react',
       projectName: cliOptions.projectName,
       typescript,
-      tailwind: !!tailwind,
+      tailwind,
       packageManager: cliOptions.packageManager || DEFAULT_PACKAGE_MANAGER,
       mode: cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
       git: !!cliOptions.git,
-      addOns: !!cliOptions.addOns,
-      chosenAddOns: [],
+      addOns,
+      chosenAddOns,
       variableValues: {},
     }
   }
@@ -97,6 +109,10 @@ export async function promptForOptions(
   if (options.framework === 'solid') {
     options.typescript = true
     options.tailwind = true
+  }
+
+  if (cliOptions.addOns) {
+    options.typescript = true
   }
 
   if (!cliOptions.projectName) {
@@ -202,61 +218,66 @@ export async function promptForOptions(
     options.packageManager = cliOptions.packageManager
   }
 
-  // Select any add-ons
-  const allAddOns = await getAllAddOns(options.framework)
-  const addOns = allAddOns.filter((addOn) => addOn.type === 'add-on')
-  let selectedAddOns: Array<string> = []
-  if (options.mode === FILE_ROUTER && cliOptions.addOns && addOns.length > 0) {
-    const value = await multiselect({
-      message: 'What add-ons would you like for your project:',
-      options: addOns.map((addOn) => ({
-        value: addOn.id,
-        label: addOn.name,
-        hint: addOn.description,
-      })),
-      required: false,
-    })
-
-    if (isCancel(selectedAddOns)) {
-      cancel('Operation cancelled.')
-      process.exit(0)
-    }
-    selectedAddOns = value as Array<string>
-  }
-
-  // Select any examples
-  const examples = allAddOns.filter((addOn) => addOn.type === 'example')
-  let selectedExamples: Array<string> = []
-  if (
-    options.mode === FILE_ROUTER &&
-    cliOptions.addOns &&
-    examples.length > 0
-  ) {
-    const value = await multiselect({
-      message: 'Would you like any examples?',
-      options: examples.map((addOn) => ({
-        value: addOn.id,
-        label: addOn.name,
-        hint: addOn.description,
-      })),
-      required: false,
-    })
-
-    if (isCancel(value)) {
-      cancel('Operation cancelled.')
-      process.exit(0)
-    }
-    selectedExamples = value
-  }
-
-  if (selectedAddOns.length > 0 || selectedExamples.length > 0) {
-    options.chosenAddOns = await finalizeAddOns(options.framework, [
-      ...selectedAddOns,
-      ...selectedExamples,
-    ])
+  options.chosenAddOns = []
+  if (Array.isArray(cliOptions.addOns)) {
+    options.chosenAddOns = await finalizeAddOns(
+      options.framework,
+      options.mode,
+      cliOptions.addOns,
+    )
     options.tailwind = true
-  } else {
-    options.chosenAddOns = []
+  } else if (cliOptions.addOns) {
+    // Select any add-ons
+    const allAddOns = await getAllAddOns(options.framework, options.mode)
+    const addOns = allAddOns.filter((addOn) => addOn.type === 'add-on')
+    let selectedAddOns: Array<string> = []
+    if (options.typescript && addOns.length > 0) {
+      const value = await multiselect({
+        message: 'What add-ons would you like for your project:',
+        options: addOns.map((addOn) => ({
+          value: addOn.id,
+          label: addOn.name,
+          hint: addOn.description,
+        })),
+        required: false,
+      })
+
+      if (isCancel(value)) {
+        cancel('Operation cancelled.')
+        process.exit(0)
+      }
+      selectedAddOns = value
+    }
+
+    // Select any examples
+    const examples = allAddOns.filter((addOn) => addOn.type === 'example')
+    let selectedExamples: Array<string> = []
+    if (options.typescript && examples.length > 0) {
+      const value = await multiselect({
+        message: 'Would you like any examples?',
+        options: examples.map((addOn) => ({
+          value: addOn.id,
+          label: addOn.name,
+          hint: addOn.description,
+        })),
+        required: false,
+      })
+
+      if (isCancel(value)) {
+        cancel('Operation cancelled.')
+        process.exit(0)
+      }
+      selectedExamples = value
+    }
+
+    if (selectedAddOns.length > 0 || selectedExamples.length > 0) {
+      options.chosenAddOns = await finalizeAddOns(
+        options.framework,
+        options.mode,
+        [...selectedAddOns, ...selectedExamples],
+      )
+      options.tailwind = true
+    }
   }
 
   // Collect variables

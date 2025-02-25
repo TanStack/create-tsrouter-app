@@ -3,6 +3,7 @@
   "description": "Add Solid-UI to your application.",
   "phase": "add-on",
   "link": "https://ui.shadcn.com/",
+  "templates": ["file-router", "code-router"],
   "command": {
     "command": "npx",
     "args": ["solidui-cli@latest", "add", "button", "input"]

@@ -2,25 +2,8 @@
   "name": "TanStack Query",
   "description": "Integrate TanStack Query into your application.",
   "phase": "add-on",
+  "templates": ["file-router", "code-router"],
   "link": "https://tanstack.com/query/latest",
-  "main": {
-    "imports": [
-      "import { QueryClient, QueryClientProvider } from '@tanstack/react-query'"
-    ],
-    "initialize": ["const queryClient = new QueryClient()"],
-    "providers": [
-      {
-        "open": "<QueryClientProvider client={queryClient}>",
-        "close": "</QueryClientProvider>"
-      }
-    ]
-  },
-  "layout": {
-    "imports": [
-      "import { ReactQueryDevtools } from '@tanstack/react-query-devtools'"
-    ],
-    "jsx": "<ReactQueryDevtools buttonPosition='bottom-right' />"
-  },
   "routes": [
     {
       "url": "/demo/tanstack-query",

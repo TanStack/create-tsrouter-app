@@ -8,6 +8,12 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+<% for(const route of routes) { %>import <%= route.name %> from "<%= route.path %>";
+<% } %><% if (routes.length > 0) { %>
+import Header from "./components/Header";
+<% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
+import <%= integration.name %> from "./<%= integration.path %>";
+<% } %>
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.<%= js %>";
@@ -17,8 +23,18 @@ import App from "./App.<%= jsx %>";
 const rootRoute = createRootRoute({
   component: () => (
     <>
+    <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
+      <<%= integration.name %>>
+    <% } %>
+    <% if (routes.length > 0) { %><Header /><% } %>
       <Outlet />
       <TanStackRouterDevtools />
+      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
+        <<%= integration.name %> />
+      <% } %>
+    <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+      </<%= integration.name %>>
+    <% } %>
     </>
   ),
 });
@@ -29,7 +45,7 @@ const indexRoute = createRoute({
   component: App,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute]);
+const routeTree = rootRoute.addChildren([indexRoute<%= routes.map(route => `, ${route.name}(rootRoute)`).join('') %>]);
 
 const router = createRouter({
   routeTree,

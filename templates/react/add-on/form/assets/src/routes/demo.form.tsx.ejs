@@ -1,11 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { <% if (fileRouter) { %>createFileRoute<% } else { %>createRoute<% } %> } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 
+<% if (codeRouter) { %>
+  import type { RootRoute } from '@tanstack/react-router'
+<% } else { %>
 export const Route = createFileRoute('/demo/form')({
-  component: App,
+  component: FormDemo,
 })
+<% } %>
 
-export default function App() {
+function FormDemo() {
   const form = useForm({
     defaultValues: {
       fullName: '',
@@ -48,3 +52,11 @@ export default function App() {
     </div>
   )
 }
+
+<% if (codeRouter) { %>
+export default (parentRoute: RootRoute) => createRoute({
+  path: '/demo/form',
+  component: FormDemo,
+  getParentRoute: () => parentRoute,
+})
+<% } %>
