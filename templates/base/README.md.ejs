@@ -1,3 +1,31 @@
+<% 
+function getPackageManagerAddScript(packageName, isDev) {
+  let command;
+  switch (packageManager) {
+    case 'yarn':
+      command = isDev ? `${packageManager} add ${packageName} --dev` : `${packageManager} add ${packageName}`;
+      break;
+    default:
+      command = isDev ? `${packageManager} install ${packageName} -D` : `${packageManager} install ${packageName}`;
+      break;
+  }
+  return command;
+}
+
+function getPackageManagerRunScript(scriptName) {
+  let command;
+  switch (packageManager) {
+    case 'yarn':
+      command = `${packageManager} ${scriptName}`;
+      break;
+    default:
+      command = `${packageManager} run ${scriptName}`;
+      break;
+  }
+  return command;
+}
+%>
+
 Welcome to your new TanStack app! 
 
 # Getting Started
@@ -6,7 +34,7 @@ To run this application:
 
 ```bash
 <%= packageManager %> install
-<%= packageManager %> start
+<%= getPackageManagerRunScript('start') %>
 ```
 
 # Building For Production
@@ -14,7 +42,7 @@ To run this application:
 To build this application for production:
 
 ```bash
-<%= packageManager %> run build
+<%= getPackageManagerRunScript('build') %>
 ```
 
 ## Testing
@@ -22,7 +50,7 @@ To build this application for production:
 This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
 
 ```bash
-<%= packageManager %> run test
+<%= getPackageManagerRunScript('test') %>
 ```
 
 ## Styling
@@ -168,7 +196,7 @@ More information on layouts can be found in the [Layouts documentation](hthttps:
 First you need to add the Vite plugin for Tanstack Router:
 
 ```bash
-<%= packageManager %> install -D @tanstack/router-plugin
+<%= getPackageManagerAddScript('@tanstack/router-plugin', true) %>
 ```
 
 From there you need to update your `vite.config.js` file to use the plugin:
@@ -376,7 +404,7 @@ React-Query is an excellent addition or alternative to route loading and integra
 First add your dependencies:
 
 ```bash
-<%= packageManager %> install @tanstack/react-query @tanstack/react-query-devtools
+<%= getPackageManagerAddScript('@tanstack/react-query @tanstack/react-query-devtools', false) %>
 ```
 
 Next we'll need to create a query client and provider. We recommend putting those in `main.<%= jsx %>`.
@@ -459,7 +487,7 @@ Another common requirement for React applications is state management. There are
 First you need to add TanStack Store as a dependency:
 
 ```bash
-<%= packageManager %> install @tanstack/store
+<%= getPackageManagerAddScript('@tanstack/store', false) %>
 ```
 
 Now let's create a simple counter in the `src/App.<%= jsx %>` file as a demonstration.
