@@ -19,7 +19,6 @@ const router = createRouter()
 
 <% if (addOnEnabled.sentry) { %>
   createIsomorphicFn().server(() => {
-    console.log('Sentry init server')
     SentryServer.init({
       dsn: import.meta.env.VITE_SENTRY_DSN,
       tracesSampleRate: 1.0,
