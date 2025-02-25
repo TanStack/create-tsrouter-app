@@ -6,7 +6,7 @@ To help accelerate the migration away from `create-react-app` we created the `cr
 
 ## Quick Start
 
-To maintain compatability with `create-react-app` you can build a new application by running:
+To maintain compatibility with `create-react-app` you can build a new application by running:
 
 | Command                                                        | Description                 |
 | -------------------------------------------------------------- | --------------------------- |
