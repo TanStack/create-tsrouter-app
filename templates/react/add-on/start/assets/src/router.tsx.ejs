@@ -1,0 +1,51 @@
+import { createRouter as createTanstackRouter } from '@tanstack/react-router'<% if (addOnEnabled.sentry) { %>
+import * as Sentry from '@sentry/react'
+import * as SentryServer from '@sentry/node'
+import { createIsomorphicFn } from '@tanstack/start'
+<% } %>
+
+// Import the generated route tree
+import { routeTree } from './routeTree.gen'
+
+import './styles.css'
+
+// Create a new router instance
+export const createRouter = () => {
+  const router = createTanstackRouter({ routeTree })
+  return router
+}
+
+const router = createRouter()
+
+<% if (addOnEnabled.sentry) { %>
+  createIsomorphicFn().server(() => {
+    SentryServer.init({
+      dsn: import.meta.env.VITE_SENTRY_DSN,
+      tracesSampleRate: 1.0,
+      profilesSampleRate: 1.0,
+    })
+  }).client(() => {
+    Sentry.init({
+      dsn: import.meta.env.VITE_SENTRY_DSN,
+      integrations: [
+        Sentry.replayIntegration({
+          maskAllText: false,
+          blockAllMedia: false,
+        }),
+        Sentry.tanstackRouterBrowserTracingIntegration(router),
+      ],
+      tracesSampleRate: 1.0,
+      replaysSessionSampleRate: 1.0,
+      replaysOnErrorSampleRate: 1.0,
+    })
+  })()
+<% } %>
+
+
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: router
+  }
+}

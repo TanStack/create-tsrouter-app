@@ -1,0 +1,3 @@
+# Convex configuration, get this URL from your [Dashboard](https://convex.dev/dashboard).
+CONVEX_DEPLOYMENT=
+VITE_CONVEX_URL=

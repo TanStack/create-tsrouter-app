@@ -1,0 +1,13 @@
+{
+  "name": "Convex",
+  "description": "Add the Convex database to your application.",
+  "link": "https://convex.dev",
+  "phase": "add-on",
+  "templates": ["file-router"],
+  "routes": [
+    {
+      "url": "/demo/convex",
+      "name": "Convex"
+    }
+  ]
+}

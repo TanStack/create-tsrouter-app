@@ -1,0 +1,77 @@
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+import {
+  Outlet,
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+<% for(const route of routes) { %>import <%= route.name %> from "<%= route.path %>";
+<% } %><% if (routes.length > 0) { %>
+import Header from "./components/Header";
+<% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
+import <%= integration.name %> from "./<%= integration.path %>";
+<% } %>
+
+import "./styles.css";
+import reportWebVitals from "./reportWebVitals.<%= js %>";
+
+import App from "./App.<%= jsx %>";
+
+const rootRoute = createRootRoute({
+  component: () => (
+    <>
+    <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
+      <<%= integration.name %>>
+    <% } %>
+    <% if (routes.length > 0) { %><Header /><% } %>
+      <Outlet />
+      <TanStackRouterDevtools />
+      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
+        <<%= integration.name %> />
+      <% } %>
+    <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+      </<%= integration.name %>>
+    <% } %>
+    </>
+  ),
+});
+
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: App,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute<%= routes.map(route => `, ${route.name}(rootRoute)`).join('') %>]);
+
+const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  scrollRestoration: true,
+});
+<% if (typescript) { %>
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
+
+const rootElement = document.getElementById("app")!;
+<% } else { %>
+const rootElement = document.getElementById("app");
+<% } %>if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  );
+}
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

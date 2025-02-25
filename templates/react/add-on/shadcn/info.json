@@ -1,0 +1,11 @@
+{
+  "name": "Shadcn",
+  "description": "Add Shadcn UI to your application.",
+  "phase": "add-on",
+  "templates": ["file-router", "code-router"],
+  "link": "https://ui.shadcn.com/",
+  "command": {
+    "command": "npx",
+    "args": ["shadcn@canary", "init", "-d", "-s"]
+  }
+}

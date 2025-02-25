@@ -1,0 +1,2 @@
+# Your Sentry DSN (from your Sentry account)
+VITE_SENTRY_DSN=

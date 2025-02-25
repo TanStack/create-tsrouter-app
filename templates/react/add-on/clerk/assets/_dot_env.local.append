@@ -1,0 +1,2 @@
+# Clerk configuration, get this key from your [Dashboard](https://clerk.com/dashboard).
+VITE_CLERK_PUBLISHABLE_KEY=

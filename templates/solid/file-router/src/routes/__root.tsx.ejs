@@ -1,0 +1,41 @@
+import { Outlet, createRootRouteWithContext } from '@tanstack/solid-router'
+// import { TanStackRouterDevtools } from '@tanstack/router-devtools'<% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
+import <%= integration.name %> from "../<%= integration.path %>";
+<% } %>
+<% if (addOnEnabled['solid-ui']) { %>
+import "@fontsource/inter"
+<% } %>
+<% if (addOns.length) { %>import Header from '../components/Header'
+<% } %>
+<% for(const addOn of addOns) {
+  for(const init of addOn.main?.initialize || []) { %>
+  <%- init %>
+<% } } %>
+
+export const Route = createRootRouteWithContext<{}>()({
+  component: RootComponent,
+})
+
+function RootComponent() {
+  return (
+    <>
+      <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
+        <<%= integration.name %>>
+      <% } %>
+        
+      <% if (addOns.length) { %>
+        <Header />
+      <% } %>
+      <Outlet />
+      {/* <TanStackRouterDevtools /> */}
+      
+      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
+        <<%= integration.name %> />
+      <% } %>
+
+      <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+        </<%= integration.name %>>
+      <% } %>
+    </>
+  )
+}

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@tanstack/solid-query": "^5.66.0",
+    "@tanstack/solid-query-devtools": "^5.66.0"
+  }
+}

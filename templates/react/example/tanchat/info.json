@@ -1,0 +1,15 @@
+{
+  "name": "TanStack Chat",
+  "description": "A chat example that uses TanStack Start and TanStack Store. Features chat with Antrhopic Sonnet, chat history and custom prompts.",
+  "phase": "example",
+  "templates": ["file-router"],
+  "link": "",
+  "routes": [
+    {
+      "url": "/example/chat",
+      "name": "Chat"
+    }
+  ],
+  "dependsOn": ["start", "store"],
+  "variables": []
+}

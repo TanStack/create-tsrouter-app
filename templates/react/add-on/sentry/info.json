@@ -1,0 +1,14 @@
+{
+  "name": "Sentry",
+  "phase": "setup",
+  "description": "Add Sentry for error monitoring, tracing, and session replays (requires Start).",
+  "link": "https://sentry.com/",
+  "templates": ["file-router", "code-router"],
+  "routes": [
+    {
+      "url": "/demo/sentry/testing",
+      "name": "Sentry"
+    }
+  ],
+  "dependsOn": ["start"]
+}

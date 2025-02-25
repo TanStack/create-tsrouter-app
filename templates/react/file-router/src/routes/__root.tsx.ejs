@@ -1,0 +1,71 @@
+import { createRootRoute, Outlet<% if (addOnEnabled.start) { %>
+,HeadContent, Scripts<% } %> } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+<% if (addOns.length) { %>
+import Header from '../components/Header'
+<% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
+import <%= integration.name %> from "../<%= integration.path %>";
+<% } %>
+  
+<% if (addOnEnabled.start) { %>
+import appCss from '../styles.css?url'
+<% } %>
+
+export const Route = createRootRoute({
+<% if (addOnEnabled.start) { %>
+    head: () => ({
+    meta: [
+      {
+        charSet: 'utf-8',
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
+      {
+        title: 'TanStack Start Starter',
+      },
+    ],
+    links: [
+      {
+        rel: 'stylesheet',
+        href: appCss,
+      },
+    ],
+  }),
+<% } %>
+  component: () => (
+<% if (addOnEnabled.start) { %><RootDocument><% } else { %><><% } %>
+  <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
+    <<%= integration.name %>>
+  <% } %>
+  <% if (addOns.length) { %>
+    <Header />  
+  <% } %>
+      <Outlet />
+      <TanStackRouterDevtools />
+      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
+        <<%= integration.name %> />
+      <% } %>
+    <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+      </<%= integration.name %>>
+    <% } %>
+<% if (addOnEnabled.start) { %></RootDocument><% } else { %></><% } %>
+  ),
+})
+
+<% if (addOnEnabled.start) { %>
+function RootDocument({ children }: { children: React.ReactNode }) {
+  return (
+    <html>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  )
+}
+<% } %>

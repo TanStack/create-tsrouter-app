@@ -1,0 +1,13 @@
+{
+  "name": "TanStack Query",
+  "description": "Integrate TanStack Query into your application.",
+  "phase": "add-on",
+  "templates": ["file-router", "code-router"],
+  "link": "https://tanstack.com/query/latest",
+  "routes": [
+    {
+      "url": "/demo/tanstack-query",
+      "name": "TanStack Query"
+    }
+  ]
+}

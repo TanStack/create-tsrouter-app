@@ -1,11 +1,6 @@
 node_modules
 dist
-app-js
-app-ts
-app-js-tw
-app-ts-tw
-app-fr
-app-fr-tw
+app-*
 my-app
 .DS_Store
 

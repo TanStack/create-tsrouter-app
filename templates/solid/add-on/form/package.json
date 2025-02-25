@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@tanstack/solid-form": "^0.43.2"
+  }
+}

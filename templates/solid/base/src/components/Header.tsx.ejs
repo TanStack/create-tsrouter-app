@@ -1,0 +1,26 @@
+import { Link } from '@tanstack/solid-router'
+<% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
+  import <%= integration.name %> from "../<%= integration.path %>";
+  <% } %>
+  
+export default function Header() {
+  return (
+    <header class="p-2 flex gap-2 bg-white text-black justify-between">
+      <nav class="flex flex-row">
+        <div class="px-2 font-bold">
+          <Link to="/">Home</Link>
+        </div>
+        <% for(const addOn of addOns) {
+          for(const route of addOn?.routes || []) { %>
+        <div class="px-2 font-bold"><Link to="<%= route.url %>"><%= route.name %></Link></div>
+        <% } } %>
+      </nav>
+
+      <div>
+        <% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
+          <<%= integration.name %> />
+        <% } %>
+      </div>
+    </header>
+  )
+}

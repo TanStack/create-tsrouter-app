@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.14.1",
+    "react-markdown": "^9.0.1",
+    "rehype-highlight": "^7.0.0",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "lucide-react": "^0.475.0"
+  }
+}
