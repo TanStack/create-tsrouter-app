@@ -11,7 +11,10 @@ import './styles.css'
 
 // Create a new router instance
 export const createRouter = () => {
-  const router = createTanstackRouter({ routeTree })
+  const router = createTanstackRouter({
+    routeTree,
+    scrollRestoration: true,
+  })
   return router
 }
 
