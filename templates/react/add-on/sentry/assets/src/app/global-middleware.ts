@@ -1,4 +1,4 @@
-import { createIsomorphicFn } from '@tanstack/start'
+import { createIsomorphicFn } from '@tanstack/react-start'
 import * as Sentry from "@sentry/react";
 import * as SentryServer from "@sentry/node";
 

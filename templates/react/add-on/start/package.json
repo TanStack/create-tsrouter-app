@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.7",
-    "@tanstack/start": "^1.106.0",
+    "@tanstack/react-start": "^1.111.12",
     "postcss": "^8.5.2",
     "vinxi": "^0.5.3",
     "vite-tsconfig-paths": "^5.1.4"

@@ -8,7 +8,7 @@
 
 import * as fs from 'node:fs/promises'
 import { createFileRoute } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/start'
+import { createServerFn } from '@tanstack/react-start'
 import * as Sentry from '@sentry/react'
 import * as SentryServer from '@sentry/node'
 import { useState, useEffect, useRef } from 'react'
