@@ -51,7 +51,7 @@ export async function normalizeOptions(
       projectName: cliOptions.projectName,
       typescript,
       tailwind,
-      packageManager: cliOptions.packageManager || DEFAULT_PACKAGE_MANAGER,
+      packageManager: cliOptions.packageManager || getPackageManager() || DEFAULT_PACKAGE_MANAGER,
       mode: cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
       git: !!cliOptions.git,
       addOns,
