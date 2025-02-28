@@ -30,6 +30,7 @@ This will start an interactive CLI that guides you through the setup process, al
 - TypeScript support
 - Tailwind CSS integration
 - Package manager
+- Toolchain
 - Git initialization
 
 ## Command Line Options
@@ -45,6 +46,7 @@ Available options:
 - `--template <type>`: Choose between `file-router`, `typescript`, or `javascript`
 - `--tailwind`: Enable Tailwind CSS
 - `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, `bun`, or `deno`)
+- `--toolchain`: Specify your toolchain solution for formatting/linting (`biome`)
 - `--no-git`: Do not initialize a git repository
 - `--add-ons`: Enable add-on selection or specify add-ons to install
 
@@ -93,6 +95,12 @@ Enable Tailwind CSS either through the interactive CLI or by adding the `--tailw
 Choose your preferred package manager (`npm`, `bun`, `yarn`, `pnpm`, or `deno`) either through the interactive CLI or using the `--package-manager` flag.
 
 Extensive documentation on using the TanStack Router, migrating to a File Base Routing approach, as well as integrating [@tanstack/react-query](https://tanstack.com/query/latest) and [@tanstack/store](https://tanstack.com/store/latest) can be found in the generated `README.md` for your project.
+
+### Toolchain
+
+Choose your preferred solution for formatting and linting either through the interactive CLI or using the `--toolchain` flag.
+
+Setting this flag to `biome` will configure it as your toolchain of choice, adding a `biome.json` to the root of the project. Consult the [biome documentation](https://biomejs.dev/guides/getting-started/) for further customization.
 
 ## Add-ons (experimental)
 
