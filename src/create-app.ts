@@ -30,9 +30,18 @@ function sortObject(obj: Record<string, string>): Record<string, string> {
 }
 
 function createCopyFiles(targetDir: string) {
-  return async function copyFiles(templateDir: string, files: Array<string>) {
+  return async function copyFiles(
+    templateDir: string,
+    files: Array<string>,
+    // optionally copy files from a folder to the root
+    toRoot?: boolean,
+  ) {
     for (const file of files) {
-      const targetFileName = file.replace('.tw', '')
+      let targetFileName = file.replace('.tw', '')
+      if (toRoot) {
+        const fileNoPath = targetFileName.split('/').pop()
+        targetFileName = fileNoPath ? `./${fileNoPath}` : targetFileName
+      }
       await copyFile(
         resolve(templateDir, file),
         resolve(targetDir, targetFileName),
@@ -64,6 +73,7 @@ function createTemplateFile(
       projectName: projectName,
       typescript: options.typescript,
       tailwind: options.tailwind,
+      toolchain: options.toolchain,
       js: options.typescript ? 'ts' : 'js',
       jsx: options.typescript ? 'tsx' : 'jsx',
       fileRouter: options.mode === FILE_ROUTER,
@@ -144,6 +154,22 @@ async function createPackageJSON(
       dependencies: {
         ...packageJSON.dependencies,
         ...twPackageJSON.dependencies,
+      },
+    }
+  }
+  if (options.toolchain === 'biome') {
+    const biomePackageJSON = JSON.parse(
+      await readFile(resolve(templateDir, 'package.biome.json'), 'utf8'),
+    )
+    packageJSON = {
+      ...packageJSON,
+      scripts: {
+        ...packageJSON.scripts,
+        ...biomePackageJSON.scripts,
+      },
+      devDependencies: {
+        ...packageJSON.devDependencies,
+        ...biomePackageJSON.devDependencies,
       },
     }
   }
@@ -282,10 +308,20 @@ export async function createApp(
 
   // Setup the .vscode directory
   await mkdir(resolve(targetDir, '.vscode'), { recursive: true })
-  await copyFile(
-    resolve(templateDirBase, '_dot_vscode/settings.json'),
-    resolve(targetDir, '.vscode/settings.json'),
-  )
+  switch (options.toolchain) {
+    case 'biome':
+      await copyFile(
+        resolve(templateDirBase, '_dot_vscode/settings.biome.json'),
+        resolve(targetDir, '.vscode/settings.json'),
+      )
+      break
+    case 'none':
+    default:
+      await copyFile(
+        resolve(templateDirBase, '_dot_vscode/settings.json'),
+        resolve(targetDir, '.vscode/settings.json'),
+      )
+  }
 
   // Fill the public directory
   await mkdir(resolve(targetDir, 'public'), { recursive: true })
@@ -321,6 +357,10 @@ export async function createApp(
 
   copyFiles(templateDirBase, ['./src/logo.svg'])
 
+  if (options.toolchain === 'biome') {
+    copyFiles(templateDirBase, ['./toolchain/biome.json'], true)
+  }
+
   // Setup the main, reportWebVitals and index.html files
   if (!isAddOnEnabled('start') && options.framework === 'react') {
     if (options.typescript) {
@@ -346,7 +386,7 @@ export async function createApp(
     )
   }
 
-  // Setup the package.json file, optionally with typescript and tailwind
+  // Setup the package.json file, optionally with typescript, tailwind and biome
   await createPackageJSON(
     options.projectName,
     options,
@@ -565,6 +605,24 @@ export async function createApp(
     if (!silent) {
       log.warn(chalk.red(warnings.join('\n')))
     }
+  }
+
+  if (options.toolchain === 'biome') {
+    s?.start(`Applying toolchain ${options.toolchain}...`)
+    switch (options.packageManager) {
+      case 'pnpm':
+        // pnpm automatically forwards extra arguments
+        await execa(options.packageManager, ['run', 'check', '--fix'], {
+          cwd: targetDir,
+        })
+        break
+      default:
+        await execa(options.packageManager, ['run', 'check', '--', '--fix'], {
+          cwd: targetDir,
+        })
+        break
+    }
+    s?.stop(`Applied toolchain ${options.toolchain}...`)
   }
 
   if (options.git) {

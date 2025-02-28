@@ -65,5 +65,7 @@ function MainApp() {
   )
 }
 
-const rootElement = document.getElementById('app')!
-render(() => <MainApp />, rootElement!)
+const rootElement = document.getElementById('app')
+if(rootElement) {
+  render(() => <MainApp />, rootElement)
+}

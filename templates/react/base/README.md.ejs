@@ -31,6 +31,16 @@ This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
 <% } else { %>
 This project uses CSS for styling.
 <% } %>
+<% if (toolchain && toolchain === 'biome') { %>
+## Linting & Formatting
+This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
+
+```bash
+<%= packageManager %> run lint
+<%= packageManager %> run format
+<%= packageManager %> run check # runs both lint and format together
+```
+<% } %>
 
 <% for(const addon of addOns.filter(addon => addon.readme)) { %>
 <%- addon.readme %>
