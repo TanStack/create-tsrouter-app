@@ -1,13 +1,14 @@
 {
   "name": "create-tsrouter-app",
-  "version": "0.4.3",
+  "version": "0.6.5",
   "description": "Tanstack Application Builder",
   "bin": "./dist/index.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
     "start": "tsc && node dist/index.js",
-    "test": "npm run test:lint",
+    "test": "npm run test:lint && vitest --run",
+    "test:watch": "vitest",
     "cipublish": "node scripts/publish.js",
     "test:lint": "eslint ./src",
     "mcp": "tsc && npx @modelcontextprotocol/inspector dist/index.js --mcp"
@@ -39,6 +40,7 @@
     "execa": "^9.5.2",
     "express": "^4.21.2",
     "prettier": "^3.5.0",
+    "vitest": "^3.0.8",
     "zod": "^3.24.2"
   },
   "devDependencies": {

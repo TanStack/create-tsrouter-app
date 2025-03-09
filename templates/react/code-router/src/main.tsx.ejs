@@ -7,7 +7,7 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 <% for(const route of routes) { %>import <%= route.name %> from "<%= route.path %>";
 <% } %><% if (routes.length > 0) { %>
 import Header from "./components/Header";
@@ -32,7 +32,7 @@ const rootRoute = createRootRoute({
       <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
         <<%= integration.name %> />
       <% } %>
-    <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+    <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
       </<%= integration.name %>>
     <% } %>
     </>
@@ -60,10 +60,10 @@ declare module "@tanstack/react-router" {
   }
 }
 
-const rootElement = document.getElementById("app")!;
+const rootElement = document.getElementById("app");
 <% } else { %>
 const rootElement = document.getElementById("app");
-<% } %>if (!rootElement.innerHTML) {
+<% } %>if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>

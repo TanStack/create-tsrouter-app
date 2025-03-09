@@ -12,7 +12,7 @@ import "@fontsource/inter"
   <%- init %>
 <% } } %>
 
-export const Route = createRootRouteWithContext<{}>()({
+export const Route = createRootRouteWithContext()({
   component: RootComponent,
 })
 
@@ -33,7 +33,7 @@ function RootComponent() {
         <<%= integration.name %> />
       <% } %>
 
-      <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+      <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
         </<%= integration.name %>>
       <% } %>
     </>

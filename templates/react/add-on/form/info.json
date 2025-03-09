@@ -1,13 +1,17 @@
 {
   "name": "Form",
-  "description": "TansStack Form",
+  "description": "TanStack Form",
   "phase": "add-on",
   "templates": ["file-router", "code-router"],
   "link": "https://tanstack.com/form/latest",
   "routes": [
     {
-      "url": "/demo/form",
-      "name": "Form"
+      "url": "/demo/form/simple",
+      "name": "Simple Form"
+    },
+    {
+      "url": "/demo/form/address",
+      "name": "Address Form"
     }
   ]
 }

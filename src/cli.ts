@@ -4,12 +4,16 @@ import { intro, log } from '@clack/prompts'
 import { createApp } from './create-app.js'
 import { normalizeOptions, promptForOptions } from './options.js'
 import { SUPPORTED_PACKAGE_MANAGERS } from './package-manager.js'
+import { SUPPORTED_TOOLCHAINS } from './toolchain.js'
 
 import runServer from './mcp.js'
 import { listAddOns } from './add-ons.js'
 import { DEFAULT_FRAMEWORK, SUPPORTED_FRAMEWORKS } from './constants.js'
 
+import { createDefaultEnvironment } from './environment.js'
+
 import type { PackageManager } from './package-manager.js'
+import type { ToolChain } from './toolchain.js'
 import type { CliOptions, Framework } from './types.js'
 
 export function cli() {
@@ -65,6 +69,20 @@ export function cli() {
         return value as PackageManager
       },
     )
+    .option<ToolChain>(
+      `--toolchain <${SUPPORTED_TOOLCHAINS.join('|')}>`,
+      `Explicitly tell the CLI to use this toolchain`,
+      (value) => {
+        if (!SUPPORTED_TOOLCHAINS.includes(value as ToolChain)) {
+          throw new InvalidArgumentError(
+            `Invalid toolchain: ${value}. The following are allowed: ${SUPPORTED_TOOLCHAINS.join(
+              ', ',
+            )}`,
+          )
+        }
+        return value as ToolChain
+      },
+    )
     .option('--tailwind', 'add Tailwind CSS', false)
     .option<Array<string> | boolean>(
       '--add-ons [...add-ons]',
@@ -99,7 +117,9 @@ export function cli() {
             intro("Let's configure your TanStack application")
             finalOptions = await promptForOptions(cliOptions)
           }
-          await createApp(finalOptions)
+          await createApp(finalOptions, {
+            environment: createDefaultEnvironment(),
+          })
         } catch (error) {
           log.error(
             error instanceof Error

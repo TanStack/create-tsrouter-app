@@ -40,5 +40,7 @@ function App() {
   )
 }
 
-const rootElement = document.getElementById('app')!
-render(() => <App />, rootElement!)
+const rootElement = document.getElementById('app')
+if(rootElement) {
+  render(() => <App />, rootElement)
+}

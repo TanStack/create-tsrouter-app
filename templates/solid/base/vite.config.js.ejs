@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 <%if (fileRouter) { %>import { TanStackRouterVite } from '@tanstack/router-plugin/vite'<% } %>
 import solidPlugin from 'vite-plugin-solid'
 import tailwindcss from '@tailwindcss/vite'<% if (addOnEnabled['solid-ui']) { %>
-import { resolve } from 'path'<% } %><% if (addOnEnabled['module-federation']) { %>
+import { resolve } from 'node:path'<% } %><% if (addOnEnabled['module-federation']) { %>
 import {federation} from "@module-federation/vite";<% } %><% if (addOnEnabled['module-federation']) { %>
 import federationConfig from "./module-federation.config.js";
 <% } %>

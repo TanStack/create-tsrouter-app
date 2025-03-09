@@ -9,10 +9,6 @@
     {
       "url": "/demo/start/server-funcs",
       "name": "Start - Server Functions"
-    },
-    {
-      "url": "/demo/start/api-request",
-      "name": "Start - API Request"
     }
   ]
 }

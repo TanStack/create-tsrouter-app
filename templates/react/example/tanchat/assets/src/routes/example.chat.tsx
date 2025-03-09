@@ -1,15 +1,26 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState, useRef } from 'react'
-import { PlusCircle, MessageCircle, ChevronLeft, ChevronRight, Trash2, X, Menu, Send, Settings, User, LogOut, Edit2 } from 'lucide-react'
+import {
+  PlusCircle,
+  MessageCircle,
+  Trash2,
+  Send,
+  Settings,
+  Edit2,
+} from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeHighlight from 'rehype-highlight'
+
 import { SettingsDialog } from '../components/demo.SettingsDialog'
 import { useAppState } from '../store/demo.hooks'
 import { store } from '../store/demo.store'
-import { genAIResponse, type Message } from '../utils/demo.ai'
-import "../demo.index.css"
+import { genAIResponse } from '../utils/demo.ai'
+
+import type { Message } from '../utils/demo.ai'
+
+import '../demo.index.css'
 
 function Home() {
   const {
@@ -23,22 +34,23 @@ function Home() {
     addMessage,
     setLoading,
     getCurrentConversation,
-    getActivePrompt
+    getActivePrompt,
   } = useAppState()
 
   const currentConversation = getCurrentConversation(store.state)
   const messages = currentConversation?.messages || []
-  
+
   // Local state
   const [input, setInput] = useState('')
   const [editingChatId, setEditingChatId] = useState<string | null>(null)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
+  const [pendingMessage, setPendingMessage] = useState<Message | null>(null)
 
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight
     }
   }
 
@@ -50,7 +62,7 @@ function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isLoading) return
-    
+
     const currentInput = input
     setInput('') // Clear input early for better UX
     setLoading(true)
@@ -64,7 +76,7 @@ function Home() {
         const newConversation = {
           id: conversationId,
           title: currentInput.trim().slice(0, 30),
-          messages: []
+          messages: [],
         }
         addConversation(newConversation)
       }
@@ -84,7 +96,7 @@ function Home() {
       if (activePrompt) {
         systemPrompt = {
           value: activePrompt.content,
-          enabled: true
+          enabled: true,
         }
       }
 
@@ -92,21 +104,44 @@ function Home() {
       const response = await genAIResponse({
         data: {
           messages: [...messages, userMessage],
-          systemPrompt
-        }
+          systemPrompt,
+        },
       })
 
-      if (!response.text?.trim()) {
-        throw new Error('Received empty response from AI')
+      const reader = response.body?.getReader()
+      if (!reader) {
+        throw new Error('No reader found in response')
       }
 
-      const assistantMessage: Message = {
+      const decoder = new TextDecoder()
+
+      let done = false
+      let newMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant' as const,
-        content: response.text
+        content: '',
+      }
+      while (!done) {
+        const out = await reader.read()
+        done = out.done
+        if (!done) {
+          try {
+            const json = JSON.parse(decoder.decode(out.value))
+            if (json.type === 'content_block_delta') {
+              newMessage = {
+                ...newMessage,
+                content: newMessage.content + json.delta.text,
+              }
+              setPendingMessage(newMessage)
+            }
+          } catch (e) {}
+        }
       }
 
-      addMessage(conversationId, assistantMessage)
+      setPendingMessage(null)
+      if (newMessage.content.trim()) {
+        addMessage(conversationId, newMessage)
+      }
     } catch (error) {
       console.error('Error:', error)
       const errorMessage: Message = {
@@ -126,7 +161,7 @@ function Home() {
     const newConversation = {
       id: Date.now().toString(),
       title: 'New Chat',
-      messages: []
+      messages: [],
     }
     addConversation(newConversation)
   }
@@ -184,7 +219,9 @@ function Home() {
                 <input
                   type="text"
                   value={chat.title}
-                  onChange={(e) => handleUpdateChatTitle(chat.id, e.target.value)}
+                  onChange={(e) =>
+                    handleUpdateChatTitle(chat.id, e.target.value)
+                  }
                   onBlur={() => setEditingChatId(null)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -229,37 +266,47 @@ function Home() {
         {currentConversationId ? (
           <>
             {/* Messages */}
-            <div ref={messagesContainerRef} className="flex-1 overflow-y-auto pb-24">
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 overflow-y-auto pb-24"
+            >
               <div className="max-w-3xl mx-auto w-full px-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`py-6 ${message.role === 'assistant'
-                      ? 'bg-gradient-to-r from-orange-500/5 to-red-600/5'
-                      : 'bg-transparent'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4 max-w-3xl mx-auto w-full">
-                      {message.role === 'assistant' ? (
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 mt-2 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
-                          AI
+                {[...messages, pendingMessage]
+                  .filter((v) => v)
+                  .map((message) => (
+                    <div
+                      key={message!.id}
+                      className={`py-6 ${
+                        message!.role === 'assistant'
+                          ? 'bg-gradient-to-r from-orange-500/5 to-red-600/5'
+                          : 'bg-transparent'
+                      }`}
+                    >
+                      <div className="flex items-start gap-4 max-w-3xl mx-auto w-full">
+                        {message!.role === 'assistant' ? (
+                          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 mt-2 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
+                            AI
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
+                            Y
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <ReactMarkdown
+                            className="prose dark:prose-invert max-w-none"
+                            rehypePlugins={[
+                              rehypeRaw,
+                              rehypeSanitize,
+                              rehypeHighlight,
+                            ]}
+                          >
+                            {message!.content}
+                          </ReactMarkdown>
                         </div>
-                      ) : (
-                        <div className="w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
-                          Y
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <ReactMarkdown
-                          className="prose dark:prose-invert max-w-none"
-                          rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight]}
-                        >
-                          {message.content}
-                        </ReactMarkdown>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                 {isLoading && (
                   <div className="py-6 bg-gradient-to-r from-orange-500/5 to-red-600/5">
                     <div className="flex items-start gap-4 max-w-3xl mx-auto w-full">
@@ -268,16 +315,29 @@ function Home() {
                         <div className="absolute inset-[2px] rounded-lg bg-gray-900 flex items-center justify-center">
                           <div className="relative w-full h-full rounded-lg bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
                             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 animate-pulse"></div>
-                            <span className="relative z-10 text-sm font-medium text-white">AI</span>
+                            <span className="relative z-10 text-sm font-medium text-white">
+                              AI
+                            </span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className="text-gray-400 font-medium text-lg">Thinking</div>
+                        <div className="text-gray-400 font-medium text-lg">
+                          Thinking
+                        </div>
                         <div className="flex gap-2">
-                          <div className="w-2 h-2 rounded-full bg-orange-500 animate-[bounce_0.8s_infinite]" style={{ animationDelay: '0ms' }}></div>
-                          <div className="w-2 h-2 rounded-full bg-orange-500 animate-[bounce_0.8s_infinite]" style={{ animationDelay: '200ms' }}></div>
-                          <div className="w-2 h-2 rounded-full bg-orange-500 animate-[bounce_0.8s_infinite]" style={{ animationDelay: '400ms' }}></div>
+                          <div
+                            className="w-2 h-2 rounded-full bg-orange-500 animate-[bounce_0.8s_infinite]"
+                            style={{ animationDelay: '0ms' }}
+                          ></div>
+                          <div
+                            className="w-2 h-2 rounded-full bg-orange-500 animate-[bounce_0.8s_infinite]"
+                            style={{ animationDelay: '200ms' }}
+                          ></div>
+                          <div
+                            className="w-2 h-2 rounded-full bg-orange-500 animate-[bounce_0.8s_infinite]"
+                            style={{ animationDelay: '400ms' }}
+                          ></div>
                         </div>
                       </div>
                     </div>
@@ -305,9 +365,10 @@ function Home() {
                       rows={1}
                       style={{ minHeight: '44px', maxHeight: '200px' }}
                       onInput={(e) => {
-                        const target = e.target as HTMLTextAreaElement;
-                        target.style.height = 'auto';
-                        target.style.height = Math.min(target.scrollHeight, 200) + 'px';
+                        const target = e.target as HTMLTextAreaElement
+                        target.style.height = 'auto'
+                        target.style.height =
+                          Math.min(target.scrollHeight, 200) + 'px'
                       }}
                     />
                     <button
@@ -329,7 +390,8 @@ function Home() {
                 <span className="text-white">TanStack</span> Chat
               </h1>
               <p className="text-gray-400 mb-6 w-2/3 mx-auto text-lg">
-                You can ask me about anything, I might or might not have a good answer, but you can still ask.
+                You can ask me about anything, I might or might not have a good
+                answer, but you can still ask.
               </p>
               <form onSubmit={handleSubmit}>
                 <div className="relative max-w-xl mx-auto">
@@ -370,6 +432,6 @@ function Home() {
   )
 }
 
-export const Route = createFileRoute('/')({
-  component: Home
+export const Route = createFileRoute('/example/chat')({
+  component: Home,
 })

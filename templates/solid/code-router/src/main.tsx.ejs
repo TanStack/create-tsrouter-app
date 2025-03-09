@@ -30,7 +30,7 @@ const rootRoute = createRootRoute({
       <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
         <<%= integration.name %> />
       <% } %>
-      <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+      <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
         </<%= integration.name %>>
       <% } %>
       </>
@@ -65,5 +65,7 @@ function MainApp() {
   )
 }
 
-const rootElement = document.getElementById('app')!
-render(() => <MainApp />, rootElement!)
+const rootElement = document.getElementById('app')
+if(rootElement) {
+  render(() => <MainApp />, rootElement)
+}

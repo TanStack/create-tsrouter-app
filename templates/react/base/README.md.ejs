@@ -31,13 +31,23 @@ This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
 <% } else { %>
 This project uses CSS for styling.
 <% } %>
+<% if (toolchain && toolchain === 'biome') { %>
+## Linting & Formatting
+This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
+
+```bash
+<%= packageManager %> run lint
+<%= packageManager %> run format
+<%= packageManager %> run check # runs both lint and format together
+```
+<% } %>
 
 <% for(const addon of addOns.filter(addon => addon.readme)) { %>
 <%- addon.readme %>
 <% } %>
 
 ## Routing
-<% if (fileRouter) { %>This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as fiels in `src/routes`.<% } else { %>This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a code based router. Which means that the routes are defined in code (in the `./src/main.<%= jsx %>` file). If you like you can also use a file based routing setup by following the [File Based Routing](https://tanstack.com/router/latest/docs/framework/react/guide/file-based-routing) guide.<% } %>
+<% if (fileRouter) { %>This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.<% } else { %>This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a code based router. Which means that the routes are defined in code (in the `./src/main.<%= jsx %>` file). If you like you can also use a file based routing setup by following the [File Based Routing](https://tanstack.com/router/latest/docs/framework/react/guide/file-based-routing) guide.<% } %>
 
 ### Adding A Route
 <% if (fileRouter) { %>
@@ -143,7 +153,7 @@ Here is an example layout that includes a header:
 
 ```tsx
 import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import { Link } from "@tanstack/react-router";
 
@@ -205,7 +215,7 @@ Then you'll need to create a `src/routes/__root.<%= jsx %>` file with the conten
 
 ```tsx
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 export const Route = createRootRoute({
   component: () => (

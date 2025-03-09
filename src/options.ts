@@ -12,6 +12,7 @@ import {
   SUPPORTED_PACKAGE_MANAGERS,
   getPackageManager,
 } from './package-manager.js'
+import { DEFAULT_TOOLCHAIN, SUPPORTED_TOOLCHAINS } from './toolchain.js'
 import { CODE_ROUTER, DEFAULT_FRAMEWORK, FILE_ROUTER } from './constants.js'
 import { finalizeAddOns, getAllAddOns } from './add-ons.js'
 import type { AddOn, Variable } from './add-ons.js'
@@ -52,6 +53,7 @@ export async function normalizeOptions(
       typescript,
       tailwind,
       packageManager: cliOptions.packageManager || getPackageManager() || DEFAULT_PACKAGE_MANAGER,
+      toolchain: cliOptions.toolchain || DEFAULT_TOOLCHAIN,
       mode: cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER,
       git: !!cliOptions.git,
       addOns,
@@ -155,9 +157,8 @@ export async function promptForOptions(
     }
     options.mode = routerType as typeof CODE_ROUTER | typeof FILE_ROUTER
   } else {
-    options.mode = cliOptions.template as
-      | typeof CODE_ROUTER
-      | typeof FILE_ROUTER
+    options.mode =
+      cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER
     if (options.mode === FILE_ROUTER) {
       options.typescript = true
     }
@@ -181,7 +182,7 @@ export async function promptForOptions(
   }
 
   // Tailwind selection
-  if (cliOptions.tailwind === undefined && options.framework === 'react') {
+  if (!cliOptions.tailwind && options.framework === 'react') {
     const tailwind = await confirm({
       message: 'Would you like to use Tailwind CSS?',
       initialValue: true,
@@ -219,6 +220,25 @@ export async function promptForOptions(
     options.packageManager = cliOptions.packageManager
   }
 
+  // Toolchain selection
+  if (cliOptions.toolchain === undefined) {
+    const tc = await select({
+      message: 'Select toolchain',
+      options: SUPPORTED_TOOLCHAINS.map((tc) => ({
+        value: tc,
+        label: tc,
+      })),
+      initialValue: DEFAULT_TOOLCHAIN,
+    })
+    if (isCancel(tc)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+    options.toolchain = tc
+  } else {
+    options.toolchain = cliOptions.toolchain
+  }
+
   options.chosenAddOns = []
   if (Array.isArray(cliOptions.addOns)) {
     options.chosenAddOns = await finalizeAddOns(
@@ -251,25 +271,25 @@ export async function promptForOptions(
     }
 
     // Select any examples
-    const selectedExamples: Array<string> = []
-    // const examples = allAddOns.filter((addOn) => addOn.type === 'example')
-    // if (options.typescript && examples.length > 0) {
-    //   const value = await multiselect({
-    //     message: 'Would you like any examples?',
-    //     options: examples.map((addOn) => ({
-    //       value: addOn.id,
-    //       label: addOn.name,
-    //       hint: addOn.description,
-    //     })),
-    //     required: false,
-    //   })
+    let selectedExamples: Array<string> = []
+    const examples = allAddOns.filter((addOn) => addOn.type === 'example')
+    if (options.typescript && examples.length > 0) {
+      const value = await multiselect({
+        message: 'Would you like any examples?',
+        options: examples.map((addOn) => ({
+          value: addOn.id,
+          label: addOn.name,
+          hint: addOn.description,
+        })),
+        required: false,
+      })
 
-    //   if (isCancel(value)) {
-    //     cancel('Operation cancelled.')
-    //     process.exit(0)
-    //   }
-    //   selectedExamples = value
-    // }
+      if (isCancel(value)) {
+        cancel('Operation cancelled.')
+        process.exit(0)
+      }
+      selectedExamples = value
+    }
 
     if (selectedAddOns.length > 0 || selectedExamples.length > 0) {
       options.chosenAddOns = await finalizeAddOns(

@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 <% } %><%if (fileRouter) { %>
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";<% } %><% if (addOnEnabled['module-federation']) { %>
 import {federation} from "@module-federation/vite";<% } %><% if (addOnEnabled.shadcn) { %>
-import { resolve } from "path";<% } %><% if (addOnEnabled['module-federation']) { %>
+import { resolve } from "node:path";<% } %><% if (addOnEnabled['module-federation']) { %>
 import federationConfig from "./module-federation.config.js";
 <% } %>
 

@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet<% if (addOnEnabled.start) { %>
 ,HeadContent, Scripts<% } %> } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 <% if (addOns.length) { %>
 import Header from '../components/Header'
 <% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
@@ -47,7 +47,7 @@ export const Route = createRootRoute({
       <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
         <<%= integration.name %> />
       <% } %>
-    <% for(const integration of integrations.filter(i => i.type === 'provider').toReversed()) { %>
+    <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
       </<%= integration.name %>>
     <% } %>
 <% if (addOnEnabled.start) { %></RootDocument><% } else { %></><% } %>

@@ -2,9 +2,9 @@ import { createServerFn } from '@tanstack/react-start'
 import { Anthropic } from '@anthropic-ai/sdk'
 
 export interface Message {
-    id: string
-    role: 'user' | 'assistant'
-    content: string
+  id: string
+  role: 'user' | 'assistant'
+  content: string
 }
 
 const DEFAULT_SYSTEM_PROMPT = `You are TanStack Chat, an AI assistant using Markdown for clear and structured responses. Format your responses following these guidelines:
@@ -47,62 +47,66 @@ const DEFAULT_SYSTEM_PROMPT = `You are TanStack Chat, an AI assistant using Mark
    - Use inline \`code\` for technical terms
    - Include example usage where helpful
 
-Keep responses concise and well-structured. Use appropriate Markdown formatting to enhance readability and understanding.`;
+Keep responses concise and well-structured. Use appropriate Markdown formatting to enhance readability and understanding.`
 
 // Non-streaming implementation
-export const genAIResponse = createServerFn({ method: 'GET' })
-   
-    .validator((d: { 
-        messages: Message[], 
-        systemPrompt?: { value: string, enabled: boolean },
-        streamEnabled?: boolean 
-    }) => d)
-    // .middleware([loggingMiddleware])
-    .handler(async ({ data }) => {
-        const anthropic = new Anthropic({
-            apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
-        });
+export const genAIResponse = createServerFn({ method: 'GET', response: 'raw' })
+  .validator(
+    (d: {
+      messages: Array<Message>
+      systemPrompt?: { value: string; enabled: boolean }
+    }) => d,
+  )
+  // .middleware([loggingMiddleware])
+  .handler(async ({ data }) => {
+    const anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY || '',
+    })
 
-        // Filter out error messages and empty messages
-        const formattedMessages = data.messages
-            .filter(msg => msg.content.trim() !== '' && !msg.content.startsWith('Sorry, I encountered an error'))
-            .map(msg => ({
-                role: msg.role,
-                content: msg.content.trim()
-            }));
+    // Filter out error messages and empty messages
+    const formattedMessages = data.messages
+      .filter(
+        (msg) =>
+          msg.content.trim() !== '' &&
+          !msg.content.startsWith('Sorry, I encountered an error'),
+      )
+      .map((msg) => ({
+        role: msg.role,
+        content: msg.content.trim(),
+      }))
 
-        if (formattedMessages.length === 0) {
-            return { error: 'No valid messages to send' };
-        }
+    if (formattedMessages.length === 0) {
+      return { error: 'No valid messages to send' }
+    }
 
-        const systemPrompt = data.systemPrompt?.enabled 
-            ? `${DEFAULT_SYSTEM_PROMPT}\n\n${data.systemPrompt.value}`
-            : DEFAULT_SYSTEM_PROMPT;
+    const systemPrompt = data.systemPrompt?.enabled
+      ? `${DEFAULT_SYSTEM_PROMPT}\n\n${data.systemPrompt.value}`
+      : DEFAULT_SYSTEM_PROMPT
 
-        // Debug log to verify prompt layering
-        console.log('System Prompt Configuration:', {
-            hasCustomPrompt: data.systemPrompt?.enabled,
-            customPromptValue: data.systemPrompt?.value,
-            finalPrompt: systemPrompt
-        });
+    // Debug log to verify prompt layering
+    console.log('System Prompt Configuration:', {
+      hasCustomPrompt: data.systemPrompt?.enabled,
+      customPromptValue: data.systemPrompt?.value,
+      finalPrompt: systemPrompt,
+    })
 
-        try {
-            const response = await anthropic.messages.create({
-                model: "claude-3-5-sonnet-20241022",
-                max_tokens: 4096,
-                system: systemPrompt,
-                messages: formattedMessages,
-            });
+    try {
+      const response = await anthropic.messages.stream({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 4096,
+        system: systemPrompt,
+        messages: formattedMessages,
+      })
 
-            if (response.content[0].type === 'text') {
-                return { text: response.content[0].text };
-            }
-            return { error: 'Unexpected response type' };
-        } catch (error) {
-            console.error('Error in genAIResponse:', error);
-            if (error instanceof Error && error.message.includes('rate limit')) {
-                return { error: 'Rate limit exceeded. Please try again in a moment.' };
-            }
-            return { error: error instanceof Error ? error.message : 'Failed to get AI response' };
-        }
-    });
+      return new Response(response.toReadableStream())
+    } catch (error) {
+      console.error('Error in genAIResponse:', error)
+      if (error instanceof Error && error.message.includes('rate limit')) {
+        return { error: 'Rate limit exceeded. Please try again in a moment.' }
+      }
+      return {
+        error:
+          error instanceof Error ? error.message : 'Failed to get AI response',
+      }
+    }
+  })
