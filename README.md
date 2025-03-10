@@ -1,6 +1,6 @@
 # Create React App for TanStack Router
 
-This CLI applications builds Tanstack Router applications that are the functional equivalent of [Create React App](https://create-react-app.dev/).
+This CLI application builds Tanstack Router applications that are the functional equivalent of [Create React App](https://create-react-app.dev/).
 
 To help accelerate the migration away from `create-react-app` we created the `create-tsrouter-app` CLI which is a plug-n-play replacement for CRA.
 
