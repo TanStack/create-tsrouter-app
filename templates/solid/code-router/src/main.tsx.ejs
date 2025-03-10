@@ -5,7 +5,7 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/solid-router";
-// import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/solid-router-devtools";
 import { render } from 'solid-js/web'
 <% for(const route of routes) { %>import <%= route.name %> from "<%= route.path %>";
 <% } %><% if (routes.length > 0) { %>
@@ -26,7 +26,7 @@ const rootRoute = createRootRoute({
     <% } %>
       <% if (routes.length > 0) { %><Header /><% } %>
       <Outlet />
-      {/* <TanStackRouterDevtools /> */}
+      <TanStackRouterDevtools />
       <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
         <<%= integration.name %> />
       <% } %>
