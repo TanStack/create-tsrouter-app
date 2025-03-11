@@ -203,8 +203,8 @@ function AddressForm() {
 
 <% if (codeRouter) { %>
 export default (parentRoute: RootRoute) => createRoute({
-  path: '/demo/form',
-  component: Addres,
+  path: '/demo/form/address',
+  component: AddressForm,
   getParentRoute: () => parentRoute,
 })
 <% } %>
