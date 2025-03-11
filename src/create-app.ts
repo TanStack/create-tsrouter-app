@@ -653,6 +653,24 @@ export async function createApp(
     resolve(targetDir, '.gitignore'),
   )
 
+  // Append addon-specific .gitignore entries
+  for (const addOn of options.chosenAddOns) {
+    if (
+      environment.exists(
+        resolve(addOn.directory, 'assets', '_dot_gitignore.append'),
+      )
+    ) {
+      await environment.appendFile(
+        resolve(targetDir, '.gitignore'),
+        (
+          await environment.readFile(
+            resolve(addOn.directory, 'assets', '_dot_gitignore.append'),
+          )
+        ).toString(),
+      )
+    }
+  }
+
   // Create the README.md
   await templateFile(templateDirBase, 'README.md.ejs')
 
