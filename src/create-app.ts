@@ -415,6 +415,12 @@ export async function createApp(
     await templateFile(templateDirBase, './index.html.ejs')
   }
 
+  // Add .gitignore
+  await environment.copyFile(
+    resolve(templateDirBase, '_dot_gitignore'),
+    resolve(targetDir, '.gitignore'),
+  )
+
   // Setup tsconfig
   if (options.typescript) {
     await templateFile(
@@ -644,30 +650,6 @@ export async function createApp(
   for (const addOn of options.chosenAddOns) {
     if (addOn.warning) {
       warnings.push(addOn.warning)
-    }
-  }
-
-  // Add .gitignore
-  await environment.copyFile(
-    resolve(templateDirBase, '_dot_gitignore'),
-    resolve(targetDir, '.gitignore'),
-  )
-
-  // Append addon-specific .gitignore entries
-  for (const addOn of options.chosenAddOns) {
-    if (
-      environment.exists(
-        resolve(addOn.directory, 'assets', '_dot_gitignore.append'),
-      )
-    ) {
-      await environment.appendFile(
-        resolve(targetDir, '.gitignore'),
-        (
-          await environment.readFile(
-            resolve(addOn.directory, 'assets', '_dot_gitignore.append'),
-          )
-        ).toString(),
-      )
     }
   }
 
