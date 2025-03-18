@@ -23,6 +23,15 @@ import type { CliOptions, Options } from './types.js'
 export async function normalizeOptions(
   cliOptions: CliOptions,
 ): Promise<Required<Options> | undefined> {
+  // in some cases, if you use windows/powershell, the argument for addons
+  // if sepparated by comma is not really passed as an array, but as a string 
+  // with spaces, We need to normalize this edge case.
+  if (Array.isArray(cliOptions.addOns) && cliOptions.addOns.length === 1) {
+      const parseSeparatedArgs = cliOptions.addOns[0].split(' ');
+      if (parseSeparatedArgs.length > 1) {
+          cliOptions.addOns = parseSeparatedArgs;
+      }
+  }
   if (cliOptions.projectName) {
     let typescript =
       cliOptions.template === 'typescript' ||
