@@ -487,7 +487,7 @@ export async function createApp(
       )
       await environment.execute(
         'npx',
-        ['shadcn@canary', 'add', '--silent', '--yes', ...shadcnComponents],
+        ['shadcn@latest', 'add', '--silent', '--yes', ...shadcnComponents],
         resolve(targetDir),
       )
       s?.stop(`Installed additional shadcn components`)
