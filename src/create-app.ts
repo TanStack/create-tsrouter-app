@@ -215,6 +215,25 @@ async function createPackageJSON(
       },
     }
   }
+  if (options.toolchain === 'eslint+prettier') {
+    const eslintPrettierPackageJSON = JSON.parse(
+      await environment.readFile(
+        resolve(templateDir, 'package.eslintprettier.json'),
+        'utf-8',
+      ),
+    )
+    packageJSON = {
+      ...packageJSON,
+      scripts: {
+        ...packageJSON.scripts,
+        ...eslintPrettierPackageJSON.scripts,
+      },
+      devDependencies: {
+        ...packageJSON.devDependencies,
+        ...eslintPrettierPackageJSON.devDependencies,
+      },
+    }
+  }
   if (options.mode === FILE_ROUTER) {
     const frPackageJSON = JSON.parse(
       await environment.readFile(resolve(routerDir, 'package.fr.json'), 'utf8'),
@@ -399,6 +418,18 @@ export async function createApp(
     copyFiles(templateDirBase, ['./toolchain/biome.json'], true)
   }
 
+  if (options.toolchain === 'eslint+prettier') {
+    copyFiles(
+      templateDirBase,
+      [
+        './toolchain/eslint.config.js',
+        './toolchain/prettier.config.js',
+        './toolchain/.prettierignore',
+      ],
+      true,
+    )
+  }
+
   // Setup reportWebVitals
   if (!isAddOnEnabled('start') && options.framework === 'react') {
     if (options.typescript) {
@@ -430,7 +461,7 @@ export async function createApp(
     )
   }
 
-  // Setup the package.json file, optionally with typescript, tailwind and biome
+  // Setup the package.json file, optionally with typescript, tailwind and formatter/linter
   await createPackageJSON(
     environment,
     options.projectName,
@@ -686,6 +717,16 @@ export async function createApp(
         )
         break
     }
+    s?.stop(`Applied toolchain ${options.toolchain}...`)
+  }
+
+  if (options.toolchain === 'eslint+prettier') {
+    s?.start(`Applying toolchain ${options.toolchain}...`)
+    await environment.execute(
+      options.packageManager,
+      ['run', 'check'],
+      targetDir,
+    )
     s?.stop(`Applied toolchain ${options.toolchain}...`)
   }
 
