@@ -1,5 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
-import { Anthropic } from '@anthropic-ai/sdk'
+import { anthropic } from '@ai-sdk/anthropic'
+import { streamText } from 'ai'
+
+import getTools from './demo.tools'
 
 export interface Message {
   id: string
@@ -7,64 +10,23 @@ export interface Message {
   content: string
 }
 
-const DEFAULT_SYSTEM_PROMPT = `You are TanStack Chat, an AI assistant using Markdown for clear and structured responses. Format your responses following these guidelines:
+const SYSTEM_PROMPT = `You are a helpful assistant for a store that sells guitars.
 
-1. Use headers for sections:
-   # For main topics
-   ## For subtopics
-   ### For subsections
+You can use the following tools to help the user:
 
-2. For lists and steps:
-   - Use bullet points for unordered lists
-   - Number steps when sequence matters
-   
-3. For code:
-   - Use inline \`code\` for short snippets
-   - Use triple backticks with language for blocks:
-   \`\`\`python
-   def example():
-       return "like this"
-   \`\`\`
+- getGuitars: Get all guitars from the database
+- recommendGuitar: Recommend a guitar to the user
+`
 
-4. For emphasis:
-   - Use **bold** for important points
-   - Use *italics* for emphasis
-   - Use > for important quotes or callouts
-
-5. For structured data:
-   | Use | Tables |
-   |-----|---------|
-   | When | Needed |
-
-6. Break up long responses with:
-   - Clear section headers
-   - Appropriate spacing between sections
-   - Bullet points for better readability
-   - Short, focused paragraphs
-
-7. For technical content:
-   - Always specify language for code blocks
-   - Use inline \`code\` for technical terms
-   - Include example usage where helpful
-
-Keep responses concise and well-structured. Use appropriate Markdown formatting to enhance readability and understanding.`
-
-// Non-streaming implementation
-export const genAIResponse = createServerFn({ method: 'GET', response: 'raw' })
+export const genAIResponse = createServerFn({ method: 'POST', response: 'raw' })
   .validator(
     (d: {
       messages: Array<Message>
       systemPrompt?: { value: string; enabled: boolean }
     }) => d,
   )
-  // .middleware([loggingMiddleware])
   .handler(async ({ data }) => {
-    const anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY || '',
-    })
-
-    // Filter out error messages and empty messages
-    const formattedMessages = data.messages
+    const messages = data.messages
       .filter(
         (msg) =>
           msg.content.trim() !== '' &&
@@ -75,30 +37,18 @@ export const genAIResponse = createServerFn({ method: 'GET', response: 'raw' })
         content: msg.content.trim(),
       }))
 
-    if (formattedMessages.length === 0) {
-      return { error: 'No valid messages to send' }
-    }
-
-    const systemPrompt = data.systemPrompt?.enabled
-      ? `${DEFAULT_SYSTEM_PROMPT}\n\n${data.systemPrompt.value}`
-      : DEFAULT_SYSTEM_PROMPT
-
-    // Debug log to verify prompt layering
-    console.log('System Prompt Configuration:', {
-      hasCustomPrompt: data.systemPrompt?.enabled,
-      customPromptValue: data.systemPrompt?.value,
-      finalPrompt: systemPrompt,
-    })
+    const tools = await getTools()
 
     try {
-      const response = await anthropic.messages.stream({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 4096,
-        system: systemPrompt,
-        messages: formattedMessages,
+      const result = streamText({
+        model: anthropic('claude-3-5-sonnet-latest'),
+        messages,
+        system: SYSTEM_PROMPT,
+        maxSteps: 10,
+        tools,
       })
 
-      return new Response(response.toReadableStream())
+      return result.toDataStreamResponse()
     } catch (error) {
       console.error('Error in genAIResponse:', error)
       if (error instanceof Error && error.message.includes('rate limit')) {

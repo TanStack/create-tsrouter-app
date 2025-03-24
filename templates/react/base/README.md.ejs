@@ -178,7 +178,7 @@ export const Route = createRootRoute({
 <% } %>
 The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
 
-More information on layouts can be found in the [Layouts documentation](hthttps://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
+More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
 
 <% if (codeRouter) { %>
 ### Migrating To File Base Routing
@@ -319,7 +319,13 @@ import "./styles.css";
 import reportWebVitals from "./reportWebVitals.<%= js %>";
 
 // Create a new router instance
-const router = createRouter({ routeTree, defaultPreload: "intent", scrollRestoration: true, defaultStructuralSharing: true });
+const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  defaultPreloadStaleTime: 0,
+  scrollRestoration: true,
+  defaultStructuralSharing: true
+});
 <% if (typescript) { %>
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
@@ -397,7 +403,7 @@ First add your dependencies:
 <%= getPackageManagerAddScript("@tanstack/react-query @tanstack/react-query-devtools") %>
 ```
 
-Next we'll need to creata query client and provider. We recommend putting those in `main.<%= jsx %>`.
+Next we'll need to create a query client and provider. We recommend putting those in `main.<%= jsx %>`.
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

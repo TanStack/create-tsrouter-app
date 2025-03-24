@@ -13,5 +13,14 @@
       "url": "/demo/form/address",
       "name": "Address Form"
     }
+  ],
+  "shadcnComponents": [
+    "button",
+    "select",
+    "input",
+    "textarea",
+    "slider",
+    "switch",
+    "label"
   ]
 }

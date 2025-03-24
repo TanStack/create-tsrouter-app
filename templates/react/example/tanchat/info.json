@@ -8,6 +8,10 @@
     {
       "url": "/example/chat",
       "name": "Chat"
+    },
+    {
+      "url": "/example/guitars",
+      "name": "Guitar Demo"
     }
   ],
   "dependsOn": ["start", "store"],

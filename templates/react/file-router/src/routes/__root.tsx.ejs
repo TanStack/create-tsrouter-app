@@ -1,17 +1,20 @@
 import { Outlet<% if (addOnEnabled.start) { %>
-, HeadContent, Scripts<% } %>, createRootRoute } from '@tanstack/react-router'
+, HeadContent, Scripts<% } %>, <% if (addOnEnabled["tanstack-query"]) { %>createRootRouteWithContext<% } else { %>createRootRoute<% } %> } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 <% if (addOns.length) { %>
 import Header from '../components/Header'
 <% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
 import <%= integration.name %> from "../<%= integration.path %>";
 <% } %>
-  
 <% if (addOnEnabled.start) { %>
 import appCss from '../styles.css?url'
-<% } %>
-
-export const Route = createRootRoute({
+<% } %><% if (addOnEnabled["tanstack-query"]) { %>
+import type { QueryClient } from '@tanstack/react-query'
+interface MyRouterContext {
+  queryClient: QueryClient
+}<% } %>
+  
+export const Route = <% if (addOnEnabled["tanstack-query"]) { %>createRootRouteWithContext<MyRouterContext>()<% } else { %>createRootRoute<% } %>({
 <% if (addOnEnabled.start) { %>
     head: () => ({
     meta: [

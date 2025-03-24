@@ -6,6 +6,7 @@ import { format } from 'prettier'
 import chalk from 'chalk'
 
 import { CODE_ROUTER, FILE_ROUTER } from './constants.js'
+import { packageManagerExecute } from './package-manager.js'
 
 import type { Environment } from './environment.js'
 import type { Options } from './types.js'
@@ -494,7 +495,7 @@ export async function createApp(
         await environment.execute(
           addOn.command.command,
           addOn.command.args || [],
-          targetDir,
+          resolve(targetDir),
         )
       }
 
@@ -516,12 +517,14 @@ export async function createApp(
       s?.start(
         `Installing shadcn components (${Array.from(shadcnComponents).join(', ')})...`,
       )
-      await environment.execute(
-        'npx',
-        ['shadcn@canary', 'add', ...shadcnComponents],
-        targetDir,
+      await packageManagerExecute(
+        environment,
+        options.packageManager,
+        'shadcn@latest',
+        ['add', '--silent', '--yes', ...shadcnComponents],
+        resolve(targetDir),
       )
-      s?.stop(`Installed shadcn components`)
+      s?.stop(`Installed additional shadcn components`)
     }
   }
 
@@ -689,7 +692,11 @@ export async function createApp(
 
   // Install dependencies
   s?.start(`Installing dependencies via ${options.packageManager}...`)
-  await environment.execute(options.packageManager, ['install'], targetDir)
+  await environment.execute(
+    options.packageManager,
+    ['install'],
+    resolve(targetDir),
+  )
   s?.stop(`Installed dependencies`)
 
   if (warnings.length > 0) {
@@ -706,14 +713,14 @@ export async function createApp(
         await environment.execute(
           options.packageManager,
           ['run', 'check', '--fix'],
-          targetDir,
+          resolve(targetDir),
         )
         break
       default:
         await environment.execute(
           options.packageManager,
           ['run', 'check', '--', '--fix'],
-          targetDir,
+          resolve(targetDir),
         )
         break
     }
@@ -732,7 +739,7 @@ export async function createApp(
 
   if (options.git) {
     s?.start(`Initializing git repository...`)
-    await environment.execute('git', ['init'], targetDir)
+    await environment.execute('git', ['init'], resolve(targetDir))
     s?.stop(`Initialized git repository`)
   }
 
@@ -742,7 +749,7 @@ export async function createApp(
   if (environment.getErrors().length) {
     errorStatement = `
 
-${chalk.red('There were errors encountered during this process:')}
+${chalk.red('Errors were encountered during this process:')}
 
 ${environment.getErrors().join('\n')}`
   }
@@ -753,12 +760,12 @@ ${environment.getErrors().join('\n')}`
       startCommand = `deno ${isAddOnEnabled('start') ? 'task dev' : 'start'}`
     }
 
-    outro(`Created your TanStack app in '${basename(targetDir)}'.
+    outro(`Your TanStack app is ready in '${basename(targetDir)}'.
 
 Use the following commands to start your app:
 % cd ${options.projectName}
 % ${startCommand}
 
-Please read README.md for more information on testing, styling, adding routes, react-query, etc.${errorStatement}`)
+Please read the README.md for more information on testing, styling, adding routes, react-query, etc.${errorStatement}`)
   }
 }

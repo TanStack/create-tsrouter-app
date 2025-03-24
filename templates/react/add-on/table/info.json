@@ -1,0 +1,13 @@
+{
+  "name": "Table",
+  "description": "Integrate TanStack Table into your application.",
+  "phase": "add-on",
+  "templates": ["file-router", "code-router"],
+  "link": "https://tanstack.com/table/latest",
+  "routes": [
+    {
+      "url": "/demo/table",
+      "name": "TanStack Table"
+    }
+  ]
+}
