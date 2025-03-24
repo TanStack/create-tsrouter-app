@@ -195,6 +195,21 @@ Loaders simplify your data fetching logic dramatically. Check out more informati
 
 Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
 
+<% if (toolchain && toolchain !== 'none') { %>
+## Linting & Formatting
+<% if (toolchain === 'biome') { %>
+This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
+<% } %>
+<% if (toolchain === 'eslint+prettier') { %>
+This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+<% } %>
+```bash
+<%= getPackageManagerRunScript('lint') %>
+<%= getPackageManagerRunScript('format') %>
+<%= getPackageManagerRunScript('check') %>
+```
+<% } %>
+
 # Learn More
 
 You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
