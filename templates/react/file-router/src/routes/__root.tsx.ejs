@@ -11,8 +11,8 @@ import appCss from '../styles.css?url'
 <% } %><% if (addOnEnabled["tanstack-query"]) { %>
 import type { QueryClient } from '@tanstack/react-query'
 <% if (addOnEnabled.tRPC) { %>
-import { TRPCRouter } from '@/integrations/trpc/router'
-import { TRPCOptionsProxy } from "@trpc/tanstack-react-query"
+import type { TRPCRouter } from '@/integrations/trpc/router'
+import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
 <% } %>
 
 interface MyRouterContext {
