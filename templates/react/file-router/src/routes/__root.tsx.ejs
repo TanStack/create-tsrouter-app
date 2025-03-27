@@ -12,12 +12,13 @@ import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 <% if (addOnEnabled.tRPC) { %>
 import { TRPCRouter } from '@/integrations/trpc/router'
+import { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 <% } %>
 
 interface MyRouterContext {
   queryClient: QueryClient
   <% if (addOnEnabled.tRPC) { %>
-  trpc: TRPCRouter
+  trpc: TRPCOptionsProxy<TRPCRouter>;
   <% } %>
 }<% } %>
   
