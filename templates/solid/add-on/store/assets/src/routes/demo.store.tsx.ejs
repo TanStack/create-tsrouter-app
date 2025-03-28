@@ -4,7 +4,7 @@ import { useStore } from '@tanstack/solid-store'
 import { fullName, store } from '../lib/demo-store'
 
 <% if (codeRouter) { %>
-import type { RootRoute } from '@tanstack/react-router'
+import type { RootRoute } from '@tanstack/solid-router'
 <% } else { %>
 export const Route = createFileRoute('/demo/store')({
   component: DemoStore,
