@@ -5,9 +5,7 @@
     "start": "vinxi start"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.0.7",
     "@tanstack/solid-start": "^1.114.3",
-    "postcss": "^8.5.2",
     "vinxi": "^0.5.3",
     "vite-tsconfig-paths": "^5.1.4"
   }
