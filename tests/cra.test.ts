@@ -119,8 +119,8 @@ describe('React Templates', () => {
 
 	test('file router with add-on start on npm', async () => {
 		const projectName = 'TEST';
-    const framework = 'react'
-    const template = 'file-router'
+		const framework = 'react'
+		const template = 'file-router'
 		const { environment, output } = createTestEnvironment(projectName);
 		await createApp(
 			{
