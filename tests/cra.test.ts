@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 
 import { createApp } from '../src/create-app.js'
+import { finalizeAddOns } from '../src/add-ons.js';
 import { cleanupOutput, createTestEnvironment } from './test-utilities.js'
 
 describe('React Templates', () => {
@@ -115,6 +116,36 @@ describe('React Templates', () => {
       './snapshots/cra/fr-ts-tw-npm.json',
     )
   })
+
+	test('file router with add-on start on npm', async () => {
+		const projectName = 'TEST';
+    const framework = 'react'
+    const template = 'file-router'
+		const { environment, output } = createTestEnvironment(projectName);
+		await createApp(
+			{
+				addOns: true,
+				framework,
+				chosenAddOns: await finalizeAddOns(framework, template, ['start']),
+				git: true,
+				mode: template,
+				packageManager: 'npm',
+				projectName,
+				tailwind: true,
+				toolchain: 'none',
+				typescript: true,
+				variableValues: {},
+			},
+			{
+				silent: true,
+				environment,
+			},
+		);
+		cleanupOutput(output);
+		await expect(JSON.stringify(output, null, 2)).toMatchFileSnapshot(
+			'./snapshots/cra/cr-ts-start-npm.json',
+		);
+	});
 })
 
 describe('Solid Templates', () => {
@@ -229,4 +260,34 @@ describe('Solid Templates', () => {
       './snapshots/cra/solid-fr-ts-tw-npm.json',
     )
   })
+
+	test('file router with add-on start on npm', async () => {
+		const projectName = 'TEST';
+		const framework = 'solid';
+		const template = 'file-router';
+		const { environment, output } = createTestEnvironment(projectName);
+		await createApp(
+			{
+				addOns: true,
+				framework,
+				chosenAddOns: await finalizeAddOns(framework, template, ['start']),
+				git: true,
+				mode: template,
+				packageManager: 'npm',
+				projectName,
+				tailwind: true,
+				toolchain: 'none',
+				typescript: true,
+				variableValues: {},
+			},
+			{
+				silent: true,
+				environment,
+			},
+		);
+		cleanupOutput(output);
+		await expect(JSON.stringify(output, null, 2)).toMatchFileSnapshot(
+			'./snapshots/cra/solid-cr-ts-start-npm.json',
+		);
+	});
 })
