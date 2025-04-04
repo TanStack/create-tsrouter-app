@@ -1,2 +1,2 @@
-# Clerk configuration, get this key from your [Dashboard](https://clerk.com/dashboard).
+# Clerk configuration, get this key from your [Dashboard](dashboard.clerk.com)
 VITE_CLERK_PUBLISHABLE_KEY=
