@@ -145,11 +145,7 @@ async function createPackageJSON(
   templateDir: string,
   routerDir: string,
   targetDir: string,
-  addOns: Array<{
-    dependencies?: Record<string, string>
-    devDependencies?: Record<string, string>
-    scripts?: Record<string, string>
-  }>,
+  addOns: Array<AddOn['packageAdditions']>,
 ) {
   let packageJSON = JSON.parse(
     await environment.readFile(resolve(templateDir, 'package.json'), 'utf8'),
@@ -237,20 +233,28 @@ async function createPackageJSON(
   }
 
   for (const addOn of addOns) {
+    const { dependencies, devDependencies, scripts, pnpm, ...rest } = addOn
     packageJSON = {
       ...packageJSON,
       dependencies: {
         ...packageJSON.dependencies,
-        ...addOn.dependencies,
+        ...dependencies,
       },
       devDependencies: {
         ...packageJSON.devDependencies,
-        ...addOn.devDependencies,
+        ...devDependencies,
       },
       scripts: {
         ...packageJSON.scripts,
-        ...addOn.scripts,
+        ...scripts,
       },
+      ...rest,
+    }
+    if (options.packageManager === 'pnpm') {
+      packageJSON.pnpm = {
+        ...(packageJSON?.pnpm ?? {}),
+        ...pnpm,
+      }
     }
   }
 
