@@ -94,6 +94,8 @@ export type AddOn = {
     dependencies?: Record<string, string>
     devDependencies?: Record<string, string>
     scripts?: Record<string, string>
+  } & {
+    [key: string]: Record<string, string>
   }
   command?: {
     command: string
