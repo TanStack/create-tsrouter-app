@@ -1,14 +1,13 @@
-import styles from './PWABadge.module.css'
-
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
+import styles from './PWABadge.module.css'
+
 function PWABadge() {
-  // periodic sync is disabled, change the value to enable it, the period is in milliseconds
-// You can remove onRegisteredSW callback and registerPeriodicSync function
-  const period = 0
+  // check for updates every hour
+  const period = 60 * 60 * 1000
 
   const {
-    
+    offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
@@ -28,24 +27,30 @@ function PWABadge() {
   })
 
   function close() {
-    
+    setOfflineReady(false)
     setNeedRefresh(false)
   }
 
   return (
-    <div className={styles.PWABadgeContainer} role="alert" aria-labelledby="toast-message">
-      { (needRefresh)
-      && (
-        <div className={styles.PWABadgeToast}>
-          <div className={styles.PWABadgeToastMessage}>
-            <span id="toast-message">New content available, click on reload button to update.</span>
+    <div className={styles.Container} role="alert" aria-labelledby="toast-message">
+      { (needRefresh || offlineReady) ?
+      (
+        <div className={styles.Toast}>
+          <div className={styles.Message}>
+            {offlineReady ? (
+              <span id="toast-message">App ready to work offline</span>
+            ) : (
+              <span id="toast-message">New content available, click on reload button to update.</span>
+            )}
           </div>
           <div>
-            <button className={styles.PWABadgeToastButton} onClick={() => updateServiceWorker(true)}>Reload</button>
-            <button className={styles.PWABadgeToastButton} onClick={() => close()}>Close</button>
+            {needRefresh ? (
+              <button className={styles.ToastButton} onClick={() => updateServiceWorker(true)}>Reload</button>
+            ) : null}
+            <button className={styles.ToastButton} onClick={() => close()}>Close</button>
           </div>
         </div>
-      )}
+      ): null}
     </div>
   )
 }
