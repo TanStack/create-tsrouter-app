@@ -7,7 +7,7 @@
     "jsxImportSource": "solid-js",
     "module": "ESNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["vite/client"],
+    "types": ["vite/client"<% if (addOnEnabled['pwa']) { %>, "vite-plugin-pwa/solid"<% } %>],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -21,11 +21,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true<% if (addOnEnabled['solid-ui']) { %>,
+    "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     }
-  <% } %>
   }
 }

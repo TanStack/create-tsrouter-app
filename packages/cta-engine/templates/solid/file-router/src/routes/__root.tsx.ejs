@@ -27,7 +27,7 @@ function RootComponent() {
         <Header />
       <% } %>
       <Outlet />
-      {/* <TanStackRouterDevtools /> */}
+      <TanStackRouterDevtools />
       
       <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
         <<%= integration.name %> />
