@@ -1,0 +1,5 @@
+# Better Auth Secret can be anything, preferable a random string
+BETTER_AUTH_SECRET=
+
+# Backend URL
+BETTER_AUTH_URL=http://localhost:3000
