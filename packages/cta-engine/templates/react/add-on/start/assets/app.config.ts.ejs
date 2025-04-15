@@ -1,9 +1,10 @@
 import { defineConfig } from '@tanstack/react-start/config'
 import viteTsConfigPaths from 'vite-tsconfig-paths'<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite"
+<% } %><% if (addOnEnabled['sentry']) { %>
+import * as Sentry from "@sentry/tanstackstart-react";
 <% } %>
-
-export default defineConfig({
+const config = defineConfig({
   tsr: {
     appDirectory: 'src',
   },
@@ -17,3 +18,15 @@ export default defineConfig({
     ],
   },
 })
+
+<% if (addOnEnabled['sentry']) { %>
+export default wrapVinxiConfigWithSentry(config, {
+  org: process.env.VITE_SENTRY_ORG,
+  project: process.env.VITE_SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  // Only print logs for uploading source maps in CI
+  // Set to `true` to suppress logs
+  silent: !process.env.CI,
+});<% } else { %>
+export default config
+<% } %>

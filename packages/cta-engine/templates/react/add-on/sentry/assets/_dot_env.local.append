@@ -1,2 +1,11 @@
 # Your Sentry DSN (from your Sentry account)
 VITE_SENTRY_DSN=
+
+# Your Sentry organization (from your Sentry account)
+VITE_SENTRY_ORG=
+
+# Your Sentry project (from your Sentry account)
+VITE_SENTRY_PROJECT=
+
+# Your Sentry authentication token (from your Sentry account)
+SENTRY_AUTH_TOKEN=

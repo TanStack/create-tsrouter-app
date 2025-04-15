@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "@sentry/node": "^9.1.0",
-    "@sentry/profiling-node": "^9.1.0",
-    "@sentry/react": "^9.1.0"
+    "@sentry/tanstackstart-react": "^9.12.0"
   }
 }
