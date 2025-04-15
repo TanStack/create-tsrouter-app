@@ -803,6 +803,6 @@ Use the following commands to start your app:
 % cd ${options.projectName}
 % ${startCommand}
 
-Please check the README.md for more information on testing, styling, adding routes, react-query, etc.${errorStatement}`)
+Please read the README.md for more information on testing, styling, adding routes, react-query, etc.${errorStatement}`)
   }
 }
