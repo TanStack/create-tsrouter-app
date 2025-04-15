@@ -9,8 +9,7 @@
 import * as fs from 'node:fs/promises'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import * as Sentry from '@sentry/react'
-import * as SentryServer from '@sentry/node'
+import * as Sentry from "@sentry/tanstackstart-react";
 import { useState, useEffect, useRef } from 'react'
 
 export const Route = createFileRoute('/demo/sentry/testing')({
@@ -21,7 +20,7 @@ export const Route = createFileRoute('/demo/sentry/testing')({
 const badServerFunc = createServerFn({
   method: 'GET',
 }).handler(async () => {
-  return await SentryServer.startSpan(
+  return await Sentry.startSpan(
     { 
       name: 'Reading non-existent file',
       op: 'file.read'
@@ -31,7 +30,7 @@ const badServerFunc = createServerFn({
         await fs.readFile('./doesnt-exist', 'utf-8')
         return true
       } catch (error) {
-        SentryServer.captureException(error)
+        Sentry.captureException(error)
         throw error
       }
     }
@@ -42,7 +41,7 @@ const badServerFunc = createServerFn({
 const goodServerFunc = createServerFn({
   method: 'GET',
 }).handler(async () => {
-  return await SentryServer.startSpan(
+  return await Sentry.startSpan(
     { 
       name: 'Successful server operation',
       op: 'demo.success'
@@ -244,6 +243,7 @@ function RouteComponent() {
                 <div className="space-y-6">
                   <div>
                     <button
+                      type="button"
                       onClick={() => {
                         setDemoStep(prev => prev + 1)
                         handleClientError()
@@ -267,7 +267,8 @@ function RouteComponent() {
                         <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-2">
                           <div className="flex items-center text-red-400 text-sm">
                             <svg className="w-4 h-4 mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                              <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            <title>Red Warning Sign</title>
+                            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                             Client-side error captured and traced
                           </div>
@@ -275,14 +276,15 @@ function RouteComponent() {
                         <div className="bg-purple-900/20 border border-purple-500/50 rounded-lg p-3">
                           <div className="flex items-center justify-between">
                             <div className="relative">
-                              <div 
+                              <button
+                                type="button"
                                 className={`inline-flex items-center bg-purple-900/40 px-3 py-1.5 rounded-lg border border-purple-500/50 cursor-pointer hover:bg-purple-900/60 transition-all ${copiedSpan === spanOps.clientError ? 'scale-95' : ''}`}
                                 onClick={() => handleCopy(spanOps.clientError)}
                                 title="Click to copy operation name"
                               >
                                 <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
                                 <code className="text-purple-400 text-sm font-mono">{spanOps.clientError}</code>
-                              </div>
+                              </button>
                               {copiedSpan === spanOps.clientError && (
                                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
                                   Copied!
@@ -297,6 +299,7 @@ function RouteComponent() {
 
                   <div>
                     <button
+                      type="button"
                       onClick={() => {
                         setDemoStep(prev => prev + 1)
                         handleClientTrace()
@@ -332,14 +335,15 @@ function RouteComponent() {
                           <div className="bg-purple-900/20 border border-purple-500/50 rounded-lg p-3">
                             <div className="flex items-center justify-between">
                               <div className="relative">
-                                <div 
+                                <button
+                                  type="button"
                                   className={`inline-flex items-center bg-purple-900/40 px-3 py-1.5 rounded-lg border border-purple-500/50 cursor-pointer hover:bg-purple-900/60 transition-all ${copiedSpan === spanOps.client ? 'scale-95' : ''}`}
                                   onClick={() => handleCopy(spanOps.client)}
                                   title="Click to copy operation name"
                                 >
                                   <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
                                   <code className="text-purple-400 text-sm font-mono">{spanOps.client}</code>
-                                </div>
+                                </button>
                                 {copiedSpan === spanOps.client && (
                                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
                                     Copied!
@@ -361,6 +365,7 @@ function RouteComponent() {
                 <div className="space-y-6">
                   <div>
                     <button
+                      type="button"
                       onClick={() => {
                         setDemoStep(prev => prev + 1)
                         handleServerError()
@@ -384,6 +389,7 @@ function RouteComponent() {
                         <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-3">
                           <div className="flex items-center text-red-400 text-sm">
                             <svg className="w-4 h-4 mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                              <title>Red Warning Sign</title>
                               <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                             Server-side error captured and traced
@@ -392,14 +398,15 @@ function RouteComponent() {
                         <div className="bg-purple-900/20 border border-purple-500/50 rounded-lg p-3">
                           <div className="flex items-center justify-between">
                             <div className="relative">
-                              <div 
+                              <button 
+                                type="button"
                                 className={`inline-flex items-center bg-purple-900/40 px-3 py-1.5 rounded-lg border border-purple-500/50 cursor-pointer hover:bg-purple-900/60 transition-all ${copiedSpan === spanOps.serverError ? 'scale-95' : ''}`}
                                 onClick={() => handleCopy(spanOps.serverError)}
                                 title="Click to copy operation name"
                               >
                                 <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
                                 <code className="text-purple-400 text-sm font-mono">{spanOps.serverError}</code>
-                              </div>
+                              </button>
                               {copiedSpan === spanOps.serverError && (
                                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
                                   Copied!
@@ -414,6 +421,7 @@ function RouteComponent() {
 
                   <div>
                     <button
+                      type="button"
                       onClick={() => {
                         setDemoStep(prev => prev + 1)
                         handleServerTrace()
@@ -449,14 +457,15 @@ function RouteComponent() {
                           <div className="bg-purple-900/20 border border-purple-500/50 rounded-lg p-3">
                             <div className="flex items-center justify-between">
                               <div className="relative">
-                                <div 
+                                <button 
+                                  type="button"
                                   className={`inline-flex items-center bg-purple-900/40 px-3 py-1.5 rounded-lg border border-purple-500/50 cursor-pointer hover:bg-purple-900/60 transition-all ${copiedSpan === spanOps.server ? 'scale-95' : ''}`}
                                   onClick={() => handleCopy(spanOps.server)}
                                   title="Click to copy operation name"
                                 >
                                   <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
                                   <code className="text-purple-400 text-sm font-mono">{spanOps.server}</code>
-                                </div>
+                                </button>
                                 {copiedSpan === spanOps.server && (
                                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
                                     Copied!
