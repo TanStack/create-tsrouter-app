@@ -24,10 +24,10 @@ function TanStackQueryDemo() {
 <% } else { %>
   const { data } = useQuery({
     queryKey: ['people'],
-    queryFn: () =>
-      fetch('https://swapi.dev/api/people')
-        .then((res) => res.json())
-        .then((d) => d.results as { name: string }[]),
+    queryFn: () => Promise.resolve([
+      { name: 'John Doe' },
+      { name: 'Jane Doe' },
+    ]),
     initialData: [],
   })
 <% } %>
