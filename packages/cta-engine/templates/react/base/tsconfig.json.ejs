@@ -6,7 +6,7 @@
     "jsx": "react-jsx",
     "module": "ESNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["vite/client"],
+    "types": ["vite/client"<% if (addOnEnabled['pwa']) { %>, "vite-plugin-pwa/react"<% } %>],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
