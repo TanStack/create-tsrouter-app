@@ -11,7 +11,7 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": <% if (addOnEnabled['start']) { %>false,  /* Should be turned off when using Start to avoid server bundles leaking into client bundles*/<% } else { %>true,<% } %>
     "noEmit": true,
 
     /* Linting */
