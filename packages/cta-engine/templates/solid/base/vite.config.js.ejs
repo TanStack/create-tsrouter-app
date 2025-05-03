@@ -1,8 +1,10 @@
-import { defineConfig } from 'vite'
-<%if (fileRouter) { %>import { TanStackRouterVite } from '@tanstack/router-plugin/vite'<% } %>
-import solidPlugin from 'vite-plugin-solid'
-import tailwindcss from '@tailwindcss/vite'<% if (addOnEnabled['solid-ui']) { %>
-import { resolve } from 'node:path'<% } %><% if (addOnEnabled['module-federation']) { %>
+import { defineConfig } from 'vite'<% if (addOnEnabled['pwa']) { %>
+import { VitePWA } from 'vite-plugin-pwa';
+import pkg from './package.json';
+<% } %><%if (fileRouter) { %>import { TanStackRouterVite } from '@tanstack/router-plugin/vite'<% } %>
+import solidPlugin from 'vite-plugin-solid';
+import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'node:path';<% if (addOnEnabled['module-federation']) { %>
 import {federation} from "@module-federation/vite";<% } %><% if (addOnEnabled['module-federation']) { %>
 import federationConfig from "./module-federation.config.js";
 <% } %>
@@ -12,11 +14,40 @@ export default defineConfig({
   plugins: [<% if (addOnEnabled['module-federation']) { %>federation(federationConfig), <% } %><%if (fileRouter) { %>
     TanStackRouterVite({ target: 'solid', autoCodeSplitting: true }),<% } %>
     solidPlugin(),
-    tailwindcss(),
-  ],<% if (addOnEnabled['solid-ui']) { %>
+    tailwindcss(),<% if (addOnEnabled['pwa']) { %>
+    VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: false,
+  
+      pwaAssets: {
+        disabled: false,
+        config: true,
+      },
+      manifestFilename: 'manifest.json',
+      manifest: {
+        name: pkg.name,
+        short_name: pkg.name,
+        description: pkg.description || pkg.name,
+        theme_color: '#ffffff',
+      },
+  
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+      },
+  
+      devOptions: {
+        enabled: false,
+        navigateFallback: 'index.html',
+        suppressWarnings: true,
+        type: 'module',
+      },
+    }),<% } %>
+  ],
   resolve: {
     alias: {
       '~': resolve(__dirname, './src'),
     },
-  },<% } %>
+  }
 })

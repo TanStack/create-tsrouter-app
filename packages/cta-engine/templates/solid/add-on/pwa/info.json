@@ -1,0 +1,10 @@
+{
+  "name": "Vite PWA",
+  "description": "Add PWA support to your application",
+  "phase": "add-on",
+  "link": "https://github.com/vite-pwa/vite-plugin-pwa",
+  "templates": [
+    "file-router",
+    "code-router"
+  ]
+}
