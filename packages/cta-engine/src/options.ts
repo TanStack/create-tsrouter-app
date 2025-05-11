@@ -248,21 +248,6 @@ export async function promptForOptions(
     }
   }
 
-  // Tailwind selection
-  if (!cliOptions.tailwind && options.framework === 'react') {
-    const tailwind = await confirm({
-      message: 'Would you like to use Tailwind CSS?',
-      initialValue: true,
-    })
-    if (isCancel(tailwind)) {
-      cancel('Operation cancelled.')
-      process.exit(0)
-    }
-    options.tailwind = tailwind
-  } else {
-    options.tailwind = options.framework === 'solid' || !!cliOptions.tailwind
-  }
-
   // Package manager selection
   if (cliOptions.packageManager === undefined) {
     const detectedPackageManager = getPackageManager()
@@ -382,6 +367,28 @@ export async function promptForOptions(
       options.mode,
       forcedAddOns,
     )
+  }
+
+  // Tailwind selection
+  if (
+    !cliOptions.tailwind &&
+    !options.tailwind &&
+    options.framework === 'react'
+  ) {
+    const tailwind = await confirm({
+      message: 'Would you like to use Tailwind CSS?',
+      initialValue: true,
+    })
+    if (isCancel(tailwind)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+    options.tailwind = tailwind
+  } else {
+    options.tailwind =
+      options.framework === 'solid' ||
+      !!cliOptions.tailwind ||
+      !!options.tailwind
   }
 
   // Collect variables
