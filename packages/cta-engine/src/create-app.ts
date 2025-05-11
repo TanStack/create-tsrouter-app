@@ -788,6 +788,8 @@ ${environment.getErrors().join('\n')}`
 
     outro(`Your ${appName} app is ready in '${basename(targetDir)}'.
 
+${options.tailwind ? 'Tailwind CSS has been installed' : ''}
+
 Use the following commands to start your app:
 % cd ${options.projectName}
 % ${startCommand}
