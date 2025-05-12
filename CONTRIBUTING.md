@@ -14,9 +14,8 @@
 - Run the build
   - `pnpm build`
 - Build an example app with the builder:
-  - `node [root of the monorepo]/cli/create-tsrouter-app/dist/index.js app-js`
-  - Do not attempt to build an app within the monorepo because the dependencies will be hoisted into the monorepo.
-- Run `pnpm dev` at that top level to build everything in watch mode
+  - `node [root of the monorepo]/cli/create-tsrouter-app/dist/index.js app-js` (Do not attempt to build an app within the monorepo because the dependencies will be hoisted into the monorepo.)
+  - `cd app-js` and run `pnpm dev` to build everything in watch mode
 - Run `pnpm build` and `pnpm test` to make sure the changes work
 - Check your work and PR
 
