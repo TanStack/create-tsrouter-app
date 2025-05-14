@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TanStack/create-router-app.git"
+    "url": "https://github.com/TanStack/create-tsrouter-app.git"
   },
   "homepage": "https://tanstack.com/router",
   "funding": {
