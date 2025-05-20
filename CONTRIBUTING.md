@@ -71,7 +71,7 @@ cd packages/cta-ui
 pnpm dev:ui
 ```
 
-At this poing you should be able to navigate to `http://localhost:3000` and see the React app connected to the API server on `http://localhost:8080`.
+Navigate to `http://localhost:3000` and see the React app connected to the API server on `http://localhost:8080`.
 
 ## Running the Monorepo in Watch Mode
 
