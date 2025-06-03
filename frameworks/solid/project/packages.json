@@ -12,7 +12,7 @@
   },
   "file-router": {
     "dependencies": {
-      "@tanstack/router-plugin": "^1.109.2"
+      "@tanstack/router-plugin": "^1.121.0-alpha.22"
     }
   }
 }
