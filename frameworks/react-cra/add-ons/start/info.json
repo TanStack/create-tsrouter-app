@@ -21,8 +21,6 @@
     }
   ],
   "deletedFiles": [
-    "./vite.config.js",
-    "./vite.config.ts",
     "./index.html",
     "./src/main.tsx",
     "./src/App.css"
