@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
 import { createPackageJSON } from '../src/package-json.js'
-import { FILE_ROUTER } from '../src/constants.js'
 
 import type { Options, Framework } from '../src/types.js'
 
@@ -17,7 +16,7 @@ describe('createPackageJSON', () => {
           },
         },
       ],
-      mode: FILE_ROUTER,
+      mode: 'file-router',
       typescript: true,
       tailwind: true,
       projectName: 'test',

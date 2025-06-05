@@ -12,4 +12,5 @@ cli({
   appName: 'TanStack Start',
   forcedMode: 'file-router',
   forcedAddOns: ['start'],
+  craCompatible: true,
 })

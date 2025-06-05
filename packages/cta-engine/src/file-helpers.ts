@@ -37,7 +37,12 @@ export function getBinaryFile(content: string): string | null {
 }
 
 export function relativePath(from: string, to: string) {
-  const cleanedFrom = from.startsWith('./') ? from.slice(2) : from
+  const fixedOnWindows = from.startsWith('.\\')
+    ? from.replace(/\\/g, '/')
+    : from
+  const cleanedFrom = fixedOnWindows.startsWith('./')
+    ? fixedOnWindows.slice(2)
+    : from
   const cleanedTo = to.startsWith('./') ? to.slice(2) : to
 
   const fromSegments = cleanedFrom.split('/')

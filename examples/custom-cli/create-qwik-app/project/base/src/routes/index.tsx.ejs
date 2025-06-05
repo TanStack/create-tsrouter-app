@@ -1,0 +1,54 @@
+import { component$ } from "@builder.io/qwik";
+import type { DocumentHead } from "@builder.io/qwik-city";
+
+export default component$(() => {
+  return (<% if (tailwind) { %>
+    <div class="text-center">
+      <header class="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
+        <img
+          src="/logo.svg"
+          class="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
+          alt="logo"
+        />
+        <p>
+          Edit <code>src/routes/index.tsx</code> and save to reload.
+        </p>
+        <a
+          class="text-[#61dafb] hover:underline"
+          href="https://qwik.dev/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn Qwik
+        </a>
+      </header>
+    </div>
+<% } else { %>
+    <div class="App">
+      <header class="App-header">
+        <img src="/logo.svg" class="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/routes/index.tsx</code> and save to reload.
+        </p>
+        <a
+          class="App-link"
+          href="https://qwik.dev/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn Qwik
+        </a>
+      </header>
+    </div>
+<% } %>  );
+});
+
+export const head: DocumentHead = {
+  title: "Welcome to Qwik",
+  meta: [
+    {
+      name: "description",
+      content: "Qwik site description",
+    },
+  ],
+};

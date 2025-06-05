@@ -36,6 +36,18 @@ beforeEach(() => {
         modes: ['file-router', 'code-router'],
       },
     ],
+    supportedModes: {
+      'code-router': {
+        displayName: 'Code Router',
+        description: 'TanStack Router using code to define the routes',
+        forceTypescript: false,
+      },
+      'file-router': {
+        displayName: 'File Router',
+        description: 'TanStack Router using files to define the routes',
+        forceTypescript: true,
+      },
+    },
   } as unknown as Framework)
 
   __testRegisterFramework({

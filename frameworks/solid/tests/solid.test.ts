@@ -7,7 +7,7 @@ import {
   getFrameworkById,
 } from '@tanstack/cta-engine'
 
-import type { AddOn, Mode, Options } from '@tanstack/cta-engine'
+import type { AddOn, Options } from '@tanstack/cta-engine'
 
 import { cleanupOutput } from './test-utilities.js'
 
@@ -77,7 +77,7 @@ test('file router on npm', async () => {
   const { environment, output } = createMemoryEnvironment()
   const options = {
     ...(await createSolidOptions(projectName)),
-    mode: 'file-router' as Mode,
+    mode: 'file-router',
     typescript: true,
   }
   await createApp(environment, options)
@@ -92,7 +92,7 @@ test('file router with tailwind on npm', async () => {
   const { environment, output } = createMemoryEnvironment()
   const options = {
     ...(await createSolidOptions(projectName)),
-    mode: 'file-router' as Mode,
+    mode: 'file-router',
     typescript: true,
     tailwind: true,
   }

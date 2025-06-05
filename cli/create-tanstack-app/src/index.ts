@@ -11,4 +11,5 @@ cli({
   name: 'create-tanstack-app',
   appName: 'TanStack',
   defaultTemplate: 'file-router',
+  craCompatible: true,
 })

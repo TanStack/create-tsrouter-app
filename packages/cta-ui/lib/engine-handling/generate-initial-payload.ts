@@ -12,7 +12,6 @@ import {
 
 import { cleanUpFiles } from './file-helpers.js'
 import { createAppWrapper } from './create-app-wrapper.js'
-import { registerFrameworks } from './framework-registration.js'
 import {
   getApplicationMode,
   getForcedAddOns,
@@ -40,8 +39,6 @@ function convertAddOnToAddOnInfo(addOn: AddOn): AddOnInfo {
 }
 
 export async function generateInitialPayload() {
-  registerFrameworks()
-
   const projectPath = getProjectPath()
   const applicationMode = getApplicationMode()
 
@@ -76,10 +73,10 @@ export async function generateInitialPayload() {
     }
   }
 
+  const serializedOptions = await getSerializedOptions()
+
   const rawRegistry = await getRawRegistry(getRegistryURL())
   const registryAddOns = await getRegistryAddOns(getRegistryURL())
-
-  const serializedOptions = await getSerializedOptions()
 
   const output = await createAppWrapper(serializedOptions, {
     dryRun: true,
@@ -87,12 +84,12 @@ export async function generateInitialPayload() {
 
   const framework = await getFrameworkById(serializedOptions.framework)
 
-  const codeRouterAddOns = getAllAddOns(framework!, 'code-router').map(
-    convertAddOnToAddOnInfo,
-  )
-
-  const fileRouterAddOns = getAllAddOns(framework!, 'file-router').map(
-    convertAddOnToAddOnInfo,
+  const addOns = Object.keys(framework!.supportedModes).reduce(
+    (acc, mode) => {
+      acc[mode] = getAllAddOns(framework!, mode).map(convertAddOnToAddOnInfo)
+      return acc
+    },
+    {} as Record<string, Array<AddOnInfo>>,
   )
 
   for (const addOnInfo of registryAddOns) {
@@ -100,11 +97,8 @@ export async function generateInitialPayload() {
       (addOn) => addOn.url === addOnInfo.id,
     )
     if (addOnFramework?.framework === serializedOptions.framework) {
-      if (addOnInfo.modes.includes('code-router')) {
-        codeRouterAddOns.push(convertAddOnToAddOnInfo(addOnInfo))
-      }
-      if (addOnInfo.modes.includes('file-router')) {
-        fileRouterAddOns.push(convertAddOnToAddOnInfo(addOnInfo))
+      for (const mode of addOnInfo.modes) {
+        addOns[mode].push(convertAddOnToAddOnInfo(addOnInfo))
       }
     }
   }
@@ -117,12 +111,10 @@ export async function generateInitialPayload() {
   }
 
   return {
+    supportedModes: framework!.supportedModes,
     applicationMode,
     localFiles,
-    addOns: {
-      'code-router': codeRouterAddOns,
-      'file-router': fileRouterAddOns,
-    },
+    addOns,
     options: serializedOptions,
     output,
     forcedRouterMode,

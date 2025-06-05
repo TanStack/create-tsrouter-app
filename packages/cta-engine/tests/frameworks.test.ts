@@ -6,6 +6,8 @@ import {
   getFrameworkById,
   getFrameworkByName,
   registerFramework,
+  scanAddOnDirectories,
+  scanProjectDirectory,
 } from '../src/frameworks.js'
 
 vi.mock('node:fs', () => fs)
@@ -28,50 +30,24 @@ describe('registerFramework', () => {
       version: '1.0.0',
     }
 
-    vol.mkdirSync('/test/add-ons/test/assets', { recursive: true })
-    vol.writeFileSync(
-      '/test/add-ons/test/info.json',
-      JSON.stringify({
-        id: 'test',
-        name: 'Test',
-        description: 'Test',
-        version: '1.0.0',
-      }),
-    )
-    vol.writeFileSync(
-      '/test/add-ons/test/package.json',
-      JSON.stringify({
-        id: 'test',
-        name: 'Test',
-        description: 'Test',
-        version: '1.0.0',
-      }),
-    )
-    vol.writeFileSync(
-      '/test/add-ons/test/assets/package.json',
-      JSON.stringify(addOnPackageJSON),
-    )
-    vol.writeFileSync('/test/add-ons/test/README.md', 'foo')
-    vol.mkdirSync('/test/project/base/assets', { recursive: true })
-    vol.writeFileSync(
-      '/test/project/base/package.json',
-      JSON.stringify(basePackageJSON),
-    )
-    vol.writeFileSync(
-      '/test/project/packages.json',
-      JSON.stringify({
-        typescript: {},
-      }),
-    )
-
     registerFramework({
       id: 'test',
       name: 'Test',
-      addOnsDirectories: ['/test/add-ons'],
+      addOns: [],
       description: 'Test',
       version: '1.0.0',
-      baseDirectory: '/test/project',
-      examplesDirectory: '/test/examples',
+      base: {
+        './package.json': JSON.stringify(basePackageJSON),
+      },
+      basePackageJSON,
+      optionalPackages: {},
+      supportedModes: {
+        'code-router': {
+          displayName: 'Code Router',
+          description: 'Code Router',
+          forceTypescript: false,
+        },
+      },
     })
 
     const f = getFrameworkById('test')!
@@ -81,13 +57,6 @@ describe('registerFramework', () => {
 
     const fileContents = await f.getFileContents('./package.json')
     expect(fileContents).toEqual(JSON.stringify(basePackageJSON))
-
-    const addOns = await f.getAddOns()
-    const addOnFiles = await addOns[0].getFiles()
-    expect(addOnFiles).toEqual(['./package.json'])
-
-    const addOnFileContents = await addOns[0].getFileContents('./package.json')
-    expect(addOnFileContents).toEqual(JSON.stringify(addOnPackageJSON))
 
     expect(getFrameworkByName('Test')).not.toBeUndefined()
     expect(getFrameworks().length).toEqual(1)

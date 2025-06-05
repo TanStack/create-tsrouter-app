@@ -11,10 +11,44 @@ import type { AddOn, Framework, FrameworkDefinition } from './types.js'
 
 const frameworks: Array<Framework> = []
 
-function getAddOns(framework: FrameworkDefinition) {
+export function scanProjectDirectory(
+  projectDirectory: string,
+  baseDirectory: string,
+) {
+  const absolutePaths: Record<string, string> = {}
+  findFilesRecursively(baseDirectory, absolutePaths)
+
+  const files = Object.keys(absolutePaths).reduce(
+    (acc, path) => {
+      acc[path.replace(baseDirectory, '.')] = absolutePaths[path]
+      return acc
+    },
+    {} as Record<string, string>,
+  )
+
+  const basePackageJSON = existsSync(resolve(baseDirectory, 'package.json'))
+    ? JSON.parse(readFileSync(resolve(baseDirectory, 'package.json'), 'utf8'))
+    : {}
+
+  const optionalPackages = existsSync(
+    resolve(projectDirectory, 'packages.json'),
+  )
+    ? JSON.parse(
+        readFileSync(resolve(projectDirectory, 'packages.json'), 'utf8'),
+      )
+    : {}
+
+  return {
+    files,
+    basePackageJSON,
+    optionalPackages,
+  }
+}
+
+export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
   const addOns: Array<AddOn> = []
 
-  for (const addOnsBase of framework.addOnsDirectories) {
+  for (const addOnsBase of addOnsDirectories) {
     for (const dir of readdirSync(addOnsBase).filter((file) =>
       isDirectory(resolve(addOnsBase, file)),
     )) {
@@ -85,36 +119,17 @@ export function __testClearFrameworks() {
 }
 
 export function registerFramework(framework: FrameworkDefinition) {
-  const baseAssetsDirectory = resolve(framework.baseDirectory, 'base')
-
-  const basePackageJSON = JSON.parse(
-    readFileSync(resolve(baseAssetsDirectory, 'package.json'), 'utf8'),
-  )
-  const optionalPackages = JSON.parse(
-    readFileSync(resolve(framework.baseDirectory, 'packages.json'), 'utf8'),
-  )
-
-  const addOns = getAddOns(framework)
+  const { addOns, base, ...rest } = framework
 
   const frameworkWithBundler: Framework = {
-    ...framework,
-    getFiles: () => {
-      const files: Record<string, string> = {}
-      findFilesRecursively(baseAssetsDirectory, files)
-      return Promise.resolve(
-        Object.keys(files).map((path) =>
-          path.replace(baseAssetsDirectory, '.'),
-        ),
-      )
-    },
+    ...rest,
+    getFiles: () => Promise.resolve(Object.keys(base)),
     getFileContents: (path: string) => {
-      return Promise.resolve(readFileHelper(resolve(baseAssetsDirectory, path)))
+      return Promise.resolve(base[path])
     },
     getDeletedFiles: () => {
       return Promise.resolve([])
     },
-    basePackageJSON,
-    optionalPackages,
     getAddOns: () => addOns,
   }
 

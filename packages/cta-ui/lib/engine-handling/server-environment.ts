@@ -1,11 +1,11 @@
-import type { Mode, SerializedOptions } from '@tanstack/cta-engine'
+import type { SerializedOptions } from '@tanstack/cta-engine'
 
 export type ServerEnvironment = {
   projectPath: string
   mode: 'add' | 'setup'
   options?: SerializedOptions
   addOns?: Array<string>
-  forcedRouterMode?: Mode
+  forcedRouterMode?: string
   forcedAddOns?: Array<string>
   registry?: string
 }

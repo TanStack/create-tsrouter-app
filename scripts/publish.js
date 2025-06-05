@@ -37,6 +37,10 @@ await publish({
       packageDir: './packages/cta-ui',
     },
     {
+      name: '@tanstack/cta-ui-base',
+      packageDir: './packages/cta-ui-base',
+    },
+    {
       name: '@tanstack/cta-frameworks-react-cra',
       packageDir: './frameworks/react-cra',
     },

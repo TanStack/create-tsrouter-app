@@ -1,0 +1,15 @@
+<% if (fileRouter) { ignoreFile() } %><% if (!tailwind) { %>import "./App.css";<% } %>
+
+function App() {
+  return (<% if (tailwind) { %>
+    <div className="text-center">
+      <h1>I'm a customized setup</h1>
+    </div>
+<% } else { %>
+    <div className="App">
+      <h1>I'm a customized setup</h1>
+    </div>
+<% } %>  );
+}
+
+export default App;

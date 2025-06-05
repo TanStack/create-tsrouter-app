@@ -11,8 +11,6 @@ import {
   getFrameworkById,
 } from '@tanstack/cta-engine'
 
-import type { Mode } from '@tanstack/cta-engine'
-
 function createServer({
   appName,
   forcedAddOns = [],
@@ -213,7 +211,7 @@ export async function runMCPServer(
     appName,
     name,
   }: {
-    forcedMode?: Mode
+    forcedMode?: string
     forcedAddOns?: Array<string>
     appName?: string
     name?: string

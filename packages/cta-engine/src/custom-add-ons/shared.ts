@@ -8,7 +8,7 @@ import { readConfigFileFromEnvironment } from '../config-file.js'
 import { readFileHelper } from '../file-helpers.js'
 import { loadStarter } from '../custom-add-ons/starter.js'
 
-import type { Environment, Mode, Options, SerializedOptions } from '../types.js'
+import type { Environment, Options, SerializedOptions } from '../types.js'
 import type { PersistedOptions } from '../config-file.js'
 
 export function createPackageAdditions(
@@ -68,7 +68,7 @@ export async function createAppOptionsFromPersisted(
   const framework = getFrameworkById(rest.framework)
   return {
     ...rest,
-    mode: json.mode as Mode,
+    mode: json.mode!,
     projectName: json.projectName!,
     typescript: json.typescript!,
     tailwind: json.tailwind!,
@@ -77,7 +77,7 @@ export async function createAppOptionsFromPersisted(
     targetDir: '',
     framework: framework!,
     starter: json.starter ? await loadStarter(json.starter) : undefined,
-    chosenAddOns: await finalizeAddOns(framework!, json.mode as Mode, [
+    chosenAddOns: await finalizeAddOns(framework!, json.mode!, [
       ...json.chosenAddOns,
     ]),
   }
@@ -91,7 +91,7 @@ export function createSerializedOptionsFromPersisted(
   /* eslint-enable unused-imports/no-unused-vars */
   return {
     ...rest,
-    mode: json.mode as Mode,
+    mode: json.mode!,
     projectName: json.projectName!,
     typescript: json.typescript!,
     tailwind: json.tailwind!,

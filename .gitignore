@@ -7,6 +7,7 @@ my-app
 **/dist
 .vinxi
 **/lib-dist
+**/lib-react
 **/api-server-dist
 .vscode
 

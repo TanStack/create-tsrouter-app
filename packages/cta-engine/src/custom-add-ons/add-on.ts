@@ -100,10 +100,10 @@ export default (parentRoute: RootRoute) => createRoute({
 export async function validateAddOnSetup(environment: Environment) {
   const options = await readCurrentProjectOptions(environment)
 
-  if (options.mode !== 'file-router') {
+  if (options.mode === 'code-router') {
     environment.error(
-      'This project is not using file-router mode.',
-      'To create an add-on, the project must be created with the file-router mode.',
+      'This project is using code-router mode.',
+      'To create an add-on, the project must not use code-router mode.',
     )
     process.exit(1)
   }

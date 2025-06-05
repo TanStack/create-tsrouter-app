@@ -2,3 +2,4 @@ packages:
   - 'packages/*'
   - 'cli/*'
   - 'frameworks/*'
+  - 'examples/custom-cli/*'

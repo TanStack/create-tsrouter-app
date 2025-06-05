@@ -1,4 +1,3 @@
-import { FILE_ROUTER } from './constants.js'
 import { sortObject } from './utils.js'
 
 import type { Options } from './types.js'
@@ -37,9 +36,7 @@ export function createPackageJSON(options: Options) {
     options.tailwind
       ? options.framework.optionalPackages.tailwindcss
       : undefined,
-    options.mode === FILE_ROUTER
-      ? options.framework.optionalPackages['file-router']
-      : undefined,
+    options.mode ? options.framework.optionalPackages[options.mode] : undefined,
   ]
   for (const addition of additions.filter(Boolean)) {
     packageJSON = mergePackageJSON(packageJSON, addition)

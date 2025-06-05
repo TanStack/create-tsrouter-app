@@ -1,15 +1,15 @@
 import { loadRemoteAddOn } from './custom-add-ons/add-on.js'
 
-import type { AddOn, Framework, Mode } from './types.js'
+import type { AddOn, Framework } from './types.js'
 
-export function getAllAddOns(framework: Framework, mode: Mode): Array<AddOn> {
+export function getAllAddOns(framework: Framework, mode: string): Array<AddOn> {
   return framework.getAddOns().filter((a) => a.modes.includes(mode))
 }
 
 // Turn the list of chosen add-on IDs into a final list of add-ons by resolving dependencies
 export async function finalizeAddOns(
   framework: Framework,
-  mode: Mode,
+  mode: string,
   chosenAddOnIDs: Array<string>,
 ): Promise<Array<AddOn>> {
   const finalAddOnIDs = new Set(chosenAddOnIDs)

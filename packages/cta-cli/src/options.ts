@@ -1,6 +1,6 @@
+import { intro } from '@clack/prompts'
+
 import {
-  CODE_ROUTER,
-  FILE_ROUTER,
   finalizeAddOns,
   getFrameworkById,
   getPackageManager,
@@ -18,10 +18,9 @@ import {
   selectTypescript,
 } from './ui-prompts.js'
 
-import type { Mode, Options } from '@tanstack/cta-engine'
+import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
-import { intro } from '@clack/prompts'
 
 export async function promptForCreateOptions(
   cliOptions: CliOptions,
@@ -30,7 +29,7 @@ export async function promptForCreateOptions(
     forcedMode,
   }: {
     forcedAddOns?: Array<string>
-    forcedMode?: Mode
+    forcedMode?: string
   },
 ): Promise<Required<Options> | undefined> {
   const options = {} as Required<Options>
@@ -44,15 +43,22 @@ export async function promptForCreateOptions(
     options.mode = forcedMode
   } else if (cliOptions.template) {
     options.mode =
-      cliOptions.template === 'file-router' ? FILE_ROUTER : CODE_ROUTER
+      cliOptions.template === 'file-router' ? 'file-router' : 'code-router'
   } else {
     options.mode = await selectRouterType()
   }
 
   // TypeScript selection (if using Code Router)
+  // TODO: Make this declarative
   options.typescript =
-    options.mode === FILE_ROUTER || options.framework.id === 'solid'
-  if (!options.typescript && options.mode === CODE_ROUTER) {
+    options.mode === 'file-router' || options.framework.id === 'solid'
+  if (
+    forcedMode &&
+    options.framework.supportedModes[forcedMode].forceTypescript
+  ) {
+    options.typescript = true
+  }
+  if (!options.typescript && options.mode === 'code-router') {
     options.typescript = await selectTypescript()
   }
 

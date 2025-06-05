@@ -11,8 +11,6 @@ import {
 
 import { TMP_TARGET_DIR } from '../constants.js'
 
-import { registerFrameworks } from './framework-registration.js'
-
 import { cleanUpFileArray, cleanUpFiles } from './file-helpers.js'
 import { getApplicationMode, getProjectPath } from './server-environment.js'
 
@@ -33,9 +31,10 @@ export async function createAppWrapper(
     environmentFactory?: () => Environment
   },
 ) {
-  registerFrameworks()
-
   const framework = getFrameworkById(projectOptions.framework)!
+  if (!framework) {
+    throw new Error(`Framework ${projectOptions.framework} not found`)
+  }
 
   let starter: Starter | undefined
   const addOns: Array<string> = [...projectOptions.chosenAddOns]

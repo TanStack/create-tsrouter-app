@@ -11,7 +11,6 @@ import {
   selectTailwind,
   selectToolchain,
 } from '../src/ui-prompts'
-import { FILE_ROUTER } from '@tanstack/cta-engine'
 
 import type { AddOn, Framework } from '@tanstack/cta-engine'
 
@@ -44,7 +43,7 @@ describe('selectRouterType', () => {
     vi.spyOn(clack, 'isCancel').mockImplementation(() => false)
 
     const routerType = await selectRouterType()
-    expect(routerType).toBe(FILE_ROUTER)
+    expect(routerType).toBe('file-router')
   })
 
   it('should exit on cancel', async () => {

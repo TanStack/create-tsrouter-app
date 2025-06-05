@@ -10,4 +10,5 @@ registerSolid()
 cli({
   name: 'create-tsrouter-app',
   appName: 'TanStack',
+  craCompatible: true,
 })

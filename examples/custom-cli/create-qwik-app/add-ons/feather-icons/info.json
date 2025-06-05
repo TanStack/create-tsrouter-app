@@ -1,0 +1,16 @@
+{
+  "name": "Feather Icons",
+  "description": "Add Feather Icons to your application.",
+  "phase": "add-on",
+  "modes": ["default"],
+  "type": "add-on",
+  "link": "https://github.com/egmaleta/qwik-feather-icons",
+  "routes": [
+    {
+      "url": "/demo-feather",
+      "name": "Feather Icons",
+      "path": "src/routes/demo-feather/index.tsx",
+      "jsName": "FeatherIconsDemo"
+    }
+  ]
+}

@@ -38,9 +38,18 @@ beforeEach(() => {
     version: '1.0.0',
     baseDirectory: '/foo',
     addOnsDirectories: [],
-    examplesDirectory: '',
     basePackageJSON: {},
     optionalPackages: {},
+    supportedModes: {
+      'code-router': {
+        displayName: 'Code Router',
+        description: 'Code Router',
+      },
+      'file-router': {
+        displayName: 'File Router',
+        description: 'File Router',
+      },
+    },
     getAddOns: () => [
       {
         id: 'test',

@@ -2,7 +2,6 @@ import { resolve, sep } from 'node:path'
 import { render } from 'ejs'
 import { format } from 'prettier'
 
-import { CODE_ROUTER, FILE_ROUTER } from './constants.js'
 import { formatCommand } from './utils.js'
 import {
   getPackageManagerInstallCommand,
@@ -83,8 +82,8 @@ export function createTemplateFile(environment: Environment, options: Options) {
       tailwind: options.tailwind,
       js: options.typescript ? 'ts' : 'js',
       jsx: options.typescript ? 'tsx' : 'jsx',
-      fileRouter: options.mode === FILE_ROUTER,
-      codeRouter: options.mode === CODE_ROUTER,
+      fileRouter: options.mode === 'file-router',
+      codeRouter: options.mode === 'code-router',
       addOnEnabled,
       addOns: options.chosenAddOns,
       integrations,

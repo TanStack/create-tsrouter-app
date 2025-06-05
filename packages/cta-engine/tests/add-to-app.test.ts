@@ -50,7 +50,6 @@ beforeEach(() => {
     version: '1.0.0',
     baseDirectory: '/foo',
     addOnsDirectories: [],
-    examplesDirectory: '',
     basePackageJSON: {},
     optionalPackages: {},
     getAddOns: () => [

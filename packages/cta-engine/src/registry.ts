@@ -13,7 +13,7 @@ const registrySchema = z.object({
         description: z.string(),
         url: z.string(),
         banner: z.string().optional(),
-        mode: z.enum(['code-router', 'file-router']),
+        mode: z.string(),
         framework: z.string(),
       }),
     )
@@ -24,7 +24,7 @@ const registrySchema = z.object({
         name: z.string(),
         description: z.string(),
         url: z.string(),
-        modes: z.array(z.enum(['code-router', 'file-router'])),
+        modes: z.array(z.string()),
         framework: z.string(),
       }),
     )

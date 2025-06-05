@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@source "../node_modules/@tanstack/cta-ui-base";
+
 @layer theme, base, components, utilities;
 
 @plugin "tailwindcss-animate";

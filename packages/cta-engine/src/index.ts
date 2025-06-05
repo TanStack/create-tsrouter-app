@@ -11,7 +11,7 @@ export {
   createDefaultEnvironment,
 } from './environment.js'
 
-export { CODE_ROUTER, CONFIG_FILE, FILE_ROUTER } from './constants.js'
+export { CONFIG_FILE } from './constants.js'
 
 export {
   DEFAULT_PACKAGE_MANAGER,
@@ -24,6 +24,8 @@ export {
   getFrameworkById,
   getFrameworkByName,
   getFrameworks,
+  scanProjectDirectory,
+  scanAddOnDirectories,
 } from './frameworks.js'
 
 export {
@@ -75,7 +77,6 @@ export type {
   FileBundleHandler,
   Framework,
   FrameworkDefinition,
-  Mode,
   Options,
   SerializedOptions,
   Starter,

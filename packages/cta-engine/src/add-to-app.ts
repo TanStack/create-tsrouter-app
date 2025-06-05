@@ -19,7 +19,7 @@ import { mergePackageJSON } from './package-json.js'
 import { runSpecialSteps } from './special-steps/index.js'
 import { loadStarter } from './custom-add-ons/starter.js'
 
-import type { Environment, Mode, Options } from './types.js'
+import type { Environment, Options } from './types.js'
 import type { PersistedOptions } from './config-file.js'
 
 export async function hasPendingGitChanges(
@@ -48,7 +48,7 @@ async function createOptions(
     framework,
     tailwind: true,
     addOns: true,
-    chosenAddOns: await finalizeAddOns(framework!, json.mode as Mode, [
+    chosenAddOns: await finalizeAddOns(framework!, json.mode!, [
       ...json.chosenAddOns,
       ...addOns,
     ]),

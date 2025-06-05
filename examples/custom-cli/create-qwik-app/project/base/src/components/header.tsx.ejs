@@ -1,0 +1,28 @@
+<% if (addOns.length === 0 && integrations.length === 0 && routes.length === 0) { ignoreFile() } %>
+import { component$ } from "@builder.io/qwik";
+import { Link } from '@builder.io/qwik-city';
+<% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
+import <%= integration.jsName %> from "<%= relativePath(integration.path) %>";
+<% } %>
+
+export default component$(() => {
+  return (
+    <header class="p-2 flex gap-2 bg-white text-black justify-between">
+      <nav class="flex flex-row">
+        <div class="px-2 font-bold">
+          <Link to="/">Home</Link>
+        </div>
+<% for(const addOn of addOns) { for(const route of (addOn?.routes||[])?.filter(r => r.url && r.name)) { %>
+<div class="px-2 font-bold"><Link href="<%= route.url %>"><%= route.name %></Link></div>
+<% } } %>
+      </nav>
+<% if (integrations.filter(i => i.type === 'header-user').length > 0) { %>
+      <div>
+<% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
+  <<%= integration.jsName %> />
+<% } %>
+      </div>
+<% } %>
+    </header>
+  );
+})

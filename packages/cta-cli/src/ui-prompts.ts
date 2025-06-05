@@ -8,14 +8,12 @@ import {
 } from '@clack/prompts'
 
 import {
-  CODE_ROUTER,
   DEFAULT_PACKAGE_MANAGER,
-  FILE_ROUTER,
   SUPPORTED_PACKAGE_MANAGERS,
   getAllAddOns,
 } from '@tanstack/cta-engine'
 
-import type { AddOn, Mode, PackageManager } from '@tanstack/cta-engine'
+import type { AddOn, PackageManager } from '@tanstack/cta-engine'
 
 import type { Framework } from '@tanstack/cta-engine/dist/types/types.js'
 
@@ -38,20 +36,20 @@ export async function getProjectName(): Promise<string> {
   return value
 }
 
-export async function selectRouterType(): Promise<Mode> {
+export async function selectRouterType(): Promise<string> {
   const routerType = await select({
     message: 'Select the router type:',
     options: [
       {
-        value: FILE_ROUTER,
+        value: 'file-router',
         label: 'File Router - File-based routing structure',
       },
       {
-        value: CODE_ROUTER,
+        value: 'code-router',
         label: 'Code Router - Traditional code-based routing',
       },
     ],
-    initialValue: FILE_ROUTER,
+    initialValue: 'file-router',
   })
 
   if (isCancel(routerType)) {
@@ -59,7 +57,7 @@ export async function selectRouterType(): Promise<Mode> {
     process.exit(0)
   }
 
-  return routerType as Mode
+  return routerType
 }
 
 export async function selectTypescript(): Promise<boolean> {
@@ -106,7 +104,7 @@ export async function selectPackageManager(): Promise<PackageManager> {
 
 export async function selectAddOns(
   framework: Framework,
-  mode: Mode,
+  mode: string,
   type: string,
   message: string,
   forcedAddOns: Array<string> = [],
