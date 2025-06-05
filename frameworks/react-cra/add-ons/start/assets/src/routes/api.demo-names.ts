@@ -1,6 +1,4 @@
-import { createAPIFileRoute } from '@tanstack/react-start/api'
-
-export const APIRoute = createAPIFileRoute('/demo/start/api/names')({
+export const ServerRoute = createServerFileRoute().methods({
   GET: async ({ request }) => {
     return new Response(JSON.stringify(['Alice', 'Bob', 'Charlie']), {
       headers: {
