@@ -1,3 +1,6 @@
+// do same for listTanStackReactAddOns and listTanStackSolidAddOns
+// remove the react and solid variants
+
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -9,6 +12,8 @@ import {
   createDefaultEnvironment,
   finalizeAddOns,
   getFrameworkById,
+  getFrameworkByName,
+  getFrameworks,
 } from '@tanstack/cta-engine'
 
 function createServer({
@@ -24,12 +29,17 @@ function createServer({
     version: '1.0.0',
   })
 
+  const frameworks = getFrameworks();
+  const frameworkNames = frameworks.map((framework) => framework.name);
+
   server.tool(
-    'listTanStackReactAddOns',
-    'List the available add-ons for creating TanStack React applications',
-    {},
-    () => {
-      const framework = getFrameworkById('react-cra')!
+    'listTanStackAddOns',
+    'List the available add-ons for creating TanStack applications',
+    {
+      framework: z.string().describe(`The framework to use. Available frameworks: ${frameworkNames.join(', ')}`),
+    },
+    ({ framework: frameworkName }) => {
+      const framework = getFrameworkByName(frameworkName)!
       return {
         content: [
           {
@@ -50,9 +60,10 @@ function createServer({
   )
 
   server.tool(
-    'createTanStackReactApplication',
-    'Create a new TanStack React application',
+    'createTanStackApplication',
+    'Create a new TanStack application',
     {
+      framework: z.string().describe(`The framework to use. Available frameworks: ${frameworkNames.join(', ')}`),
       projectName: z
         .string()
         .describe(
@@ -66,8 +77,8 @@ function createServer({
           'The directory to create the application in. Use the absolute path of the directory you want the application to be created in',
         ),
     },
-    async ({ projectName, addOns, cwd, targetDir }) => {
-      const framework = getFrameworkById('react-cra')!
+    async ({ framework:frameworkName, projectName, addOns, cwd, targetDir }) => {
+      const framework = getFrameworkByName(frameworkName)!
       try {
         process.chdir(cwd)
         try {
@@ -94,94 +105,6 @@ function createServer({
           })
         } catch (error) {
           console.error(error)
-          return {
-            content: [
-              { type: 'text', text: `Error creating application: ${error}` },
-            ],
-          }
-        }
-        return {
-          content: [{ type: 'text', text: 'Application created successfully' }],
-        }
-      } catch (error) {
-        return {
-          content: [
-            { type: 'text', text: `Error creating application: ${error}` },
-          ],
-        }
-      }
-    },
-  )
-
-  server.tool(
-    'listTanStackSolidAddOns',
-    'List the available add-ons for creating TanStack Solid applications',
-    {},
-    () => {
-      const framework = getFrameworkById('solid')!
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              framework
-                .getAddOns()
-                .filter((addOn) => addOn.modes.includes('file-router'))
-                .map((addOn) => ({
-                  id: addOn.id,
-                  description: addOn.description,
-                })),
-            ),
-          },
-        ],
-      }
-    },
-  )
-
-  server.tool(
-    'createTanStackSolidApplication',
-    'Create a new TanStack Solid application',
-    {
-      projectName: z
-        .string()
-        .describe(
-          'The package.json module name of the application (will also be the directory name)',
-        ),
-      cwd: z.string().describe('The directory to create the application in'),
-      addOns: z.array(z.string()).describe('The IDs of the add-ons to install'),
-      targetDir: z
-        .string()
-        .describe(
-          'The directory to create the application in. Use the absolute path of the directory you want the application to be created in',
-        ),
-    },
-    async ({ projectName, addOns, cwd, targetDir }) => {
-      const framework = getFrameworkById('solid')!
-      try {
-        process.chdir(cwd)
-        try {
-          const chosenAddOns = await finalizeAddOns(
-            framework,
-            'file-router',
-            Array.from(
-              new Set([
-                ...(addOns as unknown as Array<string>),
-                ...forcedAddOns,
-              ]),
-            ),
-          )
-          await createApp(createDefaultEnvironment(), {
-            projectName: projectName.replace(/^\//, './'),
-            targetDir,
-            framework,
-            typescript: true,
-            tailwind: true,
-            packageManager: 'pnpm',
-            mode: 'file-router',
-            chosenAddOns,
-            git: true,
-          })
-        } catch (error) {
           return {
             content: [
               { type: 'text', text: `Error creating application: ${error}` },

@@ -24,7 +24,7 @@ export function createFrameworkDefinition(): FrameworkDefinition {
 
   return {
     id: 'solid',
-    name: 'solid',
+    name: 'Solid',
     description: 'Solid templates for Tanstack Router Applications',
     version: '0.1.0',
     base: files,
