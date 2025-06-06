@@ -1,0 +1,14 @@
+{
+  "name": "Better Auth",
+  "description": "Add Better Auth authentication to your application.",
+  "phase": "add-on",
+  "templates": ["file-router"],
+  "link": "https://www.better-auth.com",
+  "routes": [
+    {
+      "url": "/demo/better-auth/signup",
+      "name": "Better Auth"
+    }
+  ],
+  "dependsOn": ["start"]
+}
