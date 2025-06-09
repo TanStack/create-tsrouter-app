@@ -1,7 +1,7 @@
 {
   "files": {
     ".cta.json": "{\n  \"addOns\": false,\n  \"git\": true,\n  \"mode\": \"file-router\",\n  \"packageManager\": \"npm\",\n  \"projectName\": \"TEST\",\n  \"tailwind\": false,\n  \"typescript\": false,\n  \"variableValues\": {},\n  \"version\": 1,\n  \"framework\": \"react-cra\",\n  \"chosenAddOns\": []\n}",
-    ".gitignore": "node_modules\n.DS_Store\ndist\ndist-ssr\n*.local\n",
+    ".gitignore": "node_modules\n.DS_Store\ndist\ndist-ssr\n*.local\n.env\n",
     "/.vscode/settings.json": "{\n  \"files.watcherExclude\": {\n    \"**/routeTree.gen.ts\": true\n  },\n  \"search.exclude\": {\n    \"**/routeTree.gen.ts\": true\n  },\n  \"files.readonlyInclude\": {\n    \"**/routeTree.gen.ts\": true\n  }\n}\n",
     "/public/manifest.json": "{\n  \"short_name\": \"TanStack App\",\n  \"name\": \"Create TanStack App Sample\",\n  \"icons\": [\n    {\n      \"src\": \"favicon.ico\",\n      \"sizes\": \"64x64 32x32 24x24 16x16\",\n      \"type\": \"image/x-icon\"\n    },\n    {\n      \"src\": \"logo192.png\",\n      \"type\": \"image/png\",\n      \"sizes\": \"192x192\"\n    },\n    {\n      \"src\": \"logo512.png\",\n      \"type\": \"image/png\",\n      \"sizes\": \"512x512\"\n    }\n  ],\n  \"start_url\": \".\",\n  \"display\": \"standalone\",\n  \"theme_color\": \"#000000\",\n  \"background_color\": \"#ffffff\"\n}\n",
     "/public/robots.txt": "# https://www.robotstxt.org/robotstxt.html\nUser-agent: *\nDisallow:\n",
