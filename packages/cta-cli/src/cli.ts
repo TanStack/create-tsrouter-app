@@ -191,7 +191,7 @@ export function cli({
         }
         return value
       },
-      defaultFramework || 'react',
+      defaultFramework || 'React',
     )
   }
 
