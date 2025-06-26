@@ -4,9 +4,20 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite"
 <% } %><% if (addOnEnabled.sentry) { %>
 import { wrapVinxiConfigWithSentry } from "@sentry/tanstackstart-react";
+<% } %><% if (addOnEnabled.neon) { %>
+import postgresPlugin from "@neondatabase/vite-plugin-postgres";
 <% } %>
 const config = defineConfig({
     plugins: [
+      <% if (addOnEnabled.neon) { %>
+        postgresPlugin({
+          seed: {
+            type: "sql-script",
+            path: "db/init.sql"
+          },
+          referrer: 'create-tanstack'
+        }),
+      <% } %>
       // this is the plugin that enables path aliases
       viteTsConfigPaths({
         projects: ['./tsconfig.json'],
