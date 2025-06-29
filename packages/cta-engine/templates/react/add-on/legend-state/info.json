@@ -1,0 +1,13 @@
+{
+  "name": "Legend State",
+  "description": "A state manager with built-in sync engine to persist state locally or remotely",
+  "phase": "add-on",
+  "templates": ["file-router", "code-router"],
+  "link": "https://legendapp.com/open-source/state/v3/",
+  "routes": [
+    {
+      "url": "/demo/legend-state",
+      "name": "Legend State"
+    }
+  ]
+}
