@@ -224,6 +224,7 @@ Errors were encountered during the creation of your app:
 ${environment.getErrors().join('\n')}`
   }
 
+  // Use the force luke! :)
   environment.outro(
     `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.
 
