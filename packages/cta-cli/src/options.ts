@@ -10,6 +10,7 @@ import {
 
 import {
   getProjectName,
+  promptForAddOnOptions,
   selectAddOns,
   selectGit,
   selectPackageManager,
@@ -131,7 +132,17 @@ export async function promptForCreateOptions(
     options.typescript = true
   }
 
-  options.addOnOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
+  // Prompt for add-on options in interactive mode
+  if (Array.isArray(cliOptions.addOns)) {
+    // Non-interactive mode: use defaults
+    options.addOnOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
+  } else {
+    // Interactive mode: prompt for options
+    const userOptions = await promptForAddOnOptions(options.chosenAddOns.map(a => a.id), options.framework)
+    const defaultOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
+    // Merge user options with defaults
+    options.addOnOptions = { ...defaultOptions, ...userOptions }
+  }
   options.git = cliOptions.git || (await selectGit())
 
   return options
