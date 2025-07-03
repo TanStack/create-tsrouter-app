@@ -103,6 +103,17 @@ export async function normalizeOptions(
     typescript = true
   }
 
+  // Handle add-on configuration option
+  let addOnOptionsFromCLI = {}
+  if (cliOptions.addOnConfig) {
+    try {
+      addOnOptionsFromCLI = JSON.parse(cliOptions.addOnConfig)
+    } catch (error) {
+      console.error('Error parsing add-on config:', error)
+      process.exit(1)
+    }
+  }
+
   return {
     projectName: projectName,
     targetDir: resolve(process.cwd(), projectName),
@@ -116,7 +127,10 @@ export async function normalizeOptions(
       DEFAULT_PACKAGE_MANAGER,
     git: !!cliOptions.git,
     chosenAddOns,
-    addOnOptions: populateAddOnOptionsDefaults(chosenAddOns),
+    addOnOptions: {
+      ...populateAddOnOptionsDefaults(chosenAddOns),
+      ...addOnOptionsFromCLI
+    },
     starter: starter,
   }
 }
