@@ -4,6 +4,7 @@ import {
   finalizeAddOns,
   getFrameworkById,
   getPackageManager,
+  populateAddOnOptionsDefaults,
   readConfigFile,
 } from '@tanstack/cta-engine'
 
@@ -130,6 +131,7 @@ export async function promptForCreateOptions(
     options.typescript = true
   }
 
+  options.addOnOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
   options.git = cliOptions.git || (await selectGit())
 
   return options

@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "drizzle-orm": "^0.29.0"<% if (addOnOption.drizzle.database === 'postgres') { %>,
+    "postgres": "^3.4.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>,
+    "mysql2": "^3.6.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>,
+    "better-sqlite3": "^8.7.0"<% } %>
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.20.0"<% if (addOnOption.drizzle.database === 'postgres') { %>,
+    "@types/postgres": "^3.0.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>,
+    "@types/mysql2": "^3.0.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>,
+    "@types/better-sqlite3": "^7.6.0"<% } %>
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate:<% if (addOnOption.drizzle.database === 'postgres') { %>pg<% } else if (addOnOption.drizzle.database === 'mysql') { %>mysql<% } else { %>sqlite<% } %>",
+    "db:push": "drizzle-kit push:<% if (addOnOption.drizzle.database === 'postgres') { %>pg<% } else if (addOnOption.drizzle.database === 'mysql') { %>mysql<% } else { %>sqlite<% } %>",
+    "db:studio": "drizzle-kit studio"
+  }
+}

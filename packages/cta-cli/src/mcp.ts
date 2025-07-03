@@ -13,6 +13,7 @@ import {
   finalizeAddOns,
   getFrameworkByName,
   getFrameworks,
+  populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
 function createServer({
@@ -114,6 +115,7 @@ function createServer({
             packageManager: 'pnpm',
             mode: 'file-router',
             chosenAddOns,
+            addOnOptions: populateAddOnOptionsDefaults(chosenAddOns),
             git: true,
           })
         } catch (error) {

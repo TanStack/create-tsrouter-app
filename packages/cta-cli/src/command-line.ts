@@ -6,6 +6,7 @@ import {
   getFrameworkById,
   getPackageManager,
   loadStarter,
+  populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
 import type { Options } from '@tanstack/cta-engine'
@@ -115,6 +116,7 @@ export async function normalizeOptions(
       DEFAULT_PACKAGE_MANAGER,
     git: !!cliOptions.git,
     chosenAddOns,
+    addOnOptions: populateAddOnOptionsDefaults(chosenAddOns),
     starter: starter,
   }
 }

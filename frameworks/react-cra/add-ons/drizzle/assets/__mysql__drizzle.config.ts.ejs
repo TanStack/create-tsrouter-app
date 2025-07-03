@@ -1,0 +1,13 @@
+<% if (addOnOption.drizzle.database !== 'mysql') { ignoreFile() } %>
+import { defineConfig } from 'drizzle-kit'
+
+export default defineConfig({
+  schema: './<%= addOnOption.drizzle.schema %>/schema.<%= js %>',
+  out: './<%= addOnOption.drizzle.schema %>/migrations',
+  driver: 'mysql2',
+  dbCredentials: {
+    connectionString: process.env.DATABASE_URL!,
+  },
+  verbose: true,
+  strict: true,
+})

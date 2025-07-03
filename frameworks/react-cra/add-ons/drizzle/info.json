@@ -1,0 +1,40 @@
+{
+  "name": "Drizzle ORM",
+  "description": "Add Drizzle ORM with configurable database support to your application.",
+  "phase": "add-on",
+  "modes": ["file-router"],
+  "type": "add-on",
+  "link": "https://orm.drizzle.team",
+  "dependsOn": ["start"],
+  "options": {
+    "database": {
+      "type": "select",
+      "label": "Database Provider",
+      "description": "Choose your database provider",
+      "default": "postgres",
+      "options": [
+        { "value": "postgres", "label": "PostgreSQL" },
+        { "value": "mysql", "label": "MySQL" },
+        { "value": "sqlite", "label": "SQLite" }
+      ]
+    },
+    "schema": {
+      "type": "select",
+      "label": "Schema Location",
+      "description": "Where to place your database schema",
+      "default": "src/db",
+      "options": [
+        { "value": "src/db", "label": "src/db/" },
+        { "value": "db", "label": "db/" }
+      ]
+    }
+  },
+  "routes": [
+    {
+      "url": "/demo/drizzle",
+      "name": "Drizzle Demo",
+      "path": "src/routes/demo.drizzle.tsx",
+      "jsName": "DrizzleDemo"
+    }
+  ]
+}

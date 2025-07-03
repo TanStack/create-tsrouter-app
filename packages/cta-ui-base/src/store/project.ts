@@ -23,6 +23,7 @@ export const useProjectOptions = create<
   tailwind: true,
   git: true,
   chosenAddOns: [],
+  addOnOptions: {},
   packageManager: 'pnpm',
 }))
 
