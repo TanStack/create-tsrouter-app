@@ -148,18 +148,63 @@ export function useAddOns() {
               (addOn) => addOn !== addOnId,
             ),
           }))
+          // Clear options when add-on is disabled
+          useProjectOptions.setState((state) => {
+            const newAddOnOptions = { ...state.addOnOptions }
+            delete newAddOnOptions[addOnId]
+            return { addOnOptions: newAddOnOptions }
+          })
         } else {
           useMutableAddOns.setState((state) => ({
             userSelectedAddOns: [...state.userSelectedAddOns, addOnId],
           }))
+          // Initialize options with defaults when add-on is enabled
+          const addOn = availableAddOns.find((a) => a.id === addOnId)
+          if (addOn?.options) {
+            const defaultOptions: Record<string, any> = {}
+            Object.entries(addOn.options).forEach(([optionName, option]) => {
+              defaultOptions[optionName] = (option as any).default
+            })
+            useProjectOptions.setState((state) => ({
+              addOnOptions: {
+                ...state.addOnOptions,
+                [addOnId]: defaultOptions,
+              },
+            }))
+          }
         }
       }
     },
-    [ready, addOnState],
+    [ready, addOnState, availableAddOns],
+  )
+
+  const setAddOnOption = useCallback(
+    (addOnId: string, optionName: string, value: any) => {
+      if (!ready) return
+      useProjectOptions.setState((state) => ({
+        addOnOptions: {
+          ...state.addOnOptions,
+          [addOnId]: {
+            ...state.addOnOptions[addOnId],
+            [optionName]: value,
+          },
+        },
+      }))
+    },
+    [ready],
+  )
+
+  const getAddOnOptions = useCallback(
+    (addOnId: string) => {
+      return useProjectOptions.getState().addOnOptions[addOnId] || {}
+    },
+    [],
   )
 
   return {
     toggleAddOn,
+    setAddOnOption,
+    getAddOnOptions,
     chosenAddOns,
     availableAddOns,
     userSelectedAddOns,

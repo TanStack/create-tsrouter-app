@@ -73,6 +73,10 @@ export {
 
 export type {
   AddOn,
+  AddOnOption,
+  AddOnOptions,
+  AddOnSelectOption,
+  AddOnSelection,
   Environment,
   FileBundleHandler,
   Framework,

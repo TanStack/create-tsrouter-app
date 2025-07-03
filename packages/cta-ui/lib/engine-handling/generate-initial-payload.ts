@@ -35,6 +35,7 @@ function convertAddOnToAddOnInfo(addOn: AddOn): AddOnInfo {
     logo: addOn.logo,
     link: addOn.link!,
     dependsOn: addOn.dependsOn,
+    options: addOn.options,
   }
 }
 
