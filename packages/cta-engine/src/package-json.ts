@@ -1,3 +1,4 @@
+import { render } from 'ejs'
 import { sortObject } from './utils.js'
 
 import type { Options } from './types.js'
@@ -42,10 +43,41 @@ export function createPackageJSON(options: Options) {
     packageJSON = mergePackageJSON(packageJSON, addition)
   }
 
-  for (const addOn of options.chosenAddOns.map(
-    (addOn) => addOn.packageAdditions,
-  )) {
-    packageJSON = mergePackageJSON(packageJSON, addOn)
+  for (const addOn of options.chosenAddOns) {
+    let addOnPackageJSON = addOn.packageAdditions
+    
+    // Process EJS template if present
+    if (addOn.packageTemplate) {
+      const templateValues = {
+        packageManager: options.packageManager,
+        projectName: options.projectName,
+        typescript: options.typescript,
+        tailwind: options.tailwind,
+        js: options.typescript ? 'ts' : 'js',
+        jsx: options.typescript ? 'tsx' : 'jsx',
+        fileRouter: options.mode === 'file-router',
+        codeRouter: options.mode === 'code-router',
+        addOnEnabled: options.chosenAddOns.reduce<Record<string, boolean>>(
+          (acc, addon) => {
+            acc[addon.id] = true
+            return acc
+          },
+          {},
+        ),
+        addOnOption: options.addOnOptions,
+        addOns: options.chosenAddOns,
+      }
+      
+      try {
+        const renderedTemplate = render(addOn.packageTemplate, templateValues)
+        addOnPackageJSON = JSON.parse(renderedTemplate)
+      } catch (error) {
+        console.error(`Error processing package.json.ejs for add-on ${addOn.id}:`, error)
+        // Fall back to packageAdditions if template processing fails
+      }
+    }
+    
+    packageJSON = mergePackageJSON(packageJSON, addOnPackageJSON)
   }
 
   if (options.starter) {

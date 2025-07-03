@@ -1,0 +1,9 @@
+import { <% if (addOnOption.drizzle.database === 'postgres') { %>pgTable, serial, text, timestamp<% } else if (addOnOption.drizzle.database === 'mysql') { %>mysqlTable, serial, varchar, timestamp<% } else { %>sqliteTable, integer, text<% } %> } from 'drizzle-orm/<% if (addOnOption.drizzle.database === 'postgres') { %>pg-core<% } else if (addOnOption.drizzle.database === 'mysql') { %>mysql-core<% } else { %>sqlite-core<% } %>'
+
+export const users = <% if (addOnOption.drizzle.database === 'postgres') { %>pgTable<% } else if (addOnOption.drizzle.database === 'mysql') { %>mysqlTable<% } else { %>sqliteTable<% } %>('users', {
+  id: <% if (addOnOption.drizzle.database === 'sqlite') { %>integer('id').primaryKey()<% } else { %>serial('id').primaryKey()<% } %>,
+  <% if (addOnOption.drizzle.database === 'mysql') { %>name: varchar('name', { length: 256 }),
+  email: varchar('email', { length: 256 }),<% } else { %>name: text('name'),
+  email: text('email'),<% } %>
+  <% if (addOnOption.drizzle.database === 'sqlite') { %>createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),<% } else { %>createdAt: timestamp('created_at').defaultNow(),<% } %>
+})

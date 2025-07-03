@@ -183,3 +183,44 @@ export async function selectToolchain(
 
   return tc
 }
+
+export async function promptForAddOnOptions(
+  addOnIds: Array<string>,
+  framework: Framework,
+): Promise<Record<string, Record<string, any>>> {
+  const addOnOptions: Record<string, Record<string, any>> = {}
+  
+  for (const addOnId of addOnIds) {
+    const addOn = framework.getAddOns().find(a => a.id === addOnId)
+    if (!addOn || !addOn.options) continue
+    
+    addOnOptions[addOnId] = {}
+    
+    for (const [optionName, option] of Object.entries(addOn.options)) {
+      if (option && typeof option === 'object' && 'type' in option) {
+        if (option.type === 'select') {
+          const selectOption = option as { type: 'select'; label: string; description?: string; default: string; options: Array<{ value: string; label: string }> }
+          
+          const value = await select({
+            message: `${addOn.name}: ${selectOption.label}`,
+            options: selectOption.options.map(opt => ({
+              value: opt.value,
+              label: opt.label,
+            })),
+            initialValue: selectOption.default,
+          })
+          
+          if (isCancel(value)) {
+            cancel('Operation cancelled.')
+            process.exit(0)
+          }
+          
+          addOnOptions[addOnId][optionName] = value
+        }
+        // Future option types can be added here
+      }
+    }
+  }
+  
+  return addOnOptions
+}
