@@ -2,8 +2,8 @@
 import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
-  schema: './<%= addOnOption.drizzle.schema %>/schema.<%= js %>',
-  out: './<%= addOnOption.drizzle.schema %>/migrations',
+  schema: './src/db/schema.<%= js %>',
+  out: './src/db/migrations',
   driver: 'mysql2',
   dbCredentials: {
     connectionString: process.env.DATABASE_URL!,

@@ -17,16 +17,6 @@
         { "value": "mysql", "label": "MySQL" },
         { "value": "sqlite", "label": "SQLite" }
       ]
-    },
-    "schema": {
-      "type": "select",
-      "label": "Schema Location",
-      "description": "Where to place your database schema",
-      "default": "src/db",
-      "options": [
-        { "value": "src/db", "label": "src/db/" },
-        { "value": "db", "label": "db/" }
-      ]
     }
   },
   "routes": [
