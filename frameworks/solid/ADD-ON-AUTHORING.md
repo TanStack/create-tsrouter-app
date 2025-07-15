@@ -212,9 +212,9 @@ Use filename prefixes to include files only when specific option values are sele
 
 ```
 assets/
-├── __postgres__drizzle.config.ts.ejs
-├── __mysql__drizzle.config.ts.ejs
-├── __sqlite__drizzle.config.ts.ejs
+├── __postgres__schema.prisma.ejs
+├── __mysql__schema.prisma.ejs
+├── __sqlite__schema.prisma.ejs
 └── src/
     └── db/
         ├── __postgres__index.ts.ejs
@@ -232,12 +232,18 @@ assets/
 Within template files, use `ignoreFile()` to skip file generation:
 
 ```ejs
-<% if (addOnOption.drizzle.database !== 'postgres') { ignoreFile() } %>
-import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+<% if (addOnOption.database.database !== 'postgres') { ignoreFile() } %>
+import { PrismaClient } from '@prisma/client'
 
-const client = postgres(process.env.DATABASE_URL!)
-export const db = drizzle(client)
+declare global {
+  var __prisma: PrismaClient | undefined
+}
+
+export const prisma = globalThis.__prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma
+}
 ```
 
 ## Complete Example: Database Add-on
@@ -272,40 +278,53 @@ File structure:
 ```
 database/
 ├── assets/
-│   ├── __postgres__db.config.ts.ejs
-│   ├── __mysql__db.config.ts.ejs
-│   ├── __sqlite__db.config.ts.ejs
+│   ├── __postgres__schema.prisma.ejs
+│   ├── __mysql__schema.prisma.ejs
+│   ├── __sqlite__schema.prisma.ejs
 │   └── src/
 │       ├── db/
-│       │   ├── __postgres__connection.ts.ejs
-│       │   ├── __mysql__connection.ts.ejs
-│       │   └── __sqlite__connection.ts.ejs
+│       │   ├── __postgres__index.ts.ejs
+│       │   ├── __mysql__index.ts.ejs
+│       │   └── __sqlite__index.ts.ejs
 │       └── routes/
 │           └── demo.database.tsx.ejs
 └── package.json.ejs
 ```
 
-Code in `assets/__postgres__db.config.ts.ejs`:
+Code in `assets/__postgres__schema.prisma.ejs`:
 ```ejs
 <% if (addOnOption.database.database !== 'postgres') { ignoreFile() } %>
-export const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME || 'myapp',
-  username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 ```
 
-Code in `assets/src/db/__postgres__connection.ts.ejs`:
+Code in `assets/src/db/__postgres__index.ts.ejs`:
 ```ejs
 <% if (addOnOption.database.database !== 'postgres') { ignoreFile() } %>
-import { Client } from 'pg'
-import { dbConfig } from '../db.config'
+import { PrismaClient } from '@prisma/client'
 
-export const createConnection = () => {
-  const client = new Client(dbConfig)
-  return client
+declare global {
+  var __prisma: PrismaClient | undefined
+}
+
+export const prisma = globalThis.__prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma
 }
 ```
 
@@ -320,15 +339,16 @@ export default function DatabaseDemo() {
     try {
       // Database-specific connection logic
       <% if (addOnOption.database.database === 'postgres') { %>
-      const { createConnection } = await import('../db/connection')
-      const client = createConnection()
-      await client.connect()
+      const { prisma } = await import('../db')
+      await prisma.$connect()
       setStatus('Connected to PostgreSQL!')
       <% } else if (addOnOption.database.database === 'mysql') { %>
-      const { createConnection } = await import('../db/connection')
-      const connection = createConnection()
+      const { prisma } = await import('../db')
+      await prisma.$connect()
       setStatus('Connected to MySQL!')
       <% } else if (addOnOption.database.database === 'sqlite') { %>
+      const { prisma } = await import('../db')
+      await prisma.$connect()
       setStatus('Connected to SQLite!')
       <% } %>
     } catch (error) {
@@ -349,15 +369,11 @@ export default function DatabaseDemo() {
 Code in `package.json.ejs`:
 ```ejs
 {
-  <% if (addOnOption.database.database === 'postgres') { %>
+  "prisma": "^5.8.0",
+  "@prisma/client": "^5.8.0"<% if (addOnOption.database.database === 'postgres') { %>,
   "pg": "^8.11.0",
-  "@types/pg": "^8.10.0"
-  <% } else if (addOnOption.database.database === 'mysql') { %>
-  "mysql2": "^3.6.0"
-  <% } else if (addOnOption.database.database === 'sqlite') { %>
-  "better-sqlite3": "^8.7.0",
-  "@types/better-sqlite3": "^7.6.0"
-  <% } %>
+  "@types/pg": "^8.10.0"<% } else if (addOnOption.database.database === 'mysql') { %>,
+  "mysql2": "^3.6.0"<% } else if (addOnOption.database.database === 'sqlite') { %><% } %>
 }
 ```
 

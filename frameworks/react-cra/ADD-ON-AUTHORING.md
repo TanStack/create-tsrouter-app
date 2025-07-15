@@ -252,9 +252,9 @@ Use filename prefixes to include files only when specific option values are sele
 
 ```
 assets/
-├── __postgres__drizzle.config.ts.ejs
-├── __mysql__drizzle.config.ts.ejs
-├── __sqlite__drizzle.config.ts.ejs
+├── __postgres__schema.prisma.ejs
+├── __mysql__schema.prisma.ejs
+├── __sqlite__schema.prisma.ejs
 └── src/
     └── db/
         ├── __postgres__index.ts.ejs
@@ -272,25 +272,31 @@ assets/
 Within template files, use `ignoreFile()` to skip file generation:
 
 ```ejs
-<% if (addOnOption.drizzle.database !== 'postgres') { ignoreFile() } %>
-import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+<% if (addOnOption.prisma.database !== 'postgres') { ignoreFile() } %>
+import { PrismaClient } from '@prisma/client'
 
-const client = postgres(process.env.DATABASE_URL!)
-export const db = drizzle(client)
+declare global {
+  var __prisma: PrismaClient | undefined
+}
+
+export const prisma = globalThis.__prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma
+}
 ```
 
-## Complete Example: Drizzle Add-on
+## Complete Example: Prisma Add-on
 
-Here's how the Drizzle add-on implements configurable database support:
+Here's how the Prisma add-on implements configurable database support:
 
 ### Examples
 
 Configuration in `info.json`:
 ```json
 {
-  "name": "Drizzle ORM",
-  "description": "Add Drizzle ORM with configurable database support to your application.",
+  "name": "Prisma ORM",
+  "description": "Add Prisma ORM with configurable database support to your application.",
   "options": {
     "database": {
       "type": "select",
@@ -309,11 +315,11 @@ Configuration in `info.json`:
 
 File structure:
 ```
-drizzle/
+prisma/
 ├── assets/
-│   ├── __postgres__drizzle.config.ts.ejs
-│   ├── __mysql__drizzle.config.ts.ejs
-│   ├── __sqlite__drizzle.config.ts.ejs
+│   ├── __postgres__schema.prisma.ejs
+│   ├── __mysql__schema.prisma.ejs
+│   ├── __sqlite__schema.prisma.ejs
 │   └── src/
 │       └── db/
 │           ├── __postgres__index.ts.ejs
@@ -322,31 +328,35 @@ drizzle/
 └── package.json.ejs
 ```
 
-Code in `assets/__postgres__drizzle.config.ts.ejs`:
+Code in `assets/__postgres__schema.prisma.ejs`:
 ```ejs
-<% if (addOnOption.drizzle.database !== 'postgres') { ignoreFile() } %>
-import { defineConfig } from 'drizzle-kit'
+<% if (addOnOption.prisma.database !== 'postgres') { ignoreFile() } %>
+generator client {
+  provider = "prisma-client-js"
+}
 
-export default defineConfig({
-  schema: './src/db/schema.<%= js %>',
-  out: './src/db/migrations',
-  driver: 'pg',
-  dbCredentials: {
-    connectionString: process.env.DATABASE_URL!,
-  }
-})
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 ```
 
 Code in `package.json.ejs`:
 ```ejs
 {
-  <% if (addOnOption.drizzle.database === 'postgres') { %>
+  "prisma": "^5.8.0",
+  "@prisma/client": "^5.8.0"<% if (addOnOption.prisma.database === 'postgres') { %>,
   "pg": "^8.11.0",
-  "drizzle-orm": "^0.29.0"
-  <% } else if (addOnOption.drizzle.database === 'mysql') { %>
-  "mysql2": "^3.6.0",
-  "drizzle-orm": "^0.29.0"
-  <% } %>
+  "@types/pg": "^8.10.0"<% } else if (addOnOption.prisma.database === 'mysql') { %>,
+  "mysql2": "^3.6.0"<% } else if (addOnOption.prisma.database === 'sqlite') { %><% } %>
 }
 ```
 
@@ -357,15 +367,15 @@ When using the CLI interactively, users are prompted for each option:
 
 ```bash
 create-tsrouter-app my-app
-# User selects Drizzle add-on
-# CLI prompts: "Drizzle ORM: Database Provider" with options
+# User selects Prisma add-on
+# CLI prompts: "Prisma ORM: Database Provider" with options
 ```
 
 ### Non-Interactive Mode
 Options can be specified via JSON configuration:
 
 ```bash
-create-tsrouter-app my-app --add-ons drizzle --add-on-config '{"drizzle":{"database":"mysql"}}'
+create-tsrouter-app my-app --add-ons prisma --add-on-config '{"prisma":{"database":"mysql"}}'
 ```
 
 ## Best Practices

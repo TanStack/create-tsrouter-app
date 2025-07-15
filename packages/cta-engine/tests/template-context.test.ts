@@ -26,13 +26,13 @@ describe('Template Context - Add-on Options', () => {
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
       }
     })
     environment.startRun()
-    await templateFile('./test.txt.ejs', 'Database: <%= addOnOption.drizzle.database %>')
+    await templateFile('./test.txt.ejs', 'Database: <%= addOnOption.testAddon.database %>')
     environment.finishRun()
 
     expect(output.files['/test/test.txt']).toEqual('Database: postgres')
@@ -43,7 +43,7 @@ describe('Template Context - Add-on Options', () => {
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'mysql'
         },
         shadcn: {
@@ -54,7 +54,7 @@ describe('Template Context - Add-on Options', () => {
     environment.startRun()
     await templateFile(
       './test.txt.ejs',
-      'Drizzle: <%= addOnOption.drizzle.database %>, shadcn: <%= addOnOption.shadcn.theme %>'
+      'Drizzle: <%= addOnOption.testAddon.database %>, shadcn: <%= addOnOption.shadcn.theme %>'
     )
     environment.finishRun()
 
@@ -88,7 +88,7 @@ describe('Template Context - Add-on Options', () => {
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
       }
@@ -96,9 +96,9 @@ describe('Template Context - Add-on Options', () => {
     environment.startRun()
     await templateFile(
       './test.txt.ejs',
-      `<% if (addOnOption.drizzle.database === 'postgres') { %>
+      `<% if (addOnOption.testAddon.database === 'postgres') { %>
 PostgreSQL configuration
-<% } else if (addOnOption.drizzle.database === 'mysql') { %>
+<% } else if (addOnOption.testAddon.database === 'mysql') { %>
 MySQL configuration
 <% } else { %>
 SQLite configuration
@@ -114,7 +114,7 @@ SQLite configuration
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
       }
@@ -122,11 +122,11 @@ SQLite configuration
     environment.startRun()
     await templateFile(
       './postgres-config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL configuration\nexport const config = "postgres"'
+      '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL configuration\nexport const config = "postgres"'
     )
     await templateFile(
       './mysql-config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "mysql") { ignoreFile() } %>\n// MySQL configuration\nexport const config = "mysql"'
+      '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL configuration\nexport const config = "mysql"'
     )
     environment.finishRun()
 
@@ -156,7 +156,7 @@ SQLite configuration
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: undefined
         }
       }
@@ -164,7 +164,7 @@ SQLite configuration
     environment.startRun()
     await templateFile(
       './test.txt.ejs',
-      'Database: <%= addOnOption.drizzle.database || "not set" %>'
+      'Database: <%= addOnOption.testAddon.database || "not set" %>'
     )
     environment.finishRun()
 
@@ -178,12 +178,12 @@ SQLite configuration
       projectName: 'my-app',
       chosenAddOns: [
         {
-          id: 'drizzle',
+          id: 'testAddon',
           name: 'Drizzle ORM',
         } as AddOn
       ],
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
       }
@@ -191,11 +191,11 @@ SQLite configuration
     environment.startRun()
     await templateFile(
       './test.txt.ejs',
-      'Project: <%= projectName %>, Add-ons: <%= Object.keys(addOnEnabled).join(", ") %>, Database: <%= addOnOption.drizzle.database %>'
+      'Project: <%= projectName %>, Add-ons: <%= Object.keys(addOnEnabled).join(", ") %>, Database: <%= addOnOption.testAddon.database %>'
     )
     environment.finishRun()
 
-    expect(output.files['/test/test.txt']).toEqual('Project: my-app, Add-ons: drizzle, Database: postgres')
+    expect(output.files['/test/test.txt']).toEqual('Project: my-app, Add-ons: testAddon, Database: postgres')
   })
 
   it('should handle nested object access safely', async () => {
@@ -203,7 +203,7 @@ SQLite configuration
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
       }
@@ -211,7 +211,7 @@ SQLite configuration
     environment.startRun()
     await templateFile(
       './test.txt.ejs',
-      'Exists: <%= addOnOption.drizzle ? "yes" : "no" %>, Non-existent: <%= addOnOption.nonexistent ? "yes" : "no" %>'
+      'Exists: <%= addOnOption.testAddon ? "yes" : "no" %>, Non-existent: <%= addOnOption.nonexistent ? "yes" : "no" %>'
     )
     environment.finishRun()
 
@@ -223,7 +223,7 @@ SQLite configuration
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
       }
@@ -231,22 +231,22 @@ SQLite configuration
     environment.startRun()
     await templateFile(
       './db-config.ts.ejs',
-      `<% if (addOnOption.drizzle.database === 'postgres') { %>
-import { drizzle } from 'drizzle-orm/postgres-js'
+      `<% if (addOnOption.testAddon.database === 'postgres') { %>
+import { testAddon } from 'testAddon-orm/postgres-js'
 import postgres from 'postgres'
-<% } else if (addOnOption.drizzle.database === 'mysql') { %>
-import { drizzle } from 'drizzle-orm/mysql2'
+<% } else if (addOnOption.testAddon.database === 'mysql') { %>
+import { testAddon } from 'testAddon-orm/mysql2'
 import mysql from 'mysql2/promise'
-<% } else if (addOnOption.drizzle.database === 'sqlite') { %>
-import { drizzle } from 'drizzle-orm/better-sqlite3'
+<% } else if (addOnOption.testAddon.database === 'sqlite') { %>
+import { testAddon } from 'testAddon-orm/better-sqlite3'
 import Database from 'better-sqlite3'
 <% } %>
 
-export const db = drizzle(/* connection */)`
+export const db = testAddon(/* connection */)`
     )
     environment.finishRun()
 
-    expect(output.files['/test/db-config.ts']).toContain("import { drizzle } from 'drizzle-orm/postgres-js'")
+    expect(output.files['/test/db-config.ts']).toContain("import { testAddon } from 'testAddon-orm/postgres-js'")
     expect(output.files['/test/db-config.ts']).toContain("import postgres from 'postgres'")
     expect(output.files['/test/db-config.ts']).not.toContain("import mysql from 'mysql2/promise'")
     expect(output.files['/test/db-config.ts']).not.toContain("import Database from 'better-sqlite3'")
@@ -257,29 +257,29 @@ export const db = drizzle(/* connection */)`
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
       }
     })
     environment.startRun()
     await templateFile(
-      './__postgres__drizzle.config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL Drizzle config\nexport default { driver: "postgres" }'
+      './__postgres__testAddon.config.ts.ejs',
+      '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL Drizzle config\nexport default { driver: "postgres" }'
     )
     await templateFile(
-      './__mysql__drizzle.config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "mysql") { ignoreFile() } %>\n// MySQL Drizzle config\nexport default { driver: "mysql" }'
+      './__mysql__testAddon.config.ts.ejs',
+      '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL Drizzle config\nexport default { driver: "mysql" }'
     )
     environment.finishRun()
 
     // File should be created with prefix stripped
-    expect(output.files['/test/drizzle.config.ts']).toBeDefined()
-    expect(output.files['/test/drizzle.config.ts'].trim()).toEqual('// PostgreSQL Drizzle config\nexport default { driver: \'postgres\' }')
+    expect(output.files['/test/testAddon.config.ts']).toBeDefined()
+    expect(output.files['/test/testAddon.config.ts'].trim()).toEqual('// PostgreSQL Drizzle config\nexport default { driver: \'postgres\' }')
     
     // Prefixed filename should not exist
-    expect(output.files['/test/__postgres__drizzle.config.ts']).toBeUndefined()
-    expect(output.files['/test/__mysql__drizzle.config.ts']).toBeUndefined()
+    expect(output.files['/test/__postgres__testAddon.config.ts']).toBeUndefined()
+    expect(output.files['/test/__mysql__testAddon.config.ts']).toBeUndefined()
   })
 
   it('should handle nested directory with prefixed files', async () => {
@@ -287,7 +287,7 @@ export const db = drizzle(/* connection */)`
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: {
+        testAddon: {
           database: 'sqlite'
         }
       }
@@ -295,11 +295,11 @@ export const db = drizzle(/* connection */)`
     environment.startRun()
     await templateFile(
       './src/db/__sqlite__index.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "sqlite") { ignoreFile() } %>\n// SQLite database connection\nexport const db = "sqlite"'
+      '<% if (addOnOption.testAddon.database !== "sqlite") { ignoreFile() } %>\n// SQLite database connection\nexport const db = "sqlite"'
     )
     await templateFile(
       './src/db/__postgres__index.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL database connection\nexport const db = "postgres"'
+      '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL database connection\nexport const db = "postgres"'
     )
     environment.finishRun()
 

@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "prisma": "^5.8.0",
+    "@prisma/client": "^5.8.0"<% if (addOnOption.prisma.database === 'postgres') { %>,
+    "pg": "^8.11.0"<% } %><% if (addOnOption.prisma.database === 'mysql') { %>,
+    "mysql2": "^3.6.0"<% } %>
+  },
+  "devDependencies": {<% if (addOnOption.prisma.database === 'postgres') { %>
+    "@types/pg": "^8.10.0"<% } %><% if (addOnOption.prisma.database === 'mysql') { %>
+    "@types/mysql2": "^3.6.0"<% } %><% if (addOnOption.prisma.database === 'sqlite') { %>
+    "@types/better-sqlite3": "^7.6.0"<% } %>
+  },
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed"
+  }
+}

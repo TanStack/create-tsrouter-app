@@ -26,22 +26,22 @@ describe('Filename Processing - Prefix Stripping', () => {
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: { database: 'postgres' }
+        testAddon: { database: 'postgres' }
       }
     })
     environment.startRun()
     await templateFile(
-      './__postgres__drizzle.config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL config\nexport default { driver: "postgres" }'
+      './__postgres__testAddon.config.ts.ejs',
+      '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL config\nexport default { driver: "postgres" }'
     )
     environment.finishRun()
 
     // File should be created with prefix stripped
-    expect(output.files['/test/drizzle.config.ts']).toBeDefined()
-    expect(output.files['/test/drizzle.config.ts'].trim()).toEqual('// PostgreSQL config\nexport default { driver: \'postgres\' }')
+    expect(output.files['/test/testAddon.config.ts']).toBeDefined()
+    expect(output.files['/test/testAddon.config.ts'].trim()).toEqual('// PostgreSQL config\nexport default { driver: \'postgres\' }')
     
     // Original prefixed filename should not exist
-    expect(output.files['/test/__postgres__drizzle.config.ts']).toBeUndefined()
+    expect(output.files['/test/__postgres__testAddon.config.ts']).toBeUndefined()
   })
 
   it('should strip prefix from nested directory paths', async () => {
@@ -49,13 +49,13 @@ describe('Filename Processing - Prefix Stripping', () => {
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: { database: 'mysql' }
+        testAddon: { database: 'mysql' }
       }
     })
     environment.startRun()
     await templateFile(
       './src/db/__mysql__connection.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "mysql") { ignoreFile() } %>\n// MySQL connection\nexport const connection = "mysql"'
+      '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL connection\nexport const connection = "mysql"'
     )
     environment.finishRun()
 
@@ -72,32 +72,32 @@ describe('Filename Processing - Prefix Stripping', () => {
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: { database: 'sqlite' }
+        testAddon: { database: 'sqlite' }
       }
     })
     environment.startRun()
     await templateFile(
-      './__postgres__drizzle.config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL config'
+      './__postgres__testAddon.config.ts.ejs',
+      '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL config'
     )
     await templateFile(
-      './__mysql__drizzle.config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "mysql") { ignoreFile() } %>\n// MySQL config'
+      './__mysql__testAddon.config.ts.ejs',
+      '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL config'
     )
     await templateFile(
-      './__sqlite__drizzle.config.ts.ejs',
-      '<% if (addOnOption.drizzle.database !== "sqlite") { ignoreFile() } %>\n// SQLite config'
+      './__sqlite__testAddon.config.ts.ejs',
+      '<% if (addOnOption.testAddon.database !== "sqlite") { ignoreFile() } %>\n// SQLite config'
     )
     environment.finishRun()
 
     // Only SQLite file should exist (others ignored via ignoreFile())
-    expect(output.files['/test/drizzle.config.ts']).toBeDefined()
-    expect(output.files['/test/drizzle.config.ts'].trim()).toEqual('// SQLite config')
+    expect(output.files['/test/testAddon.config.ts']).toBeDefined()
+    expect(output.files['/test/testAddon.config.ts'].trim()).toEqual('// SQLite config')
     
     // Prefixed filenames should not exist
-    expect(output.files['/test/__postgres__drizzle.config.ts']).toBeUndefined()
-    expect(output.files['/test/__mysql__drizzle.config.ts']).toBeUndefined()
-    expect(output.files['/test/__sqlite__drizzle.config.ts']).toBeUndefined()
+    expect(output.files['/test/__postgres__testAddon.config.ts']).toBeUndefined()
+    expect(output.files['/test/__mysql__testAddon.config.ts']).toBeUndefined()
+    expect(output.files['/test/__sqlite__testAddon.config.ts']).toBeUndefined()
   })
 
   it('should handle complex filename patterns', async () => {
@@ -125,7 +125,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     const templateFile = createTemplateFile(environment, {
       ...simpleOptions,
       addOnOptions: {
-        drizzle: { database: 'postgres' }
+        testAddon: { database: 'postgres' }
       }
     })
     environment.startRun()
@@ -137,7 +137,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     // Then append with prefixed filename
     await templateFile(
       './__postgres__.env.append.ejs',
-      '<% if (addOnOption.drizzle.database !== "postgres") { ignoreFile() } %>\nDATABASE_URL=postgresql://localhost:5432/mydb\n'
+      '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\nDATABASE_URL=postgresql://localhost:5432/mydb\n'
     )
     environment.finishRun()
 

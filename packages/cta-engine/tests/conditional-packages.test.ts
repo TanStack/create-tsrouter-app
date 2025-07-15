@@ -29,25 +29,25 @@ describe('Conditional Package Dependencies', () => {
         ...baseOptions,
         chosenAddOns: [
           {
-            id: 'drizzle',
+            id: 'testAddon',
             name: 'Drizzle ORM',
             packageTemplate: `{
               "dependencies": {
-                "drizzle-orm": "^0.29.0"<% if (addOnOption.drizzle.database === 'postgres') { %>,
-                "postgres": "^3.4.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>,
-                "mysql2": "^3.6.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>,
+                "testAddon-orm": "^0.29.0"<% if (addOnOption.testAddon.database === 'postgres') { %>,
+                "postgres": "^3.4.0"<% } %><% if (addOnOption.testAddon.database === 'mysql') { %>,
+                "mysql2": "^3.6.0"<% } %><% if (addOnOption.testAddon.database === 'sqlite') { %>,
                 "better-sqlite3": "^8.7.0"<% } %>
               },
-              "devDependencies": {<% if (addOnOption.drizzle.database === 'postgres') { %>
-                "@types/postgres": "^3.0.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>
-                "@types/mysql2": "^3.0.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>
+              "devDependencies": {<% if (addOnOption.testAddon.database === 'postgres') { %>
+                "@types/postgres": "^3.0.0"<% } %><% if (addOnOption.testAddon.database === 'mysql') { %>
+                "@types/mysql2": "^3.0.0"<% } %><% if (addOnOption.testAddon.database === 'sqlite') { %>
                 "@types/better-sqlite3": "^7.6.0"<% } %>
               }
             }`
           }
         ],
         addOnOptions: {
-          drizzle: {
+          testAddon: {
             database: 'postgres'
           }
         }
@@ -56,7 +56,7 @@ describe('Conditional Package Dependencies', () => {
       const packageJSON = createPackageJSON(options)
 
       expect(packageJSON.dependencies).toEqual({
-        'drizzle-orm': '^0.29.0',
+        'testAddon-orm': '^0.29.0',
         'postgres': '^3.4.0'
       })
       expect(packageJSON.devDependencies).toEqual({
@@ -74,20 +74,20 @@ describe('Conditional Package Dependencies', () => {
         ...baseOptions,
         chosenAddOns: [
           {
-            id: 'drizzle',
+            id: 'testAddon',
             name: 'Drizzle ORM',
             packageTemplate: `{
               "dependencies": {
-                "drizzle-orm": "^0.29.0"<% if (addOnOption.drizzle.database === 'postgres') { %>,
-                "postgres": "^3.4.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>,
-                "mysql2": "^3.6.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>,
+                "testAddon-orm": "^0.29.0"<% if (addOnOption.testAddon.database === 'postgres') { %>,
+                "postgres": "^3.4.0"<% } %><% if (addOnOption.testAddon.database === 'mysql') { %>,
+                "mysql2": "^3.6.0"<% } %><% if (addOnOption.testAddon.database === 'sqlite') { %>,
                 "better-sqlite3": "^8.7.0"<% } %>
               }
             }`
           }
         ],
         addOnOptions: {
-          drizzle: {
+          testAddon: {
             database: 'mysql'
           }
         }
@@ -96,7 +96,7 @@ describe('Conditional Package Dependencies', () => {
       const packageJSON = createPackageJSON(options)
 
       expect(packageJSON.dependencies).toEqual({
-        'drizzle-orm': '^0.29.0',
+        'testAddon-orm': '^0.29.0',
         'mysql2': '^3.6.0'
       })
       // PostgreSQL and SQLite dependencies should not be included
@@ -109,23 +109,23 @@ describe('Conditional Package Dependencies', () => {
         ...baseOptions,
         chosenAddOns: [
           {
-            id: 'drizzle',
+            id: 'testAddon',
             name: 'Drizzle ORM',
             packageTemplate: `{
               "dependencies": {
-                "drizzle-orm": "^0.29.0"<% if (addOnOption.drizzle.database === 'postgres') { %>,
-                "postgres": "^3.4.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>,
-                "mysql2": "^3.6.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>,
+                "testAddon-orm": "^0.29.0"<% if (addOnOption.testAddon.database === 'postgres') { %>,
+                "postgres": "^3.4.0"<% } %><% if (addOnOption.testAddon.database === 'mysql') { %>,
+                "mysql2": "^3.6.0"<% } %><% if (addOnOption.testAddon.database === 'sqlite') { %>,
                 "better-sqlite3": "^8.7.0"<% } %>
               },
-              "devDependencies": {<% if (addOnOption.drizzle.database === 'sqlite') { %>
+              "devDependencies": {<% if (addOnOption.testAddon.database === 'sqlite') { %>
                 "@types/better-sqlite3": "^7.6.0"<% } %>
               }
             }`
           }
         ],
         addOnOptions: {
-          drizzle: {
+          testAddon: {
             database: 'sqlite'
           }
         }
@@ -134,7 +134,7 @@ describe('Conditional Package Dependencies', () => {
       const packageJSON = createPackageJSON(options)
 
       expect(packageJSON.dependencies).toEqual({
-        'drizzle-orm': '^0.29.0',
+        'testAddon-orm': '^0.29.0',
         'better-sqlite3': '^8.7.0'
       })
       expect(packageJSON.devDependencies).toEqual({
@@ -147,11 +147,11 @@ describe('Conditional Package Dependencies', () => {
         ...baseOptions,
         chosenAddOns: [
           {
-            id: 'drizzle',
+            id: 'testAddon',
             name: 'Drizzle ORM',
             packageTemplate: `{
               "dependencies": {
-                "drizzle-orm": "^0.29.0"<% if (addOnOption.drizzle.database === 'postgres') { %>,
+                "testAddon-orm": "^0.29.0"<% if (addOnOption.testAddon.database === 'postgres') { %>,
                 "postgres": "^3.4.0"<% } %>
               }
             }`
@@ -168,7 +168,7 @@ describe('Conditional Package Dependencies', () => {
           }
         ],
         addOnOptions: {
-          drizzle: {
+          testAddon: {
             database: 'postgres'
           },
           auth: {
@@ -180,7 +180,7 @@ describe('Conditional Package Dependencies', () => {
       const packageJSON = createPackageJSON(options)
 
       expect(packageJSON.dependencies).toEqual({
-        'drizzle-orm': '^0.29.0',
+        'testAddon-orm': '^0.29.0',
         'postgres': '^3.4.0',
         '@auth0/nextjs-auth0': '^3.0.0'
       })

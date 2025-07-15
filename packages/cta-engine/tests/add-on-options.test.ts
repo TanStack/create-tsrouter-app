@@ -1,7 +1,25 @@
-import { describe, it, expect } from 'vitest'
-import { z } from 'zod'
-import { AddOnSelectOptionSchema, AddOnOptionSchema, AddOnOptionsSchema } from '../src/types.js'
+import { describe, expect, it } from 'vitest'
 import { populateAddOnOptionsDefaults } from '../src/add-ons.js'
+import { AddOnOptionSchema, AddOnOptionsSchema, AddOnSelectOptionSchema } from '../src/types.js'
+import type { AddOn } from '../src/types.js'
+
+// Helper function to create test AddOn objects
+function createTestAddOn(overrides: Partial<AddOn>): AddOn {
+  return {
+    id: 'test-addon',
+    name: 'Test Addon',
+    description: 'Test addon description',
+    type: 'add-on',
+    modes: ['file-router'],
+    phase: 'add-on',
+    files: {},
+    deletedFiles: [],
+    getFiles: () => Promise.resolve([]),
+    getFileContents: () => Promise.resolve(''),
+    getDeletedFiles: () => Promise.resolve([]),
+    ...overrides
+  }
+}
 
 describe('Add-on Options', () => {
   describe('Option Schema Validation', () => {
@@ -96,9 +114,9 @@ describe('Add-on Options', () => {
   describe('populateAddOnOptionsDefaults', () => {
     it('should populate defaults for add-ons with options', () => {
       const addOns = [
-        {
-          id: 'drizzle',
-          name: 'Drizzle ORM',
+        createTestAddOn({
+          id: 'testAddon',
+          name: 'Test Addon',
           options: {
             database: {
               type: 'select' as const,
@@ -111,8 +129,8 @@ describe('Add-on Options', () => {
               ]
             }
           }
-        },
-        {
+        }),
+        createTestAddOn({
           id: 'shadcn',
           name: 'shadcn/ui',
           options: {
@@ -126,13 +144,13 @@ describe('Add-on Options', () => {
               ]
             }
           }
-        }
+        })
       ]
 
       const result = populateAddOnOptionsDefaults(addOns)
 
       expect(result).toEqual({
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         },
         shadcn: {
@@ -143,11 +161,11 @@ describe('Add-on Options', () => {
 
     it('should handle add-ons without options', () => {
       const addOns = [
-        {
+        createTestAddOn({
           id: 'simple-addon',
           name: 'Simple Add-on'
           // No options property
-        }
+        })
       ]
 
       const result = populateAddOnOptionsDefaults(addOns)
@@ -157,9 +175,9 @@ describe('Add-on Options', () => {
 
     it('should only populate defaults for enabled add-ons', () => {
       const addOns = [
-        {
-          id: 'drizzle',
-          name: 'Drizzle ORM',
+        createTestAddOn({
+          id: 'testAddon',
+          name: 'Test Addon',
           options: {
             database: {
               type: 'select' as const,
@@ -171,8 +189,8 @@ describe('Add-on Options', () => {
               ]
             }
           }
-        },
-        {
+        }),
+        createTestAddOn({
           id: 'shadcn',
           name: 'shadcn/ui',
           options: {
@@ -186,14 +204,14 @@ describe('Add-on Options', () => {
               ]
             }
           }
-        }
+        })
       ]
 
-      const enabledAddOns = [addOns[0]] // Only drizzle
+      const enabledAddOns = [addOns[0]] // Only testAddon
       const result = populateAddOnOptionsDefaults(enabledAddOns)
 
       expect(result).toEqual({
-        drizzle: {
+        testAddon: {
           database: 'postgres'
         }
         // shadcn should not be included
@@ -201,23 +219,6 @@ describe('Add-on Options', () => {
     })
 
     it('should handle empty enabled add-ons array', () => {
-      const addOns = [
-        {
-          id: 'drizzle',
-          name: 'Drizzle ORM',
-          options: {
-            database: {
-              type: 'select' as const,
-              label: 'Database Provider',
-              default: 'postgres',
-              options: [
-                { value: 'postgres', label: 'PostgreSQL' }
-              ]
-            }
-          }
-        }
-      ]
-
       const enabledAddOns: Array<any> = []
       const result = populateAddOnOptionsDefaults(enabledAddOns)
 
@@ -226,7 +227,7 @@ describe('Add-on Options', () => {
 
     it('should handle add-ons with multiple options', () => {
       const addOns = [
-        {
+        createTestAddOn({
           id: 'complex-addon',
           name: 'Complex Add-on',
           options: {
@@ -249,7 +250,7 @@ describe('Add-on Options', () => {
               ]
             }
           }
-        }
+        })
       ]
 
       const result = populateAddOnOptionsDefaults(addOns)
@@ -264,22 +265,27 @@ describe('Add-on Options', () => {
 
     it('should handle options without default values', () => {
       const addOns = [
-        {
+        createTestAddOn({
           id: 'no-default',
           name: 'No Default Add-on',
           options: {
             database: {
               type: 'select' as const,
               label: 'Database',
-              // No default property
+              default: 'postgres', // We need a default for valid schema
               options: [
                 { value: 'postgres', label: 'PostgreSQL' },
                 { value: 'mysql', label: 'MySQL' }
               ]
             }
           }
-        }
+        })
       ]
+
+      // Test the case where an addon has no default by manually modifying the option
+      if (addOns[0].options?.database) {
+        delete (addOns[0].options.database as any).default
+      }
 
       const result = populateAddOnOptionsDefaults(addOns)
 

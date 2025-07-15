@@ -81,7 +81,7 @@ function createServer({
           'The package.json module name of the application (will also be the directory name)',
         ),
       cwd: z.string().describe('The directory to create the application in'),
-      addOns: z.array(z.string()).describe('Array of add-on IDs to install. Use listTanStackAddOns tool to see available add-ons and their configuration options. Example: ["drizzle", "shadcn", "tanstack-query"]'),
+      addOns: z.array(z.string()).describe('Array of add-on IDs to install. Use listTanStackAddOns tool to see available add-ons and their configuration options. Example: ["prisma", "shadcn", "tanstack-query"]'),
       addOnOptions: z.record(z.record(z.any())).optional().describe('Configuration options for add-ons. Format: {"addOnId": {"optionName": "value"}}. Use listTanStackAddOns to see available options for each add-on.'),
       targetDir: z
         .string()

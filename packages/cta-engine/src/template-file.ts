@@ -123,7 +123,7 @@ export function createTemplateFile(environment: Environment, options: Options) {
 
     let target = convertDotFilesAndPaths(file.replace('.ejs', ''))
 
-    // Strip option prefixes from filename (e.g., __postgres__drizzle.config.ts -> drizzle.config.ts)
+    // Strip option prefixes from filename (e.g., __postgres__schema.prisma -> schema.prisma)
     const prefixMatch = target.match(/^(.+\/)?__([^_]+)__(.+)$/)
     if (prefixMatch) {
       const [, directory, , filename] = prefixMatch
