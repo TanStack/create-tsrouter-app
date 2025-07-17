@@ -167,3 +167,222 @@ If you don't want a header link you can omit the `url` and `name` properties.
 You **MUST** specify routes in the `info.json` file if your add-on supports the `code-router` mode. This is because the `code-routers` setup needs to import the routes in order to add them to the router.
 
 By convension you should prefix demo routes with `demo` to make it clear that they are demo routes so they can be easily identified and removed.
+
+# Add-on Options
+
+The CTA framework supports configurable add-ons through an options system that allows users to customize add-on behavior during creation. This enables more flexible and reusable add-ons that can adapt to different use cases.
+
+## Overview
+
+Add-on options allow developers to create configurable add-ons where users can select from predefined choices that affect:
+- Which files are included in the generated project
+- Template variable values used during file generation
+- Package dependencies that get installed
+- Configuration file contents
+
+## Configuration Format
+
+Options are defined in the `info.json` file using the following schema:
+
+```json
+{
+  "name": "My Add-on",
+  "description": "A configurable add-on",
+  "options": {
+    "optionName": {
+      "type": "select",
+      "label": "Display Label",
+      "description": "Optional description shown to users",
+      "default": "defaultValue",
+      "options": [
+        { "value": "option1", "label": "Option 1" },
+        { "value": "option2", "label": "Option 2" }
+      ]
+    }
+  }
+}
+```
+
+### Option Types
+
+#### Select Options
+
+The `select` type allows users to choose from a predefined list of options:
+
+```json
+"database": {
+  "type": "select",
+  "label": "Database Provider",
+  "description": "Choose your database provider",
+  "default": "postgres",
+  "options": [
+    { "value": "postgres", "label": "PostgreSQL" },
+    { "value": "mysql", "label": "MySQL" },
+    { "value": "sqlite", "label": "SQLite" }
+  ]
+}
+```
+
+**Properties:**
+- `type`: Must be `"select"`
+- `label`: Display text shown to users
+- `description`: Optional help text
+- `default`: Default value that must match one of the option values
+- `options`: Array of value/label pairs
+
+## Template Usage
+
+Option values are available in EJS templates through the `addOnOption` variable:
+
+```ejs
+<!-- Access option value -->
+<% if (addOnOption.myAddOnId.database === 'postgres') { %>
+  PostgreSQL specific code
+<% } %>
+
+<!-- Use option value in output -->
+const driver = '<%= addOnOption.myAddOnId.database %>'
+```
+
+The structure is: `addOnOption.{addOnId}.{optionName}`
+
+## Conditional Files
+
+Use filename prefixes to include files only when specific option values are selected:
+
+```
+assets/
+├── __postgres__schema.prisma.ejs
+├── __mysql__schema.prisma.ejs
+├── __sqlite__schema.prisma.ejs
+└── src/
+    └── db/
+        ├── __postgres__index.ts.ejs
+        ├── __mysql__index.ts.ejs
+        └── __sqlite__index.ts.ejs
+```
+
+**Naming Convention:**
+- `__optionValue__filename.ext.ejs` - Include only if option matches value
+- The prefix is stripped from the final filename
+- Use `ignoreFile()` in templates for additional conditional logic
+
+### Template Conditional Logic
+
+Within template files, use `ignoreFile()` to skip file generation:
+
+```ejs
+<% if (addOnOption.prisma.database !== 'postgres') { ignoreFile() } %>
+import { PrismaClient } from '@prisma/client'
+
+declare global {
+  var __prisma: PrismaClient | undefined
+}
+
+export const prisma = globalThis.__prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma
+}
+```
+
+## Complete Example: Prisma Add-on
+
+Here's how the Prisma add-on implements configurable database support:
+
+### Examples
+
+Configuration in `info.json`:
+```json
+{
+  "name": "Prisma ORM",
+  "description": "Add Prisma ORM with configurable database support to your application.",
+  "options": {
+    "database": {
+      "type": "select",
+      "label": "Database Provider",
+      "description": "Choose your database provider",
+      "default": "postgres",
+      "options": [
+        { "value": "postgres", "label": "PostgreSQL" },
+        { "value": "mysql", "label": "MySQL" },
+        { "value": "sqlite", "label": "SQLite" }
+      ]
+    }
+  }
+}
+```
+
+File structure:
+```
+prisma/
+├── assets/
+│   ├── __postgres__schema.prisma.ejs
+│   ├── __mysql__schema.prisma.ejs
+│   ├── __sqlite__schema.prisma.ejs
+│   └── src/
+│       └── db/
+│           ├── __postgres__index.ts.ejs
+│           ├── __mysql__index.ts.ejs
+│           └── __sqlite__index.ts.ejs
+└── package.json.ejs
+```
+
+Code in `assets/__postgres__schema.prisma.ejs`:
+```ejs
+<% if (addOnOption.prisma.database !== 'postgres') { ignoreFile() } %>
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
+
+Code in `package.json.ejs`:
+```ejs
+{
+  "prisma": "^5.8.0",
+  "@prisma/client": "^5.8.0"<% if (addOnOption.prisma.database === 'postgres') { %>,
+  "pg": "^8.11.0",
+  "@types/pg": "^8.10.0"<% } else if (addOnOption.prisma.database === 'mysql') { %>,
+  "mysql2": "^3.6.0"<% } else if (addOnOption.prisma.database === 'sqlite') { %><% } %>
+}
+```
+
+## CLI Usage
+
+### Interactive Mode
+When using the CLI interactively, users are prompted for each option:
+
+```bash
+create-tsrouter-app my-app
+# User selects Prisma add-on
+# CLI prompts: "Prisma ORM: Database Provider" with options
+```
+
+### Non-Interactive Mode
+Options can be specified via JSON configuration:
+
+```bash
+create-tsrouter-app my-app --add-ons prisma --add-on-config '{"prisma":{"database":"mysql"}}'
+```
+
+## Best Practices
+
+1. **Use descriptive labels** - Make option purposes clear to users
+2. **Provide sensible defaults** - Choose the most common use case
+3. **Group related files** - Use consistent prefixing for option-specific files  
+4. **Document options** - Include descriptions to help users understand choices
+5. **Test all combinations** - Ensure each option value generates working code
+6. **Use validation** - The system validates options against the schema automatically

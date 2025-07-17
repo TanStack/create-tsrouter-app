@@ -47,3 +47,21 @@ export async function finalizeAddOns(
 function loadAddOn(addOn: AddOn): AddOn {
   return addOn
 }
+
+export function populateAddOnOptionsDefaults(
+  chosenAddOns: Array<AddOn>
+): Record<string, Record<string, any>> {
+  const addOnOptions: Record<string, Record<string, any>> = {}
+  
+  for (const addOn of chosenAddOns) {
+    if (addOn.options) {
+      const defaults: Record<string, any> = {}
+      for (const [optionKey, optionDef] of Object.entries(addOn.options)) {
+        defaults[optionKey] = optionDef.default
+      }
+      addOnOptions[addOn.id] = defaults
+    }
+  }
+  
+  return addOnOptions
+}
