@@ -10,6 +10,7 @@ import {
   registerFramework,
 } from '@tanstack/cta-engine'
 import { FileSyncer } from './file-syncer.js'
+import { createUIEnvironment } from './ui-environment.js'
 import type {
   Environment,
   Framework,
@@ -61,6 +62,10 @@ class DebounceQueue {
     }, this.delay)
   }
 
+  size(): number {
+    return this.changes.size
+  }
+
   clear(): void {
     if (this.timer) {
       clearTimeout(this.timer)
@@ -100,11 +105,12 @@ export class DevWatchManager {
       throw new Error('Cannot use the --no-install flag when using --dev-watch')
     }
 
-    // Log startup
-    this.log.info(`Starting dev watch mode`)
-    this.log.info(`Watching: ${chalk.cyan(this.options.watchPath)}`)
-    this.log.info(`Target: ${chalk.cyan(this.options.targetDir)}`)
-    this.log.info(`Waiting for file changes...`)
+    // Log startup with tree style
+    console.log()
+    console.log(chalk.bold('dev-watch'))
+    this.log.tree('', `watching: ${chalk.cyan(this.options.watchPath)}`)
+    this.log.tree('', `target: ${chalk.cyan(this.options.targetDir)}`)
+    this.log.tree('', 'ready', true)
 
     // Setup signal handlers
     process.on('SIGINT', () => this.cleanup())
@@ -115,7 +121,8 @@ export class DevWatchManager {
   }
 
   async stop(): Promise<void> {
-    this.log.info('Stopping dev watch mode')
+    console.log()
+    this.log.info('Stopping dev watch mode...')
 
     if (this.watcher) {
       await this.watcher.close()
@@ -158,12 +165,20 @@ export class DevWatchManager {
       this.log.error(`Watcher error: ${error.message}`),
     )
 
-    this.log.success('File watcher started')
+    this.watcher.on('ready', () => {
+      // Already shown in startup, no need to repeat
+    })
   }
 
   private handleChange(_type: ChangeEvent['type'], filePath: string): void {
     const relativePath = path.relative(this.options.watchPath, filePath)
-    this.log.change(relativePath)
+    // Log change only once for the first file in debounce queue
+    if (this.debounceQueue.size() === 0) {
+      this.log.section('change detected')
+      this.log.subsection(`└─ ${relativePath}`)
+    } else {
+      this.log.subsection(`└─ ${relativePath}`)
+    }
     this.debounceQueue.add(filePath)
   }
 
@@ -178,7 +193,7 @@ export class DevWatchManager {
     const buildId = this.buildCount
 
     try {
-      this.log.build(`Starting build #${buildId}`)
+      this.log.section(`build #${buildId}`)
       const startTime = Date.now()
 
       if (!this.options.frameworkDefinitionInitializers) {
@@ -241,8 +256,17 @@ export class DevWatchManager {
         install: packageJsonModified,
       }
 
-      // Create app in temp directory
-      await createApp(this.options.environment, updatedOptions)
+      // Show package installation indicator if needed
+      if (packageJsonModified) {
+        this.log.tree('  ', `${chalk.yellow('⟳')} installing packages...`)
+      }
+
+      // Create app in temp directory with silent environment
+      const silentEnvironment = createUIEnvironment(
+        this.options.environment.appName,
+        true,
+      )
+      await createApp(silentEnvironment, updatedOptions)
 
       // Sync files to target directory
       const syncResult = await this.syncer.sync(
@@ -260,18 +284,61 @@ export class DevWatchManager {
       }
 
       const elapsed = Date.now() - startTime
-      this.log.success(`Build #${buildId} completed in ${elapsed}ms`)
 
-      // Report sync results
+      // Build tree-style summary
+      this.log.tree('  ', `duration: ${chalk.cyan(elapsed + 'ms')}`)
+
+      if (packageJsonModified) {
+        this.log.tree('  ', `packages: ${chalk.green('✓ installed')}`)
+      }
+
+      // Always show the last item in tree without checking for files to show
+      const noMoreTreeItems =
+        syncResult.updated.length === 0 &&
+        syncResult.created.length === 0 &&
+        syncResult.errors.length === 0
+
       if (syncResult.updated.length > 0) {
-        this.log.sync(`Updated ${syncResult.updated.length} files`)
-        syncResult.updated.forEach((update) => {
-          this.log.sync(`  ↳ ${update.path}`)
+        this.log.tree(
+          '  ',
+          `updated: ${chalk.green(syncResult.updated.length + ' file' + (syncResult.updated.length > 1 ? 's' : ''))}`,
+          syncResult.created.length === 0 && syncResult.errors.length === 0,
+        )
+      }
+      if (syncResult.created.length > 0) {
+        this.log.tree(
+          '  ',
+          `created: ${chalk.green(syncResult.created.length + ' file' + (syncResult.created.length > 1 ? 's' : ''))}`,
+          syncResult.errors.length === 0,
+        )
+      }
+      if (syncResult.errors.length > 0) {
+        this.log.tree(
+          '  ',
+          `failed: ${chalk.red(syncResult.errors.length + ' file' + (syncResult.errors.length > 1 ? 's' : ''))}`,
+          true,
+        )
+      }
 
-          // Show diff if available
+      // If nothing changed, show that
+      if (noMoreTreeItems) {
+        this.log.tree('  ', `no changes`, true)
+      }
+
+      // Always show changed files with diffs
+      if (syncResult.updated.length > 0) {
+        syncResult.updated.forEach((update, index) => {
+          const isLastFile =
+            index === syncResult.updated.length - 1 &&
+            syncResult.created.length === 0
+
+          // For files with diffs, always use ├─
+          const fileIsLast = isLastFile && !update.diff
+          this.log.treeItem('  ', update.path, fileIsLast)
+
+          // Always show diff if available
           if (update.diff) {
             const diffLines = update.diff.split('\n')
-            // Skip the header lines and show the actual diff
             const relevantLines = diffLines
               .slice(4)
               .filter(
@@ -282,49 +349,58 @@ export class DevWatchManager {
               )
 
             if (relevantLines.length > 0) {
-              this.log.sync(`     ${chalk.dim('Changes:')}`)
+              // Always use │ to continue the tree line through the diff
+              const prefix = '    │ '
               relevantLines.forEach((line) => {
                 if (line.startsWith('+') && !line.startsWith('+++')) {
-                  this.log.sync(`     ${chalk.green(line)}`)
+                  console.log(chalk.gray(prefix) + '  ' + chalk.green(line))
                 } else if (line.startsWith('-') && !line.startsWith('---')) {
-                  this.log.sync(`     ${chalk.red(line)}`)
+                  console.log(chalk.gray(prefix) + '  ' + chalk.red(line))
                 } else if (line.startsWith('@')) {
-                  this.log.sync(`     ${chalk.cyan(line)}`)
+                  console.log(chalk.gray(prefix) + '  ' + chalk.cyan(line))
                 }
               })
             }
           }
         })
       }
+      
+      // Show created files
       if (syncResult.created.length > 0) {
-        this.log.sync(`Created ${syncResult.created.length} files`)
-        syncResult.created.forEach((file) => this.log.sync(`  ↳ ${file}`))
+        syncResult.created.forEach((file, index) => {
+          const isLast = index === syncResult.created.length - 1
+          this.log.treeItem('  ', `${chalk.green('+')} ${file}`, isLast)
+        })
       }
-      if (syncResult.skipped.length > 0) {
-        this.log.sync(`Skipped ${syncResult.skipped.length} unchanged files`)
-      }
+
+      // Always show errors
       if (syncResult.errors.length > 0) {
-        this.log.error(`Failed to sync ${syncResult.errors.length} files`)
-        syncResult.errors.forEach((err) => this.log.error(`  ↳ ${err}`))
+        console.log() // Add spacing
+        syncResult.errors.forEach((err, index) => {
+          this.log.tree(
+            '  ',
+            `${chalk.red('error:')} ${err}`,
+            index === syncResult.errors.length - 1,
+          )
+        })
       }
     } catch (error) {
       this.log.error(
         `Build #${buildId} failed: ${error instanceof Error ? error.message : String(error)}`,
       )
-      console.error(error)
     } finally {
       this.isBuilding = false
     }
   }
 
   private cleanup(): void {
-    this.log.info('Cleaning up...')
+    console.log()
+    console.log('Cleaning up...')
 
     // Clean up temp directory
     if (this.tempDir && fs.existsSync(this.tempDir)) {
       try {
         fs.rmSync(this.tempDir, { recursive: true, force: true })
-        this.log.success('Temp directory cleaned up')
       } catch (error) {
         this.log.error(
           `Failed to clean up temp directory: ${error instanceof Error ? error.message : String(error)}`,
@@ -336,13 +412,19 @@ export class DevWatchManager {
   }
 
   private log = {
-    info: (msg: string) => console.log(chalk.blue('ℹ️ ') + ` ${msg}`),
-    change: (path: string) =>
-      console.log(chalk.yellow('📝') + ` File changed: ${path}`),
-    build: (msg: string) => console.log(chalk.cyan('🔨') + ` ${msg}`),
-    sync: (msg: string) => console.log(chalk.magenta(' ') + ` ${msg}`),
-    error: (msg: string) => console.error(chalk.red('❌') + ` ${msg}`),
-    success: (msg: string) => console.log(chalk.green('✅') + ` ${msg}`),
-    warning: (msg: string) => console.log(chalk.yellow('⚠️ ') + ` ${msg}`),
+    tree: (prefix: string, msg: string, isLast = false) => {
+      const connector = isLast ? '└─' : '├─'
+      console.log(chalk.gray(prefix + connector) + ' ' + msg)
+    },
+    treeItem: (prefix: string, msg: string, isLast = false) => {
+      const connector = isLast ? '└─' : '├─'
+      console.log(chalk.gray(prefix + '  ' + connector) + ' ' + msg)
+    },
+    info: (msg: string) => console.log(msg),
+    error: (msg: string) => console.error(chalk.red('✗') + ' ' + msg),
+    success: (msg: string) => console.log(chalk.green('✓') + ' ' + msg),
+    warning: (msg: string) => console.log(chalk.yellow('⚠') + ' ' + msg),
+    section: (title: string) => console.log('\n' + chalk.bold('▸ ' + title)),
+    subsection: (msg: string) => console.log('  ' + msg),
   }
 }

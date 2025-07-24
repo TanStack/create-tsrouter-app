@@ -408,9 +408,15 @@ Remove your node_modules directory and package lock file and re-install.`,
       normalizedOpts.targetDir =
         options.targetDir || resolve(process.cwd(), projectName)
 
-      // Create the initial app
-      intro(`Creating initial ${appName} app in ${normalizedOpts.targetDir}...`)
-      await createApp(environment, normalizedOpts)
+      // Create the initial app with minimal output for dev watch mode
+      console.log(chalk.bold('\ndev-watch'))
+      console.log(chalk.gray('├─') + ' ' + `creating initial ${appName} app...`)
+      if (normalizedOpts.install !== false) {
+        console.log(chalk.gray('├─') + ' ' + chalk.yellow('⟳') + ' installing packages...')
+      }
+      const silentEnvironment = createUIEnvironment(appName, true)
+      await createApp(silentEnvironment, normalizedOpts)
+      console.log(chalk.gray('└─') + ' ' + chalk.green('✓') + ` app created`)
 
       // Now start the dev watch mode
       const manager = new DevWatchManager({
