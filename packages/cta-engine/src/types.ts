@@ -141,6 +141,7 @@ export interface Options {
 
   packageManager: PackageManager
   git: boolean
+  install?: boolean
 
   chosenAddOns: Array<AddOn>
   starter?: Starter | undefined
