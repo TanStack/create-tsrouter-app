@@ -4,20 +4,24 @@
   "link": "https://convex.dev",
   "phase": "add-on",
   "type": "add-on",
-  "modes": ["file-router"],
-  "routes": [
-    {
-      "url": "/demo/convex",
-      "name": "Convex",
-      "path": "src/routes/demo.convex.tsx",
-      "jsName": "ConvexDemo"
-    }
+  "modes": [
+    "file-router"
   ],
-  "integrations": [
-    {
-      "type": "provider",
-      "path": "src/integrations/convex/provider.tsx",
-      "jsName": "ConvexProvider"
-    }
-  ]
+  "customProperties": {
+    "routes": [
+      {
+        "url": "/demo/convex",
+        "name": "Convex",
+        "path": "src/routes/demo.convex.tsx",
+        "jsName": "ConvexDemo"
+      }
+    ],
+    "integrations": [
+      {
+        "type": "provider",
+        "path": "src/integrations/convex/provider.tsx",
+        "jsName": "ConvexProvider"
+      }
+    ]
+  }
 }

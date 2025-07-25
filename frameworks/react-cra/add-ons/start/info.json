@@ -3,27 +3,33 @@
   "phase": "setup",
   "description": "Add TanStack Start for SSR, API endpoints, and more.",
   "link": "https://tanstack.com/start/latest",
-  "modes": ["file-router"],
+  "modes": [
+    "file-router"
+  ],
   "type": "add-on",
   "warning": "TanStack Start is not yet at 1.0 and may change significantly or not be compatible with other add-ons.\nMigrating to Start might require deleting node_modules and re-installing.",
-  "routes": [
-    {
-      "url": "/demo/start/server-funcs",
-      "name": "Start - Server Functions",
-      "path": "src/routes/demo.start.server-funcs.tsx",
-      "jsName": "StartServerFuncsDemo"
-    },
-    {
-      "url": "/demo/start/api-request",
-      "name": "Start - API Request",
-      "path": "src/routes/demo.start.api-request.tsx",
-      "jsName": "StartApiRequestDemo"
-    }
-  ],
   "deletedFiles": [
     "./index.html",
     "./src/main.tsx",
     "./src/App.css"
   ],
-  "addOnSpecialSteps": ["rimraf-node-modules"]
+  "addOnSpecialSteps": [
+    "rimraf-node-modules"
+  ],
+  "customProperties": {
+    "routes": [
+      {
+        "url": "/demo/start/server-funcs",
+        "name": "Start - Server Functions",
+        "path": "src/routes/demo.start.server-funcs.tsx",
+        "jsName": "StartServerFuncsDemo"
+      },
+      {
+        "url": "/demo/start/api-request",
+        "name": "Start - API Request",
+        "path": "src/routes/demo.start.api-request.tsx",
+        "jsName": "StartApiRequestDemo"
+      }
+    ]
+  }
 }

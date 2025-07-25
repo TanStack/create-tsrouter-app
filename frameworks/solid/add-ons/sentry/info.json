@@ -3,14 +3,18 @@
   "phase": "setup",
   "description": "Add Sentry for error monitoring and crash reporting (requires Start).",
   "link": "https://sentry.com/",
-  "modes": ["file-router"],
+  "modes": [
+    "file-router"
+  ],
   "type": "add-on",
-  "routes": [
-    {
-      "url": "/demo/sentry/bad-event-handler",
-      "name": "Sentry",
-      "path": "src/routes/demo.sentry.bad-event-handler.tsx",
-      "jsName": "SentryBadEventHandlerDemo"
-    }
-  ]
+  "customProperties": {
+    "routes": [
+      {
+        "url": "/demo/sentry/bad-event-handler",
+        "name": "Sentry",
+        "path": "src/routes/demo.sentry.bad-event-handler.tsx",
+        "jsName": "SentryBadEventHandlerDemo"
+      }
+    ]
+  }
 }

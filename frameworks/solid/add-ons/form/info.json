@@ -3,14 +3,19 @@
   "description": "TanStack Form",
   "phase": "add-on",
   "link": "https://tanstack.com/form/latest",
-  "modes": ["file-router", "code-router"],
+  "modes": [
+    "file-router",
+    "code-router"
+  ],
   "type": "add-on",
-  "routes": [
-    {
-      "url": "/demo/form",
-      "name": "Form",
-      "path": "src/routes/demo.form.tsx",
-      "jsName": "FormDemo"
-    }
-  ]
+  "customProperties": {
+    "routes": [
+      {
+        "url": "/demo/form",
+        "name": "Form",
+        "path": "src/routes/demo.form.tsx",
+        "jsName": "FormDemo"
+      }
+    ]
+  }
 }

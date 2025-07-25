@@ -2,15 +2,20 @@
   "name": "Table",
   "description": "Integrate TanStack Table into your application.",
   "phase": "add-on",
-  "modes": ["file-router", "code-router"],
+  "modes": [
+    "file-router",
+    "code-router"
+  ],
   "link": "https://tanstack.com/table/latest",
   "type": "add-on",
-  "routes": [
-    {
-      "url": "/demo/table",
-      "name": "TanStack Table",
-      "path": "src/routes/demo.table.tsx",
-      "jsName": "TableDemo"
-    }
-  ]
+  "customProperties": {
+    "routes": [
+      {
+        "url": "/demo/table",
+        "name": "TanStack Table",
+        "path": "src/routes/demo.table.tsx",
+        "jsName": "TableDemo"
+      }
+    ]
+  }
 }

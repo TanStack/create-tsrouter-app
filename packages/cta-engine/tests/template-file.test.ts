@@ -102,14 +102,16 @@ describe('createTemplateFile', () => {
         {
           id: 'test',
           name: 'Test',
-          routes: [
-            {
-              path: '/test',
-              name: 'Test',
-              url: '/test',
-              jsName: 'test',
-            },
-          ],
+          customProperties: {
+            routes: [
+              {
+                path: '/test',
+                name: 'Test',
+                url: '/test',
+                jsName: 'test',
+              },
+            ],
+          },
         } as AddOn,
       ],
     })
@@ -132,13 +134,15 @@ describe('createTemplateFile', () => {
         {
           id: 'test',
           name: 'Test',
-          integrations: [
-            {
-              type: 'header-user',
-              path: '/test',
-              jsName: 'test',
-            } as Integration,
-          ],
+          customProperties: {
+            integrations: [
+              {
+                type: 'header-user',
+                path: '/test',
+                jsName: 'test',
+              } as Integration,
+            ],
+          },
         } as AddOn,
       ],
     })

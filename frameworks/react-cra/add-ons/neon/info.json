@@ -4,14 +4,20 @@
   "link": "https://neon.com",
   "phase": "add-on",
   "type": "add-on",
-  "modes": ["file-router"],
-  "routes": [
-    {
-      "url": "/demo/neon",
-      "name": "Neon",
-      "path": "src/routes/demo.neon.tsx",
-      "jsName": "NeonDemo"
-    }
+  "modes": [
+    "file-router"
   ],
-  "dependsOn": ["start"]
+  "dependsOn": [
+    "start"
+  ],
+  "customProperties": {
+    "routes": [
+      {
+        "url": "/demo/neon",
+        "name": "Neon",
+        "path": "src/routes/demo.neon.tsx",
+        "jsName": "NeonDemo"
+      }
+    ]
+  }
 }

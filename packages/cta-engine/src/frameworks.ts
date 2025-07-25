@@ -45,7 +45,10 @@ export function scanProjectDirectory(
   }
 }
 
-export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
+export function scanAddOnDirectories(
+  addOnsDirectories: Array<string>,
+  framework?: { customProperties?: Record<string, any> },
+) {
   const addOns: Array<AddOn> = []
 
   for (const addOnsBase of addOnsDirectories) {
@@ -93,6 +96,26 @@ export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
         return Promise.resolve(files[path])
       }
 
+      // Validate custom properties if framework defines them
+      let validatedCustomProperties: Record<string, unknown> | undefined
+      if (framework?.customProperties && info.customProperties) {
+        validatedCustomProperties = {}
+        for (const [key, schema] of Object.entries(framework.customProperties)) {
+          if (key in info.customProperties) {
+            try {
+              validatedCustomProperties[key] = schema.parse(info.customProperties[key])
+            } catch (error: any) {
+              throw new Error(
+                `Invalid custom property "${key}" in add-on "${dir}": ${error.message}`
+              )
+            }
+          }
+        }
+      } else if (info.customProperties) {
+        // If no framework validation, pass through as-is
+        validatedCustomProperties = info.customProperties
+      }
+
       addOns.push({
         ...info,
         id: dir,
@@ -100,6 +123,7 @@ export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
         readme,
         files,
         smallLogo,
+        customProperties: validatedCustomProperties,
         getFiles,
         getFileContents,
         getDeletedFiles: () => Promise.resolve(info.deletedFiles ?? []),

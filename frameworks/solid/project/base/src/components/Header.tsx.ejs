@@ -10,10 +10,9 @@ export default function Header() {
         <div class="px-2 font-bold">
           <Link to="/">Home</Link>
         </div>
-        <% for(const addOn of addOns) {
-          for(const route of (addOn?.routes||[])?.filter(r => r.url && r.name) || []) { %>
+        <% for(const route of (routes||[]).filter(r => r.url && r.name)) { %>
         <div class="px-2 font-bold"><Link to="<%= route.url %>"><%= route.name %></Link></div>
-        <% } } %>
+        <% } %>
       </nav>
 
       <div>

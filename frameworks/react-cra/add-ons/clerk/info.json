@@ -2,27 +2,31 @@
   "name": "Clerk",
   "description": "Add Clerk authentication to your application.",
   "phase": "add-on",
-  "modes": ["file-router"],
+  "modes": [
+    "file-router"
+  ],
   "type": "add-on",
   "link": "https://clerk.com",
-  "routes": [
-    {
-      "url": "/demo/clerk",
-      "name": "Clerk",
-      "path": "src/routes/demo.clerk.tsx",
-      "jsName": "ClerkDemo"
-    }
-  ],
-  "integrations": [
-    {
-      "type": "header-user",
-      "jsName": "ClerkHeader",
-      "path": "src/integrations/clerk/header-user.tsx"
-    },
-    {
-      "type": "provider",
-      "jsName": "ClerkProvider",
-      "path": "src/integrations/clerk/provider.tsx"
-    }
-  ]
+  "customProperties": {
+    "routes": [
+      {
+        "url": "/demo/clerk",
+        "name": "Clerk",
+        "path": "src/routes/demo.clerk.tsx",
+        "jsName": "ClerkDemo"
+      }
+    ],
+    "integrations": [
+      {
+        "type": "header-user",
+        "jsName": "ClerkHeader",
+        "path": "src/integrations/clerk/header-user.tsx"
+      },
+      {
+        "type": "provider",
+        "jsName": "ClerkProvider",
+        "path": "src/integrations/clerk/provider.tsx"
+      }
+    ]
+  }
 }

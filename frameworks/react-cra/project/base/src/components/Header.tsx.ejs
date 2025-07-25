@@ -10,10 +10,9 @@ export default function Header() {
         <div className="px-2 font-bold">
           <Link to="/">Home</Link>
         </div>
-<% for(const addOn of addOns) {
-  for(const route of (addOn?.routes||[])?.filter(r => r.url && r.name)) { %>
-<div className="px-2 font-bold"><Link to="<%= route.url %>"><%= route.name %></Link></div>
-<% } } %>
+<% for(const route of (routes||[]).filter(r => r.url && r.name)) { %>
+        <div className="px-2 font-bold"><Link to="<%= route.url %>"><%= route.name %></Link></div>
+        <% } %>
       </nav>
 <% if (integrations.filter(i => i.type === 'header-user').length > 0) { %>
       <div>
