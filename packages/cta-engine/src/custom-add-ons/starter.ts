@@ -40,7 +40,6 @@ export async function readOrGenerateStarterInfo(
         shadcnComponents: [],
         framework: options.framework,
         mode: options.mode!,
-        routes: [],
         warning: '',
         type: 'starter',
         packageAdditions: {

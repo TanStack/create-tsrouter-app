@@ -4,7 +4,10 @@
   "phase": "add-on",
   "link": "https://tanstack.com/store/latest",
   "type": "add-on",
-  "modes": ["file-router", "code-router"],
+  "modes": [
+    "file-router",
+    "code-router"
+  ],
   "routes": [
     {
       "url": "/demo/store",

@@ -1,4 +1,5 @@
 import z from 'zod'
+import type { ZodTypeAny } from 'zod'
 
 import type { PackageManager } from './package-manager.js'
 
@@ -63,25 +64,26 @@ export const StarterCompiledSchema = StarterSchema.extend({
   deletedFiles: z.array(z.string()),
 })
 
-export const IntegrationSchema = z.object({
-  type: z.string(),
-  path: z.string(),
-  jsName: z.string(),
-})
-
 export const AddOnInfoSchema = AddOnBaseSchema.extend({
   modes: z.array(z.string()),
-  integrations: z.array(IntegrationSchema).optional(),
   phase: z.enum(['setup', 'add-on']),
   readme: z.string().optional(),
+  integrations: z
+    .array(
+      z.object({
+        type: z.string(),
+        path: z.string(),
+        jsName: z.string(),
+      }),
+    )
+    .optional(),
+  customProperties: z.record(z.string(), z.unknown()).optional(),
 })
 
 export const AddOnCompiledSchema = AddOnInfoSchema.extend({
   files: z.record(z.string(), z.string()),
   deletedFiles: z.array(z.string()),
 })
-
-export type Integration = z.infer<typeof IntegrationSchema>
 
 export type AddOnBase = z.infer<typeof AddOnBaseSchema>
 
@@ -109,6 +111,8 @@ export type FrameworkDefinition = {
   description: string
   version: string
 
+  customProperties?: Record<string, ZodTypeAny>
+
   base: Record<string, string>
   addOns: Array<AddOn>
   basePackageJSON: Record<string, any>
@@ -127,6 +131,7 @@ export type FrameworkDefinition = {
 export type Framework = Omit<FrameworkDefinition, 'base' | 'addOns'> &
   FileBundleHandler & {
     getAddOns: () => Array<AddOn>
+    customProperties?: Record<string, ZodTypeAny>
   }
 
 export interface Options {

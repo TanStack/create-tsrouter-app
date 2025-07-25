@@ -3,7 +3,9 @@
   "phase": "setup",
   "description": "Add TanStack Start for SSR, API endpoints, and more.",
   "link": "https://tanstack.com/start/latest",
-  "modes": ["file-router"],
+  "modes": [
+    "file-router"
+  ],
   "type": "add-on",
   "warning": "TanStack Start is not yet at 1.0 and may change significantly or not be compatible with other add-ons.",
   "routes": [
@@ -13,5 +15,6 @@
       "path": "src/routes/demo.start.server-funcs.tsx",
       "jsName": "StartServerFuncsDemo"
     }
-  ]
+  ],
+  "customProperties": {}
 }

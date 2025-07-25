@@ -2,7 +2,10 @@
   "name": "Store",
   "description": "Add TanStack Store to your application.",
   "phase": "add-on",
-  "modes": ["file-router", "code-router"],
+  "modes": [
+    "file-router",
+    "code-router"
+  ],
   "type": "add-on",
   "link": "https://tanstack.com/store/latest",
   "routes": [
@@ -12,5 +15,6 @@
       "path": "src/routes/demo.store.tsx",
       "jsName": "StoreDemo"
     }
-  ]
+  ],
+  "customProperties": {}
 }

@@ -12,9 +12,9 @@ export default component$(() => {
         <div class="px-2 font-bold">
           <Link to="/">Home</Link>
         </div>
-<% for(const addOn of addOns) { for(const route of (addOn?.routes||[])?.filter(r => r.url && r.name)) { %>
-<div class="px-2 font-bold"><Link href="<%= route.url %>"><%= route.name %></Link></div>
-<% } } %>
+<% for(const route of (routes||[]).filter(r => r.url && r.name)) { %>
+        <div class="px-2 font-bold"><Link href="<%= route.url %>"><%= route.name %></Link></div>
+        <% } %>
       </nav>
 <% if (integrations.filter(i => i.type === 'header-user').length > 0) { %>
       <div>

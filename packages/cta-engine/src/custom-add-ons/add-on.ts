@@ -185,9 +185,12 @@ export async function buildAssetsDirectory(
       })
       if (file.includes('/routes/')) {
         const { url, code, name, jsName } = templatize(changedFiles[file], file)
-        info.routes ||= []
-        if (!info.routes.find((r) => r.url === url)) {
-          info.routes.push({
+        if (!info.routes) {
+          info.routes = []
+        }
+        const routes = info.routes as Array<any>
+        if (!routes.find((r: any) => r.url === url)) {
+          routes.push({
             url,
             name,
             jsName,

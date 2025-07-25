@@ -3,8 +3,13 @@
   "phase": "setup",
   "description": "Add Sentry for error monitoring, tracing, and session replays (requires Start).",
   "link": "https://sentry.com/",
-  "modes": ["file-router"],
+  "modes": [
+    "file-router"
+  ],
   "type": "add-on",
+  "dependsOn": [
+    "start"
+  ],
   "routes": [
     {
       "url": "/demo/sentry/testing",
@@ -12,6 +17,5 @@
       "path": "src/routes/demo.sentry.testing.tsx",
       "jsName": "SentryDemo"
     }
-  ],
-  "dependsOn": ["start"]
+  ]
 }

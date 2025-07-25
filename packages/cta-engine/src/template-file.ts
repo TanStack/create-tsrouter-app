@@ -9,7 +9,7 @@ import {
 } from './package-manager.js'
 import { relativePath } from './file-helpers.js'
 
-import type { AddOn, Environment, Options } from './types.js'
+import type { Environment, Options } from './types.js'
 
 function convertDotFilesAndPaths(path: string) {
   return path
@@ -50,19 +50,52 @@ export function createTemplateFile(environment: Environment, options: Options) {
     }
   }
 
-  const integrations: Array<Required<AddOn>['integrations'][number]> = []
+  // Collect all custom properties from add-ons
+  const customProperties: Record<string, Array<unknown>> = {}
+
+  // Initialize arrays for all framework custom properties
+  if (options.framework.customProperties) {
+    for (const key of Object.keys(options.framework.customProperties)) {
+      customProperties[key] = []
+    }
+  }
+
+  // Collect custom properties from each add-on
   for (const addOn of options.chosenAddOns) {
-    if (addOn.integrations) {
-      for (const integration of addOn.integrations) {
-        integrations.push(integration)
+    if (addOn.customProperties) {
+      for (const [key, values] of Object.entries(addOn.customProperties)) {
+        // Initialize array if it doesn't exist (for properties not defined in framework)
+        if (!(key in customProperties)) {
+          customProperties[key] = []
+        }
+
+        // Add values to the array
+        if (Array.isArray(values)) {
+          customProperties[key].push(...values)
+        } else {
+          customProperties[key].push(values)
+        }
       }
     }
   }
 
-  const routes: Array<Required<AddOn>['routes'][number]> = []
-  for (const addOn of options.chosenAddOns) {
-    if (addOn.routes) {
-      routes.push(...addOn.routes)
+  // Collect routes and integrations from add-ons (they're at root level in info.json)
+  // but they're defined in customProperties in the framework schema
+  if (options.framework.customProperties?.routes) {
+    customProperties.routes = []
+    for (const addOn of options.chosenAddOns) {
+      if (addOn.routes) {
+        customProperties.routes.push(...addOn.routes)
+      }
+    }
+  }
+
+  if (options.framework.customProperties?.integrations) {
+    customProperties.integrations = []
+    for (const addOn of options.chosenAddOns) {
+      if ('integrations' in addOn && addOn.integrations) {
+        customProperties.integrations.push(...(addOn as any).integrations)
+      }
     }
   }
 
@@ -86,8 +119,9 @@ export function createTemplateFile(environment: Environment, options: Options) {
       codeRouter: options.mode === 'code-router',
       addOnEnabled,
       addOns: options.chosenAddOns,
-      integrations,
-      routes,
+
+      // Spread custom properties to make them available at top level
+      ...customProperties,
 
       getPackageManagerAddScript,
       getPackageManagerRunScript,

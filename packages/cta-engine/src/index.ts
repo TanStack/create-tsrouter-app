@@ -68,7 +68,6 @@ export {
   StopEvent,
   AddOnCompiledSchema,
   AddOnInfoSchema,
-  IntegrationSchema,
 } from './types.js'
 
 export type {

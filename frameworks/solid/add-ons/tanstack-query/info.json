@@ -2,7 +2,9 @@
   "name": "TanStack Query",
   "description": "Integrate TanStack Query into your application.",
   "phase": "add-on",
-  "modes": ["file-router"],
+  "modes": [
+    "file-router"
+  ],
   "type": "add-on",
   "link": "https://tanstack.com/query/latest",
   "routes": [
@@ -24,5 +26,6 @@
       "path": "src/integrations/tanstack-query/header-user.tsx",
       "jsName": "TanStackQueryHeaderUser"
     }
-  ]
+  ],
+  "customProperties": {}
 }

@@ -2,7 +2,10 @@
   "name": "Table",
   "description": "Integrate TanStack Table into your application.",
   "phase": "add-on",
-  "modes": ["file-router", "code-router"],
+  "modes": [
+    "file-router",
+    "code-router"
+  ],
   "link": "https://tanstack.com/table/latest",
   "type": "add-on",
   "routes": [

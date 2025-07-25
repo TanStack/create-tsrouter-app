@@ -4,7 +4,9 @@
   "link": "https://convex.dev",
   "phase": "add-on",
   "type": "add-on",
-  "modes": ["file-router"],
+  "modes": [
+    "file-router"
+  ],
   "routes": [
     {
       "url": "/demo/convex",

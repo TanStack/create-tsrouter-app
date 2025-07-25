@@ -2,7 +2,9 @@
   "name": "Feather Icons",
   "description": "Add Feather Icons to your application.",
   "phase": "add-on",
-  "modes": ["default"],
+  "modes": [
+    "default"
+  ],
   "type": "add-on",
   "link": "https://github.com/egmaleta/qwik-feather-icons",
   "routes": [

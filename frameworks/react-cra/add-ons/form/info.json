@@ -3,8 +3,20 @@
   "description": "TanStack Form",
   "phase": "add-on",
   "type": "add-on",
-  "modes": ["file-router", "code-router"],
+  "modes": [
+    "file-router",
+    "code-router"
+  ],
   "link": "https://tanstack.com/form/latest",
+  "shadcnComponents": [
+    "button",
+    "select",
+    "input",
+    "textarea",
+    "slider",
+    "switch",
+    "label"
+  ],
   "routes": [
     {
       "url": "/demo/form/simple",
@@ -18,14 +30,5 @@
       "path": "src/routes/demo.form.address.tsx",
       "jsName": "FormAddressDemo"
     }
-  ],
-  "shadcnComponents": [
-    "button",
-    "select",
-    "input",
-    "textarea",
-    "slider",
-    "switch",
-    "label"
   ]
 }
