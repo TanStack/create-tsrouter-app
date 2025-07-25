@@ -8,14 +8,12 @@
   ],
   "link": "https://tanstack.com/table/latest",
   "type": "add-on",
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/table",
-        "name": "TanStack Table",
-        "path": "src/routes/demo.table.tsx",
-        "jsName": "TableDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/table",
+      "name": "TanStack Table",
+      "path": "src/routes/demo.table.tsx",
+      "jsName": "TableDemo"
+    }
+  ]
 }

@@ -10,14 +10,12 @@
   "dependsOn": [
     "start"
   ],
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/neon",
-        "name": "Neon",
-        "path": "src/routes/demo.neon.tsx",
-        "jsName": "NeonDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/neon",
+      "name": "Neon",
+      "path": "src/routes/demo.neon.tsx",
+      "jsName": "NeonDemo"
+    }
+  ]
 }

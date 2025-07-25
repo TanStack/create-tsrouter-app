@@ -5,26 +5,24 @@
   "modes": ["file-router", "code-router"],
   "type": "add-on",
   "link": "https://tanstack.com/query/latest",
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/tanstack-query",
-        "name": "TanStack Query",
-        "path": "src/routes/demo.tanstack-query.tsx",
-        "jsName": "TanStackQueryDemo"
-      }
-    ],
-    "integrations": [
-      {
-        "type": "root-provider",
-        "path": "src/integrations/tanstack-query/root-provider.tsx",
-        "jsName": "TanStackQueryProvider"
-      },
-      {
-        "type": "layout",
-        "path": "src/integrations/tanstack-query/layout.tsx",
-        "jsName": "TanStackQueryLayout"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/tanstack-query",
+      "name": "TanStack Query",
+      "path": "src/routes/demo.tanstack-query.tsx",
+      "jsName": "TanStackQueryDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "root-provider",
+      "path": "src/integrations/tanstack-query/root-provider.tsx",
+      "jsName": "TanStackQueryProvider"
+    },
+    {
+      "type": "layout",
+      "path": "src/integrations/tanstack-query/layout.tsx",
+      "jsName": "TanStackQueryLayout"
+    }
+  ]
 }

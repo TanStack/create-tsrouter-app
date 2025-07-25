@@ -139,9 +139,7 @@ export async function readOrGenerateAddOnInfo(
         shadcnComponents: [],
         framework: options.framework,
         modes: [options.mode],
-        customProperties: {
-          routes: [],
-        },
+        routes: [],
         warning: '',
         phase: 'add-on',
         type: 'add-on',
@@ -187,13 +185,10 @@ export async function buildAssetsDirectory(
       })
       if (file.includes('/routes/')) {
         const { url, code, name, jsName } = templatize(changedFiles[file], file)
-        if (!info.customProperties) {
-          info.customProperties = {}
+        if (!info.routes) {
+          info.routes = []
         }
-        if (!info.customProperties.routes) {
-          info.customProperties.routes = []
-        }
-        const routes = info.customProperties.routes as Array<any>
+        const routes = info.routes as Array<any>
         if (!routes.find((r: any) => r.url === url)) {
           routes.push({
             url,

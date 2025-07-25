@@ -8,14 +8,13 @@
   ],
   "type": "add-on",
   "link": "https://tanstack.com/store/latest",
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/store",
-        "name": "Store",
-        "path": "src/routes/demo.store.tsx",
-        "jsName": "StoreDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/store",
+      "name": "Store",
+      "path": "src/routes/demo.store.tsx",
+      "jsName": "StoreDemo"
+    }
+  ],
+  "customProperties": {}
 }

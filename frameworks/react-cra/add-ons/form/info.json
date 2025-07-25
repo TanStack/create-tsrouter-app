@@ -17,20 +17,18 @@
     "switch",
     "label"
   ],
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/form/simple",
-        "name": "Simple Form",
-        "path": "src/routes/demo.form.simple.tsx",
-        "jsName": "FormSimpleDemo"
-      },
-      {
-        "url": "/demo/form/address",
-        "name": "Address Form",
-        "path": "src/routes/demo.form.address.tsx",
-        "jsName": "FormAddressDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/form/simple",
+      "name": "Simple Form",
+      "path": "src/routes/demo.form.simple.tsx",
+      "jsName": "FormSimpleDemo"
+    },
+    {
+      "url": "/demo/form/address",
+      "name": "Address Form",
+      "path": "src/routes/demo.form.address.tsx",
+      "jsName": "FormAddressDemo"
+    }
+  ]
 }

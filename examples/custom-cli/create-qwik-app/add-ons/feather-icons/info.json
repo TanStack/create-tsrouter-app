@@ -7,14 +7,12 @@
   ],
   "type": "add-on",
   "link": "https://github.com/egmaleta/qwik-feather-icons",
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo-feather",
-        "name": "Feather Icons",
-        "path": "src/routes/demo-feather/index.tsx",
-        "jsName": "FeatherIconsDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo-feather",
+      "name": "Feather Icons",
+      "path": "src/routes/demo-feather/index.tsx",
+      "jsName": "FeatherIconsDemo"
+    }
+  ]
 }

@@ -8,7 +8,9 @@
   "routes": [
     {
       "url": "/example/chat",
-      "name": "Chat"
+      "name": "Chat",
+      "path": "src/routes/example.chat.tsx",
+      "jsName": "ChatDemo"
     }
   ],
   "dependsOn": ["solid-ui", "store"]

@@ -8,14 +8,13 @@
   ],
   "type": "add-on",
   "warning": "TanStack Start is not yet at 1.0 and may change significantly or not be compatible with other add-ons.",
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/start/server-funcs",
-        "name": "Start - Server Functions",
-        "path": "src/routes/demo.start.server-funcs.tsx",
-        "jsName": "StartServerFuncsDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/start/server-funcs",
+      "name": "Start - Server Functions",
+      "path": "src/routes/demo.start.server-funcs.tsx",
+      "jsName": "StartServerFuncsDemo"
+    }
+  ],
+  "customProperties": {}
 }

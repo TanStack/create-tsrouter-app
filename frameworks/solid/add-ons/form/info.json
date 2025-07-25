@@ -8,14 +8,13 @@
     "code-router"
   ],
   "type": "add-on",
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/form",
-        "name": "Form",
-        "path": "src/routes/demo.form.tsx",
-        "jsName": "FormDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/form",
+      "name": "Form",
+      "path": "src/routes/demo.form.tsx",
+      "jsName": "FormDemo"
+    }
+  ],
+  "customProperties": {}
 }

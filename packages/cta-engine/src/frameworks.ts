@@ -116,6 +116,35 @@ export function scanAddOnDirectories(
         validatedCustomProperties = info.customProperties
       }
 
+      // Also validate routes and integrations that are at root level in info.json
+      // but defined in framework's customProperties
+      let validatedRoutes = info.routes
+      let validatedIntegrations = info.integrations
+      
+      if (framework?.customProperties) {
+        // Validate routes if defined in framework customProperties
+        if (framework.customProperties.routes && info.routes) {
+          try {
+            validatedRoutes = framework.customProperties.routes.parse(info.routes)
+          } catch (error: any) {
+            throw new Error(
+              `Invalid routes in add-on "${dir}": ${error.message}`
+            )
+          }
+        }
+        
+        // Validate integrations if defined in framework customProperties
+        if (framework.customProperties.integrations && info.integrations) {
+          try {
+            validatedIntegrations = framework.customProperties.integrations.parse(info.integrations)
+          } catch (error: any) {
+            throw new Error(
+              `Invalid integrations in add-on "${dir}": ${error.message}`
+            )
+          }
+        }
+      }
+
       addOns.push({
         ...info,
         id: dir,
@@ -123,6 +152,8 @@ export function scanAddOnDirectories(
         readme,
         files,
         smallLogo,
+        routes: validatedRoutes,
+        integrations: validatedIntegrations,
         customProperties: validatedCustomProperties,
         getFiles,
         getFileContents,

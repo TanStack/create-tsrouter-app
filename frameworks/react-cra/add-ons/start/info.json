@@ -16,20 +16,18 @@
   "addOnSpecialSteps": [
     "rimraf-node-modules"
   ],
-  "customProperties": {
-    "routes": [
-      {
-        "url": "/demo/start/server-funcs",
-        "name": "Start - Server Functions",
-        "path": "src/routes/demo.start.server-funcs.tsx",
-        "jsName": "StartServerFuncsDemo"
-      },
-      {
-        "url": "/demo/start/api-request",
-        "name": "Start - API Request",
-        "path": "src/routes/demo.start.api-request.tsx",
-        "jsName": "StartApiRequestDemo"
-      }
-    ]
-  }
+  "routes": [
+    {
+      "url": "/demo/start/server-funcs",
+      "name": "Start - Server Functions",
+      "path": "src/routes/demo.start.server-funcs.tsx",
+      "jsName": "StartServerFuncsDemo"
+    },
+    {
+      "url": "/demo/start/api-request",
+      "name": "Start - API Request",
+      "path": "src/routes/demo.start.api-request.tsx",
+      "jsName": "StartApiRequestDemo"
+    }
+  ]
 }

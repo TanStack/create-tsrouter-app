@@ -79,6 +79,26 @@ export function createTemplateFile(environment: Environment, options: Options) {
     }
   }
 
+  // Collect routes and integrations from add-ons (they're at root level in info.json)
+  // but they're defined in customProperties in the framework schema
+  if (options.framework.customProperties?.routes) {
+    customProperties.routes = []
+    for (const addOn of options.chosenAddOns) {
+      if (addOn.routes) {
+        customProperties.routes.push(...addOn.routes)
+      }
+    }
+  }
+
+  if (options.framework.customProperties?.integrations) {
+    customProperties.integrations = []
+    for (const addOn of options.chosenAddOns) {
+      if ('integrations' in addOn && addOn.integrations) {
+        customProperties.integrations.push(...(addOn as any).integrations)
+      }
+    }
+  }
+
   const addOnEnabled = options.chosenAddOns.reduce<Record<string, boolean>>(
     (acc, addOn) => {
       acc[addOn.id] = true

@@ -26,6 +26,16 @@ export const AddOnBaseSchema = z.object({
       args: z.array(z.string()).optional(),
     })
     .optional(),
+  routes: z
+    .array(
+      z.object({
+        url: z.string().optional(),
+        name: z.string().optional(),
+        path: z.string(),
+        jsName: z.string(),
+      }),
+    )
+    .optional(),
   packageAdditions: z
     .object({
       dependencies: z.record(z.string(), z.string()).optional(),
@@ -58,6 +68,15 @@ export const AddOnInfoSchema = AddOnBaseSchema.extend({
   modes: z.array(z.string()),
   phase: z.enum(['setup', 'add-on']),
   readme: z.string().optional(),
+  integrations: z
+    .array(
+      z.object({
+        type: z.string(),
+        path: z.string(),
+        jsName: z.string(),
+      }),
+    )
+    .optional(),
   customProperties: z.record(z.string(), z.unknown()).optional(),
 })
 
