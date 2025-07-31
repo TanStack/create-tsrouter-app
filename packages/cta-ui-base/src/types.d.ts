@@ -1,4 +1,4 @@
-import type { StatusStepType } from '@tanstack/cta-engine'
+import type { StatusStepType, AddOnOption, AddOnOptions } from '@tanstack/cta-engine'
 
 export type ApplicationMode = 'add' | 'setup' | 'none'
 
@@ -38,6 +38,7 @@ export type AddOnInfo = {
   logo?: string
   link: string
   dependsOn?: Array<string>
+  options?: AddOnOptions
 }
 
 export type FileClass =
