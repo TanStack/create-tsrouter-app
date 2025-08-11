@@ -11,7 +11,7 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": <%= addOnEnabled['start'] ? 'false' : 'true' %>,
     "noEmit": true,
 
     /* Linting */

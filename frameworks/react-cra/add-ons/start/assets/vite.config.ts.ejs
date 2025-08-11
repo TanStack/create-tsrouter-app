@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { tanstackStart } from '@tanstack/react-start/plugin/vite';
+import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite"
 <% } %><% if (addOnEnabled.sentry) { %>
@@ -23,7 +24,10 @@ const config = defineConfig({
         projects: ['./tsconfig.json'],
       }),
       <% if (tailwind) { %>tailwindcss(),<% } %>
-      tanstackStart(),
+      tanstackStart({
+        customViteReactPlugin: true,
+      }),
+      viteReact(),
     ],
 })
 

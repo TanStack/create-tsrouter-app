@@ -1,0 +1,17 @@
+{
+  "name": "oRPC",
+  "description": "Integrate oRPC into your application.",
+  "phase": "add-on",
+  "modes": ["file-router"],
+  "link": "https://orpc.unnoq.com/",
+  "dependsOn": ["tanstack-query", "start"],
+  "type": "add-on",
+  "routes": [
+    {
+      "url": "/demo/orpc-todo",
+      "name": "oRPC Todo",
+      "path": "src/routes/demo.orpc-todo.tsx",
+      "jsName": "ORPCTodos"
+    }
+  ]
+}

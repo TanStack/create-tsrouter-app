@@ -4,9 +4,9 @@ import superjson from "superjson";
 import { createTRPCClient, httpBatchStreamLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 
-import { TRPCProvider } from "@/integrations/trpc/react";
-
 import type { TRPCRouter } from "@/integrations/trpc/router";
+
+import { TRPCProvider } from "@/integrations/trpc/react";
 
 function getUrl() {
   const base = (() => {
@@ -25,26 +25,31 @@ export const trpcClient = createTRPCClient<TRPCRouter>({
   ],
 });
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    dehydrate: { serializeData: superjson.serialize },
-    hydrate: { deserializeData: superjson.deserialize },
-  },
-});
-
-const serverHelpers = createTRPCOptionsProxy({
-  client: trpcClient,
-  queryClient: queryClient,
-});
-
 export function getContext() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      dehydrate: { serializeData: superjson.serialize },
+      hydrate: { deserializeData: superjson.deserialize },
+    },
+  });
+
+  const serverHelpers = createTRPCOptionsProxy({
+    client: trpcClient,
+    queryClient: queryClient,
+  });
   return {
     queryClient,
     trpc: serverHelpers,
   };
 }
 
-export function Provider({ children }: { children: React.ReactNode }) {
+export function Provider({
+  children,
+  queryClient,
+}: {
+  children: React.ReactNode;
+  queryClient: QueryClient;
+}) {
   return (
     <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
       {children}
@@ -54,17 +59,22 @@ export function Provider({ children }: { children: React.ReactNode }) {
 <% } else { %>
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const queryClient = new QueryClient()
-
 export function getContext() {
+  const queryClient = new QueryClient();
   return {
     queryClient,
-  }
+  };
 }
 
-export function Provider({ children }: { children: React.ReactNode }) {
+export function Provider({
+  children,
+  queryClient,
+}: {
+  children: React.ReactNode;
+  queryClient: QueryClient;
+}) {
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  )
+  );
 }
 <% } %>

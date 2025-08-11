@@ -1,6 +1,7 @@
 import { experimental_createMCPClient, tool } from 'ai'
 //import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { z } from 'zod'
+
 import guitars from '../data/example-guitars'
 
 // Example of using an SSE MCP server
@@ -24,7 +25,7 @@ import guitars from '../data/example-guitars'
 
 const getGuitars = tool({
   description: 'Get all products from the database',
-  parameters: z.object({}),
+  inputSchema: z.object({}),
   execute: async () => {
     return Promise.resolve(guitars)
   },
@@ -32,9 +33,14 @@ const getGuitars = tool({
 
 const recommendGuitar = tool({
   description: 'Use this tool to recommend a guitar to the user',
-  parameters: z.object({
+  inputSchema: z.object({
     id: z.string().describe('The id of the guitar to recommend'),
   }),
+  execute: async ({ id }) => {
+    return {
+      id,
+    }
+  },
 })
 
 export default async function getTools() {

@@ -5,5 +5,13 @@
   "modes": ["file-router"],
   "link": "https://trpc.io/",
   "dependsOn": ["tanstack-query", "start"],
-  "type": "add-on"
+  "type": "add-on",
+  "routes": [
+    {
+      "url": "/demo/trpc-todo",
+      "name": "tRPC Todo",
+      "path": "src/routes/demo.trpc-todo.tsx",
+      "jsName": "TRPCTodos"
+    }
+  ]
 }

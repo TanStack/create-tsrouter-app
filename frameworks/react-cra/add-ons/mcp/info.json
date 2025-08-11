@@ -1,0 +1,18 @@
+{
+  "name": "MCP",
+  "phase": "setup",
+  "description": "Add Model Context Protocol (MCP) support.",
+  "link": "https://mcp.dev",
+  "modes": ["file-router"],
+  "type": "add-on",
+  "warning": "MCP is still in development and may change significantly or not be compatible with other add-ons.\nThe MCP implementation does not support authentication.",
+  "routes": [
+    {
+      "url": "/demo/mcp-todos",
+      "name": "MCP",
+      "path": "src/routes/demo.mcp-todos.tsx",
+      "jsName": "MCPTodosDemo"
+    }
+  ],
+  "dependsOn": ["start"]
+}

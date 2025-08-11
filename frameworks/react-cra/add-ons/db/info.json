@@ -1,0 +1,17 @@
+{
+  "name": "DB",
+  "description": "TanStack DB",
+  "phase": "add-on",
+  "type": "add-on",
+  "modes": ["file-router"],
+  "link": "https://tanstack.com/db/latest",
+  "dependsOn": ["tanstack-query", "start"],
+  "routes": [
+    {
+      "url": "/demo/db-chat",
+      "name": "DB Chat",
+      "path": "src/routes/demo.db-chat.tsx",
+      "jsName": "DBChatDemo"
+    }
+  ]
+}
