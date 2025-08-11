@@ -25,12 +25,10 @@
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.6",
     "tailwindcss-animate": "^1.0.7",
-    "vinxi": "^0.5.3",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
     "@content-collections/core": "^0.8.2",
-    "@content-collections/vinxi": "^0.1.0",
     "@content-collections/vite": "^0.2.6",
     "@tanstack/router-generator": "1.120.20",
     "@tanstack/start": "^1.120.20",
