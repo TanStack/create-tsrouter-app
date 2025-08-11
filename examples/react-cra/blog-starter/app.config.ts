@@ -1,5 +1,5 @@
 import contentCollections from "@content-collections/vinxi";
-import { defineConfig } from "@tanstack/react-start/config";
+import { defineConfig } from "@tanstack/start/config";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 
