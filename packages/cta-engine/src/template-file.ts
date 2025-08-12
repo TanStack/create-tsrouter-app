@@ -92,7 +92,8 @@ export function createTemplateFile(environment: Environment, options: Options) {
       getPackageManagerAddScript,
       getPackageManagerRunScript,
 
-      relativePath: (path: string) => relativePath(file, path),
+      relativePath: (path: string, stripExtension: boolean = false) =>
+        relativePath(file, path, stripExtension),
 
       ignoreFile: () => {
         throw new IgnoreFileError()

@@ -20,9 +20,9 @@
       "jsName": "TanStackQueryProvider"
     },
     {
-      "type": "layout",
-      "path": "src/integrations/tanstack-query/layout.tsx",
-      "jsName": "TanStackQueryLayout"
+      "type": "devtools",
+      "path": "src/integrations/tanstack-query/devtools.tsx",
+      "jsName": "TanStackQueryDevtools"
     }
   ]
 }

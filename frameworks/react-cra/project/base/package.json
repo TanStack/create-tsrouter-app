@@ -10,8 +10,9 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@tanstack/react-devtools": "^0.2.2",
     "@tanstack/react-router": "^1.130.2",
-    "@tanstack/react-router-devtools": "^1.130.2",
+    "@tanstack/react-router-devtools": "^1.131.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

@@ -1,10 +1,11 @@
 <% if (!fileRouter) { ignoreFile() } %>import { <% if (addOnEnabled.start) { %>
   HeadContent<% } else { %>Outlet<% } %><% if (addOnEnabled.start) { %>, Scripts<% } %>, <% if (addOnEnabled["tanstack-query"]) { %>createRootRouteWithContext<% } else { %>createRootRoute<% } %> } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { TanstackDevtools } from '@tanstack/react-devtools'
 <% if (addOns.length) { %>
 import Header from '../components/Header'
-<% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
-import <%= integration.jsName %> from "<%= relativePath(integration.path) %>";
+<% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider' || i.type === 'devtools')) { %>
+import <%= integration.jsName %> from '<%= relativePath(integration.path, true) %>'
 <% } %>
 <% if (addOnEnabled.start) { %>
 import appCss from '../styles.css?url'
@@ -53,7 +54,18 @@ export const Route = <% if (addOnEnabled["tanstack-query"]) { %>createRootRouteW
   <% for(const integration of integrations.filter(i => i.type === 'provider')) { %><<%= integration.jsName %>>
   <% } %><% if (addOns.length) { %><Header />  
   <% } %><Outlet />
-      <TanStackRouterDevtools />
+        <TanstackDevtools
+        config={{
+          position: 'bottom-left',
+        }}
+        plugins={[
+          {
+            name: 'Tanstack Router',
+            render: <TanStackRouterDevtoolsPanel />,
+          },
+          <% for(const integration of integrations.filter(i => i.type === 'devtools')) { %><%= integration.jsName %>,<% } %>
+        ]}
+      />
       <% for(const integration of integrations.filter(i => i.type === 'layout')) { %><<%= integration.jsName %> />
       <% } %><% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %></<%= integration.jsName %>>
     <% } %>
@@ -72,7 +84,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <% for(const integration of integrations.filter(i => i.type === 'provider')) { %><<%= integration.jsName %>>
         <% } %><% if (addOns.length) { %><Header />  
         <% } %>{children}
-          <TanStackRouterDevtools />
+          <TanstackDevtools
+            config={{
+              position: 'bottom-left',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              <% for(const integration of integrations.filter(i => i.type === 'devtools')) { %><%= integration.jsName %>,<% } %>
+            ]}
+          />
           <% for(const integration of integrations.filter(i => i.type === 'layout')) { %><<%= integration.jsName %> />
           <% } %><% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %></<%= integration.jsName %>>
         <% } %><Scripts />

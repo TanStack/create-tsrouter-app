@@ -12,5 +12,12 @@
       "path": "src/routes/demo.store.tsx",
       "jsName": "StoreDemo"
     }
+  ],
+  "integrations": [
+    {
+      "type": "devtools",
+      "path": "src/lib/demo-store-devtools.tsx",
+      "jsName": "StoreDevtools"
+    }
   ]
 }
