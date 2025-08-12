@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "@ai-sdk/anthropic": "^1.1.17",
-    "@ai-sdk/react": "^1.1.23",
+    "@ai-sdk/anthropic": "^2.0.1",
+    "@ai-sdk/react": "^2.0.8",
     "@modelcontextprotocol/sdk": "^1.8.0",
-    "ai": "^4.1.65",
+    "ai": "^5.0.8",
     "highlight.js": "^11.11.1",
     "react-markdown": "^9.0.1",
     "rehype-highlight": "^7.0.0",

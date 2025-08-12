@@ -1,46 +1,40 @@
 import { createRouter as createTanstackRouter } from '@tanstack/react-router'<% if (addOnEnabled['tanstack-query']) { %>
-import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
-import * as TanstackQuery from './integrations/tanstack-query/root-provider'
-<% } %>
+  import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
+  import * as TanstackQuery from "./integrations/tanstack-query/root-provider";
+  <% } %>
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
-import './styles.css'
-
 // Create a new router instance
 export const createRouter = () => {
   <% if (addOnEnabled['tanstack-query']) { %>
-  const router = createTanstackRouter({
-    routeTree,
-    context: {
-      <% if (addOnEnabled['tanstack-query']) { %>
-        ...TanstackQuery.getContext(),
-      <% } %>
-    },
-    scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
-    <% if (addOnEnabled.tRPC) { %>
-    Wrap: (props: { children: React.ReactNode }) => {
-      return (
-        <TanstackQuery.Provider>
-          {props.children}
-        </TanstackQuery.Provider>
-      );
-    },
-  <% } %>
-  });
-  
-  setupRouterSsrQueryIntegration({router, queryClient: TanstackQuery.getContext().queryClient})
+    const rqContext = TanstackQuery.getContext();
 
-  <% } else { %>
-  const router = createTanstackRouter({
+    const router = createTanstackRouter({
+        routeTree,
+        context: { ...rqContext },
+        defaultPreload: "intent",
+        Wrap: (props: { children: React.ReactNode }) => {
+          return (
+            <TanstackQuery.Provider {...rqContext}>
+              {props.children}
+            </TanstackQuery.Provider>
+          );
+        },
+      })
+
+    setupRouterSsrQueryIntegration({router, queryClient: rqContext.queryClient})
+
+    return router;
+
+    <% } else { %>
+  return createTanstackRouter({
     routeTree,
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
   })
   <% } %>
-  return router
 }
 
 // Register the router instance for type safety

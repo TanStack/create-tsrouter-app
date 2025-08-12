@@ -5,6 +5,7 @@
   "modes": ["file-router"],
   "type": "add-on",
   "link": "https://clerk.com",
+  "tailwind": true,
   "routes": [
     {
       "url": "/demo/clerk",

@@ -224,6 +224,7 @@ Errors were encountered during the creation of your app:
 ${environment.getErrors().join('\n')}`
   }
 
+  // Use the force luke! :)
   environment.outro(
     `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.
 
@@ -233,7 +234,7 @@ Use the following commands to start your app:
       getPackageManagerScriptCommand(options.packageManager, ['dev']),
     )}
 
-Please check the README.md for information on testing, styling, adding routes, etc.${errorStatement}`,
+Please read the README.md for information on testing, styling, adding routes, etc.${errorStatement}`,
   )
 }
 

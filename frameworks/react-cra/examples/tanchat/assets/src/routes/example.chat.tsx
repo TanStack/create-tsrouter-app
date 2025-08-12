@@ -1,5 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
 import { Send } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -7,10 +7,11 @@ import rehypeSanitize from 'rehype-sanitize'
 import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
 import { useChat } from '@ai-sdk/react'
-
-import { genAIResponse } from '../utils/demo.ai'
+import { DefaultChatTransport } from 'ai'
 
 import type { UIMessage } from 'ai'
+
+import GuitarRecommendation from '@/components/example-GuitarRecommendation'
 
 import '../demo.index.css'
 
@@ -56,10 +57,10 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
   return (
     <div ref={messagesContainerRef} className="flex-1 overflow-y-auto pb-24">
       <div className="max-w-3xl mx-auto w-full px-4">
-        {messages.map(({ id, role, content }) => (
+        {messages.map(({ id, role, parts }) => (
           <div
             key={id}
-            className={`py-6 ${
+            className={`p-4 ${
               role === 'assistant'
                 ? 'bg-gradient-to-r from-orange-500/5 to-red-600/5'
                 : 'bg-transparent'
@@ -75,18 +76,39 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                   Y
                 </div>
               )}
-              <div className="flex-1 min-w-0">
-                <ReactMarkdown
-                  className="prose dark:prose-invert max-w-none"
-                  rehypePlugins={[
-                    rehypeRaw,
-                    rehypeSanitize,
-                    rehypeHighlight,
-                    remarkGfm,
-                  ]}
-                >
-                  {content}
-                </ReactMarkdown>
+              <div className="flex-1">
+                {parts.map((part, index) => {
+                  if (part.type === 'text') {
+                    return (
+                      <div className="flex-1 min-w-0" key={index}>
+                        <ReactMarkdown
+                          className="prose dark:prose-invert max-w-none"
+                          rehypePlugins={[
+                            rehypeRaw,
+                            rehypeSanitize,
+                            rehypeHighlight,
+                            remarkGfm,
+                          ]}
+                        >
+                          {part.text}
+                        </ReactMarkdown>
+                      </div>
+                    )
+                  }
+                  if (
+                    part.type === 'tool-recommendGuitar' &&
+                    part.state === 'output-available' &&
+                    (part.output as { id: string })?.id
+                  ) {
+                    return (
+                      <div key={index} className="max-w-[80%] mx-auto">
+                        <GuitarRecommendation
+                          id={(part.output as { id: string })?.id}
+                        />
+                      </div>
+                    )
+                  }
+                })}
               </div>
             </div>
           </div>
@@ -97,17 +119,12 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
 }
 
 function ChatPage() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    initialMessages: [],
-    fetch: (_url, options) => {
-      const { messages } = JSON.parse(options!.body! as string)
-      return genAIResponse({
-        data: {
-          messages,
-        },
-      })
-    },
+  const { messages, sendMessage } = useChat({
+    transport: new DefaultChatTransport({
+      api: '/api/demo-chat',
+    }),
   })
+  const [input, setInput] = useState('')
 
   const Layout = messages.length ? ChattingLayout : InitalLayout
 
@@ -117,11 +134,17 @@ function ChatPage() {
         <Messages messages={messages} />
 
         <Layout>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              sendMessage({ text: input })
+              setInput('')
+            }}
+          >
             <div className="relative max-w-xl mx-auto">
               <textarea
                 value={input}
-                onChange={handleInputChange}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Type something clever (or don't, we won't judge)..."
                 className="w-full rounded-lg border border-orange-500/20 bg-gray-800/50 pl-4 pr-12 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent resize-none overflow-hidden shadow-lg"
                 rows={1}
@@ -135,7 +158,8 @@ function ChatPage() {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault()
-                    handleSubmit(e)
+                    sendMessage({ text: input })
+                    setInput('')
                   }
                 }}
               />

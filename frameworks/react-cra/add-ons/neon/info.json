@@ -1,7 +1,7 @@
 {
   "name": "Neon",
   "description": "Add the Neon database to your application.",
-  "link": "https://neon.tech",
+  "link": "https://neon.com",
   "phase": "add-on",
   "type": "add-on",
   "modes": ["file-router"],

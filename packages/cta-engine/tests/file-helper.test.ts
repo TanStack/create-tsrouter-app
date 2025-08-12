@@ -16,6 +16,9 @@ beforeEach(() => {
 })
 
 describe('relativePath', () => {
+  it('relative path with the same directory and strip extension', () => {
+    expect(relativePath('src/utils.ts', 'src/index.ts', true)).toBe('./index')
+  })
   it('relative path with the same directory', () => {
     expect(relativePath('src/utils.ts', 'src/index.ts')).toBe('./index.ts')
   })

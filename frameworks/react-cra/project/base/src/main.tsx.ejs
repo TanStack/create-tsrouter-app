@@ -53,11 +53,13 @@ const indexRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([indexRoute<%= routes.map(route => `, ${route.jsName}(rootRoute)`).join('') %>]);
 
-const router = createRouter({
+<% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
+const <%= integration.jsName %>Context = <%= integration.jsName %>.getContext();
+<% } %>const router = createRouter({
   routeTree,
   context: {
     <% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
-      ...<%= integration.jsName %>.getContext(),
+      ...<%= integration.jsName %>Context,
     <% } %>
   },
   defaultPreload: "intent",
@@ -80,7 +82,7 @@ const rootElement = document.getElementById("app");
   root.render(
     <StrictMode>
       <% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
-        <<%= integration.jsName %>.Provider>
+        <<%= integration.jsName %>.Provider {...<%= integration.jsName %>Context}>
       <% } %>
         <RouterProvider router={router} />
       <% for(const integration of integrations.filter(i => i.type === 'root-provider').reverse()) { %>
@@ -112,11 +114,13 @@ import "./styles.css";
 import reportWebVitals from "./reportWebVitals.<%= js %>";
 
 // Create a new router instance
-const router = createRouter({
+<% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
+const <%= integration.jsName %>Context = <%= integration.jsName %>.getContext();
+<% } %>const router = createRouter({
   routeTree,
   context: {
     <% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
-      ...<%= integration.jsName %>.getContext(),
+      ...<%= integration.jsName %>Context,
     <% } %>
   },
   defaultPreload: "intent",
@@ -139,7 +143,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
-        <<%= integration.jsName %>.Provider>
+        <<%= integration.jsName %>.Provider {...<%= integration.jsName %>Context}>
       <% } %>
           <RouterProvider router={router} />
       <% for(const integration of integrations.filter(i => i.type === 'root-provider').reverse()) { %>
