@@ -22,7 +22,7 @@
     },
     "devDependencies": {
       "@content-collections/core": "^0.8.2",
-      "@content-collections/vinxi": "^0.1.0"
+      "@content-collections/vite": "^0.2.6"
     }
   },
   "dependsOn": ["start", "shadcn"],
