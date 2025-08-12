@@ -62,13 +62,6 @@ export async function promptForCreateOptions(
     options.typescript = await selectTypescript()
   }
 
-  // Tailwind selection
-  if (!cliOptions.tailwind && options.framework.id === 'react-cra') {
-    options.tailwind = await selectTailwind()
-  } else {
-    options.tailwind = true
-  }
-
   // Package manager selection
   if (cliOptions.packageManager) {
     options.packageManager = cliOptions.packageManager
@@ -126,8 +119,22 @@ export async function promptForCreateOptions(
   )
 
   if (options.chosenAddOns.length) {
-    options.tailwind = true
     options.typescript = true
+  }
+
+  // Tailwind selection
+  const addOnsRequireTailwind = options.chosenAddOns.some(
+    (addOn) => addOn.tailwind,
+  )
+
+  if (
+    !cliOptions.tailwind &&
+    options.framework.id === 'react-cra' &&
+    !addOnsRequireTailwind
+  ) {
+    options.tailwind = await selectTailwind()
+  } else {
+    options.tailwind = true
   }
 
   options.git = cliOptions.git || (await selectGit())

@@ -13,7 +13,6 @@ import {
   createApp,
   createSerializedOptions,
   getAllAddOns,
-  getFrameworkById,
   getFrameworkByName,
   getFrameworks,
   initAddOn,

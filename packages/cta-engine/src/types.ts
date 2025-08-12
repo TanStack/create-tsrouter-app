@@ -18,6 +18,7 @@ export const AddOnBaseSchema = z.object({
   link: z.string().optional(),
   license: z.string().optional(),
   warning: z.string().optional(),
+  tailwind: z.boolean().optional().default(true),
   type: z.enum(['add-on', 'example', 'starter', 'toolchain']),
   command: z
     .object({
