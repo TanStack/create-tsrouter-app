@@ -9,9 +9,27 @@ import TypescriptSwitch from './sidebar-items/typescript-switch'
 import StarterDialog from './sidebar-items/starter'
 import SidebarGroup from './sidebar-items/sidebar-group'
 
-export function AppSidebar() {
+export interface SidebarProps {
+  slots?: {
+    actions: React.ReactNode
+  }
+}
+
+export const DefaultAppSidebarActions = () => (
+  <div className="mt-5">
+    <RunAddOns />
+    <RunCreateApp />
+  </div>
+)
+
+const defaultSlots: SidebarProps['slots'] = {
+  actions: <DefaultAppSidebarActions />,
+}
+
+export function AppSidebar(props: SidebarProps) {
   const ready = useReady()
   const mode = useApplicationMode()
+  const slots = Object.assign({}, defaultSlots, props.slots)
 
   return (
     <div className="flex flex-col gap-2">
@@ -34,10 +52,7 @@ export function AppSidebar() {
           )}
         </>
       )}
-      <div className="mt-5">
-        <RunAddOns />
-        <RunCreateApp />
-      </div>
+      {slots.actions}
     </div>
   )
 }
