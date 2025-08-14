@@ -3,7 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 <% } else { %>
 import { useEffect, useState } from 'react'
 <% } %>
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'<% if (!tailwind) { %>
+import '../demo.start.css'
+<% } %>
 
 function getNames() {
   return fetch('/api/demo-names').then((res) => res.json())
@@ -27,6 +29,7 @@ function Home() {
     }, [])
   <% } %>
   return (
+<% if (tailwind) { %>
     <div
       className="flex items-center justify-center min-h-screen p-4 text-white"
       style={{
@@ -49,5 +52,17 @@ function Home() {
         </ul>
       </div>
     </div>
+<% } else { %>
+    <div className="api-page">
+      <div className="content">
+        <h1>Start API Request Demo - Names List</h1>
+        <ul>
+          {names.map((name) => (
+            <li key={name}>{name}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+<% } %>
   )
 }

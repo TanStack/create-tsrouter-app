@@ -68,6 +68,7 @@ export function templatize(routeCode: string, routeFile: string) {
       fullMatch,
       `<% if (codeRouter) { %>
 import type { RootRoute } from '@tanstack/react-router'
+import tailwind from '@tailwindcss/vite';
 <% } else { %>
 export const Route = createFileRoute('${path}')({${routeDefinition}})
 <% } %>`,
@@ -126,7 +127,7 @@ export async function validateAddOnSetup(environment: Environment) {
 export async function readOrGenerateAddOnInfo(
   options: PersistedOptions,
 ): Promise<AddOnInfo> {
-  return existsSync(INFO_FILE)
+  const info = existsSync(INFO_FILE)
     ? JSON.parse((await readFile(INFO_FILE)).toString())
     : ({
         id: `${options.projectName}-add-on`,
@@ -134,6 +135,7 @@ export async function readOrGenerateAddOnInfo(
         version: '0.0.1',
         description: 'Add-on',
         author: 'Jane Smith <jane.smith@example.com>',
+        tailwind: options.tailwind || true,
         license: 'MIT',
         link: `https://github.com/jane-smith/${options.projectName}-add-on`,
         shadcnComponents: [],
@@ -150,6 +152,8 @@ export async function readOrGenerateAddOnInfo(
         },
         dependsOn: options.chosenAddOns,
       } as AddOnInfo)
+  info.tailwind = options.tailwind || true
+  return info
 }
 
 export async function generateProject(persistedOptions: PersistedOptions) {
