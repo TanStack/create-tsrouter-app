@@ -22,6 +22,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
+      "content-collections": ["./.content-collections/generated"],
       "@/*": ["./src/*"],
     }
   }
