@@ -62,7 +62,7 @@ export async function selectRouterType(): Promise<string> {
 
 export async function selectTypescript(): Promise<boolean> {
   const typescriptEnable = await confirm({
-    message: 'Would you like to use TypeScript?',
+    message: 'Would you like to use TypeScript? (⚠️ Will be enabled automatically if you choose any add-ons)',
     initialValue: true,
   })
   if (isCancel(typescriptEnable)) {
@@ -74,7 +74,7 @@ export async function selectTypescript(): Promise<boolean> {
 
 export async function selectTailwind(): Promise<boolean> {
   const tailwind = await confirm({
-    message: 'Would you like to use Tailwind CSS?',
+    message: 'Would you like to use Tailwind CSS? (⚠️ Will be enabled automatically if you choose any add-ons)',
     initialValue: true,
   })
 
