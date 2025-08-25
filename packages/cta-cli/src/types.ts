@@ -12,10 +12,12 @@ export interface CliOptions {
   git?: boolean
   addOns?: Array<string> | boolean
   listAddOns?: boolean
+  addonDetails?: string
   mcp?: boolean
   mcpSse?: boolean
   starter?: string
   targetDir?: string
   interactive?: boolean
   ui?: boolean
+  addOnConfig?: string
 }
