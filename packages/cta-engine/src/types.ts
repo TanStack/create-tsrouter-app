@@ -67,6 +67,7 @@ export const AddOnBaseSchema = z.object({
   logo: z.string().optional(),
   addOnSpecialSteps: z.array(z.string()).optional(),
   createSpecialSteps: z.array(z.string()).optional(),
+  postInitSpecialSteps: z.array(z.string()).optional(),
   options: AddOnOptionsSchema.optional(),
 })
 
@@ -204,6 +205,7 @@ type FileEnvironment = {
     command: string,
     args: Array<string>,
     cwd: string,
+    options?: { inherit?: boolean },
   ) => Promise<{ stdout: string }>
   deleteFile: (path: string) => Promise<void>
 

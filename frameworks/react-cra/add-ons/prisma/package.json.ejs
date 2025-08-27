@@ -10,7 +10,8 @@
     "@types/mysql2": "^3.6.0"<% } %><% if (addOnOption.prisma.database === 'sqlite') { %>
     "@types/better-sqlite3": "^7.6.0"<% } %>
   },
-  "scripts": {
+  "scripts": {<% if (addOnOption.prisma.database === 'postgres') { %>
+    "post-cta-init": "npx create-db@latest",<% } %>
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
