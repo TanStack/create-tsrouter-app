@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "vite-plugin-zephyr": "latest"
+  }
+}
