@@ -1,4 +1,4 @@
-<% if (addOnEnabled.start) { ignoreFile() } %>import { defineConfig } from "vite";
+<% if (addOnEnabled.start) { ignoreFile() } %>import { defineConfig } from "vitest/config";
 import viteReact from "@vitejs/plugin-react";<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite";
 <% } %><%if (fileRouter) { %>
