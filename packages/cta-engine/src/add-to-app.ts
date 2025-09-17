@@ -181,7 +181,9 @@ export async function runNewCommands(
         type: 'command',
         message: `Running ${formatCommand({ command: command.command, args: command.args })}...`,
       })
-      await environment.execute(command.command, command.args, cwd)
+      await environment.execute(command.command, command.args, cwd, {
+        inherit: true,
+      })
       environment.finishStep('run-commands', 'Setup commands complete')
     }
   }
@@ -259,6 +261,23 @@ export async function addToApp(
   )
   s.stop(`Installed dependencies`)
   environment.finishStep('install-dependencies', 'Dependencies installed')
+
+  // Run any post-init special steps for the new add-ons
+  const postInitSpecialSteps = new Set<string>([])
+  for (const addOn of newOptions.chosenAddOns) {
+    for (const step of addOn.postInitSpecialSteps || []) {
+      if (addOns.includes(addOn.id)) {
+        postInitSpecialSteps.add(step)
+      }
+    }
+  }
+  if (postInitSpecialSteps.size) {
+    await runSpecialSteps(
+      environment,
+      newOptions,
+      Array.from(postInitSpecialSteps),
+    )
+  }
 
   // Handle new commands
 

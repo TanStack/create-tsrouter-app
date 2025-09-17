@@ -7,6 +7,7 @@ import {
   finalizeAddOns,
   getFrameworkById,
   loadStarter,
+  populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
 import { TMP_TARGET_DIR } from '../constants.js'
@@ -64,6 +65,9 @@ export async function createAppWrapper(
     starter,
     framework,
     chosenAddOns,
+    addOnOptions: (!projectOptions.addOnOptions || Object.keys(projectOptions.addOnOptions).length === 0) 
+      ? populateAddOnOptionsDefaults(chosenAddOns) 
+      : projectOptions.addOnOptions,
   }
 
   function createEnvironment() {

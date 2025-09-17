@@ -46,12 +46,22 @@ export function createDefaultEnvironment(): Environment {
       await mkdir(dirname(path), { recursive: true })
       return writeFile(path, getBinaryFile(base64Contents) as string)
     },
-    execute: async (command: string, args: Array<string>, cwd: string) => {
+    execute: async (command: string, args: Array<string>, cwd: string, options?: { inherit?: boolean }) => {
       try {
-        const result = await execa(command, args, {
-          cwd,
-        })
-        return { stdout: result.stdout }
+        if (options?.inherit) {
+          // For commands that should show output directly to the user
+          await execa(command, args, {
+            cwd,
+            stdio: 'inherit',
+          })
+          return { stdout: '' }
+        } else {
+          // For commands where we need to capture output
+          const result = await execa(command, args, {
+            cwd,
+          })
+          return { stdout: result.stdout }
+        }
       } catch {
         errors.push(
           `Command "${command} ${args.join(' ')}" did not run successfully. Please run this manually in your project.`,
