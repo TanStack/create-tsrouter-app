@@ -1,4 +1,4 @@
-<% if (!addOnEnabled['tanstack-query']) { ignoreFile() } %>import { createServerFileRoute } from '@tanstack/react-start/server'
+<% if (!addOnEnabled['tanstack-query']) { ignoreFile() } %>import { createFileRoute } from '@tanstack/react-router'
 
 const todos = [
   {
@@ -15,17 +15,21 @@ const todos = [
   },
 ]
 
-export const ServerRoute = createServerFileRoute('/api/demo-tq-todos').methods({
-  GET: () => {
-    return Response.json(todos)
-  },
-  POST: async ({ request }) => {
-    const name = await request.json()
-    const todo = {
-      id: todos.length + 1,
-      name,
-    }
-    todos.push(todo)
-    return Response.json(todo)
+export const Route = createFileRoute('/api/demo-tq-todos')({
+  server: {
+    handlers: {
+      GET: () => {
+        return Response.json(todos)
+      },
+      POST: async ({ request }) => {
+        const name = await request.json()
+        const todo = {
+          id: todos.length + 1,
+          name,
+        }
+        todos.push(todo)
+        return Response.json(todo)
+      },
+    },
   },
 })

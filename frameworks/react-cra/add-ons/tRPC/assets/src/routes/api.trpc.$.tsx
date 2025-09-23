@@ -1,5 +1,6 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { trpcRouter } from '@/integrations/trpc/router'
+import { createFileRoute } from '@tanstack/react-router'
 
 function handler({ request }: { request: Request }) {
   return fetchRequestHandler({
@@ -9,7 +10,11 @@ function handler({ request }: { request: Request }) {
   })
 }
 
-export const ServerRoute = createServerFileRoute('/api/trpc/$').methods({
-  GET: handler,
-  POST: handler,
+export const Route = createFileRoute('/api/trpc/$')({
+  server: {
+    handlers: {
+      GET: handler,
+      POST: handler,
+    },
+  },
 })

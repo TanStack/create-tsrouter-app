@@ -1,4 +1,4 @@
-import { createServerFileRoute } from '@tanstack/react-start/server'
+import { createFileRoute } from '@tanstack/react-router'
 
 import { createCollection, localOnlyCollectionOptions } from '@tanstack/db'
 import { z } from 'zod'
@@ -41,34 +41,38 @@ const sendMessage = (message: { user: string; text: string }) => {
   })
 }
 
-export const ServerRoute = createServerFileRoute('/demo/db-chat-api').methods({
-  GET: () => {
-    const stream = new ReadableStream({
-      start(controller) {
-        for (const [_id, message] of serverMessagesCollection.state) {
-          controller.enqueue(JSON.stringify(message) + '\n')
-        }
-        serverMessagesCollection.subscribeChanges((changes) => {
-          for (const change of changes) {
-            if (change.type === 'insert') {
-              controller.enqueue(JSON.stringify(change.value) + '\n')
+export const Route = createFileRoute('/demo/db-chat-api')({
+  server: {
+    handlers: {
+      GET: () => {
+        const stream = new ReadableStream({
+          start(controller) {
+            for (const [_id, message] of serverMessagesCollection.state) {
+              controller.enqueue(JSON.stringify(message) + '\n')
             }
-          }
+            serverMessagesCollection.subscribeChanges((changes) => {
+              for (const change of changes) {
+                if (change.type === 'insert') {
+                  controller.enqueue(JSON.stringify(change.value) + '\n')
+                }
+              }
+            })
+          },
+        })
+
+        return new Response(stream, {
+          headers: {
+            'Content-Type': 'application/x-ndjson',
+          },
         })
       },
-    })
-
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'application/x-ndjson',
+      POST: async ({ request }) => {
+        const message = IncomingMessageSchema.safeParse(await request.json())
+        if (!message.success) {
+          return new Response(message.error.message, { status: 400 })
+        }
+        sendMessage(message.data)
       },
-    })
-  },
-  POST: async ({ request }) => {
-    const message = IncomingMessageSchema.safeParse(await request.json())
-    if (!message.success) {
-      return new Response(message.error.message, { status: 400 })
-    }
-    sendMessage(message.data)
+    },
   },
 })

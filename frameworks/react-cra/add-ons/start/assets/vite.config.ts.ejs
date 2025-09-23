@@ -24,9 +24,7 @@ const config = defineConfig({
         projects: ['./tsconfig.json'],
       }),
       <% if (tailwind) { %>tailwindcss(),<% } %>
-      tanstackStart({
-        customViteReactPlugin: true,
-      }),
+      tanstackStart(),
       viteReact(),
     ],
 })
