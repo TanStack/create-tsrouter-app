@@ -35,6 +35,11 @@ beforeEach(() => {
         type: 'toolchain',
         modes: ['file-router', 'code-router'],
       },
+      {
+        id: 'oxlint',
+        type: 'toolchain',
+        modes: ['file-router', 'code-router'],
+      },
     ],
     supportedModes: {
       'code-router': {
@@ -240,6 +245,19 @@ describe('promptForCreateOptions', () => {
     )
 
     expect(options?.chosenAddOns.map((a) => a.id).sort()).toEqual(['biome'])
+  })
+
+  it('should select oxlint when toolchain is specified', async () => {
+    setBasicSpies()
+
+    vi.spyOn(prompts, 'selectToolchain').mockImplementation(async () => 'oxlint')
+
+    const options = await promptForCreateOptions(
+      { ...baseCliOptions, toolchain: 'oxlint' },
+      {},
+    )
+
+    expect(options?.chosenAddOns.map((a) => a.id).sort()).toEqual(['oxlint'])
   })
 
   it('should handle forced add-ons', async () => {

@@ -1,0 +1,8 @@
+{
+  "name": "Oxlint",
+  "description": "Oxlint linter + Prettier toolchain support.",
+  "phase": "setup",
+  "type": "toolchain",
+  "modes": ["code-router", "file-router"],
+  "link": "https://oxc.rs/docs/guide/usage/linter"
+}

@@ -1,5 +1,6 @@
 <% if (!typescript) { ignoreFile() } %>{
   <% if (addOnEnabled.eslint) { %>"include": ["**/*.ts", "**/*.tsx", "eslint.config.js", "prettier.config.js", "vite.config.js"],
+  <% } else if (addOnEnabled.oxlint) { %>"include": ["**/*.ts", "**/*.tsx", ".oxlintrc.json", "prettier.config.js", "vite.config.js"],
   <% } else { %>"include": ["**/*.ts", "**/*.tsx"],<% } %>
   "compilerOptions": {
     "target": "ES2022",
