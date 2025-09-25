@@ -31,8 +31,6 @@ export async function handleMcpRequest(
     await clientTransport.close()
     await serverTransport.close()
 
-    console.log('responseData', JSON.stringify(responseData, null, 2))
-
     return Response.json(responseData, {
       headers: {
         'Content-Type': 'application/json',
