@@ -16,7 +16,8 @@ const config = defineConfig({
             type: "sql-script",
             path: "db/init.sql"
           },
-          referrer: 'create-tanstack'
+          referrer: 'create-tanstack',
+          dotEnvKey: 'VITE_DATABASE_URL',
         }),
       <% } %>
       // this is the plugin that enables path aliases

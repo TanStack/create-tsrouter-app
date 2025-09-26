@@ -8,9 +8,13 @@ export const Route = createFileRoute('/api/mcp-todos')({
       GET: () => {
         const stream = new ReadableStream({
           start(controller) {
-            setInterval(() => {
-              controller.enqueue(`event: ping\n\n`)
-            }, 1000)
+            function ping() {
+              try {
+                controller.enqueue(`event: ping\n\n`)
+                setTimeout(ping, 1000)
+              } catch {}
+            }
+            ping()
             const unsubscribe = subscribeToTodos((todos) => {
               controller.enqueue(`data: ${JSON.stringify(todos)}\n\n`)
             })

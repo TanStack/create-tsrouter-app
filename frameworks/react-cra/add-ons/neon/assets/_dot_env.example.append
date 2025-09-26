@@ -1,3 +1,4 @@
 # These will be automatically created by Neon Launchpad (https://neon.new).
-DATABASE_URL=
-DATABASE_URL_POOLER=
+# You will also need to 
+VITE_DATABASE_URL=
+VITE_DATABASE_URL_POOLER=
