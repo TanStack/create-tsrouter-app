@@ -20,7 +20,7 @@ describe('getPackageManagerScriptCommand', () => {
   })
   it('bun', () => {
     expect(formatCommand(getPackageManagerScriptCommand('bun', ['dev']))).toBe(
-      'bunx --bun run dev',
+      'bun --bun run dev',
     )
   })
   it('deno', () => {
