@@ -34,7 +34,7 @@
     "prettier": "3.3.3",
     "typescript": "5.4.5",
     "undici": "*",
-    "vite": "5.3.5",
+    "vite": "^7.1.7",
     "vite-tsconfig-paths": "^4.2.1"
   }
 }
