@@ -3,6 +3,7 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite"
 <% } %>
 import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
+import solidPlugin from 'vite-plugin-solid'
 
 export default defineConfig({
   plugins: [
@@ -12,5 +13,6 @@ export default defineConfig({
     }),
     <% if (tailwind) { %>tailwindcss(),<% } %>
     tanstackStart(),
+    solidPlugin({ ssr: true }),
   ],
 })
