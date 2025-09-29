@@ -10,10 +10,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@tanstack/solid-router": "^1.132.7",
-    "@tanstack/solid-router-devtools": "^1.132.7",
-    "@tanstack/router-plugin": "^1.132.7",
-    "solid-js": "^1.9.4"
+    "@tanstack/solid-router": "^1.132.25",
+    "@tanstack/solid-router-devtools": "^1.132.25",
+    "@tanstack/solid-start": "^1.132.25",
+    "solid-js": "^1.9.5"
   },
   "devDependencies": {
     "vite-plugin-solid": "^2.11.2",

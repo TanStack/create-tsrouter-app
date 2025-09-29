@@ -1,4 +1,4 @@
-<% if (!fileRouter) { ignoreFile() } %>import { Outlet, createRootRouteWithContext } from '@tanstack/solid-router'
+<% if (!fileRouter) { ignoreFile() } %>import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/solid-router'
 import { TanStackRouterDevtools } from '@tanstack/solid-router-devtools'<% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider')) { %>
 import <%= integration.jsName %> from "<%= relativePath(integration.path) %>";
 <% } %>
@@ -13,7 +13,7 @@ import "@fontsource/inter"
 <% } } %>
 
 export const Route = createRootRouteWithContext()({
-  component: RootComponent,
+  shellComponent: RootComponent,
 })
 
 function RootComponent() {
@@ -22,17 +22,19 @@ function RootComponent() {
       <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
         <<%= integration.jsName %>>
       <% } %>
+      <HeadContent />
       <% if (addOns.length || integrations.length || routes.length) { %>
         <Header />
       <% } %>
       <Outlet />
-      {/* <TanStackRouterDevtools /> */}
+      <TanStackRouterDevtools />
       <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
         <<%= integration.jsName %> />
       <% } %>
       <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
         </<%= integration.jsName %>>
       <% } %>
+      <Scripts />
     </>
   )
 }
