@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@tanstack/solid-start": "1.121.3",
-    "vite": "^6.3.3",
+    "vite": "^7.1.7",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
