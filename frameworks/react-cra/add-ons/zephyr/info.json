@@ -1,0 +1,8 @@
+{
+  "name": "Zephyr Cloud",
+  "description": "The fastest way to go from idea to production.",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "link": "https://zephyr-cloud.io/",
+  "type": "add-on"
+}
