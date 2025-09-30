@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@storybook/react-vite": "^9.1.9",
+    "storybook": "^9.1.9"
+  }
+}
