@@ -4,6 +4,6 @@
     "@tanstack/react-store": "^0.7.0"
   },
   "devDependencies": {
-    "@tanstack/devtools-event-client": "^0.2.1"
+    "@tanstack/devtools-event-client": "^0.3.2"
   }
 }
