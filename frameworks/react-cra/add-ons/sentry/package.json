@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@sentry/tanstackstart-react": "^9.12.0"
+    "@sentry/tanstackstart-react": "^10.17.0"
   }
 }

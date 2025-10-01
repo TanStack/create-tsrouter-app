@@ -9,6 +9,8 @@
     "cipublish": "node scripts/publish.js",
     "dev": "nx run-many --target=dev --parallel 10",
     "test": "nx run-many -t test",
+    "check-outdated": "node scripts/check-outdated-packages.js",
+    "update-outdated": "node scripts/check-outdated-packages.js --update",
     "prepare": "husky install"
   },
   "repository": {
@@ -21,6 +23,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "nx": "20.6.4",
+    "semver": "^7.6.3",
     "typescript": "^5.6.3",
     "husky": "^8.0.0"
   },

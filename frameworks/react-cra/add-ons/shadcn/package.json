@@ -2,7 +2,7 @@
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.476.0",
+    "lucide-react": "^0.544.0",
     "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.3.6"
   }
