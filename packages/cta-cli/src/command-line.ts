@@ -93,6 +93,10 @@ export async function normalizeOptions(
         selectedAddOns.add(cliOptions.host)
       }
 
+      if (!cliOptions.host) {
+        selectedAddOns.add('nitro')
+      }
+
       return await finalizeAddOns(framework, mode, Array.from(selectedAddOns))
     }
 

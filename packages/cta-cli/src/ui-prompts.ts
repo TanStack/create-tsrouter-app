@@ -16,6 +16,7 @@ import {
 import type { AddOn, PackageManager } from '@tanstack/cta-engine'
 
 import type { Framework } from '@tanstack/cta-engine/dist/types/types.js'
+import { InitialData } from '../../cta-ui/src/types'
 
 export async function getProjectName(): Promise<string> {
   const value = await text({
@@ -189,6 +190,7 @@ export async function selectHost(
   host?: string,
 ): Promise<string | undefined> {
   const hosts = new Set<AddOn>()
+  let initialValue: string | undefined = undefined
   for (const addOn of framework
     .getAddOns()
     .sort((a, b) => a.name.localeCompare(b.name))) {
@@ -196,6 +198,9 @@ export async function selectHost(
       hosts.add(addOn)
       if (host && addOn.id === host) {
         return host
+      }
+      if (addOn.default) {
+        initialValue = addOn.id
       }
     }
   }
@@ -212,7 +217,7 @@ export async function selectHost(
         label: h.name,
       })),
     ],
-    initialValue: undefined,
+    initialValue: initialValue,
   })
 
   if (isCancel(hp)) {
