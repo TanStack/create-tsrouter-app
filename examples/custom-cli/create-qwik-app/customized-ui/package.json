@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.6",
-    "@tanstack/cta-ui-base": "^0.25.0",
+    "@tanstack/cta-ui-base": "^0.25.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.6",
