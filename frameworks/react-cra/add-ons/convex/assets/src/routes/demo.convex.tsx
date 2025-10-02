@@ -4,6 +4,7 @@ import { useQuery, useMutation } from 'convex/react'
 import { Trash2, Plus, Check, Circle } from 'lucide-react'
 
 import { api } from '../../convex/_generated/api'
+import { Id } from '../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/demo/convex')({
   ssr: false,
@@ -26,14 +27,14 @@ function ConvexTodos() {
   }, [addTodo, newTodo])
 
   const handleToggleTodo = useCallback(
-    async (id: string) => {
+    async (id: Id<'todos'>) => {
       await toggleTodo({ id })
     },
     [toggleTodo],
   )
 
   const handleRemoveTodo = useCallback(
-    async (id: string) => {
+    async (id: Id<'todos'>) => {
       await removeTodo({ id })
     },
     [removeTodo],
