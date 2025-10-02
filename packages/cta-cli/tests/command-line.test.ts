@@ -62,7 +62,14 @@ describe('normalizeOptions', () => {
     __testRegisterFramework({
       id: 'solid',
       name: 'Solid',
-      getAddOns: () => [],
+      getAddOns: () => [
+        {
+          id: 'nitro',
+          name: 'nitro',
+          modes: ['file-router'],
+          default: true,
+        },
+      ],
       supportedModes: {
         'code-router': {
           displayName: 'Code Router',
@@ -95,10 +102,11 @@ describe('normalizeOptions', () => {
     const options = await normalizeOptions({
       projectName: 'test',
       starter: 'https://github.com/cta-dev/cta-starter-solid',
+      host: 'nitro',
     })
     expect(options?.mode).toBe('file-router')
     expect(options?.tailwind).toBe(true)
-    expect(options?.typescript).toBe(false)
+    expect(options?.typescript).toBe(true)
     expect(options?.framework?.id).toBe('solid')
   })
 
@@ -122,6 +130,12 @@ describe('normalizeOptions', () => {
           id: 'foo',
           name: 'foobar',
           modes: ['file-router'],
+        },
+        {
+          id: 'nitro',
+          name: 'nitro',
+          modes: ['file-router'],
+          default: true,
         },
       ],
     })
@@ -151,6 +165,12 @@ describe('normalizeOptions', () => {
           name: 'baz',
           modes: ['file-router'],
         },
+        {
+          id: 'nitro',
+          name: 'nitro',
+          modes: ['file-router'],
+          default: true,
+        },
       ],
     })
     const options = await normalizeOptions(
@@ -179,6 +199,12 @@ describe('normalizeOptions', () => {
           name: 'Biome',
           modes: ['file-router', 'code-router'],
         },
+        {
+          id: 'nitro',
+          name: 'nitro',
+          modes: ['file-router', 'code-router'],
+          default: true,
+        },
       ],
     })
     const options = await normalizeOptions({
@@ -204,6 +230,12 @@ describe('normalizeOptions', () => {
           id: 'baz',
           name: 'baz',
           modes: ['file-router', 'code-router'],
+        },
+        {
+          id: 'nitro',
+          name: 'nitro',
+          modes: ['file-router', 'code-router'],
+          default: true,
         },
       ],
     })

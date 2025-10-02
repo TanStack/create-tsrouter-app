@@ -1,0 +1,16 @@
+{
+  "name": "Nitro",
+  "description": "Nitro deployment setup",
+  "link": "https://nitro.build/",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "type": "host",
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "jsName": "nitro",
+      "path": "vite-plugins/nitro.ts"
+    }
+  ],
+  "default": true
+}

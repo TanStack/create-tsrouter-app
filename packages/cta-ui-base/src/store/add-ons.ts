@@ -11,6 +11,7 @@ export function getAddOnStatus(
       enabled: boolean
       selected: boolean
       dependedUpon: boolean
+      isSingleSelect: string | undefined
     }
   >()
 
@@ -19,6 +20,7 @@ export function getAddOnStatus(
       selected: false,
       enabled: true,
       dependedUpon: false,
+      isSingleSelect: addOn.type === 'host' ? addOn.type : undefined,
     })
   }
 
@@ -75,6 +77,7 @@ export function getAddOnStatus(
       {
         enabled: addOn.enabled,
         selected: addOn.selected,
+        isSingleSelect: addOn.isSingleSelect,
       },
     ]),
   )

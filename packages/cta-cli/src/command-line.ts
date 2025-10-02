@@ -74,7 +74,8 @@ export async function normalizeOptions(
       Array.isArray(cliOptions.addOns) ||
       starter?.dependsOn ||
       forcedAddOns ||
-      cliOptions.toolchain
+      cliOptions.toolchain ||
+      cliOptions.host
     ) {
       const selectedAddOns = new Set<string>([
         ...(starter?.dependsOn || []),
@@ -87,6 +88,13 @@ export async function normalizeOptions(
       }
       if (cliOptions.toolchain) {
         selectedAddOns.add(cliOptions.toolchain)
+      }
+      if (cliOptions.host) {
+        selectedAddOns.add(cliOptions.host)
+      }
+
+      if (!cliOptions.host) {
+        selectedAddOns.add('nitro')
       }
 
       return await finalizeAddOns(framework, mode, Array.from(selectedAddOns))

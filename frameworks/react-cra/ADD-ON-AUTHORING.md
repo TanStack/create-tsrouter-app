@@ -136,6 +136,32 @@ Configuration in `info.json`:
 ]
 ```
 
+## vite-plugin
+
+The code is integrated into `src/vite.config.ts`
+
+### Examples
+
+Code in `assets/vite-plugins/netlify.ts`:
+
+```ts
+import netlify from '@netlify/vite-plugin-tanstack-start'
+
+export default netlify()
+```
+
+Configuration in `info.json`:
+
+```json
+"integrations": [
+  {
+    "type": "vite-plugin",
+    "jsName": "netlify",
+    "path": "vite-plugins/netlify.ts"
+  },
+]
+```
+
 # Routes
 
 If your add-on creates routes you need to specify those in the `info.json` file.

@@ -183,3 +183,38 @@ export async function selectToolchain(
 
   return tc
 }
+
+export async function selectHost(
+  framework: Framework,
+  host?: string,
+): Promise<string | undefined> {
+  const hosts = new Set<AddOn>()
+  for (const addOn of framework
+    .getAddOns()
+    .sort((a, b) => a.name.localeCompare(b.name))) {
+    if (addOn.type === 'host') {
+      hosts.add(addOn)
+      if (host && addOn.id === host) {
+        return host
+      }
+    }
+  }
+
+  const hp = await select({
+    message: 'Select hosting provider',
+    options: [
+      ...Array.from(hosts).map((h) => ({
+        value: h.id,
+        label: h.name,
+      })),
+    ],
+    initialValue: undefined,
+  })
+
+  if (isCancel(hp)) {
+    cancel('Operation cancelled.')
+    process.exit(0)
+  }
+
+  return hp as string
+}

@@ -1,8 +1,7 @@
 {
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "vite build",
-    "start": "node .output/server/index.mjs"
+    "build": "vite build"
   },
   "dependencies": {
     "@tanstack/react-router-ssr-query": "^1.131.7",

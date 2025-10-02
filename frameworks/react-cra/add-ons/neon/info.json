@@ -13,5 +13,12 @@
       "jsName": "NeonDemo"
     }
   ],
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "jsName": "neon",
+      "path": "vite-plugins/neon.ts"
+    }
+  ],
   "dependsOn": ["start"]
 }

@@ -5,29 +5,19 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite"
 <% } %><% if (addOnEnabled.sentry) { %>
 import { wrapVinxiConfigWithSentry } from "@sentry/tanstackstart-react";
-<% } %><% if (addOnEnabled.neon) { %>
-import postgresPlugin from "@neondatabase/vite-plugin-postgres";
+<% } %><% for(const integration of integrations.filter(i => i.type === 'vite-plugin')) { %>import <%= integration.jsName %> from "<%= relativePath(integration.path) %>";
 <% } %>
 const config = defineConfig({
-    plugins: [
-      <% if (addOnEnabled.neon) { %>
-        postgresPlugin({
-          seed: {
-            type: "sql-script",
-            path: "db/init.sql"
-          },
-          referrer: 'create-tanstack',
-          dotEnvKey: 'VITE_DATABASE_URL',
-        }),
-      <% } %>
-      // this is the plugin that enables path aliases
-      viteTsConfigPaths({
-        projects: ['./tsconfig.json'],
-      }),
-      <% if (tailwind) { %>tailwindcss(),<% } %>
-      tanstackStart(),
-      viteReact(),
-    ],
+  plugins: [<% for(const integration of integrations.filter(i => i.type === 'vite-plugin')) { %>
+    <%= integration.jsName %>,<% } %>
+    // this is the plugin that enables path aliases
+    viteTsConfigPaths({
+      projects: ['./tsconfig.json'],
+    }),
+    <% if (tailwind) { %>tailwindcss(),<% } %>
+    tanstackStart(),
+    viteReact(),
+  ],
 })
 
 <% if (addOnEnabled.sentry) { %>

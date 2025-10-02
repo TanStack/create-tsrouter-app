@@ -4,5 +4,12 @@
   "link": "https://docs.netlify.com",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
-  "type": "add-on"
+  "type": "host",
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "jsName": "netlify",
+      "path": "vite-plugins/netlify.ts"
+    }
+  ]
 }

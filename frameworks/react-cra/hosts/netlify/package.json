@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@netlify/vite-plugin-tanstack-start": "^1.0.2"
+  }
+}

@@ -48,7 +48,7 @@ async function writeFiles(environment: Environment, options: Options) {
   environment.finishStep('write-framework-files', 'Framework files written')
 
   let wroteAddonFiles = false
-  for (const type of ['add-on', 'example', 'toolchain']) {
+  for (const type of ['add-on', 'example', 'toolchain', 'host']) {
     for (const phase of ['setup', 'add-on', 'example']) {
       for (const addOn of options.chosenAddOns.filter(
         (addOn) => addOn.phase === phase && addOn.type === type,

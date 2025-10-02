@@ -1,0 +1,15 @@
+{
+  "name": "Cloudflare",
+  "description": "Cloudflare deployment setup",
+  "link": "https://developers.cloudflare.com/workers/vite-plugin/",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "type": "host",
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "jsName": "cloudflare",
+      "path": "vite-plugins/cloudflare.ts"
+    }
+  ]
+}

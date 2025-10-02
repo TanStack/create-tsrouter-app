@@ -32,7 +32,7 @@ export type AddOnInfo = {
   id: string
   name: string
   description: string
-  type: 'add-on' | 'example' | 'starter' | 'toolchain'
+  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'host'
   modes: Array<string>
   smallLogo?: string
   logo?: string
