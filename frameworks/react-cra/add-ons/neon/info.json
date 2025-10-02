@@ -17,7 +17,7 @@
     {
       "type": "vite-plugin",
       "jsName": "neon",
-      "path": "vite-plugins/neon.ts"
+      "path": "neon-vite-plugin.ts"
     }
   ],
   "dependsOn": ["start"]

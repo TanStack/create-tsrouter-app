@@ -8,8 +8,8 @@
   "integrations": [
     {
       "type": "vite-plugin",
-      "jsName": "netlify",
-      "path": "vite-plugins/netlify.ts"
+      "import": "import netlify from '@netlify/vite-plugin-tanstack-start'",
+      "code": "netlify()"
     }
   ]
 }

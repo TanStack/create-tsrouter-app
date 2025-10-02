@@ -65,9 +65,11 @@ export const StarterCompiledSchema = StarterSchema.extend({
 })
 
 export const IntegrationSchema = z.object({
-  type: z.string(),
-  path: z.string(),
-  jsName: z.string(),
+  type: z.string().optional(),
+  path: z.string().optional(),
+  jsName: z.string().optional(),
+  import: z.string().optional(),
+  code: z.string().optional(),
 })
 
 export const AddOnInfoSchema = AddOnBaseSchema.extend({

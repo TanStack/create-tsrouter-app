@@ -8,8 +8,8 @@
   "integrations": [
     {
       "type": "vite-plugin",
-      "jsName": "nitro",
-      "path": "vite-plugins/nitro.ts"
+      "import": "import { nitroV2Plugin } from '@tanstack/nitro-v2-vite-plugin'",
+      "code": "nitroV2Plugin()"
     }
   ],
   "default": true

@@ -203,6 +203,10 @@ export async function selectHost(
   const hp = await select({
     message: 'Select hosting provider',
     options: [
+      {
+        value: undefined,
+        label: 'None',
+      },
       ...Array.from(hosts).map((h) => ({
         value: h.id,
         label: h.name,

@@ -8,8 +8,8 @@
   "integrations": [
     {
       "type": "vite-plugin",
-      "jsName": "cloudflare",
-      "path": "vite-plugins/cloudflare.ts"
+      "import": "import { cloudflare } from '@cloudflare/vite-plugin'",
+      "code": "cloudflare({ viteEnvironment: { name: 'ssr' } })"
     }
   ]
 }
