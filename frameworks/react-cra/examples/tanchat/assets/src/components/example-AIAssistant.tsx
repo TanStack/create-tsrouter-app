@@ -100,7 +100,7 @@ export default function AIAssistant() {
   const isOpen = useStore(showAIAssistant)
   const { messages, sendMessage } = useChat({
     transport: new DefaultChatTransport({
-      api: '/api/demo-chat',
+      api: '/demo/api/tanchat',
     }),
   })
   const [input, setInput] = useState('')
