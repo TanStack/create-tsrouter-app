@@ -56,7 +56,7 @@ export const Route = <% if (addOnEnabled["tanstack-query"]) { %>createRootRouteW
   <% } %><Outlet />
         <TanStackDevtools
         config={{
-          position: 'bottom-left',
+          position: 'bottom-right',
         }}
         plugins={[
           {
@@ -86,7 +86,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <% } %>{children}
           <TanStackDevtools
             config={{
-              position: 'bottom-left',
+              position: 'bottom-right',
             }}
             plugins={[
               {

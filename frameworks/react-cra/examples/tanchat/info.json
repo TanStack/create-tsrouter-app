@@ -7,12 +7,14 @@
   "link": "",
   "routes": [
     {
-      "url": "/example/chat",
+      "icon": "MessagesSquare",
+      "url": "/demo/tanchat",
       "name": "Chat",
-      "path": "src/routes/example.chat.tsx",
+      "path": "src/routes/demo.tanchat.tsx",
       "jsName": "ChatDemo"
     },
     {
+      "icon": "Guitar",
       "url": "/example/guitars",
       "name": "Guitar Demo",
       "path": "src/routes/example.guitars.tsx",
@@ -26,8 +28,8 @@
   "integrations": [
     {
       "type": "header-user",
-      "path": "src/integrations/tanchat/header-user.tsx",
-      "jsName": "TanStackChatHeaderUser"
+      "path": "src/components/example-AIAssistant.tsx",
+      "jsName": "TanChatAIAssistant"
     }
   ],
   "dependsOn": ["start", "store"],

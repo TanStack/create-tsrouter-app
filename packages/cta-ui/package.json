@@ -44,5 +44,5 @@
     "vitest": "^3.0.5",
     "web-vitals": "^4.2.4"
   },
-  "version": "0.24.1"
+  "version": "0.26.0"
 }

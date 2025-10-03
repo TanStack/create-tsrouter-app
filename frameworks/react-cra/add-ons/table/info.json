@@ -7,6 +7,7 @@
   "type": "add-on",
   "routes": [
     {
+      "icon": "Table",
       "url": "/demo/table",
       "name": "TanStack Table",
       "path": "src/routes/demo.table.tsx",

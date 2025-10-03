@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { useStore } from '@tanstack/react-store'
-import { Send, X } from 'lucide-react'
+import { Store } from '@tanstack/store'
+
+import { Send, X, ChevronRight } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
+
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 
-import { showAIAssistant } from '../store/example-assistant'
 import GuitarRecommendation from './example-GuitarRecommendation'
 
 import type { UIMessage } from 'ai'
+
+export const showAIAssistant = new Store(false)
 
 function Messages({ messages }: { messages: Array<UIMessage> }) {
   const messagesContainerRef = useRef<HTMLDivElement>(null)
@@ -105,16 +109,19 @@ export default function AIAssistant() {
     <div className="relative z-50">
       <button
         onClick={() => showAIAssistant.setState((state) => !state)}
-        className="flex items-center gap-2 px-3 py-1 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 text-white hover:opacity-90 transition-opacity"
+        className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 text-white hover:opacity-90 transition-opacity"
       >
-        <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center text-xs font-medium">
-          AI
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center text-xs font-medium">
+            AI
+          </div>
+          <span className="font-medium">AI Assistant</span>
         </div>
-        AI Assistant
+        <ChevronRight className="w-4 h-4" />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-[700px] h-[600px] bg-gray-900 rounded-lg shadow-xl border border-orange-500/20 flex flex-col">
+        <div className="absolute bottom-0 left-full ml-2 w-[700px] h-[600px] bg-gray-900 rounded-lg shadow-xl border border-orange-500/20 flex flex-col">
           <div className="flex items-center justify-between p-3 border-b border-orange-500/20">
             <h3 className="font-semibold text-white">AI Assistant</h3>
             <button

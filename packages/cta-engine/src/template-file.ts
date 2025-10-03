@@ -9,7 +9,7 @@ import {
 } from './package-manager.js'
 import { relativePath } from './file-helpers.js'
 
-import type { AddOn, Environment, Options } from './types.js'
+import type { AddOn, Environment, Integration, Options } from './types.js'
 
 function convertDotFilesAndPaths(path: string) {
   return path
@@ -75,6 +75,16 @@ export function createTemplateFile(environment: Environment, options: Options) {
   )
 
   return async function templateFile(file: string, content: string) {
+    const localRelativePath = (path: string, stripExtension: boolean = false) =>
+      relativePath(file, path, stripExtension)
+
+    const integrationImportContent = (integration: Integration) =>
+      integration.import ||
+      `import ${integration.jsName} from '${localRelativePath(integration.path || '')}'`
+
+    const integrationImportCode = (integration: Integration) =>
+      integration.code || integration.jsName
+
     const templateValues = {
       packageManager: options.packageManager,
       projectName: options.projectName,
@@ -94,6 +104,9 @@ export function createTemplateFile(environment: Environment, options: Options) {
 
       relativePath: (path: string, stripExtension: boolean = false) =>
         relativePath(file, path, stripExtension),
+
+      integrationImportContent,
+      integrationImportCode,
 
       ignoreFile: () => {
         throw new IgnoreFileError()

@@ -33,7 +33,7 @@ import { convertTemplateToMode } from './utils.js'
 import type { CliOptions, TemplateOptions } from './types.js'
 import type { Options, PackageManager } from '@tanstack/cta-engine'
 
-// This CLI assumes that all of the registered frameworks have the same set of toolchains, modes, etc.
+// This CLI assumes that all of the registered frameworks have the same set of toolchains, hosts, modes, etc.
 
 export function cli({
   name,
@@ -65,6 +65,15 @@ export function cli({
     for (const addOn of framework.getAddOns()) {
       if (addOn.type === 'toolchain') {
         toolchains.add(addOn.id)
+      }
+    }
+  }
+
+  const hosts = new Set<string>()
+  for (const framework of getFrameworks()) {
+    for (const addOn of framework.getAddOns()) {
+      if (addOn.type === 'host') {
+        hosts.add(addOn.id)
       }
     }
   }
@@ -295,6 +304,23 @@ Remove your node_modules directory and package lock file and re-install.`,
       },
     )
 
+  if (hosts.size > 0) {
+    program.option<string>(
+      `--host <${Array.from(hosts).join('|')}>`,
+      `Explicitly tell the CLI to use this hosting provider`,
+      (value) => {
+        if (!hosts.has(value)) {
+          throw new InvalidArgumentError(
+            `Invalid host: ${value}. The following are allowed: ${Array.from(
+              hosts,
+            ).join(', ')}`,
+          )
+        }
+        return value
+      },
+    )
+  }
+
   if (toolchains.size > 0) {
     program.option<string>(
       `--toolchain <${Array.from(toolchains).join('|')}>`,
@@ -385,13 +411,14 @@ Remove your node_modules directory and package lock file and re-install.`,
             forcedAddOns,
             { disableNameCheck: true },
           )
+          const options = {
+            ...createSerializedOptions(optionsFromCLI!),
+            projectName: 'my-app',
+            targetDir: resolve(process.cwd(), 'my-app'),
+          }
           launchUI({
             mode: 'setup',
-            options: {
-              ...createSerializedOptions(optionsFromCLI!),
-              projectName: 'my-app',
-              targetDir: resolve(process.cwd(), 'my-app'),
-            },
+            options,
             forcedRouterMode: defaultMode,
             forcedAddOns,
             environmentFactory: () => createUIEnvironment(appName, false),

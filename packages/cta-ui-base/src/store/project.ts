@@ -140,17 +140,42 @@ export function useAddOns() {
   const toggleAddOn = useCallback(
     (addOnId: string) => {
       if (!ready) return
-      if (addOnState[addOnId].enabled) {
-        if (addOnState[addOnId].selected) {
-          useMutableAddOns.setState((state) => ({
-            userSelectedAddOns: state.userSelectedAddOns.filter(
-              (addOn) => addOn !== addOnId,
-            ),
-          }))
-        } else {
-          useMutableAddOns.setState((state) => ({
-            userSelectedAddOns: [...state.userSelectedAddOns, addOnId],
-          }))
+
+      if (addOnState[addOnId].isSingleSelect) {
+        if (!addOnState[addOnId].selected) {
+          // Find the currently selected addOn with the same isSingleSelect value and unselect it
+          const singleSelectType = addOnState[addOnId].isSingleSelect
+          const currentlySelected = Object.keys(addOnState).find(
+            (id) =>
+              id !== addOnId &&
+              addOnState[id].isSingleSelect === singleSelectType &&
+              addOnState[id].selected,
+          )
+          useMutableAddOns.setState((state) => {
+            let newUserSelectedAddOns = state.userSelectedAddOns.filter(
+              (id) => id !== currentlySelected, // remove the previously selected one
+            )
+            if (!newUserSelectedAddOns.includes(addOnId)) {
+              newUserSelectedAddOns = [...newUserSelectedAddOns, addOnId]
+            }
+            return {
+              userSelectedAddOns: newUserSelectedAddOns,
+            }
+          })
+        }
+      } else {
+        if (addOnState[addOnId].enabled) {
+          if (addOnState[addOnId].selected) {
+            useMutableAddOns.setState((state) => ({
+              userSelectedAddOns: state.userSelectedAddOns.filter(
+                (addOn) => addOn !== addOnId,
+              ),
+            }))
+          } else {
+            useMutableAddOns.setState((state) => ({
+              userSelectedAddOns: [...state.userSelectedAddOns, addOnId],
+            }))
+          }
         }
       }
     },

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@tanstack/nitro-v2-vite-plugin": "^1.132.31"
+  }
+}

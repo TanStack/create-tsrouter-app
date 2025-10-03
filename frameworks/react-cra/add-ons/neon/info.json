@@ -7,10 +7,18 @@
   "modes": ["file-router"],
   "routes": [
     {
+      "icon": "Database",
       "url": "/demo/neon",
       "name": "Neon",
       "path": "src/routes/demo.neon.tsx",
       "jsName": "NeonDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "jsName": "neon",
+      "path": "neon-vite-plugin.ts"
     }
   ],
   "dependsOn": ["start"]

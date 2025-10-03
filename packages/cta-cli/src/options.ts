@@ -15,6 +15,7 @@ import {
   selectRouterType,
   selectTailwind,
   selectToolchain,
+  selectHost,
   selectTypescript,
 } from './ui-prompts.js'
 
@@ -84,11 +85,17 @@ export async function promptForCreateOptions(
     cliOptions.toolchain,
   )
 
+  // Host selection
+  const host = await selectHost(options.framework, cliOptions.host)
+
   // Add-ons selection
   const addOns: Set<string> = new Set()
 
   if (toolchain) {
     addOns.add(toolchain)
+  }
+  if (host) {
+    addOns.add(host)
   }
 
   for (const addOn of forcedAddOns) {

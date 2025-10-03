@@ -6,3 +6,4 @@ dist-ssr
 .env
 .nitro
 .tanstack
+.wrangler
