@@ -31,13 +31,16 @@ This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
 <% } else { %>
 This project uses CSS for styling.
 <% } %>
-<% if (addOnEnabled.biome || addOnEnabled.eslint) { %>
+<% if (addOnEnabled.biome || addOnEnabled.eslint || addOnEnabled.oxlint) { %>
 ## Linting & Formatting
 <% if (addOnEnabled.biome) { %>
 This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
 <% } %>
 <% if (addOnEnabled.eslint) { %>
 This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+<% } %>
+<% if (addOnEnabled.oxlint) { %>
+This project uses [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and [prettier](https://prettier.io/) for linting and formatting. The following scripts are available:
 <% } %>
 ```bash
 <%= getPackageManagerRunScript('lint') %>
