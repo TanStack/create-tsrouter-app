@@ -7,6 +7,7 @@
   "type": "add-on",
   "routes": [
     {
+      "icon": "BookOpen",
       "url": "/demo/storybook",
       "name": "Storybook",
       "path": "src/routes/demo.storybook.tsx",

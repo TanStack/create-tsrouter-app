@@ -16,13 +16,13 @@ type Todo = {
 function TanStackQueryDemo() {
   const { data, refetch } = useQuery<Todo[]>({
     queryKey: ['todos'],
-    queryFn: () => fetch('/api/demo-tq-todos').then((res) => res.json()),
+    queryFn: () => fetch('/demo/api/tq-todos').then((res) => res.json()),
     initialData: [],
   })
 
   const { mutate: addTodo } = useMutation({
     mutationFn: (todo: string) =>
-      fetch('/api/demo-tq-todos', {
+      fetch('/demo/api/tq-todos', {
         method: 'POST',
         body: JSON.stringify(todo),
       }).then((res) => res.json()),

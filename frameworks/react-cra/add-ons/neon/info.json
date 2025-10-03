@@ -7,6 +7,7 @@
   "modes": ["file-router"],
   "routes": [
     {
+      "icon": "Database",
       "url": "/demo/neon",
       "name": "Neon",
       "path": "src/routes/demo.neon.tsx",

@@ -13,7 +13,7 @@ import type { UIMessage } from 'ai'
 
 import GuitarRecommendation from '@/components/example-GuitarRecommendation'
 
-import '../demo.index.css'
+import './tanchat.css'
 
 function InitalLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -121,7 +121,7 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
 function ChatPage() {
   const { messages, sendMessage } = useChat({
     transport: new DefaultChatTransport({
-      api: '/api/demo-chat',
+      api: '/demo/api/tanchat',
     }),
   })
   const [input, setInput] = useState('')
