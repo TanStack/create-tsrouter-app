@@ -1,0 +1,9 @@
+{
+  "name": "Prisma PostgreSQL",
+  "description": "Set up PostgreSQL database for your application.",
+  "phase": "add-on",
+  "type": "add-on",
+  "link": "https://www.postgresql.org/",
+  "modes": ["file-router", "code-router"],
+  "postInitSpecialSteps": ["post-init-script"]
+}
