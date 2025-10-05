@@ -8,6 +8,7 @@
   "dependsOn": ["tanstack-query", "start"],
   "routes": [
     {
+      "icon": "Database",
       "url": "/demo/db-chat",
       "name": "DB Chat",
       "path": "src/routes/demo.db-chat.tsx",

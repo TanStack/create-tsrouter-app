@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/cta-framework-react-cra",
-  "version": "0.20.0",
+  "version": "0.28.0",
   "description": "CTA Framework for React (Create React App)",
   "type": "module",
   "main": "./dist/index.js",
@@ -33,7 +33,7 @@
     "@tanstack/cta-engine": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22.13.4",
+    "@types/node": "^24.6.0",
     "typescript": "^5.6.3",
     "vitest": "^3.1.1"
   }

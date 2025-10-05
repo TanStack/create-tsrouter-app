@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "@convex-dev/react-query": "0.0.0-alpha.8",
-    "convex": "^1.19.2"
+    "@convex-dev/react-query": "0.0.0-alpha.11",
+    "convex": "^1.27.3",
+    "lucide-react": "^0.544.0"
   }
 }

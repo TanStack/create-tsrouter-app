@@ -2,6 +2,7 @@
   "typescript": {
     "devDependencies": {
       "@types/react": "^19.0.8",
+      "@types/node": "^22.10.2",
       "@types/react-dom": "^19.0.3",
       "typescript": "^5.7.2"
     }
@@ -14,7 +15,7 @@
   },
   "file-router": {
     "dependencies": {
-      "@tanstack/router-plugin": "^1.121.2"
+      "@tanstack/router-plugin": "^1.132.0"
     }
   }
 }

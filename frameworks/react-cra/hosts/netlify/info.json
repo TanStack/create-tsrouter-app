@@ -1,0 +1,15 @@
+{
+  "name": "Netlify",
+  "description": "Netlify deployment setup",
+  "link": "https://docs.netlify.com",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "type": "host",
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "import": "import netlify from '@netlify/vite-plugin-tanstack-start'",
+      "code": "netlify()"
+    }
+  ]
+}

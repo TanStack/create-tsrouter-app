@@ -8,6 +8,7 @@ export interface CliOptions {
   tailwind?: boolean
   packageManager?: PackageManager
   toolchain?: string
+  host?: string
   projectName?: string
   git?: boolean
   addOns?: Array<string> | boolean

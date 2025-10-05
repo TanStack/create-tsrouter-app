@@ -34,7 +34,7 @@ export function getPackageManagerScriptCommand(
     case 'pnpm':
       return { command: 'pnpm', args: [...args] }
     case 'bun':
-      return { command: 'bun', args: ['run', ...args] }
+      return { command: 'bun', args: ['--bun', 'run', ...args] }
     case 'deno':
       return { command: 'deno', args: ['task', ...args] }
     default:

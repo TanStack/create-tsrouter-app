@@ -7,6 +7,7 @@
   "modes": ["file-router", "code-router"],
   "routes": [
     {
+      "icon": "Store",
       "url": "/demo/store",
       "name": "Store",
       "path": "src/routes/demo.store.tsx",

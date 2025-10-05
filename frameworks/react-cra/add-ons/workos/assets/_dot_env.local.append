@@ -1,0 +1,4 @@
+VITE_WORKOS_CLIENT_ID=
+
+# This should be your Custom Authentication Domain in production
+VITE_WORKOS_API_HOSTNAME=api.workos.com

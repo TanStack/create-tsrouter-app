@@ -37,7 +37,7 @@ export const AddOnBaseSchema = z.object({
   link: z.string().optional(),
   license: z.string().optional(),
   warning: z.string().optional(),
-  type: z.enum(['add-on', 'example', 'starter', 'toolchain']),
+  type: z.enum(['add-on', 'example', 'starter', 'toolchain', 'host']),
   command: z
     .object({
       command: z.string(),
@@ -69,6 +69,7 @@ export const AddOnBaseSchema = z.object({
   createSpecialSteps: z.array(z.string()).optional(),
   postInitSpecialSteps: z.array(z.string()).optional(),
   options: AddOnOptionsSchema.optional(),
+  default: z.boolean().optional(),
 })
 
 export const StarterSchema = AddOnBaseSchema.extend({
@@ -85,9 +86,11 @@ export const StarterCompiledSchema = StarterSchema.extend({
 })
 
 export const IntegrationSchema = z.object({
-  type: z.string(),
-  path: z.string(),
-  jsName: z.string(),
+  type: z.string().optional(),
+  path: z.string().optional(),
+  jsName: z.string().optional(),
+  import: z.string().optional(),
+  code: z.string().optional(),
 })
 
 export const AddOnInfoSchema = AddOnBaseSchema.extend({

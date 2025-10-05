@@ -8,6 +8,7 @@
   "type": "add-on",
   "routes": [
     {
+      "icon": "Network",
       "url": "/demo/trpc-todo",
       "name": "tRPC Todo",
       "path": "src/routes/demo.trpc-todo.tsx",

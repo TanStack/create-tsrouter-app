@@ -102,7 +102,7 @@ describe('Special Steps', () => {
       const expectedCommands = {
         yarn: { command: 'yarn', args: ['run', 'post-cta-init'] },
         pnpm: { command: 'pnpm', args: ['post-cta-init'] },
-        bun: { command: 'bun', args: ['run', 'post-cta-init'] },
+        bun: { command: 'bun', args: ['--bun', 'run', 'post-cta-init'] },
         deno: { command: 'deno', args: ['task', 'post-cta-init'] },
       }
 

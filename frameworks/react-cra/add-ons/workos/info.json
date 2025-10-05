@@ -1,0 +1,30 @@
+{
+  "name": "WorkOS",
+  "description": "Add WorkOS authentication to your application.",
+  "phase": "add-on",
+  "modes": ["file-router"],
+  "type": "add-on",
+  "link": "https://workos.com",
+  "tailwind": true,
+  "routes": [
+    {
+      "icon": "CircleUserRound",
+      "url": "/demo/workos",
+      "name": "WorkOS",
+      "path": "src/routes/demo.workos.tsx",
+      "jsName": "WorkOSDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "header-user",
+      "jsName": "WorkOSHeader",
+      "path": "src/components/workos-user.tsx"
+    },
+    {
+      "type": "provider",
+      "jsName": "WorkOSProvider",
+      "path": "src/integrations/workos/provider.tsx"
+    }
+  ]
+}

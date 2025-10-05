@@ -5,12 +5,12 @@
     "@modelcontextprotocol/sdk": "^1.8.0",
     "ai": "^5.0.8",
     "highlight.js": "^11.11.1",
-    "react-markdown": "^9.0.1",
+    "react-markdown": "^10.1.0",
     "rehype-highlight": "^7.0.0",
     "rehype-raw": "^7.0.0",
     "rehype-sanitize": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "lucide-react": "^0.475.0",
-    "zod": "^3.24.2"
+    "lucide-react": "^0.544.0",
+    "zod": "^4.1.11"
   }
 }

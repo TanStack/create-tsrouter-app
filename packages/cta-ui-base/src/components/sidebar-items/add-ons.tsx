@@ -16,6 +16,7 @@ import type { AddOnInfo } from '../../types'
 const addOnTypeLabels: Record<string, string> = {
   toolchain: 'Toolchain',
   'add-on': 'Add-on',
+  host: 'Hosting Provider',
   example: 'Example',
 }
 

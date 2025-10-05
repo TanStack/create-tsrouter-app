@@ -15,6 +15,7 @@ export function createFrameworkDefinition(): FrameworkDefinition {
     join(baseDirectory, 'add-ons'),
     join(baseDirectory, 'toolchains'),
     join(baseDirectory, 'examples'),
+    join(baseDirectory, 'hosts'),
   ])
 
   const { files, basePackageJSON, optionalPackages } = scanProjectDirectory(

@@ -16,6 +16,7 @@ import {
 import type { AddOn, PackageManager } from '@tanstack/cta-engine'
 
 import type { Framework } from '@tanstack/cta-engine/dist/types/types.js'
+import { InitialData } from '../../cta-ui/src/types'
 
 export async function getProjectName(): Promise<string> {
   const value = await text({
@@ -189,38 +190,87 @@ export async function promptForAddOnOptions(
   framework: Framework,
 ): Promise<Record<string, Record<string, any>>> {
   const addOnOptions: Record<string, Record<string, any>> = {}
-  
+
   for (const addOnId of addOnIds) {
-    const addOn = framework.getAddOns().find(a => a.id === addOnId)
+    const addOn = framework.getAddOns().find((a) => a.id === addOnId)
     if (!addOn || !addOn.options) continue
-    
+
     addOnOptions[addOnId] = {}
-    
+
     for (const [optionName, option] of Object.entries(addOn.options)) {
       if (option && typeof option === 'object' && 'type' in option) {
         if (option.type === 'select') {
-          const selectOption = option as { type: 'select'; label: string; description?: string; default: string; options: Array<{ value: string; label: string }> }
-          
+          const selectOption = option as {
+            type: 'select'
+            label: string
+            description?: string
+            default: string
+            options: Array<{ value: string; label: string }>
+          }
+
           const value = await select({
             message: `${addOn.name}: ${selectOption.label}`,
-            options: selectOption.options.map(opt => ({
+            options: selectOption.options.map((opt) => ({
               value: opt.value,
               label: opt.label,
             })),
             initialValue: selectOption.default,
           })
-          
+
           if (isCancel(value)) {
             cancel('Operation cancelled.')
             process.exit(0)
           }
-          
+
           addOnOptions[addOnId][optionName] = value
         }
         // Future option types can be added here
       }
     }
   }
-  
+
   return addOnOptions
+}
+
+export async function selectHost(
+  framework: Framework,
+  host?: string,
+): Promise<string | undefined> {
+  const hosts = new Set<AddOn>()
+  let initialValue: string | undefined = undefined
+  for (const addOn of framework
+    .getAddOns()
+    .sort((a, b) => a.name.localeCompare(b.name))) {
+    if (addOn.type === 'host') {
+      hosts.add(addOn)
+      if (host && addOn.id === host) {
+        return host
+      }
+      if (addOn.default) {
+        initialValue = addOn.id
+      }
+    }
+  }
+
+  const hp = await select({
+    message: 'Select hosting provider',
+    options: [
+      {
+        value: undefined,
+        label: 'None',
+      },
+      ...Array.from(hosts).map((h) => ({
+        value: h.id,
+        label: h.name,
+      })),
+    ],
+    initialValue: initialValue,
+  })
+
+  if (isCancel(hp)) {
+    cancel('Operation cancelled.')
+    process.exit(0)
+  }
+
+  return hp as string
 }
