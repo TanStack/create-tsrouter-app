@@ -12,7 +12,12 @@ import "@fontsource/inter"
   <%- init %>
 <% } } %>
 
+import styleCss from "../styles.css?url";
+
 export const Route = createRootRouteWithContext()({
+  head: () => ({
+    links: [{ rel: "stylesheet", href: styleCss }],
+  }),
   shellComponent: RootComponent,
 })
 
