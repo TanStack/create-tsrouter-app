@@ -21,7 +21,8 @@ const addOnTypeLabels: Record<string, string> = {
 }
 
 export default function SelectedAddOns() {
-  const { availableAddOns, addOnState, toggleAddOn, setAddOnOption } = useAddOns()
+  const { availableAddOns, addOnState, toggleAddOn, setAddOnOption } =
+    useAddOns()
   const addOnOptions = useProjectOptions((state) => state.addOnOptions)
 
   const sortedAddOns = useMemo(() => {
@@ -60,61 +61,60 @@ export default function SelectedAddOns() {
               >
                 <h3 className="font-medium">{addOnTypeLabels[type]}</h3>
                 <div className="space-y-3">
-                  {sortedAddOns
-                    .filter((addOn) => addOn.type === type)
-                    .map((addOn) => (
-                      <div key={addOn.id} className="w-full">
-                        <div className="flex flex-row items-center justify-between">
-                          <div className="p-1 flex flex-row items-center">
-                            <Switch
-                              id={addOn.id}
-                              checked={addOnState[addOn.id].selected}
-                              disabled={!addOnState[addOn.id].enabled}
-                              onCheckedChange={() => {
-                                toggleAddOn(addOn.id)
-                              }}
-                            />
-                            <Label
-                              htmlFor={addOn.id}
-                              className="pl-2 font-semibold text-gray-300 flex items-center gap-2"
-                            >
-                              {addOn.smallLogo && (
-                                <img
-                                  src={`data:image/svg+xml,${encodeURIComponent(
-                                    addOn.smallLogo,
-                                  )}`}
-                                  alt={addOn.name}
-                                  className="w-5"
-                                />
-                              )}
-                              {addOn.name}
-                              {addOn.options && Object.keys(addOn.options).length > 0 && (
-                                <span className="text-xs text-blue-400 bg-blue-400/10 px-1.5 py-0.5 rounded">
-                                  configurable
-                                </span>
-                              )}
-                            </Label>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            {addOnState[addOn.id].selected && addOn.options && Object.keys(addOn.options).length > 0 && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 w-6 p-0 text-gray-600 hover:text-gray-400"
-                                onClick={() => setConfigAddOn(addOn)}
+                  <div className="flex flex-row flex-wrap">
+                    {sortedAddOns
+                      .filter((addOn) => addOn.type === type)
+                      .map((addOn) => (
+                        <div key={addOn.id} className="w-1/2">
+                          <div className="flex flex-row items-center justify-between">
+                            <div className="p-1 flex flex-row items-center">
+                              <Switch
+                                id={addOn.id}
+                                checked={addOnState[addOn.id].selected}
                                 disabled={!addOnState[addOn.id].enabled}
+                                onCheckedChange={() => {
+                                  toggleAddOn(addOn.id)
+                                }}
+                              />
+                              <Label
+                                htmlFor={addOn.id}
+                                className="pl-2 font-semibold text-gray-300 flex items-center gap-2"
                               >
-                                <SettingsIcon className="w-4 h-4" />
-                              </Button>
-                            )}
-                            <InfoIcon
-                              className="w-4 text-gray-600 cursor-pointer hover:text-gray-400"
-                              onClick={() => setInfoAddOn(addOn)}
-                            />
+                                {addOn.smallLogo && (
+                                  <img
+                                    src={`data:image/svg+xml,${encodeURIComponent(
+                                      addOn.smallLogo,
+                                    )}`}
+                                    alt={addOn.name}
+                                    className="w-5"
+                                  />
+                                )}
+                                {addOn.name}
+                              </Label>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {addOnState[addOn.id].selected &&
+                                addOn.options &&
+                                Object.keys(addOn.options).length > 0 && (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0 text-gray-600 hover:text-gray-400"
+                                    onClick={() => setConfigAddOn(addOn)}
+                                    disabled={!addOnState[addOn.id].enabled}
+                                  >
+                                    <SettingsIcon className="w-4 h-4" />
+                                  </Button>
+                                )}
+                              <InfoIcon
+                                className="w-4 text-gray-600 cursor-pointer hover:text-gray-400"
+                                onClick={() => setInfoAddOn(addOn)}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                  </div>
                 </div>
               </div>
             )}
