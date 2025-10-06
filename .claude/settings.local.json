@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm ls:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(node:*)",
+      "Bash(source:*)",
+      "Bash(nvm use:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(pnpm test:*)"
+    ],
+    "deny": []
+  }
+}

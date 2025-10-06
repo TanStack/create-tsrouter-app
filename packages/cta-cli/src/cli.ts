@@ -353,6 +353,7 @@ Remove your node_modules directory and package lock file and re-install.`,
       },
     )
     .option('--list-add-ons', 'list all available add-ons', false)
+    .option('--addon-details <addon-id>', 'show detailed information about a specific add-on')
     .option('--no-git', 'do not create a git repository')
     .option(
       '--target-dir <path>',
@@ -361,6 +362,7 @@ Remove your node_modules directory and package lock file and re-install.`,
     .option('--mcp', 'run the MCP server', false)
     .option('--mcp-sse', 'run the MCP server in SSE mode', false)
     .option('--ui', 'Add with the UI')
+    .option('--add-on-config <config>', 'JSON string with add-on configuration options')
 
   program.action(async (projectName: string, options: CliOptions) => {
     if (options.listAddOns) {
@@ -369,8 +371,73 @@ Remove your node_modules directory and package lock file and re-install.`,
         defaultMode ||
           convertTemplateToMode(options.template || defaultTemplate),
       )
+      let hasConfigurableAddOns = false
       for (const addOn of addOns.filter((a) => !forcedAddOns.includes(a.id))) {
-        console.log(`${chalk.bold(addOn.id)}: ${addOn.description}`)
+        const hasOptions = addOn.options && Object.keys(addOn.options).length > 0
+        const optionMarker = hasOptions ? '*' : ' '
+        if (hasOptions) hasConfigurableAddOns = true
+        console.log(`${optionMarker} ${chalk.bold(addOn.id)}: ${addOn.description}`)
+      }
+      if (hasConfigurableAddOns) {
+        console.log('\n* = has configuration options')
+      }
+    } else if (options.addonDetails) {
+      const addOns = await getAllAddOns(
+        getFrameworkByName(options.framework || defaultFramework || 'React')!,
+        defaultMode ||
+          convertTemplateToMode(options.template || defaultTemplate),
+      )
+      const addOn = addOns.find((a) => a.id === options.addonDetails)
+      if (!addOn) {
+        console.error(`Add-on '${options.addonDetails}' not found`)
+        process.exit(1)
+      }
+      
+      console.log(`${chalk.bold.cyan('Add-on Details:')} ${chalk.bold(addOn.name)}`)
+      console.log(`${chalk.bold('ID:')} ${addOn.id}`)
+      console.log(`${chalk.bold('Description:')} ${addOn.description}`)
+      console.log(`${chalk.bold('Type:')} ${addOn.type}`)
+      console.log(`${chalk.bold('Phase:')} ${addOn.phase}`)
+      console.log(`${chalk.bold('Supported Modes:')} ${addOn.modes.join(', ')}`)
+      
+      if (addOn.link) {
+        console.log(`${chalk.bold('Link:')} ${chalk.blue(addOn.link)}`)
+      }
+      
+      if (addOn.dependsOn && addOn.dependsOn.length > 0) {
+        console.log(`${chalk.bold('Dependencies:')} ${addOn.dependsOn.join(', ')}`)
+      }
+      
+      if (addOn.options && Object.keys(addOn.options).length > 0) {
+        console.log(`\n${chalk.bold.yellow('Configuration Options:')}`)
+        for (const [optionName, option] of Object.entries(addOn.options)) {
+          if (option && typeof option === 'object' && 'type' in option) {
+            const opt = option as any
+            console.log(`  ${chalk.bold(optionName)}:`)
+            console.log(`    Label: ${opt.label}`)
+            if (opt.description) {
+              console.log(`    Description: ${opt.description}`)
+            }
+            console.log(`    Type: ${opt.type}`)
+            console.log(`    Default: ${opt.default}`)
+            if (opt.type === 'select' && opt.options) {
+              console.log(`    Available values:`)
+              for (const choice of opt.options) {
+                console.log(`      - ${choice.value}: ${choice.label}`)
+              }
+            }
+          }
+        }
+      } else {
+        console.log(`\n${chalk.gray('No configuration options available')}`)
+      }
+      
+      if (addOn.routes && addOn.routes.length > 0) {
+        console.log(`\n${chalk.bold.green('Routes:')}`)
+        for (const route of addOn.routes) {
+          console.log(`  ${chalk.bold(route.url)} (${route.name})`)
+          console.log(`    File: ${route.path}`)
+        }
       }
     } else if (options.mcp || options.mcpSse) {
       await runMCPServer(!!options.mcpSse, {

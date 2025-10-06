@@ -147,6 +147,21 @@ async function runCommandsAndInstallDependencies(
   environment.finishStep('install-dependencies', 'Installed dependencies')
   s.stop(`Installed dependencies`)
 
+  // Run any post-init special steps for the new add-ons
+  const postInitSpecialSteps = new Set<string>([])
+  for (const addOn of options.chosenAddOns) {
+    for (const step of addOn.postInitSpecialSteps || []) {
+      postInitSpecialSteps.add(step)
+    }
+  }
+  if (postInitSpecialSteps.size) {
+    await runSpecialSteps(
+      environment,
+      options,
+      Array.from(postInitSpecialSteps),
+    )
+  }
+
   for (const phase of ['setup', 'add-on', 'example']) {
     for (const addOn of options.chosenAddOns.filter(
       (addOn) =>
@@ -166,6 +181,7 @@ async function runCommandsAndInstallDependencies(
         addOn.command!.command,
         addOn.command!.args || [],
         options.targetDir,
+        { inherit: true },
       )
       environment.finishStep('run-commands', 'Setup commands complete')
       s.stop(`${addOn.name} commands complete`)
@@ -193,6 +209,7 @@ async function runCommandsAndInstallDependencies(
       options.starter.command.command,
       options.starter.command.args || [],
       options.targetDir,
+      { inherit: true },
     )
 
     environment.finishStep('run-starter-command', 'Starter command complete')

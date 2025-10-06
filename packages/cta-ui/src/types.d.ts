@@ -38,6 +38,7 @@ export type AddOnInfo = {
   logo?: string
   link: string
   dependsOn?: Array<string>
+  options?: Record<string, any>
 }
 
 export type FileClass =

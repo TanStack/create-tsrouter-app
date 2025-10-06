@@ -1,4 +1,5 @@
 import { rimrafNodeModules } from './rimraf-node-modules.js'
+import { postInitScript } from './post-init-script.js'
 
 import type { Environment, Options } from '../types.js'
 
@@ -7,6 +8,7 @@ const specialStepsLookup: Record<
   (environment: Environment, options: Options) => Promise<void>
 > = {
   'rimraf-node-modules': rimrafNodeModules,
+  'post-init-script': postInitScript,
 }
 
 export async function runSpecialSteps(
@@ -18,7 +20,7 @@ export async function runSpecialSteps(
     environment.startStep({
       id: 'special-steps',
       type: 'command',
-      message: 'Removing node_modules...',
+      message: 'Running special steps...',
     })
 
     for (const step of specialSteps) {

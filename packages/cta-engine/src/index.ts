@@ -1,7 +1,7 @@
 export { createApp } from './create-app.js'
 export { addToApp } from './add-to-app.js'
 
-export { finalizeAddOns, getAllAddOns } from './add-ons.js'
+export { finalizeAddOns, getAllAddOns, populateAddOnOptionsDefaults } from './add-ons.js'
 
 export { loadRemoteAddOn } from './custom-add-ons/add-on.js'
 export { loadStarter } from './custom-add-ons/starter.js'
@@ -73,6 +73,10 @@ export {
 
 export type {
   AddOn,
+  AddOnOption,
+  AddOnOptions,
+  AddOnSelectOption,
+  AddOnSelection,
   Environment,
   FileBundleHandler,
   Framework,

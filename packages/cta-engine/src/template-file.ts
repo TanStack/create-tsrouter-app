@@ -95,6 +95,7 @@ export function createTemplateFile(environment: Environment, options: Options) {
       fileRouter: options.mode === 'file-router',
       codeRouter: options.mode === 'code-router',
       addOnEnabled,
+      addOnOption: options.addOnOptions,
       addOns: options.chosenAddOns,
       integrations,
       routes,
@@ -134,6 +135,13 @@ export function createTemplateFile(environment: Environment, options: Options) {
     }
 
     let target = convertDotFilesAndPaths(file.replace('.ejs', ''))
+
+    // Strip option prefixes from filename (e.g., __postgres__schema.prisma -> schema.prisma)
+    const prefixMatch = target.match(/^(.+\/)?__([^_]+)__(.+)$/)
+    if (prefixMatch) {
+      const [, directory, , filename] = prefixMatch
+      target = (directory || '') + filename
+    }
 
     let append = false
     if (target.endsWith('.append')) {

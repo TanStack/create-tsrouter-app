@@ -23,6 +23,7 @@ export const useProjectOptions = create<
   tailwind: true,
   git: true,
   chosenAddOns: [],
+  addOnOptions: {},
   packageManager: 'pnpm',
 }))
 
@@ -179,11 +180,33 @@ export function useAddOns() {
         }
       }
     },
-    [ready, addOnState],
+    [ready, addOnState, availableAddOns],
   )
+
+  const setAddOnOption = useCallback(
+    (addOnId: string, optionName: string, value: any) => {
+      if (!ready) return
+      useProjectOptions.setState((state) => ({
+        addOnOptions: {
+          ...state.addOnOptions,
+          [addOnId]: {
+            ...state.addOnOptions[addOnId],
+            [optionName]: value,
+          },
+        },
+      }))
+    },
+    [ready],
+  )
+
+  const getAddOnOptions = useCallback((addOnId: string) => {
+    return useProjectOptions.getState().addOnOptions[addOnId] || {}
+  }, [])
 
   return {
     toggleAddOn,
+    setAddOnOption,
+    getAddOnOptions,
     chosenAddOns,
     availableAddOns,
     userSelectedAddOns,
