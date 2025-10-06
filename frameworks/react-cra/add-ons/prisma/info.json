@@ -1,6 +1,6 @@
 {
   "name": "Prisma",
-  "description": "Add Prisma ORM with configurable database support to your application.",
+  "description": "Add Prisma Postgres, or Prisma ORM with other DBs to your application.",
   "phase": "add-on",
   "type": "add-on",
   "link": "https://www.prisma.io/",

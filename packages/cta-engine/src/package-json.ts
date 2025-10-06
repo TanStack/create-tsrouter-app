@@ -9,6 +9,7 @@ export function mergePackageJSON(
 ) {
   return {
     ...packageJSON,
+    ...(overlayPackageJSON || {}),
     dependencies: {
       ...packageJSON.dependencies,
       ...(overlayPackageJSON?.dependencies || {}),
@@ -45,7 +46,7 @@ export function createPackageJSON(options: Options) {
 
   for (const addOn of options.chosenAddOns) {
     let addOnPackageJSON = addOn.packageAdditions
-    
+
     // Process EJS template if present
     if (addOn.packageTemplate) {
       const templateValues = {
@@ -67,16 +68,19 @@ export function createPackageJSON(options: Options) {
         addOnOption: options.addOnOptions,
         addOns: options.chosenAddOns,
       }
-      
+
       try {
         const renderedTemplate = render(addOn.packageTemplate, templateValues)
         addOnPackageJSON = JSON.parse(renderedTemplate)
       } catch (error) {
-        console.error(`Error processing package.json.ejs for add-on ${addOn.id}:`, error)
+        console.error(
+          `Error processing package.json.ejs for add-on ${addOn.id}:`,
+          error,
+        )
         // Fall back to packageAdditions if template processing fails
       }
     }
-    
+
     packageJSON = mergePackageJSON(packageJSON, addOnPackageJSON)
   }
 

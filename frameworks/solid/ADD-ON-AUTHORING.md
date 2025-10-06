@@ -161,6 +161,7 @@ The CTA framework supports configurable add-ons through an options system that a
 ## Overview
 
 Add-on options allow developers to create configurable add-ons where users can select from predefined choices that affect:
+
 - Which files are included in the generated project
 - Template variable values used during file generation
 - Package dependencies that get installed
@@ -210,6 +211,7 @@ The `select` type allows users to choose from a predefined list of options:
 ```
 
 **Properties:**
+
 - `type`: Must be `"select"`
 - `label`: Display text shown to users
 - `description`: Optional help text
@@ -231,27 +233,6 @@ const driver = '<%= addOnOption.myAddOnId.database %>'
 ```
 
 The structure is: `addOnOption.{addOnId}.{optionName}`
-
-## Conditional Files
-
-Use filename prefixes to include files only when specific option values are selected:
-
-```
-assets/
-├── __postgres__schema.prisma.ejs
-├── __mysql__schema.prisma.ejs
-├── __sqlite__schema.prisma.ejs
-└── src/
-    └── db/
-        ├── __postgres__index.ts.ejs
-        ├── __mysql__index.ts.ejs
-        └── __sqlite__index.ts.ejs
-```
-
-**Naming Convention:**
-- `__optionValue__filename.ext.ejs` - Include only if option matches value
-- The prefix is stripped from the final filename
-- Use `ignoreFile()` in templates for additional conditional logic
 
 ### Template Conditional Logic
 
@@ -279,6 +260,7 @@ Here's how you could implement a configurable database add-on for Solid:
 ### Examples
 
 Configuration in `info.json`:
+
 ```json
 {
   "name": "Database Integration",
@@ -300,67 +282,14 @@ Configuration in `info.json`:
 }
 ```
 
-File structure:
-```
-database/
-├── assets/
-│   ├── __postgres__schema.prisma.ejs
-│   ├── __mysql__schema.prisma.ejs
-│   ├── __sqlite__schema.prisma.ejs
-│   └── src/
-│       ├── db/
-│       │   ├── __postgres__index.ts.ejs
-│       │   ├── __mysql__index.ts.ejs
-│       │   └── __sqlite__index.ts.ejs
-│       └── routes/
-│           └── demo.database.tsx.ejs
-└── package.json.ejs
-```
-
-Code in `assets/__postgres__schema.prisma.ejs`:
-```ejs
-<% if (addOnOption.database.database !== 'postgres') { ignoreFile() } %>
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-```
-
-Code in `assets/src/db/__postgres__index.ts.ejs`:
-```ejs
-<% if (addOnOption.database.database !== 'postgres') { ignoreFile() } %>
-import { PrismaClient } from '@prisma/client'
-
-declare global {
-  var __prisma: PrismaClient | undefined
-}
-
-export const prisma = globalThis.__prisma || new PrismaClient()
-
-if (process.env.NODE_ENV !== 'production') {
-  globalThis.__prisma = prisma
-}
-```
-
 Code in `assets/src/routes/demo.database.tsx.ejs`:
+
 ```ejs
 import { createSignal, onMount } from 'solid-js'
 
 export default function DatabaseDemo() {
   const [status, setStatus] = createSignal('Connecting...')
-  
+
   onMount(async () => {
     try {
       // Database-specific connection logic
@@ -393,10 +322,11 @@ export default function DatabaseDemo() {
 ```
 
 Code in `package.json.ejs`:
+
 ```ejs
 {
-  "prisma": "^5.8.0",
-  "@prisma/client": "^5.8.0"<% if (addOnOption.database.database === 'postgres') { %>,
+  "prisma": "^6.16.3",
+  "@prisma/client": "^6.16.3"<% if (addOnOption.database.database === 'postgres') { %>,
   "pg": "^8.11.0",
   "@types/pg": "^8.10.0"<% } else if (addOnOption.database.database === 'mysql') { %>,
   "mysql2": "^3.6.0"<% } else if (addOnOption.database.database === 'sqlite') { %><% } %>
@@ -406,6 +336,7 @@ Code in `package.json.ejs`:
 ## CLI Usage
 
 ### Interactive Mode
+
 When using the CLI interactively, users are prompted for each option:
 
 ```bash
@@ -415,6 +346,7 @@ create-tsrouter-app my-solid-app
 ```
 
 ### Non-Interactive Mode
+
 Options can be specified via JSON configuration:
 
 ```bash
@@ -425,7 +357,7 @@ create-tsrouter-app my-solid-app --add-ons database --add-on-config '{"database"
 
 1. **Use descriptive labels** - Make option purposes clear to users
 2. **Provide sensible defaults** - Choose the most common use case
-3. **Group related files** - Use consistent prefixing for option-specific files  
+3. **Group related files** - Use consistent prefixing for option-specific files
 4. **Document options** - Include descriptions to help users understand choices
 5. **Test all combinations** - Ensure each option value generates working code
 6. **Use validation** - The system validates options against the schema automatically
