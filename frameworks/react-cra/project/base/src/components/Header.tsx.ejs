@@ -6,9 +6,14 @@ const icons = new Set([
   "Menu",
   "X",
   "Home",
-  "ChevronDown",
-  "ChevronRight",
 ])
+
+const hasRoutesWithChildren = addOns.some(a => a.routes?.some(r => r.children));
+
+if (hasRoutesWithChildren) {
+  icons.add("ChevronDown");
+  icons.add("ChevronRight");
+}
 
 for(const addOn of addOns) {
   for(const route of (addOn?.routes||[])?.filter(r => r.url && r.name)) {
@@ -28,7 +33,8 @@ const menusWithChildren = addOns.filter(a => a.routes?.some(r => r.children));
 const userHeaders = integrations.filter(i => i.type === 'header-user');
 %>
   const [isOpen, setIsOpen] = useState(false);
-  const [groupedExpanded, setGroupedExpanded] = useState<Record<string, boolean>>({});
+  <% if (menusWithChildren.length > 0) { %>const [groupedExpanded, setGroupedExpanded] = useState<Record<string, boolean>>({});
+  <% } %>
 
   return (
     <>

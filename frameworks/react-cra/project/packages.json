@@ -10,7 +10,8 @@
   "tailwindcss": {
     "dependencies": {
       "@tailwindcss/vite": "^4.0.6",
-      "tailwindcss": "^4.0.6"
+      "tailwindcss": "^4.0.6",
+      "lucide-react": "^0.545.0"
     }
   },
   "file-router": {
