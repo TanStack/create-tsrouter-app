@@ -1,5 +1,6 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useStore } from 'zustand'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 import type { SetupStep } from '../hooks/use-webcontainer-store'
 import { WebContainerContext } from './web-container-provider'
@@ -27,6 +28,8 @@ export function WebContainerPreview() {
     containerStore,
     (state) => state.setTerminalOutput,
   )
+
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false)
 
   // Auto-scroll terminal to bottom when new output arrives
   const terminalRef = useRef<HTMLDivElement>(null)
@@ -62,113 +65,88 @@ export function WebContainerPreview() {
     }
   }
 
-  if (!webContainer) {
+  // Show progress dialog during setup (similar to "Creating Your Application")
+  if (
+    !webContainer ||
+    setupStep === 'error' ||
+    setupStep !== 'ready' ||
+    !previewUrl
+  ) {
     return (
       <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-gray-900">
-        <div className="text-center">
-          <div className="text-4xl mb-4">⏳</div>
-          <div className="text-lg font-medium text-gray-700 dark:text-gray-300">
-            Initializing WebContainer...
-          </div>
-        </div>
-      </div>
-    )
-  }
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-2xl w-full mx-4 border-2 border-blue-500">
+          <h2 className="text-2xl font-bold mb-6 text-center">
+            {setupStep === 'error' ? 'Setup Failed' : 'Preparing Preview'}
+          </h2>
 
-  if (setupStep === 'error') {
-    return (
-      <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-gray-900">
-        <div className="text-center max-w-md">
-          <div className="text-4xl mb-4">❌</div>
-          <div className="text-lg font-medium text-red-600 mb-2">
-            Setup Failed
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {error}
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (setupStep !== 'ready' || !previewUrl) {
-    return (
-      <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
-        {/* Progress Header */}
-        <div className="border-b border-gray-200 dark:border-gray-700 p-4">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="text-2xl">{getStepIcon(setupStep)}</div>
-            <div className={`font-medium ${getStepColor(setupStep)}`}>
-              {statusMessage}
+          {setupStep === 'error' ? (
+            <div className="text-center">
+              <div className="text-4xl mb-4">❌</div>
+              <div className="text-lg font-medium text-red-600 mb-2">
+                An error occurred
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                {error}
+              </div>
+              <button
+                onClick={startDevServer}
+                className="px-4 py-2 text-sm bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
+              >
+                🔄 Retry
+              </button>
             </div>
-          </div>
-
-          {/* Progress Steps */}
-          <div className="flex gap-4 text-sm">
-            <div
-              className={`flex items-center gap-1 ${
-                setupStep === 'mounting'
-                  ? 'text-blue-500'
-                  : setupStep === 'installing' ||
-                      setupStep === 'starting' ||
-                      setupStep === 'ready'
-                    ? 'text-green-500'
-                    : 'text-gray-400'
-              }`}
-            >
-              <div className="w-2 h-2 rounded-full bg-current"></div>
-              Mount Files
-            </div>
-            <div
-              className={`flex items-center gap-1 ${
-                setupStep === 'installing'
-                  ? 'text-blue-500'
-                  : setupStep === 'starting' || setupStep === 'ready'
-                    ? 'text-green-500'
-                    : 'text-gray-400'
-              }`}
-            >
-              <div className="w-2 h-2 rounded-full bg-current"></div>
-              Install Dependencies
-            </div>
-            <div
-              className={`flex items-center gap-1 ${
-                setupStep === 'starting'
-                  ? 'text-blue-500'
-                  : setupStep === 'ready'
-                    ? 'text-green-500'
-                    : 'text-gray-400'
-              }`}
-            >
-              <div className="w-2 h-2 rounded-full bg-current"></div>
-              Start Server
-            </div>
-          </div>
-        </div>
-
-        {/* Terminal Output */}
-        <div className="flex-1 p-4 overflow-y-auto">
-          <div className="bg-black text-green-400 font-mono text-xs p-4 rounded-lg h-full overflow-y-auto">
-            {terminalOutput.length > 0 ? (
-              terminalOutput.map((line, index) => (
-                <div key={index} className="mb-1">
-                  {line}
+          ) : (
+            <>
+              {/* Progress Steps */}
+              <div className="space-y-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">{getStepIcon('mounting')}</div>
+                  <div
+                    className={`flex-1 ${getStepColor(setupStep === 'mounting' ? 'mounting' : setupStep === 'installing' || setupStep === 'starting' || setupStep === 'ready' ? 'ready' : 'mounting')}`}
+                  >
+                    Mount Files
+                  </div>
+                  {(setupStep === 'installing' ||
+                    setupStep === 'starting' ||
+                    setupStep === 'ready') &&
+                    '✓'}
                 </div>
-              ))
-            ) : (
-              <div className="text-gray-500">Waiting for output...</div>
-            )}
-          </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">{getStepIcon('installing')}</div>
+                  <div
+                    className={`flex-1 ${getStepColor(setupStep === 'installing' ? 'installing' : setupStep === 'starting' || setupStep === 'ready' ? 'ready' : 'mounting')}`}
+                  >
+                    Install Dependencies
+                  </div>
+                  {(setupStep === 'starting' || setupStep === 'ready') && '✓'}
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">{getStepIcon('starting')}</div>
+                  <div
+                    className={`flex-1 ${getStepColor(setupStep === 'starting' ? 'starting' : setupStep === 'ready' ? 'ready' : 'mounting')}`}
+                  >
+                    Start Server
+                  </div>
+                  {setupStep === 'ready' && '✓'}
+                </div>
+              </div>
+
+              {/* Current status */}
+              <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+                {statusMessage || 'Preparing your application...'}
+              </div>
+            </>
+          )}
         </div>
       </div>
     )
   }
 
-  // Show the running application with persistent terminal
+  // Show the running application with collapsible terminal
   return (
     <div className="flex flex-col h-full">
-      {/* iframe with the running app - 75% height */}
-      <div style={{ height: '75%' }}>
+      {/* iframe with the running app */}
+      <div className="flex-1">
         {previewUrl ? (
           <iframe
             src={previewUrl}
@@ -182,22 +160,27 @@ export function WebContainerPreview() {
             <div className="text-center">
               <div className="text-2xl mb-2">🔄</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                {setupStep === 'ready'
-                  ? 'Preview not available'
-                  : statusMessage}
+                Preview not available
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Terminal output - 25% height */}
-      <div
-        className="border-t border-gray-200 dark:border-gray-700 bg-black text-green-400 flex flex-col"
-        style={{ height: '25%' }}
-      >
-        <div className="p-2 border-b border-gray-700 bg-gray-900 flex items-center justify-between flex-shrink-0">
+      {/* Collapsible Terminal output */}
+      <div className="border-t border-gray-200 dark:border-gray-700 bg-black text-green-400 flex flex-col flex-shrink-0">
+        <div
+          className="p-2 border-b border-gray-700 bg-gray-900 flex items-center justify-between cursor-pointer hover:bg-gray-800 transition-colors"
+          onClick={() => setIsTerminalOpen(!isTerminalOpen)}
+        >
           <div className="flex items-center gap-2 flex-1">
+            <button className="text-gray-400 hover:text-gray-200">
+              {isTerminalOpen ? (
+                <ChevronDown className="w-4 h-4" />
+              ) : (
+                <ChevronUp className="w-4 h-4" />
+              )}
+            </button>
             <div className="text-xs font-medium text-gray-300">
               Terminal Output
             </div>
@@ -205,7 +188,10 @@ export function WebContainerPreview() {
               <div className="text-xs text-green-500">● Server Running</div>
             )}
           </div>
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            onClick={(e) => e.stopPropagation()}
+          >
             {previewUrl && (
               <button
                 onClick={() => window.open(previewUrl, '_blank')}
@@ -229,23 +215,26 @@ export function WebContainerPreview() {
             </button>
           </div>
         </div>
-        <div
-          ref={terminalRef}
-          className="font-mono text-xs p-2 flex-1 overflow-y-auto overflow-x-hidden"
-        >
-          {terminalOutput.length > 0 ? (
-            terminalOutput.map((line, index) => (
-              <div
-                key={index}
-                className="mb-1 leading-tight whitespace-pre-wrap break-words"
-              >
-                {line}
-              </div>
-            ))
-          ) : (
-            <div className="text-gray-500">No output yet...</div>
-          )}
-        </div>
+        {isTerminalOpen && (
+          <div
+            ref={terminalRef}
+            className="font-mono text-xs p-2 overflow-y-auto overflow-x-hidden"
+            style={{ maxHeight: '200px' }}
+          >
+            {terminalOutput.length > 0 ? (
+              terminalOutput.map((line, index) => (
+                <div
+                  key={index}
+                  className="mb-1 leading-tight whitespace-pre-wrap break-words"
+                >
+                  {line}
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500">No output yet...</div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

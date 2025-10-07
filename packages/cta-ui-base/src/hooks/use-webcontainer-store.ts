@@ -1,7 +1,9 @@
 import { WebContainer } from '@webcontainer/api'
-import type { FileSystemTree, WebContainerProcess } from '@webcontainer/api'
 import { createStore } from 'zustand'
+
 import shimALS from '../lib/als-shim'
+
+import type { FileSystemTree, WebContainerProcess } from '@webcontainer/api'
 
 export type SetupStep =
   | 'mounting'
@@ -17,7 +19,7 @@ type WebContainerStore = {
   ready: boolean
   setupStep: SetupStep
   statusMessage: string
-  terminalOutput: string[]
+  terminalOutput: Array<string>
   previewUrl: string | null
   error: string | null
   devProcess: WebContainerProcess | null
@@ -32,7 +34,7 @@ type WebContainerStore = {
   startDevServer: () => Promise<void>
   addTerminalOutput: (output: string) => void
   installDependencies: () => Promise<void>
-  setTerminalOutput: (output: string[]) => void
+  setTerminalOutput: (output: Array<string>) => void
 }
 
 const processTerminalLine = (data: string): string => {
