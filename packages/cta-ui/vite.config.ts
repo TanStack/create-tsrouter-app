@@ -8,6 +8,10 @@ export default defineConfig({
   server: {
     open: true,
     port: 3000,
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+    },
   },
   build: {
     outDir: 'dist',

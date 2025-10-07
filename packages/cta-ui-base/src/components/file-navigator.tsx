@@ -14,9 +14,12 @@ import { getFileClass, twClasses } from '../file-classes'
 
 import FileViewer from './file-viewer'
 import FileTree from './file-tree'
+import WebContainerProvider from './web-container-provider'
+import { WebContainerPreview } from './webcontainer-preview'
 
 import { Label } from './ui/label'
 import { Switch } from './ui/switch'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 
 import type { FileTreeItem } from '../types'
 
@@ -181,6 +184,21 @@ export default function FileNavigator() {
 
   const ready = useReady()
 
+  // Prepare project files for WebContainer
+  const webContainerFiles = useMemo(() => {
+    console.log('Preparing WebContainer files, tree:', tree)
+    if (!tree) {
+      console.log('Tree is empty, returning empty array')
+      return []
+    }
+    const files = Object.entries(tree).map(([path, content]) => ({
+      path,
+      content,
+    }))
+    console.log('WebContainer files prepared:', files.length, 'files')
+    return files
+  }, [tree])
+
   if (!ready) {
     return null
   }
@@ -188,20 +206,37 @@ export default function FileNavigator() {
   return (
     <div className="bg-white dark:bg-black/50 rounded-lg p-2 sm:p-4">
       {mode === 'add' && <Filters />}
-      <div className="flex flex-row @container">
-        <div className="w-1/3 @6xl:w-1/4 bg-gray-500/10 rounded-l-lg">
-          <FileTree selectedFile={selectedFile} tree={fileTree} />
-        </div>
-        <div className="w-2/3 @6xl:w-3/4">
-          {selectedFile && modifiedFileContents ? (
-            <FileViewer
-              filePath={selectedFile}
-              originalFile={originalFileContents}
-              modifiedFile={modifiedFileContents}
-            />
-          ) : null}
-        </div>
-      </div>
+      <Tabs defaultValue="files" className="w-full">
+        <TabsList className="mb-2">
+          <TabsTrigger value="files">Files</TabsTrigger>
+          <TabsTrigger value="preview">Preview</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="files" className="mt-0">
+          <div className="flex flex-row @container">
+            <div className="w-1/3 @6xl:w-1/4 bg-gray-500/10 rounded-l-lg">
+              <FileTree selectedFile={selectedFile} tree={fileTree} />
+            </div>
+            <div className="w-2/3 @6xl:w-3/4">
+              {selectedFile && modifiedFileContents ? (
+                <FileViewer
+                  filePath={selectedFile}
+                  originalFile={originalFileContents}
+                  modifiedFile={modifiedFileContents}
+                />
+              ) : null}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="preview" className="mt-0">
+          <div className="h-[800px]">
+            <WebContainerProvider projectFiles={webContainerFiles}>
+              <WebContainerPreview />
+            </WebContainerProvider>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
