@@ -106,8 +106,6 @@ function alsShim(): PluginOption {
     load(id) {
       if (id !== '\\0virtual:async_hooks') return null;
 
-      console.log('loaded!', id);
-
       return \`${ALS_SHIM}\`;
     },
   };

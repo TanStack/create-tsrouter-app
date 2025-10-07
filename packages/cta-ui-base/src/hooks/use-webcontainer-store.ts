@@ -165,7 +165,6 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
     updateProjectFiles: async (
       projectFiles: Array<{ path: string; content: string }>,
     ) => {
-      console.log('Updating project files...', projectFiles.length, 'files')
       const {
         projectFiles: originalProjectFiles,
         addTerminalOutput,
@@ -248,13 +247,11 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
           }
         }
 
+        // Write the binary files on their own since mount doesn't support binary files correctly
         await container.mount(fileSystemTree)
         for (const [path, bytes] of Object.entries(binaryFiles)) {
           await container.fs.writeFile(path, bytes)
         }
-        addTerminalOutput(
-          `📁 Files mounted successfully (${base64FileCount} binary files)`,
-        )
         packageJSONChanged = true
       } else {
         const originalMap = new Map<string, string>()

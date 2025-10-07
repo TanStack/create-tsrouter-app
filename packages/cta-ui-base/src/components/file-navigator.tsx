@@ -208,9 +208,19 @@ export default function FileNavigator() {
       <div className="bg-white dark:bg-black/50 rounded-lg p-2 sm:p-4">
         {mode === 'add' && <Filters />}
         <Tabs defaultValue="files" className="w-full">
-          <TabsList className="mb-2">
-            <TabsTrigger value="files">Files</TabsTrigger>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsList className="mb-1 h-7 p-0.5 bg-transparent border border-gray-300 dark:border-gray-700">
+            <TabsTrigger
+              value="files"
+              className="text-xs h-6 px-3 py-0 data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-800"
+            >
+              Files
+            </TabsTrigger>
+            <TabsTrigger
+              value="preview"
+              className="text-xs h-6 px-3 py-0 data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-800"
+            >
+              Preview
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="files" className="mt-0">

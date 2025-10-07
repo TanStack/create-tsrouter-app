@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { useStore } from 'zustand'
 
 import type { SetupStep } from '../hooks/use-webcontainer-store'
@@ -27,6 +27,14 @@ export function WebContainerPreview() {
     containerStore,
     (state) => state.setTerminalOutput,
   )
+
+  // Auto-scroll terminal to bottom when new output arrives
+  const terminalRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+    }
+  }, [terminalOutput])
 
   const getStepIcon = (step: SetupStep) => {
     switch (step) {
@@ -159,42 +167,8 @@ export function WebContainerPreview() {
   // Show the running application with persistent terminal
   return (
     <div className="flex flex-col h-full">
-      {/* Header with URL and controls */}
-      <div className="border-b border-gray-200 dark:border-gray-700 p-3 bg-white dark:bg-gray-800">
-        <div className="flex items-center gap-3">
-          <div className="text-lg">✅</div>
-          <div className="flex-1">
-            <div className="text-sm font-medium text-green-600 dark:text-green-400">
-              {setupStep === 'ready'
-                ? 'Development Server Running'
-                : statusMessage}
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-              {previewUrl || 'No URL available'}
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={startDevServer}
-              disabled={!webContainer}
-              className="px-3 py-1 text-xs bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors disabled:opacity-50"
-            >
-              🔄 Restart Dev Server
-            </button>
-            {previewUrl && (
-              <button
-                onClick={() => window.open(previewUrl, '_blank')}
-                className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-              >
-                Open in New Tab
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* iframe with the running app - 80% height */}
-      <div style={{ height: '80%' }}>
+      {/* iframe with the running app - 75% height */}
+      <div style={{ height: '75%' }}>
         {previewUrl ? (
           <iframe
             src={previewUrl}
@@ -217,26 +191,54 @@ export function WebContainerPreview() {
         )}
       </div>
 
-      {/* Terminal output - 20% height */}
+      {/* Terminal output - 25% height */}
       <div
-        className="border-t border-gray-200 dark:border-gray-700 bg-black text-green-400"
-        style={{ height: '20%' }}
+        className="border-t border-gray-200 dark:border-gray-700 bg-black text-green-400 flex flex-col"
+        style={{ height: '25%' }}
       >
-        <div className="p-2 border-b border-gray-700 bg-gray-900 flex items-center justify-between">
-          <div className="text-xs font-medium text-gray-300">
-            Terminal Output
+        <div className="p-2 border-b border-gray-700 bg-gray-900 flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-2 flex-1">
+            <div className="text-xs font-medium text-gray-300">
+              Terminal Output
+            </div>
+            {setupStep === 'ready' && previewUrl && (
+              <div className="text-xs text-green-500">● Server Running</div>
+            )}
           </div>
-          <button
-            onClick={() => setTerminalOutput([])}
-            className="text-xs text-gray-400 hover:text-gray-200 transition-colors"
-          >
-            Clear
-          </button>
+          <div className="flex items-center gap-2">
+            {previewUrl && (
+              <button
+                onClick={() => window.open(previewUrl, '_blank')}
+                className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              >
+                Open in New Tab
+              </button>
+            )}
+            <button
+              onClick={startDevServer}
+              disabled={!webContainer}
+              className="px-2 py-1 text-xs bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors disabled:opacity-50"
+            >
+              🔄 Restart
+            </button>
+            <button
+              onClick={() => setTerminalOutput([])}
+              className="text-xs text-gray-400 hover:text-gray-200 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
         </div>
-        <div className="font-mono text-xs p-2 h-full overflow-y-auto">
+        <div
+          ref={terminalRef}
+          className="font-mono text-xs p-2 flex-1 overflow-y-auto overflow-x-hidden"
+        >
           {terminalOutput.length > 0 ? (
             terminalOutput.map((line, index) => (
-              <div key={index} className="mb-1 leading-tight">
+              <div
+                key={index}
+                className="mb-1 leading-tight whitespace-pre-wrap break-words"
+              >
                 {line}
               </div>
             ))
