@@ -100,7 +100,11 @@ export function WebContainerPreview() {
               {/* Progress Steps */}
               <div className="space-y-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="text-2xl">{getStepIcon('mounting')}</div>
+                  <div
+                    className={`text-2xl ${setupStep === 'mounting' ? 'animate-pulse' : ''}`}
+                  >
+                    {getStepIcon('mounting')}
+                  </div>
                   <div
                     className={`flex-1 ${getStepColor(setupStep === 'mounting' ? 'mounting' : setupStep === 'installing' || setupStep === 'starting' || setupStep === 'ready' ? 'ready' : 'mounting')}`}
                   >
@@ -112,7 +116,11 @@ export function WebContainerPreview() {
                     '✓'}
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="text-2xl">{getStepIcon('installing')}</div>
+                  <div
+                    className={`text-2xl ${setupStep === 'installing' ? 'animate-spin' : ''}`}
+                  >
+                    {getStepIcon('installing')}
+                  </div>
                   <div
                     className={`flex-1 ${getStepColor(setupStep === 'installing' ? 'installing' : setupStep === 'starting' || setupStep === 'ready' ? 'ready' : 'mounting')}`}
                   >
@@ -121,7 +129,11 @@ export function WebContainerPreview() {
                   {(setupStep === 'starting' || setupStep === 'ready') && '✓'}
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="text-2xl">{getStepIcon('starting')}</div>
+                  <div
+                    className={`text-2xl ${setupStep === 'starting' ? 'animate-bounce' : ''}`}
+                  >
+                    {getStepIcon('starting')}
+                  </div>
                   <div
                     className={`flex-1 ${getStepColor(setupStep === 'starting' ? 'starting' : setupStep === 'ready' ? 'ready' : 'mounting')}`}
                   >

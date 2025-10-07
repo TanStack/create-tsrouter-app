@@ -34,6 +34,13 @@ export function launchUI(
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
 
+  // Add headers required for WebContainer (SharedArrayBuffer support)
+  app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp')
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
+    next()
+  })
+
   const packagePath = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
   const launchUI = !process.env.CTA_DISABLE_UI
