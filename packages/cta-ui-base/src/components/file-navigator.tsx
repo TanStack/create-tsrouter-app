@@ -204,39 +204,39 @@ export default function FileNavigator() {
   }
 
   return (
-    <div className="bg-white dark:bg-black/50 rounded-lg p-2 sm:p-4">
-      {mode === 'add' && <Filters />}
-      <Tabs defaultValue="files" className="w-full">
-        <TabsList className="mb-2">
-          <TabsTrigger value="files">Files</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-        </TabsList>
+    <WebContainerProvider projectFiles={webContainerFiles}>
+      <div className="bg-white dark:bg-black/50 rounded-lg p-2 sm:p-4">
+        {mode === 'add' && <Filters />}
+        <Tabs defaultValue="files" className="w-full">
+          <TabsList className="mb-2">
+            <TabsTrigger value="files">Files</TabsTrigger>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="files" className="mt-0">
-          <div className="flex flex-row @container">
-            <div className="w-1/3 @6xl:w-1/4 bg-gray-500/10 rounded-l-lg">
-              <FileTree selectedFile={selectedFile} tree={fileTree} />
+          <TabsContent value="files" className="mt-0">
+            <div className="flex flex-row @container">
+              <div className="w-1/3 @6xl:w-1/4 bg-gray-500/10 rounded-l-lg">
+                <FileTree selectedFile={selectedFile} tree={fileTree} />
+              </div>
+              <div className="w-2/3 @6xl:w-3/4">
+                {selectedFile && modifiedFileContents ? (
+                  <FileViewer
+                    filePath={selectedFile}
+                    originalFile={originalFileContents}
+                    modifiedFile={modifiedFileContents}
+                  />
+                ) : null}
+              </div>
             </div>
-            <div className="w-2/3 @6xl:w-3/4">
-              {selectedFile && modifiedFileContents ? (
-                <FileViewer
-                  filePath={selectedFile}
-                  originalFile={originalFileContents}
-                  modifiedFile={modifiedFileContents}
-                />
-              ) : null}
-            </div>
-          </div>
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="preview" className="mt-0">
-          <div className="h-[800px]">
-            <WebContainerProvider projectFiles={webContainerFiles}>
+          <TabsContent value="preview" className="mt-0">
+            <div className="h-[800px]">
               <WebContainerPreview />
-            </WebContainerProvider>
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </WebContainerProvider>
   )
 }

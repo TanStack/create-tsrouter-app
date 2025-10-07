@@ -22,6 +22,7 @@ type WebContainerStore = {
   error: string | null
   devProcess: WebContainerProcess | null
   projectFiles: Array<{ path: string; content: string }>
+  isInstalling: boolean
 
   teardown: () => void
   updateProjectFiles: (
@@ -79,6 +80,7 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
     error: null,
     devProcess: null,
     projectFiles: [],
+    isInstalling: false,
 
     teardown: () => {
       set({ webContainer: null, ready: false })
@@ -176,7 +178,6 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
         throw new Error('WebContainer not found')
       }
 
-      console.log('Awaiting WebContainer boot...')
       try {
         const container = await webContainer
         if (!container) {
@@ -198,13 +199,11 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
       let packageJSONChanged = false
       const binaryFiles: Record<string, Uint8Array> = {}
       if (originalProjectFiles.length === 0) {
-        console.log('Mounting files...', projectFiles.length, 'files')
         const fileSystemTree: FileSystemTree = {}
         let base64FileCount = 0
 
         for (const { path, content } of projectFiles) {
           const cleanPath = path.replace(/^\.?\//, '')
-          console.log(path, cleanPath)
           const pathParts = cleanPath.split('/')
 
           let current: any = fileSystemTree
@@ -225,42 +224,20 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
           if (adjustedContent.startsWith('base64::')) {
             base64FileCount++
             const base64Content = adjustedContent.replace('base64::', '')
-            console.log(
-              `[BINARY FILE] ${cleanPath}: ${base64Content.substring(0, 50)}... (${base64Content.length} chars)`,
-            )
 
             try {
-              if (cleanPath === 'public/tanstack-circle-logo.png') {
-                console.log(base64Content)
-              }
-              // More robust base64 to Uint8Array conversion
-              // Handle potential padding issues and ensure proper decoding
               const base64Cleaned = base64Content.replace(/\s/g, '')
               const binaryString = atob(base64Cleaned)
               const bytes = new Uint8Array(binaryString.length)
               for (let i = 0; i < binaryString.length; i++) {
                 bytes[i] = binaryString.charCodeAt(i) & 0xff
               }
-              console.log(
-                `[BINARY CONVERTED] ${cleanPath}: ${bytes.length} bytes, first bytes: [${Array.from(bytes.slice(0, 10)).join(', ')}]`,
-              )
               binaryFiles[cleanPath] = bytes
-              // current[fileName] = {
-              //   file: {
-              //     contents: bytes,
-              //   },
-              // }
             } catch (error) {
               console.error(
                 `[BINARY ERROR] Failed to convert ${cleanPath}:`,
                 error,
               )
-              // Fallback to empty file if conversion fails
-              // current[fileName] = {
-              //   file: {
-              //     contents: new Uint8Array(0),
-              //   },
-              // }
             }
           } else {
             current[fileName] = {
@@ -271,9 +248,6 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
           }
         }
 
-        console.log(
-          `FileSystemTree created with ${base64FileCount} binary files`,
-        )
         await container.mount(fileSystemTree)
         for (const [path, bytes] of Object.entries(binaryFiles)) {
           await container.fs.writeFile(path, bytes)
@@ -281,7 +255,6 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
         addTerminalOutput(
           `📁 Files mounted successfully (${base64FileCount} binary files)`,
         )
-        console.log('Files mounted successfully')
         packageJSONChanged = true
       } else {
         const originalMap = new Map<string, string>()
@@ -310,6 +283,17 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
         }
 
         if (changedOrNewFiles.length > 0 || deletedFiles.length > 0) {
+          // Kill dev server before updating files to avoid HMR issues
+          const { devProcess } = get()
+          if (devProcess) {
+            console.log('Stopping dev server before file update...')
+            addTerminalOutput(
+              '⏸️  Stopping dev server before updating files...',
+            )
+            devProcess.kill()
+            set({ devProcess: null, previewUrl: null })
+          }
+
           for (const { path, content } of changedOrNewFiles) {
             await container.fs.writeFile(path, content)
           }
@@ -336,14 +320,24 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
       }
     },
     installDependencies: async () => {
-      const { webContainer, addTerminalOutput, startDevServer } = get()
+      const { webContainer, addTerminalOutput, startDevServer, isInstalling } =
+        get()
+
+      if (isInstalling) {
+        console.log('Install already in progress, skipping')
+        return
+      }
+
       if (!webContainer) {
         throw new Error('WebContainer not found')
       }
 
+      set({ isInstalling: true })
+
       try {
         const container = await webContainer
         if (!container) {
+          set({ isInstalling: false })
           throw new Error('WebContainer not found')
         }
 
@@ -361,12 +355,13 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
           installProcess = await container.spawn('pnpm', ['install'])
           console.log('pnpm install process spawned successfully')
         } catch (spawnError) {
-          console.error('Failed to spawn npm install:', spawnError)
+          console.error('Failed to spawn pnpm install:', spawnError)
           throw spawnError
         }
 
         let outputCount = 0
         let lastProgressUpdate = Date.now()
+        let allOutput: string[] = []
         let progressInterval = setInterval(() => {
           const elapsed = Math.floor((Date.now() - lastProgressUpdate) / 1000)
           console.log(
@@ -378,6 +373,7 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
           new WritableStream({
             write(data) {
               outputCount++
+              allOutput.push(data)
 
               const cleaned = processTerminalLine(data)
 
@@ -390,12 +386,17 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
                   cleaned.includes('audited') ||
                   cleaned.includes('packages') ||
                   cleaned.includes('error') ||
-                  cleaned.includes('warn')
+                  cleaned.includes('warn') ||
+                  cleaned.includes('ERR') ||
+                  cleaned.includes('FAIL')
 
                 if (isImportant) {
                   console.log('[INSTALL]', cleaned)
                   addTerminalOutput(cleaned)
-                  clearInterval(progressInterval)
+                  if (isImportant && progressInterval) {
+                    clearInterval(progressInterval)
+                    progressInterval = undefined as any
+                  }
                 }
               }
             },
@@ -404,13 +405,16 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
 
         console.log('Waiting for install to complete...')
         const installExitCode = await installProcess.exit
-        clearInterval(progressInterval)
+        if (progressInterval) clearInterval(progressInterval)
         console.log('Install exit code:', installExitCode)
         console.log('Total output lines:', outputCount)
 
         if (installExitCode !== 0) {
+          // Show all output for debugging
+          console.error('[INSTALL ERROR] All output:', allOutput.join('\n'))
           const errorMsg = `pnpm install failed with exit code ${installExitCode}`
           addTerminalOutput(`❌ ${errorMsg}`)
+          addTerminalOutput('💡 Check console for detailed error output')
           set({ error: errorMsg, setupStep: 'error' })
           throw new Error(errorMsg)
         }
@@ -423,6 +427,8 @@ export default function createWebContainerStore(shouldShimALS: boolean) {
         addTerminalOutput(`❌ Install error: ${(error as Error).message}`)
         set({ error: (error as Error).message, setupStep: 'error' })
         throw error
+      } finally {
+        set({ isInstalling: false })
       }
     },
   }))
