@@ -45,7 +45,11 @@ export async function generateInitialPayload() {
 
   const localFiles =
     applicationMode === 'add'
-      ? await cleanUpFiles(await recursivelyGatherFiles(projectPath, false))
+      ? await cleanUpFiles(
+          await recursivelyGatherFiles(projectPath, false),
+          undefined,
+          true,
+        )
       : {}
 
   const forcedRouterMode = getForcedRouterMode()
