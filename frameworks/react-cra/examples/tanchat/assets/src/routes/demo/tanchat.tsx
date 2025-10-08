@@ -80,9 +80,11 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                 {parts.map((part, index) => {
                   if (part.type === 'text') {
                     return (
-                      <div className="flex-1 min-w-0" key={index}>
+                      <div
+                        className="flex-1 min-w-0 prose dark:prose-invert max-w-none prose-sm"
+                        key={index}
+                      >
                         <ReactMarkdown
-                          className="prose dark:prose-invert max-w-none"
                           rehypePlugins={[
                             rehypeRaw,
                             rehypeSanitize,

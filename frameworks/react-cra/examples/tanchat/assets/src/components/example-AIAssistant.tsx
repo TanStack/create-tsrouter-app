@@ -60,9 +60,8 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                       Y
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 text-white prose dark:prose-invert max-w-none prose-sm">
                     <ReactMarkdown
-                      className="prose dark:prose-invert max-w-none prose-sm"
                       rehypePlugins={[
                         rehypeRaw,
                         rehypeSanitize,
