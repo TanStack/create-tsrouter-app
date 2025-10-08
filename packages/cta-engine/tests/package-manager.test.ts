@@ -69,7 +69,7 @@ describe('getPackageManagerExecuteCommand', () => {
       formatCommand(
         getPackageManagerExecuteCommand('npm', 'shadcn', ['add', 'button']),
       ),
-    ).toBe('npx shadcn add button')
+    ).toBe('npx -y shadcn add button')
   })
 })
 

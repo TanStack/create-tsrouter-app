@@ -57,7 +57,7 @@ export function getPackageManagerExecuteCommand(
     case 'deno':
       return { command: 'deno', args: ['run', `npm:${pkg}`, ...args] }
     default:
-      return { command: 'npx', args: [pkg, ...args] }
+      return { command: 'npx', args: ['-y', pkg, ...args] }
   }
 }
 
