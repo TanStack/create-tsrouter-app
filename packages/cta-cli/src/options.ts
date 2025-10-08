@@ -13,11 +13,11 @@ import {
   promptForAddOnOptions,
   selectAddOns,
   selectGit,
+  selectHost,
   selectPackageManager,
   selectRouterType,
   selectTailwind,
   selectToolchain,
-  selectHost,
   selectTypescript,
 } from './ui-prompts.js'
 
@@ -145,7 +145,10 @@ export async function promptForCreateOptions(
     options.addOnOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
   } else {
     // Interactive mode: prompt for options
-    const userOptions = await promptForAddOnOptions(options.chosenAddOns.map(a => a.id), options.framework)
+    const userOptions = await promptForAddOnOptions(
+      options.chosenAddOns.map((a) => a.id),
+      options.framework,
+    )
     const defaultOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
     // Merge user options with defaults
     options.addOnOptions = { ...defaultOptions, ...userOptions }

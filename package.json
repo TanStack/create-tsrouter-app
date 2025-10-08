@@ -7,7 +7,7 @@
     "cleanNodeModules": "rm -rf node_modules && pnpm -r exec rm -rf node_modules",
     "build": "nx run-many --target=build --parallel 5",
     "cipublish": "node scripts/publish.js",
-    "dev": "nx run-many --target=dev --parallel 10",
+    "dev": "nx run-many --target=dev --parallel 20",
     "test": "nx run-many -t test",
     "check-outdated": "node scripts/check-outdated-packages.js",
     "update-outdated": "node scripts/check-outdated-packages.js --update",
@@ -45,7 +45,10 @@
   "workspaces": [
     "./cli/*",
     "./packages/*",
-    "./frameworks/*"
+    "./frameworks/*",
+    "./examples/*",
+    "./examples/custom-cli/*",
+    "./examples/custom-cli/*/customized-ui/*"
   ],
   "dependencies": {
     "@tanstack/config": "^0.16.2"

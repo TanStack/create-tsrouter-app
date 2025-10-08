@@ -19,6 +19,7 @@ export async function normalizeOptions(
   forcedAddOns?: Array<string>,
   opts?: {
     disableNameCheck?: boolean
+    forcedHost?: string
   },
 ): Promise<Options | undefined> {
   const projectName = (cliOptions.projectName ?? '').trim()
@@ -94,8 +95,8 @@ export async function normalizeOptions(
         selectedAddOns.add(cliOptions.host)
       }
 
-      if (!cliOptions.host) {
-        selectedAddOns.add('nitro')
+      if (!cliOptions.host && opts?.forcedHost) {
+        selectedAddOns.add(opts.forcedHost)
       }
 
       return await finalizeAddOns(framework, mode, Array.from(selectedAddOns))
@@ -137,7 +138,7 @@ export async function normalizeOptions(
     chosenAddOns,
     addOnOptions: {
       ...populateAddOnOptionsDefaults(chosenAddOns),
-      ...addOnOptionsFromCLI
+      ...addOnOptionsFromCLI,
     },
     starter: starter,
   }

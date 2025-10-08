@@ -13,7 +13,6 @@ import {
   createApp,
   createSerializedOptions,
   getAllAddOns,
-  getFrameworkById,
   getFrameworkByName,
   getFrameworks,
   initAddOn,
@@ -41,6 +40,7 @@ export function cli({
   forcedMode,
   forcedAddOns = [],
   defaultTemplate = 'javascript',
+  forcedHost,
   defaultFramework,
   craCompatible = false,
   webBase,
@@ -49,6 +49,7 @@ export function cli({
   appName: string
   forcedMode?: string
   forcedAddOns?: Array<string>
+  forcedHost?: string
   defaultTemplate?: TemplateOptions
   defaultFramework?: string
   craCompatible?: boolean
@@ -353,7 +354,10 @@ Remove your node_modules directory and package lock file and re-install.`,
       },
     )
     .option('--list-add-ons', 'list all available add-ons', false)
-    .option('--addon-details <addon-id>', 'show detailed information about a specific add-on')
+    .option(
+      '--addon-details <addon-id>',
+      'show detailed information about a specific add-on',
+    )
     .option('--no-git', 'do not create a git repository')
     .option(
       '--target-dir <path>',
@@ -362,7 +366,10 @@ Remove your node_modules directory and package lock file and re-install.`,
     .option('--mcp', 'run the MCP server', false)
     .option('--mcp-sse', 'run the MCP server in SSE mode', false)
     .option('--ui', 'Add with the UI')
-    .option('--add-on-config <config>', 'JSON string with add-on configuration options')
+    .option(
+      '--add-on-config <config>',
+      'JSON string with add-on configuration options',
+    )
 
   program.action(async (projectName: string, options: CliOptions) => {
     if (options.listAddOns) {
@@ -373,10 +380,13 @@ Remove your node_modules directory and package lock file and re-install.`,
       )
       let hasConfigurableAddOns = false
       for (const addOn of addOns.filter((a) => !forcedAddOns.includes(a.id))) {
-        const hasOptions = addOn.options && Object.keys(addOn.options).length > 0
+        const hasOptions =
+          addOn.options && Object.keys(addOn.options).length > 0
         const optionMarker = hasOptions ? '*' : ' '
         if (hasOptions) hasConfigurableAddOns = true
-        console.log(`${optionMarker} ${chalk.bold(addOn.id)}: ${addOn.description}`)
+        console.log(
+          `${optionMarker} ${chalk.bold(addOn.id)}: ${addOn.description}`,
+        )
       }
       if (hasConfigurableAddOns) {
         console.log('\n* = has configuration options')
@@ -392,22 +402,26 @@ Remove your node_modules directory and package lock file and re-install.`,
         console.error(`Add-on '${options.addonDetails}' not found`)
         process.exit(1)
       }
-      
-      console.log(`${chalk.bold.cyan('Add-on Details:')} ${chalk.bold(addOn.name)}`)
+
+      console.log(
+        `${chalk.bold.cyan('Add-on Details:')} ${chalk.bold(addOn.name)}`,
+      )
       console.log(`${chalk.bold('ID:')} ${addOn.id}`)
       console.log(`${chalk.bold('Description:')} ${addOn.description}`)
       console.log(`${chalk.bold('Type:')} ${addOn.type}`)
       console.log(`${chalk.bold('Phase:')} ${addOn.phase}`)
       console.log(`${chalk.bold('Supported Modes:')} ${addOn.modes.join(', ')}`)
-      
+
       if (addOn.link) {
         console.log(`${chalk.bold('Link:')} ${chalk.blue(addOn.link)}`)
       }
-      
+
       if (addOn.dependsOn && addOn.dependsOn.length > 0) {
-        console.log(`${chalk.bold('Dependencies:')} ${addOn.dependsOn.join(', ')}`)
+        console.log(
+          `${chalk.bold('Dependencies:')} ${addOn.dependsOn.join(', ')}`,
+        )
       }
-      
+
       if (addOn.options && Object.keys(addOn.options).length > 0) {
         console.log(`\n${chalk.bold.yellow('Configuration Options:')}`)
         for (const [optionName, option] of Object.entries(addOn.options)) {
@@ -431,7 +445,7 @@ Remove your node_modules directory and package lock file and re-install.`,
       } else {
         console.log(`\n${chalk.gray('No configuration options available')}`)
       }
-      
+
       if (addOn.routes && addOn.routes.length > 0) {
         console.log(`\n${chalk.bold.green('Routes:')}`)
         for (const route of addOn.routes) {
@@ -468,6 +482,7 @@ Remove your node_modules directory and package lock file and re-install.`,
             cliOptions,
             defaultMode,
             forcedAddOns,
+            { forcedHost },
           )
         }
 
@@ -476,7 +491,7 @@ Remove your node_modules directory and package lock file and re-install.`,
             cliOptions,
             defaultMode,
             forcedAddOns,
-            { disableNameCheck: true },
+            { disableNameCheck: true, forcedHost },
           )
           const options = {
             ...createSerializedOptions(optionsFromCLI!),

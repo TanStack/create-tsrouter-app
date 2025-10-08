@@ -3,3 +3,4 @@ packages:
   - 'cli/*'
   - 'frameworks/*'
   - 'examples/custom-cli/*'
+  - 'examples/custom-cli/*/customized-ui'

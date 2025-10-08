@@ -10,5 +10,6 @@ registerSolid()
 cli({
   name: 'create-tsrouter-app',
   appName: 'TanStack',
+  forcedHost: 'nitro',
   craCompatible: true,
 })
