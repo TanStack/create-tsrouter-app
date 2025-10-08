@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { anthropic } from '@ai-sdk/anthropic'
-import { convertToModelMessages, stepCountIs, streamText } from 'ai'
+<% if (addOnEnabled['netlify']) { %>import { createAnthropic } from '@ai-sdk/anthropic'
+<% } else { %>import { anthropic } from '@ai-sdk/anthropic'
+<% } %>import { convertToModelMessages, stepCountIs, streamText } from 'ai'
 
 import getTools from '@/utils/demo.tools'
 
@@ -11,7 +12,16 @@ You can use the following tools to help the user:
 - getGuitars: Get all guitars from the database
 - recommendGuitar: Recommend a guitar to the user
 `
-
+<% if (addOnEnabled['netlify']) { %>const anthropic = createAnthropic({
+  baseURL: process.env.ANTHROPIC_BASE_URL
+    ? `${process.env.ANTHROPIC_BASE_URL}/v1`
+    : undefined,
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  headers: {
+    'user-agent': 'anthropic/',
+  },
+})
+<% } %>
 export const Route = createFileRoute('/api/demo-chat')({
   server: {
     handlers: {
@@ -22,7 +32,7 @@ export const Route = createFileRoute('/api/demo-chat')({
           const tools = await getTools()
 
           const result = await streamText({
-            model: anthropic('claude-3-5-sonnet-latest'),
+            model: anthropic('<% if (addOnEnabled['netlify']) { %>claude-sonnet-4-5-20250929<% } else { %>claude-3-5-sonnet-latest<% } %>'),
             messages: convertToModelMessages(messages),
             temperature: 0.7,
             stopWhen: stepCountIs(5),
