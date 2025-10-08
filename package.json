@@ -38,6 +38,7 @@
       "@tanstack/cta-cli": "workspace:*",
       "@tanstack/cta-engine": "workspace:*",
       "@tanstack/cta-ui": "workspace:*",
+      "@tanstack/cta-ui-base": "workspace:*",
       "@tanstack/cta-framework-react-cra": "workspace:*",
       "@tanstack/cta-framework-solid": "workspace:*"
     }
