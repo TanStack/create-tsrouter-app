@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/cta-engine",
-  "version": "0.32.0",
+  "version": "0.32.1",
   "description": "Tanstack Application Builder Engine",
   "type": "module",
   "main": "./dist/index.js",
