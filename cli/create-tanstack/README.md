@@ -46,7 +46,7 @@ Available options:
 - `--template <type>`: Choose between `file-router`, `typescript`, or `javascript`
 - `--tailwind`: Enable Tailwind CSS
 - `--package-manager`: Specify your preferred package manager (`npm`, `yarn`, `pnpm`, `bun`, or `deno`)
-- `--toolchain`: Specify your toolchain solution for formatting/linting (`biome`, `eslint+prettier`)
+- `--toolchain`: Specify your toolchain solution for formatting/linting (`biome`, `eslint`)
 - `--no-git`: Do not initialize a git repository
 - `--add-ons`: Enable add-on selection or specify add-ons to install
 
@@ -102,7 +102,7 @@ Choose your preferred solution for formatting and linting either through the int
 
 Setting this flag to `biome` will configure it as your toolchain of choice, adding a `biome.json` to the root of the project. Consult the [biome documentation](https://biomejs.dev/guides/getting-started/) for further customization.
 
-Setting this flag to `eslint+prettier` will configure it as your toolchain of choice, adding an `eslint.config.js` and `prettier.config.js` to the root of the project, as well as a `.prettierignore` file. Consult the [eslint documentation](https://eslint.org/docs/latest/) and [prettier documentation](https://prettier.io/docs/) for further customization.
+Setting this flag to `eslint` will configure it as your toolchain of choice, adding an `eslint.config.js` and `prettier.config.js` to the root of the project, as well as a `.prettierignore` file. Consult the [eslint documentation](https://eslint.org/docs/latest/) and [prettier documentation](https://prettier.io/docs/) for further customization.
 
 ## Add-ons (experimental)
 
