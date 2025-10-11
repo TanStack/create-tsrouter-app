@@ -4,6 +4,7 @@
   "phase": "example",
   "modes": ["file-router"],
   "type": "example",
+  "priority": 10,
   "link": "",
   "routes": [
     {

@@ -4,6 +4,7 @@
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",
+  "priority": 160,
   "link": "https://workos.com",
   "tailwind": true,
   "routes": [

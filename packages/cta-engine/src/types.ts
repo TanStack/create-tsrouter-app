@@ -38,6 +38,7 @@ export const AddOnBaseSchema = z.object({
   license: z.string().optional(),
   warning: z.string().optional(),
   type: z.enum(['add-on', 'example', 'starter', 'toolchain', 'host']),
+  priority: z.number().optional(),
   command: z
     .object({
       command: z.string(),

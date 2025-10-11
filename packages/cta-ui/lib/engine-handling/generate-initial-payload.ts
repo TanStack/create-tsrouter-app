@@ -28,6 +28,7 @@ function convertAddOnToAddOnInfo(addOn: AddOn): AddOnInfo {
   return {
     id: addOn.id,
     name: addOn.name,
+    priority: addOn.priority,
     description: addOn.description,
     modes: addOn.modes as Array<'code-router' | 'file-router'>,
     type: addOn.type,

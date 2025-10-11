@@ -6,6 +6,7 @@
   "link": "https://trpc.io/",
   "dependsOn": ["tanstack-query", "start"],
   "type": "add-on",
+  "priority": 27,
   "routes": [
     {
       "icon": "Network",

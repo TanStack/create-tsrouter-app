@@ -4,5 +4,6 @@
   "phase": "add-on",
   "modes": ["code-router"],
   "link": "https://module-federation.io/",
-  "type": "add-on"
+  "type": "add-on",
+  "priority": 38
 }

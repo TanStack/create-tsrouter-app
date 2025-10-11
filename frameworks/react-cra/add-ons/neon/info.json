@@ -4,6 +4,7 @@
   "link": "https://neon.com",
   "phase": "add-on",
   "type": "add-on",
+  "priority": 170,
   "modes": ["file-router"],
   "routes": [
     {

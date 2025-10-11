@@ -1,4 +1,8 @@
-import type { StatusStepType, AddOnOption, AddOnOptions } from '@tanstack/cta-engine'
+import type {
+  StatusStepType,
+  AddOnOption,
+  AddOnOptions,
+} from '@tanstack/cta-engine'
 
 export type ApplicationMode = 'add' | 'setup' | 'none'
 
@@ -35,6 +39,7 @@ export type AddOnInfo = {
   type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'host'
   modes: Array<string>
   smallLogo?: string
+  priority?: number
   logo?: string
   link: string
   dependsOn?: Array<string>

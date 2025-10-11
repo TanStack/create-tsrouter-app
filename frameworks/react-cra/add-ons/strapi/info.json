@@ -4,9 +4,8 @@
   "link": "https://strapi.io/",
   "phase": "add-on",
   "type": "add-on",
-  "modes": [
-    "file-router"
-  ],
+  "priority": 110,
+  "modes": ["file-router"],
   "routes": [
     {
       "url": "/demo/strapi",

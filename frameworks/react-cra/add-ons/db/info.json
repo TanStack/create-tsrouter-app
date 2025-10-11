@@ -3,6 +3,7 @@
   "description": "TanStack DB",
   "phase": "add-on",
   "type": "add-on",
+  "priority": 50,
   "modes": ["file-router"],
   "link": "https://tanstack.com/db/latest",
   "dependsOn": ["tanstack-query", "start"],

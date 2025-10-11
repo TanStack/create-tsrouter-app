@@ -27,7 +27,12 @@ export default function SelectedAddOns() {
 
   const sortedAddOns = useMemo(() => {
     return availableAddOns.sort((a, b) => {
-      return a.name.localeCompare(b.name)
+      const aPriority = a.priority ?? 0
+      const bPriority = b.priority ?? 0
+      if (bPriority !== aPriority) {
+        return bPriority - aPriority // Higher priority first
+      }
+      return a.name.localeCompare(b.name) // Fallback to alphabetical
     })
   }, [availableAddOns])
 

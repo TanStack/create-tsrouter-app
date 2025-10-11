@@ -5,6 +5,7 @@
   "modes": ["file-router"],
   "link": "https://storybook.js.org/",
   "type": "add-on",
+  "priority": 18,
   "routes": [
     {
       "icon": "BookOpen",
