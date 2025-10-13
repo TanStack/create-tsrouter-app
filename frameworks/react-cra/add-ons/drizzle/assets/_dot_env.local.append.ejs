@@ -1,0 +1,7 @@
+<% if (addOnOption.drizzle.database === 'postgresql') { %>
+# Database URL for PostgreSQL
+DATABASE_URL="postgresql://username:password@localhost:5432/mydb"<% } else if (addOnOption.drizzle.database === 'mysql') { %>
+# Database URL for MySQL
+DATABASE_URL="mysql://username:password@localhost:3306/mydb"<% } else if (addOnOption.drizzle.database === 'sqlite') { %>
+# Database URL for SQLite
+DATABASE_URL="file:./dev.db"<% } %>
