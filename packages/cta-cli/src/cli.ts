@@ -44,6 +44,7 @@ export function cli({
   defaultFramework,
   craCompatible = false,
   webBase,
+  showHostingOptions = false,
 }: {
   name: string
   appName: string
@@ -54,6 +55,7 @@ export function cli({
   defaultFramework?: string
   craCompatible?: boolean
   webBase?: string
+  showHostingOptions?: boolean
 }) {
   const environment = createUIEnvironment(appName, false)
 
@@ -200,6 +202,7 @@ Remove your node_modules directory and package lock file and re-install.`,
           forcedAddOns,
           environmentFactory: () => createUIEnvironment(appName, false),
           webBase,
+          showHostingOptions,
         })
       } else if (parsedAddOns.length < 1) {
         const addOns = await promptForAddOns()
@@ -505,6 +508,7 @@ Remove your node_modules directory and package lock file and re-install.`,
             forcedAddOns,
             environmentFactory: () => createUIEnvironment(appName, false),
             webBase,
+            showHostingOptions,
           })
           return
         }
@@ -516,6 +520,7 @@ Remove your node_modules directory and package lock file and re-install.`,
           finalOptions = await promptForCreateOptions(cliOptions, {
             forcedMode: defaultMode,
             forcedAddOns,
+            showHostingOptions,
           })
         }
 

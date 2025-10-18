@@ -30,9 +30,11 @@ export async function promptForCreateOptions(
   {
     forcedAddOns = [],
     forcedMode,
+    showHostingOptions = false,
   }: {
     forcedAddOns?: Array<string>
     forcedMode?: string
+    showHostingOptions?: boolean
   },
 ): Promise<Required<Options> | undefined> {
   const options = {} as Required<Options>
@@ -88,7 +90,9 @@ export async function promptForCreateOptions(
   )
 
   // Host selection
-  const host = await selectHost(options.framework, cliOptions.host)
+  const host = showHostingOptions
+    ? await selectHost(options.framework, cliOptions.host)
+    : undefined
 
   // Add-ons selection
   const addOns: Set<string> = new Set()
