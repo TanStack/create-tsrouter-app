@@ -5,6 +5,7 @@
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "host",
+  "priority": 0,
   "integrations": [
     {
       "type": "vite-plugin",

@@ -6,6 +6,7 @@
   "link": "https://orpc.unnoq.com/",
   "dependsOn": ["tanstack-query", "start"],
   "type": "add-on",
+  "priority": 34,
   "routes": [
     {
       "icon": "Network",

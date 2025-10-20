@@ -4,6 +4,7 @@
   "phase": "add-on",
   "link": "https://tanstack.com/store/latest",
   "type": "add-on",
+  "priority": 22,
   "modes": ["file-router", "code-router"],
   "routes": [
     {

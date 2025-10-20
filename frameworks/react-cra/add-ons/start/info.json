@@ -5,6 +5,7 @@
   "link": "https://tanstack.com/start/latest",
   "modes": ["file-router"],
   "type": "add-on",
+  "priority": 26,
   "routes": [
     {
       "icon": "SquareFunction",

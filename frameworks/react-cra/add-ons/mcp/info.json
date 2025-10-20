@@ -5,6 +5,7 @@
   "link": "https://mcp.dev",
   "modes": ["file-router"],
   "type": "add-on",
+  "priority": 42,
   "warning": "MCP is still in development and may change significantly or not be compatible with other add-ons.\nThe MCP implementation does not support authentication.",
   "routes": [
     {

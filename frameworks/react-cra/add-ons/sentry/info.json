@@ -5,6 +5,7 @@
   "link": "https://sentry.com/",
   "modes": ["file-router"],
   "type": "add-on",
+  "priority": 130,
   "routes": [
     {
       "url": "/demo/sentry/testing",

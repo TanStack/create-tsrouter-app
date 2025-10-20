@@ -12,6 +12,7 @@ cli({
   appName: 'TanStack Start',
   forcedMode: 'file-router',
   forcedAddOns: ['start'],
+  showHostingOptions: true,
   forcedHost: 'nitro',
   craCompatible: true,
 })

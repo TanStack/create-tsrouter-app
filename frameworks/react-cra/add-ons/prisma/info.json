@@ -3,6 +3,7 @@
   "description": "Add Prisma Postgres, or Prisma ORM with other DBs to your application.",
   "phase": "add-on",
   "type": "add-on",
+  "priority": 120,
   "link": "https://www.prisma.io/",
   "modes": ["file-router"],
   "dependsOn": ["start"],
