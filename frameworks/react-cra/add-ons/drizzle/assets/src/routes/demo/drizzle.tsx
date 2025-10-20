@@ -1,14 +1,14 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { db } from '@/db'
-import { desc } from 'drizzle-orm';
-import {todos} from "@/db/schema"
+import { desc } from 'drizzle-orm'
+import { todos } from '@/db/schema'
 
 const getTodos = createServerFn({
   method: 'GET',
 }).handler(async () => {
   return await db.query.todos.findMany({
-    orderBy: [desc(todos.createdAt)]
+    orderBy: [desc(todos.createdAt)],
   })
 })
 
@@ -17,7 +17,8 @@ const createTodo = createServerFn({
 })
   .inputValidator((data: { title: string }) => data)
   .handler(async ({ data }) => {
-    return await db.insert(todos).values({ title: data.title })
+    await db.insert(todos).values({ title: data.title })
+    return { success: true }
   })
 
 export const Route = createFileRoute('/demo/drizzle')({

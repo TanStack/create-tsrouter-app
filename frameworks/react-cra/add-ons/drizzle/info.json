@@ -3,7 +3,7 @@
   "description": "Add Drizzle ORM to your application.",
   "phase": "add-on",
   "type": "add-on",
-  "priority": 120,
+  "priority": 48,
   "link": "https://orm.drizzle.team/",
   "modes": ["file-router"],
   "dependsOn": ["start"],
