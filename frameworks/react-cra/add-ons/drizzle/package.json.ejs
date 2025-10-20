@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "drizzle-orm": "^0.39.0",
+    "drizzle-kit": "^0.30.0"<% if (addOnOption.drizzle.database === 'postgresql') { %>,
+    "pg": "^8.11.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>,
+    "mysql2": "^3.6.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>,
+    "better-sqlite3": "^9.4.0"<% } %>
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "tsx": "^4.0.0",
+    <% if (addOnOption.drizzle.database === 'postgresql') { %>
+    "@types/pg": "^8.10.0"<% } %><% if (addOnOption.drizzle.database === 'mysql') { %>
+    "@types/mysql2": "^3.6.0"<% } %><% if (addOnOption.drizzle.database === 'sqlite') { %>
+    "@types/better-sqlite3": "^7.6.0"<% } %>
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit pull",
+    "db:studio": "drizzle-kit studio"
+  }
+}
