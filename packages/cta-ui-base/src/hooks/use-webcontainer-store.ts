@@ -12,8 +12,6 @@ export type SetupStep =
   | 'ready'
   | 'error'
 
-console.log('>>> startup')
-
 type WebContainerStore = {
   webContainer: Promise<WebContainer> | null
   ready: boolean

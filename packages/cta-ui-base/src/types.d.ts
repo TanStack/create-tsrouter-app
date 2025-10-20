@@ -89,6 +89,7 @@ export type InitialData = {
   localFiles: Record<string, string>
   addOns: Record<string, Array<AddOnInfo>>
   applicationMode: ApplicationMode
+  showHostingOptions?: boolean
   forcedRouterMode?: string
   forcedAddOns?: Array<string>
   registry?: Registry | undefined

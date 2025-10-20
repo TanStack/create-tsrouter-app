@@ -1,25 +1,48 @@
-import { createFileRoute } from "@tanstack/solid-router"; <% if (!tailwind) { %>
-import logo from "../logo.svg"; import "../App.css"; <% } else { %> import {
+import { createFileRoute } from "@tanstack/solid-router";
+<% if (!tailwind) { %>
+import logo from "../logo.svg";
+import "../App.css";
+<% } else { %> import {
 Zap, Server, Route as RouteIcon, Shield, Waves, Sparkles, } from "lucide-solid";
-<% } %> export const Route = createFileRoute("/")({ component: App, }); function
-App() { <% if (tailwind) { %> const features = [ { icon:
-<Zap class="w-12 h-12 text-cyan-400" />, title: "Powerful Server Functions",
-description: "Write server-side code that seamlessly integrates with your client
-components. Type-safe, secure, and simple.", }, { icon:
-<Server class="w-12 h-12 text-cyan-400" />, title: "Flexible Server Side
-Rendering", description: "Full-document SSR, streaming, and progressive
-enhancement out of the box. Control exactly what renders where.", }, { icon:
-<RouteIcon class="w-12 h-12 text-cyan-400" />, title: "API Routes", description:
-"Build type-safe API endpoints alongside your application. No separate backend
-needed.", }, { icon: <Shield class="w-12 h-12 text-cyan-400" />, title:
-"Strongly Typed Everything", description: "End-to-end type safety from server to
-client. Catch errors before they reach production.", }, { icon:
-<Waves class="w-12 h-12 text-cyan-400" />, title: "Full Streaming Support",
-description: "Stream data from server to client progressively. Perfect for AI
-applications and real-time updates.", }, { icon:
-<Sparkles class="w-12 h-12 text-cyan-400" />, title: "Next Generation Ready",
-description: "Built from the ground up for modern web applications. Deploy
-anywhere JavaScript runs.", }, ]; return (
+<% } %>
+
+export const Route = createFileRoute("/")({ component: App, });
+
+function App() { <% if (tailwind) { %>
+  const features = [
+    {
+      icon: <Zap class="w-12 h-12 text-cyan-400" />,
+      title: "Powerful Server Functions",
+      description: "Write server-side code that seamlessly integrates with your client components. Type-safe, secure, and simple.",
+    },
+    {
+      icon: <Server class="w-12 h-12 text-cyan-400" />,
+      title: "Flexible Server Side Rendering",
+      description: "Full-document SSR, streaming, and progressive enhancement out of the box. Control exactly what renders where.",
+    },
+    {
+      icon: <RouteIcon class="w-12 h-12 text-cyan-400" />,
+      title: "API Routes",
+      description: "Build type-safe API endpoints alongside your application. No separate backend needed.",
+    },
+    {
+      icon: <Shield class="w-12 h-12 text-cyan-400" />,
+      title: "Strongly Typed Everything",
+      description: "End-to-end type safety from server to client. Catch errors before they reach production.",
+    },
+    {
+      icon: <Waves class="w-12 h-12 text-cyan-400" />,
+      title: "Full Streaming Support",
+      description: "Stream data from server to client progressively. Perfect for AI applications and real-time updates.",
+    },
+    {
+      icon: <Sparkles class="w-12 h-12 text-cyan-400" />,
+      title: "Next Generation Ready",
+      description: "Built from the ground up for modern web applications. Deploy anywhere JavaScript runs.",
+    },
+  ];
+
+return (
 <div
   class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900"
 >
