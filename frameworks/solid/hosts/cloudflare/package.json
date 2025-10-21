@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@cloudflare/vite-plugin": "^1.13.8"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.3"
+  }
+}

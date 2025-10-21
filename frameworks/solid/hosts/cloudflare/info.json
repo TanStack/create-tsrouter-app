@@ -1,0 +1,16 @@
+{
+  "name": "Cloudflare",
+  "description": "Cloudflare deployment setup",
+  "link": "https://developers.cloudflare.com/workers/vite-plugin/",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "type": "host",
+  "priority": 200,
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "import": "import { cloudflare } from '@cloudflare/vite-plugin'",
+      "code": "cloudflare({ viteEnvironment: { name: 'ssr' } })"
+    }
+  ]
+}
