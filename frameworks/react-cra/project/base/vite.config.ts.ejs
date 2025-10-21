@@ -2,22 +2,21 @@
 import viteReact from "@vitejs/plugin-react";<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite";
 <% } %><%if (fileRouter) { %>
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";<% } %><% if (addOnEnabled['module-federation']) { %>
+import { tanstackRouter } from "@tanstack/router-plugin/vite";<% } %><% if (addOnEnabled['module-federation']) { %>
 import { federation } from "@module-federation/vite";<% } %>
-import { resolve } from "node:path";<% if (addOnEnabled['module-federation']) { %>
+import { fileURLToPath, URL } from 'node:url';<% if (addOnEnabled['module-federation']) { %>
 import federationConfig from "./module-federation.config.js";<% } %><% for(const integration of integrations.filter(i => i.type === 'vite-plugin')) { %><%- integrationImportContent(integration) %>
 <% } %>
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [<% for(const integration of integrations.filter(i => i.type === 'vite-plugin')) { %><%- integrationImportCode(integration) %>,<% } %> <% if(fileRouter) { %>TanStackRouterVite({ autoCodeSplitting: true }), <% } %>viteReact()<% if (tailwind) { %>, tailwindcss()<% } %><% if (addOnEnabled['module-federation']) { %>, federation(federationConfig)<% } %>],
-  test: {
-    globals: true,
-    environment: "jsdom",
-  },
+  plugins: [<% for(const integration of integrations.filter(i => i.type === 'vite-plugin')) { %><%- integrationImportCode(integration) %>,<% } %> <% if(fileRouter) { %>tanstackRouter({
+    target: "react",
+    autoCodeSplitting: true,
+  }), <% } %>viteReact()<% if (tailwind) { %>, tailwindcss()<% } %><% if (addOnEnabled['module-federation']) { %>, federation(federationConfig)<% } %>],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   }
 });
