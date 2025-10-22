@@ -160,6 +160,7 @@ export type FrameworkDefinition = {
       forceTypescript: boolean
     }
   >
+  contentChecksum?: string
 }
 
 export type Framework = Omit<FrameworkDefinition, 'base' | 'addOns'> &

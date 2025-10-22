@@ -47,6 +47,7 @@ export function createFrameworkDefinition(): FrameworkDefinition {
         forceTypescript: true,
       },
     },
+    contentChecksum,
   }
 }
 
