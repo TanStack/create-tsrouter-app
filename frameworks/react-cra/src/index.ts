@@ -6,6 +6,9 @@ import {
   scanAddOnDirectories,
   scanProjectDirectory,
 } from '@tanstack/cta-engine'
+
+import { contentChecksum } from './checksum'
+
 import type { FrameworkDefinition } from '@tanstack/cta-engine'
 
 export function createFrameworkDefinition(): FrameworkDefinition {
@@ -50,3 +53,5 @@ export function createFrameworkDefinition(): FrameworkDefinition {
 export function register() {
   registerFramework(createFrameworkDefinition())
 }
+
+export { contentChecksum }
