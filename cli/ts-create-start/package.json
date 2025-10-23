@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/create-start",
-  "version": "0.34.4",
+  "version": "0.34.6",
   "description": "Tanstack Start Builder",
   "bin": "./dist/index.js",
   "type": "module",
