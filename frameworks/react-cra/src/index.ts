@@ -7,7 +7,7 @@ import {
   scanProjectDirectory,
 } from '@tanstack/cta-engine'
 
-import { contentChecksum } from './checksum'
+import { contentChecksum } from './checksum.js'
 
 import type { FrameworkDefinition } from '@tanstack/cta-engine'
 
