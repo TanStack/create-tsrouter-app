@@ -11,7 +11,6 @@ import "@fontsource/inter"
   for(const init of addOn.main?.initialize || []) { %>
   <%- init %>
 <% } } %>
-import { HydrationScript } from 'solid-js/web'
 
 import styleCss from "../styles.css?url";
 
@@ -24,30 +23,23 @@ export const Route = createRootRouteWithContext()({
 
 function RootComponent() {
   return (
-    <html>
-      <head>
-        <HydrationScript />
-        <HeadContent />
-      </head>
-      <body>
-        <Suspense>
-          <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
-            <<%= integration.jsName %>>
-          <% } %>
-          <% if (addOns.length || integrations.length || routes.length) { %>
-            <Header />
-          <% } %>
-          <Outlet />
-          <TanStackRouterDevtools />
-          <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
-            <<%= integration.jsName %> />
-          <% } %>
-          <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
-            </<%= integration.jsName %>>
-          <% } %>
-          </Suspense>
-        <Scripts />
-      </body>
-    </html>
+    <>
+      <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
+        <<%= integration.jsName %>>
+      <% } %>
+      <HeadContent />
+      <% if (addOns.length || integrations.length || routes.length) { %>
+        <Header />
+      <% } %>
+      <Outlet />
+      <TanStackRouterDevtools />
+      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
+        <<%= integration.jsName %> />
+      <% } %>
+      <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
+        </<%= integration.jsName %>>
+      <% } %>
+      <Scripts />
+    </>
   )
 }
