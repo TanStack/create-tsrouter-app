@@ -48,7 +48,7 @@ describe('getPackageManagerExecuteCommand', () => {
       formatCommand(
         getPackageManagerExecuteCommand('pnpm', 'shadcn', ['add', 'button']),
       ),
-    ).toBe('pnpx shadcn add button')
+    ).toBe('pnpm dlx shadcn add button')
   })
   it('bun', () => {
     expect(

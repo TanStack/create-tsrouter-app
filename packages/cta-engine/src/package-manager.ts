@@ -51,7 +51,7 @@ export function getPackageManagerExecuteCommand(
     case 'yarn':
       return { command: 'yarn', args: ['dlx', pkg, ...args] }
     case 'pnpm':
-      return { command: 'pnpx', args: [pkg, ...args] }
+      return { command: 'pnpm', args: ['dlx', pkg, ...args] }
     case 'bun':
       return { command: 'bunx', args: ['--bun', pkg, ...args] }
     case 'deno':
