@@ -147,7 +147,7 @@ function ChatPage() {
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type something clever (or don't, we won't judge)..."
+                placeholder="Type something clever..."
                 className="w-full rounded-lg border border-orange-500/20 bg-gray-800/50 pl-4 pr-12 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent resize-none overflow-hidden shadow-lg"
                 rows={1}
                 style={{ minHeight: '44px', maxHeight: '200px' }}
