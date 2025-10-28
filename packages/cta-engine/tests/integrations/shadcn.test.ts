@@ -52,8 +52,16 @@ describe('shadcn', () => {
 
     expect(output.commands).toEqual([
       {
-        command: 'pnpx',
-        args: ['shadcn@latest', 'add', '--silent', '--yes', 'button', 'card'],
+        command: 'pnpm',
+        args: [
+          'dlx',
+          'shadcn@latest',
+          'add',
+          '--silent',
+          '--yes',
+          'button',
+          'card',
+        ],
       },
     ])
   })
@@ -83,8 +91,16 @@ describe('shadcn', () => {
 
     expect(output.commands).toEqual([
       {
-        command: 'pnpx',
-        args: ['shadcn@latest', 'add', '--silent', '--yes', 'button', 'card'],
+        command: 'pnpm',
+        args: [
+          'dlx',
+          'shadcn@latest',
+          'add',
+          '--silent',
+          '--yes',
+          'button',
+          'card',
+        ],
       },
     ])
   })
