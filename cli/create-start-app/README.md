@@ -10,13 +10,13 @@ To maintain compatability with `create-react-app` you can build a new applicatio
 
 | Command                                                 | Description        |
 | ------------------------------------------------------- | ------------------ |
-| `pnpx create-start-app@latest my-app`                   | Create a new app   |
-| `pnpx create-start-app@latest my-app --framework solid` | Create a Solid app |
+| `pnpm dlx create-start-app@latest my-app`                   | Create a new app   |
+| `pnpm dlx create-start-app@latest my-app --framework solid` | Create a Solid app |
 
 If you don't specify a project name, the CLI will walk you through an interactive setup process:
 
 ```bash
-pnpx create-start-app@latest
+pnpm dlx create-start-app@latest
 ```
 
 This will start an interactive CLI that guides you through the setup process, allowing you to choose:
@@ -31,7 +31,7 @@ This will start an interactive CLI that guides you through the setup process, al
 You can also use command line flags to specify your preferences directly:
 
 ```bash
-pnpx create-start-app@latest my-app --tailwind --package-manager pnpm
+pnpm dlx create-start-app@latest my-app --tailwind --package-manager pnpm
 ```
 
 Available options:
@@ -70,7 +70,7 @@ Setting this flag to `eslint` will configure it as your toolchain of choice, add
 You can enable add-on selection:
 
 ```bash
-pnpx create-start-app@latest --add-ons
+pnpm dlx create-start-app@latest --add-ons
 ```
 
 This will prompt you to select the add-ons you want to enable during application creation.
@@ -78,19 +78,19 @@ This will prompt you to select the add-ons you want to enable during application
 You can enable specific add-ons directly by adding a comma separated list of add-on names to the `--add-ons` flag. For example:
 
 ```bash
-pnpx create-start-app@latest my-app --add-ons shadcn,tanstack-query
+pnpm dlx create-start-app@latest my-app --add-ons shadcn,tanstack-query
 ```
 
 You can get a list of all available add-ons by running:
 
 ```bash
-pnpx create-start-app@latest --list-add-ons
+pnpm dlx create-start-app@latest --list-add-ons
 ```
 
 This will get you a list of all available add-ons for Solid.
 
 ```bash
-pnpx create-start-app@latest --list-add-ons --framework solid
+pnpm dlx create-start-app@latest --list-add-ons --framework solid
 ```
 
 ## MCP (Model Context Protocol) Support (experimental)
@@ -98,7 +98,7 @@ pnpx create-start-app@latest --list-add-ons --framework solid
 You can launch the `create-start-app` CLI with the `--mcp` flag to enable MCP support. Use this in your MCP enabled IDE to allow the Agent model to generate TanStack Start applications.
 
 ```bash
-pnpx create-start-app@latest --mcp
+pnpm dlx create-start-app@latest --mcp
 ```
 
 Here is the JSON configuration for MCP support in many MCP clients.
@@ -107,7 +107,7 @@ Here is the JSON configuration for MCP support in many MCP clients.
 {
   "mcpServers": {
     "create-start-app": {
-      "command": "pnpx",
+      "command": "pnpm dlx",
       "args": ["create-start-app@latest", "--mcp"]
     }
   }
