@@ -1,4 +1,5 @@
-import { intro } from '@clack/prompts'
+import fs from 'node:fs'
+import { cancel, intro } from '@clack/prompts'
 
 import {
   finalizeAddOns,
@@ -42,6 +43,15 @@ export async function promptForCreateOptions(
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
   options.projectName = cliOptions.projectName || (await getProjectName())
+  if (
+    fs.existsSync(options.projectName) &&
+    fs.readdirSync(options.projectName).length > 0
+  ) {
+    cancel(
+      `The directory ${options.projectName} is not empty. Please choose a different project name.`,
+    )
+    process.exit(1)
+  }
 
   // Router type selection
   if (forcedMode) {

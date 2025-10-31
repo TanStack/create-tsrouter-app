@@ -16,7 +16,6 @@ import {
 import type { AddOn, PackageManager } from '@tanstack/cta-engine'
 
 import type { Framework } from '@tanstack/cta-engine/dist/types/types.js'
-import { InitialData } from '../../cta-ui/src/types'
 
 export async function getProjectName(): Promise<string> {
   const value = await text({
