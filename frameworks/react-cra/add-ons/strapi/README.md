@@ -5,7 +5,7 @@ The current setup shows an example of how to use Strapi with an articles collect
 - Create a local running copy of the strapi admin
 
 ```bash
-pnpx create-strapi@latest my-strapi-project
+pnpm dlx create-strapi@latest my-strapi-project
 cd my-strapi-project
 pnpm dev
 ```
