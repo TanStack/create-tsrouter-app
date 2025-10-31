@@ -1,6 +1,6 @@
 {
   "name": "create-tanstack-app",
-  "version": "0.34.11",
+  "version": "0.34.14",
   "description": "Tanstack Application Builder",
   "bin": "./dist/index.js",
   "type": "module",
