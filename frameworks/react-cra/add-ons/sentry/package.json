@@ -1,5 +1,10 @@
 {
+  "scripts": {
+    "build": "vite build && cp instrument.server.mjs .output/server",
+    "dev": "NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000",
+    "start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs"
+  },
   "dependencies": {
-    "@sentry/tanstackstart-react": "^10.17.0"
+    "@sentry/tanstackstart-react": "^10.22.0"
   }
 }
