@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.1",
+    "@ai-sdk/mcp": "^0.0.5",
     "@ai-sdk/react": "^2.0.8",
     "@modelcontextprotocol/sdk": "^1.8.0",
     "ai": "^5.0.8",
