@@ -1,5 +1,6 @@
-import { experimental_createMCPClient, tool } from 'ai'
-//import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { tool } from 'ai'
+// import { experimental_createMCPClient } from '@ai-sdk/mcp'
+// import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { z } from 'zod'
 
 import guitars from '../data/example-guitars'
@@ -44,7 +45,7 @@ const recommendGuitar = tool({
 })
 
 export default async function getTools() {
-  // const mcpTools = await mcpCient.tools()
+  // const mcpTools = await mcpClient.tools()
   return {
     // ...mcpTools,
     getGuitars,
