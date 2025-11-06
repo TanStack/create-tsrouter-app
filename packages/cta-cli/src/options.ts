@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import { cancel, intro } from '@clack/prompts'
+import { cancel, confirm, intro, isCancel } from '@clack/prompts'
 
 import {
   finalizeAddOns,
@@ -47,10 +47,15 @@ export async function promptForCreateOptions(
     fs.existsSync(options.projectName) &&
     fs.readdirSync(options.projectName).length > 0
   ) {
-    cancel(
-      `The directory ${options.projectName} is not empty. Please choose a different project name.`,
-    )
-    process.exit(1)
+    const shouldContinue = await confirm({
+      message: `Target directory ${options.projectName} is not empty. Do you want to continue?`,
+      initialValue: true,
+    })
+
+    if (isCancel(shouldContinue) || !shouldContinue) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
   }
 
   // Router type selection
