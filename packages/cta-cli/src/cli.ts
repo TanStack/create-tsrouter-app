@@ -373,6 +373,11 @@ Remove your node_modules directory and package lock file and re-install.`,
       '--add-on-config <config>',
       'JSON string with add-on configuration options',
     )
+    .option(
+      '-f, --force',
+      'force project creation even if the target directory is not empty',
+      false,
+    )
 
   program.action(async (projectName: string, options: CliOptions) => {
     if (options.listAddOns) {

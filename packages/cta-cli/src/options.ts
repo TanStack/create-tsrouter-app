@@ -44,6 +44,7 @@ export async function promptForCreateOptions(
 
   options.projectName = cliOptions.projectName || (await getProjectName())
   if (
+    !cliOptions.force &&
     fs.existsSync(options.projectName) &&
     fs.readdirSync(options.projectName).length > 0
   ) {
