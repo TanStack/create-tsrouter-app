@@ -15,7 +15,7 @@ export function validateProjectName(name: string) {
     errors,
     warnings,
   } = validatePackageName(name);
-  const error = errors?.[0] || warnings?.[0] || 'Invalid project name';
+  const error = errors?.[0] || warnings?.[0];
 
   return {
     valid: validForNewPackages && validForOldPackages,
