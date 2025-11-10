@@ -9,10 +9,10 @@ import {
   populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
+import { validateProjectName } from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
-import { validateProjectName } from './utils.js'
 
 export async function normalizeOptions(
   cliOptions: CliOptions,
@@ -28,12 +28,11 @@ export async function normalizeOptions(
     return undefined
   }
 
-  // Validate project name
   if (projectName) {
     const { valid, error } = validateProjectName(projectName)
     if (!valid) {
-      console.error(error);
-      process.exit(1);
+      console.error(error)
+      process.exit(1)
     }
   }
 

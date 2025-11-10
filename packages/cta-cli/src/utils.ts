@@ -1,5 +1,5 @@
+import validatePackageName from 'validate-npm-package-name'
 import type { TemplateOptions } from './types.js'
-import validatePackageName from "validate-npm-package-name";
 
 export function convertTemplateToMode(template: TemplateOptions): string {
   if (template === 'typescript' || template === 'javascript') {
@@ -9,16 +9,14 @@ export function convertTemplateToMode(template: TemplateOptions): string {
 }
 
 export function validateProjectName(name: string) {
-  const {
-    validForNewPackages,
-    validForOldPackages,
-    errors,
-    warnings,
-  } = validatePackageName(name);
-  const error = errors?.[0] || warnings?.[0];
+  const { validForNewPackages, validForOldPackages, errors, warnings } =
+    validatePackageName(name)
+  const error = errors?.[0] || warnings?.[0]
 
   return {
     valid: validForNewPackages && validForOldPackages,
-    error: error?.replace('name', 'Project name') || 'Invalid project name',
+    error:
+      error?.replace(/name/g, 'Project name') ||
+      'Project name does not meet npm package naming requirements',
   }
 }

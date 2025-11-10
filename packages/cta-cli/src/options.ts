@@ -21,10 +21,10 @@ import {
   selectTypescript,
 } from './ui-prompts.js'
 
+import { validateProjectName } from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
-import { validateProjectName } from './utils.js'
 
 export async function promptForCreateOptions(
   cliOptions: CliOptions,
