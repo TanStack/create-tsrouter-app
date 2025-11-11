@@ -1,10 +1,11 @@
 {
   "name": "Nitro",
-  "description": "Nitro deployment setup",
-  "link": "https://nitro.build/",
+  "description": "Vercel deployment setup",
+  "link": "https://vercel.com/",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "host",
+  "priority": 0,
   "integrations": [
     {
       "type": "vite-plugin",
