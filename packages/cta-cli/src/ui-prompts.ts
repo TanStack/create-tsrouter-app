@@ -3,6 +3,7 @@ import {
   confirm,
   isCancel,
   multiselect,
+  note,
   select,
   text,
 } from '@clack/prompts'
@@ -103,6 +104,9 @@ export async function selectPackageManager(): Promise<PackageManager> {
   return packageManager
 }
 
+// Track if we've shown the multiselect help text
+let hasShownMultiselectHelp = false
+
 export async function selectAddOns(
   framework: Framework,
   mode: string,
@@ -114,6 +118,12 @@ export async function selectAddOns(
   const addOns = allAddOns.filter((addOn) => addOn.type === type)
   if (addOns.length === 0) {
     return []
+  }
+
+  // Show help text only once
+  if (!hasShownMultiselectHelp) {
+    note('Use ↑/↓ to navigate • Space to select/deselect • Enter to confirm', 'Keyboard Shortcuts')
+    hasShownMultiselectHelp = true
   }
 
   const value = await multiselect({
