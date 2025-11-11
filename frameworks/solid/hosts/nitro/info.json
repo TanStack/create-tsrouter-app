@@ -1,15 +1,15 @@
 {
-  "name": "Nitro",
+  "name": "Nitro (agnostic)",
   "description": "Nitro deployment setup",
-  "link": "https://nitro.build/",
+  "link": "https://v3.nitro.build/",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "deployment",
   "integrations": [
     {
       "type": "vite-plugin",
-      "import": "import { nitroV2Plugin } from '@tanstack/nitro-v2-vite-plugin'",
-      "code": "nitroV2Plugin()"
+      "import": "import { nitro } from 'nitro/vite'",
+      "code": "nitro()"
     }
   ],
   "default": true
