@@ -12,7 +12,7 @@ export type AddOnInfo = {
   name: string
   description: string
   priority?: number
-  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'host'
+  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'deployment'
   modes: Array<'code-router' | 'file-router'>
   smallLogo?: string
   logo?: string

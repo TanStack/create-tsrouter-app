@@ -36,7 +36,7 @@ export type AddOnInfo = {
   id: string
   name: string
   description: string
-  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'host'
+  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'deployment'
   modes: Array<string>
   smallLogo?: string
   priority?: number
@@ -89,7 +89,7 @@ export type InitialData = {
   localFiles: Record<string, string>
   addOns: Record<string, Array<AddOnInfo>>
   applicationMode: ApplicationMode
-  showHostingOptions?: boolean
+  showDeploymentOptions?: boolean
   forcedRouterMode?: string
   forcedAddOns?: Array<string>
   registry?: Registry | undefined

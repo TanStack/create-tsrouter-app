@@ -4,7 +4,7 @@
   "link": "https://nitro.build/",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
-  "type": "host",
+  "type": "deployment",
   "integrations": [
     {
       "type": "vite-plugin",

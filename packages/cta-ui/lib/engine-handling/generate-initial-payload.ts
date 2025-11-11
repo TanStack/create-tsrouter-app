@@ -19,7 +19,7 @@ import {
   getProjectOptions,
   getProjectPath,
   getRegistry as getRegistryURL,
-  getShowHostingOptions,
+  getShowDeploymentOptions,
 } from './server-environment.js'
 
 import type { AddOn, SerializedOptions } from '@tanstack/cta-engine'
@@ -120,7 +120,7 @@ export async function generateInitialPayload() {
   return {
     supportedModes: framework!.supportedModes,
     applicationMode,
-    showHostingOptions: getShowHostingOptions(),
+    showDeploymentOptions: getShowDeploymentOptions(),
     localFiles,
     addOns,
     options: serializedOptions,

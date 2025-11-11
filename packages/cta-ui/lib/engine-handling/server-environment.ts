@@ -8,7 +8,7 @@ export type ServerEnvironment = {
   forcedRouterMode?: string
   forcedAddOns?: Array<string>
   registry?: string
-  showHostingOptions?: boolean
+  showDeploymentOptions?: boolean
 }
 
 const serverEnvironment: ServerEnvironment = {
@@ -19,14 +19,14 @@ const serverEnvironment: ServerEnvironment = {
   forcedRouterMode: undefined,
   forcedAddOns: undefined,
   registry: undefined,
-  showHostingOptions: false,
+  showDeploymentOptions: false,
 }
 
 export function setServerEnvironment(options: Partial<ServerEnvironment>) {
   Object.assign(serverEnvironment, options)
 }
 
-export const getShowHostingOptions = () => serverEnvironment.showHostingOptions
+export const getShowDeploymentOptions = () => serverEnvironment.showDeploymentOptions
 
 export const getProjectPath = () => serverEnvironment.projectPath
 

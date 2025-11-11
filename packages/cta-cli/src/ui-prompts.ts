@@ -232,19 +232,19 @@ export async function promptForAddOnOptions(
   return addOnOptions
 }
 
-export async function selectHost(
+export async function selectDeployment(
   framework: Framework,
-  host?: string,
+  deployment?: string,
 ): Promise<string | undefined> {
-  const hosts = new Set<AddOn>()
+  const deployments = new Set<AddOn>()
   let initialValue: string | undefined = undefined
   for (const addOn of framework
     .getAddOns()
     .sort((a, b) => a.name.localeCompare(b.name))) {
-    if (addOn.type === 'host') {
-      hosts.add(addOn)
-      if (host && addOn.id === host) {
-        return host
+    if (addOn.type === 'deployment') {
+      deployments.add(addOn)
+      if (deployment && addOn.id === deployment) {
+        return deployment
       }
       if (addOn.default) {
         initialValue = addOn.id
@@ -252,21 +252,21 @@ export async function selectHost(
     }
   }
 
-  const hp = await select({
-    message: 'Select hosting provider',
+  const dp = await select({
+    message: 'Select deployment adapter',
     options: [
-      ...Array.from(hosts).map((h) => ({
-        value: h.id,
-        label: h.name,
+      ...Array.from(deployments).map((d) => ({
+        value: d.id,
+        label: d.name,
       })),
     ],
     initialValue: initialValue,
   })
 
-  if (isCancel(hp)) {
+  if (isCancel(dp)) {
     cancel('Operation cancelled.')
     process.exit(0)
   }
 
-  return hp
+  return dp
 }

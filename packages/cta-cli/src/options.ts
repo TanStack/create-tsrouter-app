@@ -13,7 +13,7 @@ import {
   promptForAddOnOptions,
   selectAddOns,
   selectGit,
-  selectHost,
+  selectDeployment,
   selectPackageManager,
   selectRouterType,
   selectTailwind,
@@ -30,11 +30,11 @@ export async function promptForCreateOptions(
   {
     forcedAddOns = [],
     forcedMode,
-    showHostingOptions = false,
+    showDeploymentOptions = false,
   }: {
     forcedAddOns?: Array<string>
     forcedMode?: string
-    showHostingOptions?: boolean
+    showDeploymentOptions?: boolean
   },
 ): Promise<Required<Options> | undefined> {
   const options = {} as Required<Options>
@@ -89,9 +89,9 @@ export async function promptForCreateOptions(
     cliOptions.toolchain,
   )
 
-  // Host selection
-  const host = showHostingOptions
-    ? await selectHost(options.framework, cliOptions.host)
+  // Deployment selection
+  const deployment = showDeploymentOptions
+    ? await selectDeployment(options.framework, cliOptions.deployment)
     : undefined
 
   // Add-ons selection
@@ -100,8 +100,8 @@ export async function promptForCreateOptions(
   if (toolchain) {
     addOns.add(toolchain)
   }
-  if (host) {
-    addOns.add(host)
+  if (deployment) {
+    addOns.add(deployment)
   }
 
   for (const addOn of forcedAddOns) {

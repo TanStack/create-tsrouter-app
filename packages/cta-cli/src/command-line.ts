@@ -19,7 +19,7 @@ export async function normalizeOptions(
   forcedAddOns?: Array<string>,
   opts?: {
     disableNameCheck?: boolean
-    forcedHost?: string
+    forcedDeployment?: string
   },
 ): Promise<Options | undefined> {
   const projectName = (cliOptions.projectName ?? '').trim()
@@ -77,7 +77,7 @@ export async function normalizeOptions(
       starter?.dependsOn ||
       forcedAddOns ||
       cliOptions.toolchain ||
-      cliOptions.host
+      cliOptions.deployment
     ) {
       const selectedAddOns = new Set<string>([
         ...(starter?.dependsOn || []),
@@ -91,12 +91,12 @@ export async function normalizeOptions(
       if (cliOptions.toolchain) {
         selectedAddOns.add(cliOptions.toolchain)
       }
-      if (cliOptions.host) {
-        selectedAddOns.add(cliOptions.host)
+      if (cliOptions.deployment) {
+        selectedAddOns.add(cliOptions.deployment)
       }
 
-      if (!cliOptions.host && opts?.forcedHost) {
-        selectedAddOns.add(opts.forcedHost)
+      if (!cliOptions.deployment && opts?.forcedDeployment) {
+        selectedAddOns.add(opts.forcedDeployment)
       }
 
       return await finalizeAddOns(framework, mode, Array.from(selectedAddOns))
