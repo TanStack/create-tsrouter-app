@@ -14,4 +14,5 @@ cli({
   forcedMode: 'file-router',
   forcedAddOns: ['start'],
   craCompatible: true,
+  showHostingOptions: true,
 })
