@@ -1,17 +1,14 @@
 {
   "dependencies": {
     "prisma": "^6.16.3",
-    "@prisma/client": "^6.16.3"<% if (addOnOption.prisma.database === 'postgres') { %>,
-    "pg": "^8.11.0"<% } %><% if (addOnOption.prisma.database === 'mysql') { %>,
-    "mysql2": "^3.6.0"<% } %>
+    "@prisma/client": "^7.0.0"<% if (addOnOption.prisma.database === 'postgres') { %>,
+    "@prisma/adapter-pg": "^7.0.0"<% } %><% if (addOnOption.prisma.database === 'mysql') { %>,
+    "@prisma/adapter-mariadb": "^7.0.0"<% } %><% if (addOnOption.prisma.database === 'sqlite') { %>,
+    "@prisma/adapter-better-sqlite3": "^7.0.0"<% } %> 
   },
   "devDependencies": {
     "dotenv-cli": "^10.0.0",
-    "ts-node": "^10.9.2",
-    <% if (addOnOption.prisma.database === 'postgres') { %>
-    "@types/pg": "^8.10.0"<% } %><% if (addOnOption.prisma.database === 'mysql') { %>
-    "@types/mysql2": "^3.6.0"<% } %><% if (addOnOption.prisma.database === 'sqlite') { %>
-    "@types/better-sqlite3": "^7.6.0"<% } %>
+    "tsx": "^4.20.6"
   },
   "scripts": {<% if (addOnOption.prisma.database === 'postgres') { %>
     "post-cta-init": "npx create-db@latest",<% } %>
@@ -20,8 +17,5 @@
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:studio": "dotenv -e .env.local -- prisma studio",
     "db:seed": "dotenv -e .env.local -- prisma db seed"
-  },
-  "prisma": {
-    "seed": "ts-node seed.ts"
   }
 }
