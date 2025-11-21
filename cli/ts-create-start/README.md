@@ -107,7 +107,7 @@ Here is the JSON configuration for MCP support in many MCP clients.
 {
   "mcpServers": {
     "create-start-app": {
-      "command": "pnpx",
+      "command": "pnpm dlx",
       "args": ["create-start-app@latest", "--mcp"]
     }
   }

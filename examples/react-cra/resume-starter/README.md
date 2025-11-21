@@ -36,7 +36,7 @@ This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
 Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
 
 ```bash
-pnpx shadcn@latest add button
+pnpm dlx shadcn@latest add button
 ```
 
 
