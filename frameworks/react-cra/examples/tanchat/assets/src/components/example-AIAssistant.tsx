@@ -3,11 +3,7 @@ import { useStore } from '@tanstack/react-store'
 import { Store } from '@tanstack/store'
 
 import { Send, X, ChevronRight } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
-import rehypeSanitize from 'rehype-sanitize'
-import rehypeHighlight from 'rehype-highlight'
-import remarkGfm from 'remark-gfm'
+import Streamdown from 'streamdown'
 
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
@@ -61,16 +57,9 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                     </div>
                   )}
                   <div className="flex-1 min-w-0 text-white prose dark:prose-invert max-w-none prose-sm">
-                    <ReactMarkdown
-                      rehypePlugins={[
-                        rehypeRaw,
-                        rehypeSanitize,
-                        rehypeHighlight,
-                        remarkGfm,
-                      ]}
-                    >
+                    <Streamdown>
                       {part.text}
-                    </ReactMarkdown>
+                    </Streamdown>
                   </div>
                 </div>
               )
