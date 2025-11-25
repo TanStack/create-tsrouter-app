@@ -9,6 +9,7 @@ import {
   populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
+import { validateProjectName } from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -25,6 +26,14 @@ export async function normalizeOptions(
   const projectName = (cliOptions.projectName ?? '').trim()
   if (!projectName && !opts?.disableNameCheck) {
     return undefined
+  }
+
+  if (projectName) {
+    const { valid, error } = validateProjectName(projectName)
+    if (!valid) {
+      console.error(error)
+      process.exit(1)
+    }
   }
 
   let tailwind = !!cliOptions.tailwind

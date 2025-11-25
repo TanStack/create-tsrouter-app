@@ -14,6 +14,7 @@ import {
   getAllAddOns,
 } from '@tanstack/cta-engine'
 
+import { validateProjectName } from './utils.js'
 import type { AddOn, PackageManager } from '@tanstack/cta-engine'
 
 import type { Framework } from '@tanstack/cta-engine/dist/types/types.js'
@@ -26,6 +27,11 @@ export async function getProjectName(): Promise<string> {
     validate(value) {
       if (!value) {
         return 'Please enter a name'
+      }
+
+      const { valid, error } = validateProjectName(value)
+      if (!valid) {
+        return error
       }
     },
   })
