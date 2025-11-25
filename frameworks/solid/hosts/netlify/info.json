@@ -4,7 +4,7 @@
   "link": "https://docs.netlify.com",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
-  "type": "host",
+  "type": "deployment",
   "priority": 180,
   "integrations": [
     {

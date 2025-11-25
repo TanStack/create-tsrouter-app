@@ -4,7 +4,7 @@
   "link": "https://developers.cloudflare.com/workers/vite-plugin/",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
-  "type": "host",
+  "type": "deployment",
   "priority": 200,
   "integrations": [
     {

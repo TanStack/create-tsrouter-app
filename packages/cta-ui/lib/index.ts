@@ -23,7 +23,7 @@ export function launchUI(
     port?: number
     environmentFactory?: () => Environment
     webBase?: string
-    showHostingOptions?: boolean
+    showDeploymentOptions?: boolean
   },
 ) {
   const { port: requestedPort, webBase, ...rest } = options

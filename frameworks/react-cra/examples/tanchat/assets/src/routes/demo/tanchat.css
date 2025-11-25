@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "highlight.js/styles/github-dark.css";
+@source "../../../../node_modules/streamdown/dist/*.js";
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {

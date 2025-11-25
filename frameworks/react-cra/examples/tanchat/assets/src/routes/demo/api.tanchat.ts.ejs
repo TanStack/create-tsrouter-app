@@ -32,7 +32,7 @@ export const Route = createFileRoute('/api/demo-chat')({
           const tools = await getTools()
 
           const result = await streamText({
-            model: anthropic('<% if (addOnEnabled['netlify']) { %>claude-sonnet-4-5-20250929<% } else { %>claude-3-5-sonnet-latest<% } %>'),
+            model: anthropic('<% if (addOnEnabled['netlify']) { %>claude-sonnet-4-5-20250929<% } else { %>claude-haiku-4-5<% } %>'),
             messages: convertToModelMessages(messages),
             temperature: 0.7,
             stopWhen: stepCountIs(5),

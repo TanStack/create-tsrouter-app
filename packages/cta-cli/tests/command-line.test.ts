@@ -102,7 +102,7 @@ describe('normalizeOptions', () => {
     const options = await normalizeOptions({
       projectName: 'test',
       starter: 'https://github.com/cta-dev/cta-starter-solid',
-      host: 'nitro',
+      deployment: 'nitro',
     })
     expect(options?.mode).toBe('file-router')
     expect(options?.tailwind).toBe(true)

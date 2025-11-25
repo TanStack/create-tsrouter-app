@@ -8,7 +8,7 @@ import { Button } from '../ui/button'
 import {
   useAddOns,
   useProjectOptions,
-  useShowHostingOptions,
+  useShowDeploymentOptions,
 } from '../../store/project'
 
 import ImportCustomAddOn from '../custom-add-on-dialog'
@@ -20,17 +20,17 @@ import type { AddOnInfo } from '../../types'
 const addOnTypeLabels: Record<string, string> = {
   toolchain: 'Toolchain',
   'add-on': 'Add-on',
-  host: 'Hosting Provider',
+  deployment: 'Deployment Adapter',
   example: 'Example',
 }
 
 export default function SelectedAddOns() {
-  const showHostingOptions = useShowHostingOptions()
+  const showDeploymentOptions = useShowDeploymentOptions()
   const { availableAddOns, addOnState, toggleAddOn, setAddOnOption } =
     useAddOns()
   const addOnOptions = useProjectOptions((state) => state.addOnOptions)
 
-  console.log('showHostingOptions', showHostingOptions)
+  console.log('showDeploymentOptions', showDeploymentOptions)
 
   const sortedAddOns = useMemo(() => {
     return availableAddOns.sort((a, b) => {
@@ -65,7 +65,9 @@ export default function SelectedAddOns() {
       />
       <div className="max-h-[60vh] overflow-y-auto space-y-2">
         {Object.keys(addOnTypeLabels)
-          .filter((type) => (showHostingOptions ? true : type !== 'host'))
+          .filter((type) =>
+            showDeploymentOptions ? true : type !== 'deployment',
+          )
           .map((type) => (
             <Fragment key={type}>
               {sortedAddOns.filter((addOn) => addOn.type === type).length >
