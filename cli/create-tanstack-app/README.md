@@ -10,17 +10,17 @@ To maintain compatability with `create-react-app` you can build a new applicatio
 
 | Command                                                                           | Description                                       |
 | --------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `pnpx create-tanstack-app@latest my-app`                                          | Create a new app                                  |
-| `pnpx create-tanstack-app@latest my-app --template file-router`                   | Create a new file based app                       |
-| `pnpx create-tanstack-app@latest my-app --template typescript`                    | Create a new TypeScript app using the Code Router |
-| `pnpx create-tanstack-app@latest my-app --tailwind`                               | Add Tailwind CSS support                          |
-| `pnpx create-tanstack-app@latest my-app --framework solid`                        | Create a Solid app                                |
-| `pnpx create-tanstack-app@latest my-app --framework solid --template file-router` | Create a Solid app with file-router               |
+| `pnpm dlx create-tanstack-app@latest my-app`                                          | Create a new app                                  |
+| `pnpm dlx create-tanstack-app@latest my-app --template file-router`                   | Create a new file based app                       |
+| `pnpm dlx create-tanstack-app@latest my-app --template typescript`                    | Create a new TypeScript app using the Code Router |
+| `pnpm dlx create-tanstack-app@latest my-app --tailwind`                               | Add Tailwind CSS support                          |
+| `pnpm dlx create-tanstack-app@latest my-app --framework solid`                        | Create a Solid app                                |
+| `pnpm dlx create-tanstack-app@latest my-app --framework solid --template file-router` | Create a Solid app with file-router               |
 
 If you don't specify a project name, the CLI will walk you through an interactive setup process:
 
 ```bash
-pnpx create-tanstack-app@latest
+pnpm dlx create-tanstack-app@latest
 ```
 
 This will start an interactive CLI that guides you through the setup process, allowing you to choose:
@@ -38,7 +38,7 @@ This will start an interactive CLI that guides you through the setup process, al
 You can also use command line flags to specify your preferences directly:
 
 ```bash
-pnpx create-tanstack-app@latest my-app --template file-router --tailwind --package-manager pnpm
+pnpm dlx create-tanstack-app@latest my-app --template file-router --tailwind --package-manager pnpm
 ```
 
 Available options:
@@ -67,7 +67,7 @@ File Based Routing is the default option when using the interactive CLI. The loc
 To explicitly choose File Based Routing, use:
 
 ```bash
-pnpx create-tanstack-app@latest my-app --template file-router
+pnpm dlx create-tanstack-app@latest my-app --template file-router
 ```
 
 ### Code Based Routing
@@ -75,7 +75,7 @@ pnpx create-tanstack-app@latest my-app --template file-router
 If you prefer traditional code-based routing, you can select it in the interactive CLI or specify it by using either the `typescript` or `javascript` template:
 
 ```bash
-pnpx create-tanstack-app@latest my-app --template typescript
+pnpm dlx create-tanstack-app@latest my-app --template typescript
 ```
 
 ## Additional Configuration
@@ -109,7 +109,7 @@ Setting this flag to `eslint` will configure it as your toolchain of choice, add
 You can enable add-on selection:
 
 ```bash
-pnpx create-tanstack-app@latest --add-ons
+pnpm dlx create-tanstack-app@latest --add-ons
 ```
 
 This will prompt you to select the add-ons you want to enable during application creation.
@@ -117,19 +117,19 @@ This will prompt you to select the add-ons you want to enable during application
 You can enable specific add-ons directly by adding a comma separated list of add-on names to the `--add-ons` flag. For example:
 
 ```bash
-pnpx create-tanstack-app@latest my-app --add-ons shadcn,tanstack-query
+pnpm dlx create-tanstack-app@latest my-app --add-ons shadcn,tanstack-query
 ```
 
 You can get a list of all available add-ons by running:
 
 ```bash
-pnpx create-tanstack-app@latest --list-add-ons
+pnpm dlx create-tanstack-app@latest --list-add-ons
 ```
 
 This will display a list of all available add-ons for React that are compatible with the Code Router.
 
 ```bash
-pnpx create-tanstack-app@latest --list-add-ons --framework solid --template file-router
+pnpm dlx create-tanstack-app@latest --list-add-ons --framework solid --template file-router
 ```
 
 Will get you a list of all available add-ons for Solid that are compatible with the File Router.
@@ -139,7 +139,7 @@ Will get you a list of all available add-ons for Solid that are compatible with 
 You can launch the `create-tanstack-app` CLI with the `--mcp` flag to enable MCP support. Use this in your MCP enabled IDE to allow the Agent model to generate TanStack Router applications.
 
 ```bash
-pnpx create-tanstack-app@latest --mcp
+pnpm dlx create-tanstack-app@latest --mcp
 ```
 
 Here is the JSON configuration for MCP support in many MCP clients.
@@ -148,7 +148,7 @@ Here is the JSON configuration for MCP support in many MCP clients.
 {
   "mcpServers": {
     "create-tanstack-app": {
-      "command": "pnpx",
+      "command": "pnpm dlx",
       "args": ["create-tanstack-app@latest", "--mcp"]
     }
   }
