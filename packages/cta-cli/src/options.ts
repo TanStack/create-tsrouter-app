@@ -1,4 +1,5 @@
-import { intro } from '@clack/prompts'
+import fs from 'node:fs'
+import { cancel, confirm, intro, isCancel } from '@clack/prompts'
 
 import {
   finalizeAddOns,
@@ -42,6 +43,21 @@ export async function promptForCreateOptions(
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
   options.projectName = cliOptions.projectName || (await getProjectName())
+  if (
+    !cliOptions.force &&
+    fs.existsSync(options.projectName) &&
+    fs.readdirSync(options.projectName).length > 0
+  ) {
+    const shouldContinue = await confirm({
+      message: `Target directory ${options.projectName} is not empty. Do you want to continue?`,
+      initialValue: true,
+    })
+
+    if (isCancel(shouldContinue) || !shouldContinue) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+  }
 
   // Router type selection
   if (forcedMode) {
