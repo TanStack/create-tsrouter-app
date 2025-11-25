@@ -3,7 +3,7 @@ import { useStore } from '@tanstack/react-store'
 import { Store } from '@tanstack/store'
 
 import { Send, X, ChevronRight } from 'lucide-react'
-import Streamdown from 'streamdown'
+import { Streamdown } from 'streamdown'
 
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
@@ -57,9 +57,7 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                     </div>
                   )}
                   <div className="flex-1 min-w-0 text-white prose dark:prose-invert max-w-none prose-sm">
-                    <Streamdown>
-                      {part.text}
-                    </Streamdown>
+                    <Streamdown>{part.text}</Streamdown>
                   </div>
                 </div>
               )

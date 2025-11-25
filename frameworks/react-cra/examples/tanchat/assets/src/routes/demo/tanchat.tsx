@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Send } from 'lucide-react'
-import Streamdown from 'streamdown'
+import { Streamdown } from 'streamdown'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 
@@ -83,9 +83,7 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                         className="flex-1 min-w-0 prose dark:prose-invert max-w-none prose-sm"
                         key={index}
                       >
-                        <Streamdown>
-                          {part.text}
-                        </Streamdown>
+                        <Streamdown>{part.text}</Streamdown>
                       </div>
                     )
                   }
