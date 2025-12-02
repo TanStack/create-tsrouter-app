@@ -13,8 +13,8 @@ import {
   getProjectName,
   promptForAddOnOptions,
   selectAddOns,
-  selectGit,
   selectDeployment,
+  selectGit,
   selectPackageManager,
   selectRouterType,
   selectTailwind,
@@ -43,7 +43,6 @@ export async function promptForCreateOptions(
 
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
-  options.projectName = cliOptions.projectName || (await getProjectName())
   // Validate project name
   if (cliOptions.projectName) {
     const { valid, error } = validateProjectName(cliOptions.projectName)
@@ -55,6 +54,7 @@ export async function promptForCreateOptions(
   } else {
     options.projectName = await getProjectName()
   }
+
   // Check if target directory is empty
   if (
     !cliOptions.force &&
