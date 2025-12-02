@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Send } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
-import rehypeSanitize from 'rehype-sanitize'
-import rehypeHighlight from 'rehype-highlight'
-import remarkGfm from 'remark-gfm'
+import { Streamdown } from 'streamdown'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 
@@ -34,7 +30,7 @@ function InitalLayout({ children }: { children: React.ReactNode }) {
 
 function ChattingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute bottom-0 right-0 left-64 bg-gray-900/80 backdrop-blur-sm border-t border-orange-500/10">
+    <div className="sticky bottom-0 left-0 right-0 bg-gray-900/80 backdrop-blur-sm border-t border-orange-500/10 z-10">
       <div className="max-w-3xl mx-auto w-full px-4 py-3">{children}</div>
     </div>
   )
@@ -55,7 +51,10 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
   }
 
   return (
-    <div ref={messagesContainerRef} className="flex-1 overflow-y-auto pb-24">
+    <div
+      ref={messagesContainerRef}
+      className="flex-1 overflow-y-auto pb-4 min-h-0"
+    >
       <div className="max-w-3xl mx-auto w-full px-4">
         {messages.map(({ id, role, parts }) => (
           <div
@@ -84,16 +83,7 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                         className="flex-1 min-w-0 prose dark:prose-invert max-w-none prose-sm"
                         key={index}
                       >
-                        <ReactMarkdown
-                          rehypePlugins={[
-                            rehypeRaw,
-                            rehypeSanitize,
-                            rehypeHighlight,
-                            remarkGfm,
-                          ]}
-                        >
-                          {part.text}
-                        </ReactMarkdown>
+                        <Streamdown>{part.text}</Streamdown>
                       </div>
                     )
                   }
@@ -131,8 +121,8 @@ function ChatPage() {
   const Layout = messages.length ? ChattingLayout : InitalLayout
 
   return (
-    <div className="relative flex h-[calc(100vh-32px)] bg-gray-900">
-      <div className="flex-1 flex flex-col">
+    <div className="relative flex h-[calc(100vh-80px)] bg-gray-900">
+      <div className="flex-1 flex flex-col min-h-0">
         <Messages messages={messages} />
 
         <Layout>
@@ -180,6 +170,6 @@ function ChatPage() {
   )
 }
 
-export const Route = createFileRoute('/example/chat')({
+export const Route = createFileRoute('/demo/tanchat')({
   component: ChatPage,
 })

@@ -48,8 +48,8 @@ export const useOriginalOptions = () => useInitialData().data?.options
 export const useOriginalSelectedAddOns = () =>
   useOriginalOptions()?.chosenAddOns
 export const useApplicationMode = () => useInitialData().data?.applicationMode
-export const useShowHostingOptions = () =>
-  useInitialData().data?.showHostingOptions
+export const useShowDeploymentOptions = () =>
+  useInitialData().data?.showDeploymentOptions
 export const useAddOnsByMode = () => useInitialData().data?.addOns
 export const useSupportedModes = () => useInitialData().data?.supportedModes
 

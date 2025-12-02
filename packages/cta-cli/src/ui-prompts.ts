@@ -3,6 +3,7 @@ import {
   confirm,
   isCancel,
   multiselect,
+  note,
   select,
   text,
 } from '@clack/prompts'
@@ -13,6 +14,7 @@ import {
   getAllAddOns,
 } from '@tanstack/cta-engine'
 
+import { validateProjectName } from './utils.js'
 import type { AddOn, PackageManager } from '@tanstack/cta-engine'
 
 import type { Framework } from '@tanstack/cta-engine/dist/types/types.js'
@@ -24,6 +26,11 @@ export async function getProjectName(): Promise<string> {
     validate(value) {
       if (!value) {
         return 'Please enter a name'
+      }
+
+      const { valid, error } = validateProjectName(value)
+      if (!valid) {
+        return error
       }
     },
   })
@@ -102,6 +109,9 @@ export async function selectPackageManager(): Promise<PackageManager> {
   return packageManager
 }
 
+// Track if we've shown the multiselect help text
+let hasShownMultiselectHelp = false
+
 export async function selectAddOns(
   framework: Framework,
   mode: string,
@@ -113,6 +123,12 @@ export async function selectAddOns(
   const addOns = allAddOns.filter((addOn) => addOn.type === type)
   if (addOns.length === 0) {
     return []
+  }
+
+  // Show help text only once
+  if (!hasShownMultiselectHelp) {
+    note('Use ↑/↓ to navigate • Space to select/deselect • Enter to confirm', 'Keyboard Shortcuts')
+    hasShownMultiselectHelp = true
   }
 
   const value = await multiselect({
@@ -231,19 +247,19 @@ export async function promptForAddOnOptions(
   return addOnOptions
 }
 
-export async function selectHost(
+export async function selectDeployment(
   framework: Framework,
-  host?: string,
+  deployment?: string,
 ): Promise<string | undefined> {
-  const hosts = new Set<AddOn>()
+  const deployments = new Set<AddOn>()
   let initialValue: string | undefined = undefined
   for (const addOn of framework
     .getAddOns()
     .sort((a, b) => a.name.localeCompare(b.name))) {
-    if (addOn.type === 'host') {
-      hosts.add(addOn)
-      if (host && addOn.id === host) {
-        return host
+    if (addOn.type === 'deployment') {
+      deployments.add(addOn)
+      if (deployment && addOn.id === deployment) {
+        return deployment
       }
       if (addOn.default) {
         initialValue = addOn.id
@@ -251,21 +267,21 @@ export async function selectHost(
     }
   }
 
-  const hp = await select({
-    message: 'Select hosting provider',
+  const dp = await select({
+    message: 'Select deployment adapter',
     options: [
-      ...Array.from(hosts).map((h) => ({
-        value: h.id,
-        label: h.name,
+      ...Array.from(deployments).map((d) => ({
+        value: d.id,
+        label: d.name,
       })),
     ],
     initialValue: initialValue,
   })
 
-  if (isCancel(hp)) {
+  if (isCancel(dp)) {
     cancel('Operation cancelled.')
     process.exit(0)
   }
 
-  return hp
+  return dp
 }

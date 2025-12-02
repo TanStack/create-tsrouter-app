@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/cta-cli",
-  "version": "0.34.15",
+  "version": "0.40.0",
   "description": "Tanstack Application Builder CLI",
   "type": "module",
   "main": "./dist/index.js",
@@ -40,6 +40,7 @@
     "commander": "^13.1.0",
     "express": "^4.21.2",
     "semver": "^7.7.2",
+    "validate-npm-package-name": "^7.0.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -47,6 +48,7 @@
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.4",
     "@types/semver": "^7.7.0",
+    "@types/validate-npm-package-name": "^4.0.2",
     "@vitest/coverage-v8": "3.1.1",
     "eslint": "^9.20.0",
     "typescript": "^5.6.3",

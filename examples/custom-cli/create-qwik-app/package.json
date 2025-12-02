@@ -28,8 +28,8 @@
   "license": "MIT",
   "packageManager": "pnpm@9.15.5",
   "dependencies": {
-    "@tanstack/cta-cli": "^0.34.15",
-    "@tanstack/cta-engine": "^0.34.15"
+    "@tanstack/cta-cli": "^0.40.0",
+    "@tanstack/cta-engine": "^0.40.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.4",

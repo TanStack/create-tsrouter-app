@@ -32,7 +32,7 @@ import { convertTemplateToMode } from './utils.js'
 import type { CliOptions, TemplateOptions } from './types.js'
 import type { Options, PackageManager } from '@tanstack/cta-engine'
 
-// This CLI assumes that all of the registered frameworks have the same set of toolchains, hosts, modes, etc.
+// This CLI assumes that all of the registered frameworks have the same set of toolchains, deployments, modes, etc.
 
 export function cli({
   name,
@@ -40,22 +40,22 @@ export function cli({
   forcedMode,
   forcedAddOns = [],
   defaultTemplate = 'javascript',
-  forcedHost,
+  forcedDeployment,
   defaultFramework,
   craCompatible = false,
   webBase,
-  showHostingOptions = false,
+  showDeploymentOptions = false,
 }: {
   name: string
   appName: string
   forcedMode?: string
   forcedAddOns?: Array<string>
-  forcedHost?: string
+  forcedDeployment?: string
   defaultTemplate?: TemplateOptions
   defaultFramework?: string
   craCompatible?: boolean
   webBase?: string
-  showHostingOptions?: boolean
+  showDeploymentOptions?: boolean
 }) {
   const environment = createUIEnvironment(appName, false)
 
@@ -72,11 +72,11 @@ export function cli({
     }
   }
 
-  const hosts = new Set<string>()
+  const deployments = new Set<string>()
   for (const framework of getFrameworks()) {
     for (const addOn of framework.getAddOns()) {
-      if (addOn.type === 'host') {
-        hosts.add(addOn.id)
+      if (addOn.type === 'deployment') {
+        deployments.add(addOn.id)
       }
     }
   }
@@ -202,7 +202,7 @@ Remove your node_modules directory and package lock file and re-install.`,
           forcedAddOns,
           environmentFactory: () => createUIEnvironment(appName, false),
           webBase,
-          showHostingOptions,
+          showDeploymentOptions,
         })
       } else if (parsedAddOns.length < 1) {
         const addOns = await promptForAddOns()
@@ -308,15 +308,15 @@ Remove your node_modules directory and package lock file and re-install.`,
       },
     )
 
-  if (hosts.size > 0) {
+  if (deployments.size > 0) {
     program.option<string>(
-      `--host <${Array.from(hosts).join('|')}>`,
-      `Explicitly tell the CLI to use this hosting provider`,
+      `--deployment <${Array.from(deployments).join('|')}>`,
+      `Explicitly tell the CLI to use this deployment adapter`,
       (value) => {
-        if (!hosts.has(value)) {
+        if (!deployments.has(value)) {
           throw new InvalidArgumentError(
-            `Invalid host: ${value}. The following are allowed: ${Array.from(
-              hosts,
+            `Invalid adapter: ${value}. The following are allowed: ${Array.from(
+              deployments,
             ).join(', ')}`,
           )
         }
@@ -490,7 +490,7 @@ Remove your node_modules directory and package lock file and re-install.`,
             cliOptions,
             defaultMode,
             forcedAddOns,
-            { forcedHost },
+            { forcedDeployment },
           )
         }
 
@@ -499,7 +499,7 @@ Remove your node_modules directory and package lock file and re-install.`,
             cliOptions,
             defaultMode,
             forcedAddOns,
-            { disableNameCheck: true, forcedHost },
+            { disableNameCheck: true, forcedDeployment },
           )
           const options = {
             ...createSerializedOptions(optionsFromCLI!),
@@ -513,7 +513,7 @@ Remove your node_modules directory and package lock file and re-install.`,
             forcedAddOns,
             environmentFactory: () => createUIEnvironment(appName, false),
             webBase,
-            showHostingOptions,
+            showDeploymentOptions,
           })
           return
         }
@@ -525,7 +525,7 @@ Remove your node_modules directory and package lock file and re-install.`,
           finalOptions = await promptForCreateOptions(cliOptions, {
             forcedMode: defaultMode,
             forcedAddOns,
-            showHostingOptions,
+            showDeploymentOptions,
           })
         }
 

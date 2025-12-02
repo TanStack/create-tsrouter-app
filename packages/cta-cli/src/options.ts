@@ -14,7 +14,7 @@ import {
   promptForAddOnOptions,
   selectAddOns,
   selectGit,
-  selectHost,
+  selectDeployment,
   selectPackageManager,
   selectRouterType,
   selectTailwind,
@@ -22,6 +22,7 @@ import {
   selectTypescript,
 } from './ui-prompts.js'
 
+import { validateProjectName } from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -31,11 +32,11 @@ export async function promptForCreateOptions(
   {
     forcedAddOns = [],
     forcedMode,
-    showHostingOptions = false,
+    showDeploymentOptions = false,
   }: {
     forcedAddOns?: Array<string>
     forcedMode?: string
-    showHostingOptions?: boolean
+    showDeploymentOptions?: boolean
   },
 ): Promise<Required<Options> | undefined> {
   const options = {} as Required<Options>
@@ -43,6 +44,18 @@ export async function promptForCreateOptions(
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
   options.projectName = cliOptions.projectName || (await getProjectName())
+  // Validate project name
+  if (cliOptions.projectName) {
+    const { valid, error } = validateProjectName(cliOptions.projectName)
+    if (!valid) {
+      console.error(error)
+      process.exit(1)
+    }
+    options.projectName = cliOptions.projectName
+  } else {
+    options.projectName = await getProjectName()
+  }
+  // Check if target directory is empty
   if (
     !cliOptions.force &&
     fs.existsSync(options.projectName) &&
@@ -105,9 +118,9 @@ export async function promptForCreateOptions(
     cliOptions.toolchain,
   )
 
-  // Host selection
-  const host = showHostingOptions
-    ? await selectHost(options.framework, cliOptions.host)
+  // Deployment selection
+  const deployment = showDeploymentOptions
+    ? await selectDeployment(options.framework, cliOptions.deployment)
     : undefined
 
   // Add-ons selection
@@ -116,8 +129,8 @@ export async function promptForCreateOptions(
   if (toolchain) {
     addOns.add(toolchain)
   }
-  if (host) {
-    addOns.add(host)
+  if (deployment) {
+    addOns.add(deployment)
   }
 
   for (const addOn of forcedAddOns) {

@@ -18,7 +18,7 @@ export function getAddOnStatus(
   const getAddOnType = (addOn: string) =>
     availableAddOns.find((a) => a.id === addOn)!.type
 
-  const isMultiSelect = (addOn: string) => getAddOnType(addOn) === 'host'
+  const isMultiSelect = (addOn: string) => getAddOnType(addOn) === 'deployment'
 
   const areAddonsOfThisTypeCurrentlyChosen = (addOn: string) =>
     chosenAddOns.some((a) => getAddOnType(a) === getAddOnType(addOn))
@@ -28,7 +28,7 @@ export function getAddOnStatus(
       selected: false,
       enabled: true,
       dependedUpon: false,
-      isSingleSelect: addOn.type === 'host' ? addOn.type : undefined,
+      isSingleSelect: addOn.type === 'deployment' ? addOn.type : undefined,
     })
   }
 
