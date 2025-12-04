@@ -10,6 +10,16 @@ export interface Guitar {
 const guitars: Array<Guitar> = [
   {
     id: 1,
+    name: 'TanStack Ukelele',
+    image: '/example-ukelele-tanstack.jpg',
+    description:
+      "Introducing the TanStack Signature Ukulele—a beautifully handcrafted concert ukulele that combines exceptional sound quality with distinctive style. Featuring a warm, resonant koa-wood body with natural grain patterns, this instrument delivers the rich, mellow tones Hawaii is famous for. The exclusive TanStack palm tree inlay on the soundhole adds a unique touch of island flair, while the matching branded headstock makes this a true collector's piece for developers and musicians alike. Whether you're a beginner looking for a quality starter instrument or an experienced player wanting something special, the TanStack Ukulele brings together craftsmanship, character, and that unmistakable tropical spirit.",
+    shortDescription:
+      'Premium koa-wood ukulele featuring exclusive TanStack branding, perfect for beach vibes and island-inspired melodies.',
+    price: 299,
+  },
+  {
+    id: 2,
     name: 'Video Game Guitar',
     image: '/example-guitar-video-games.jpg',
     description:
@@ -19,7 +29,7 @@ const guitars: Array<Guitar> = [
     price: 699,
   },
   {
-    id: 2,
+    id: 3,
     name: 'Superhero Guitar',
     image: '/example-guitar-superhero.jpg',
     description:
@@ -29,7 +39,7 @@ const guitars: Array<Guitar> = [
     price: 699,
   },
   {
-    id: 3,
+    id: 4,
     name: 'Motherboard Guitar',
     image: '/example-guitar-motherboard.jpg',
     description:
@@ -39,7 +49,7 @@ const guitars: Array<Guitar> = [
     price: 649,
   },
   {
-    id: 4,
+    id: 5,
     name: 'Racing Guitar',
     image: '/example-guitar-racing.jpg',
     description:
@@ -49,7 +59,7 @@ const guitars: Array<Guitar> = [
     price: 679,
   },
   {
-    id: 5,
+    id: 6,
     name: 'Steamer Trunk Guitar',
     image: '/example-guitar-steamer-trunk.jpg',
     description:
@@ -59,7 +69,7 @@ const guitars: Array<Guitar> = [
     price: 629,
   },
   {
-    id: 6,
+    id: 7,
     name: "Travelin' Man Guitar",
     image: '/example-guitar-traveling.jpg',
     description:
@@ -69,7 +79,7 @@ const guitars: Array<Guitar> = [
     price: 499,
   },
   {
-    id: 7,
+    id: 8,
     name: 'Flowerly Love Guitar',
     image: '/example-guitar-flowers.jpg',
     description:
