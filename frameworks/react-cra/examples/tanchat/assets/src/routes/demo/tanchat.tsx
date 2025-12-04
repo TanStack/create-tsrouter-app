@@ -1,15 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { Send } from 'lucide-react'
+import { Send, Square } from 'lucide-react'
 import { Streamdown } from 'streamdown'
-import { useChat } from '@ai-sdk/react'
-import { DefaultChatTransport } from 'ai'
-
-import type { UIMessage } from 'ai'
+import { fetchServerSentEvents, useChat } from '@tanstack/ai-react'
+import { clientTools } from '@tanstack/ai-client'
+import type { UIMessage } from '@tanstack/ai-react'
 
 import GuitarRecommendation from '@/components/example-GuitarRecommendation'
+import { recommendGuitarToolDef } from '@/lib/example.guitar-tools'
 
 import './tanchat.css'
+
+const recommendGuitarToolClient = recommendGuitarToolDef.client(({ id }) => ({
+  id: +id,
+}))
+
+const tools = clientTools(recommendGuitarToolClient)
 
 function InitalLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -56,17 +62,17 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
       className="flex-1 overflow-y-auto pb-4 min-h-0"
     >
       <div className="max-w-3xl mx-auto w-full px-4">
-        {messages.map(({ id, role, parts }) => (
+        {messages.map((message) => (
           <div
-            key={id}
+            key={message.id}
             className={`p-4 ${
-              role === 'assistant'
+              message.role === 'assistant'
                 ? 'bg-gradient-to-r from-orange-500/5 to-red-600/5'
                 : 'bg-transparent'
             }`}
           >
             <div className="flex items-start gap-4 max-w-3xl mx-auto w-full">
-              {role === 'assistant' ? (
+              {message.role === 'assistant' ? (
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 mt-2 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
                   AI
                 </div>
@@ -75,31 +81,31 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                   Y
                 </div>
               )}
-              <div className="flex-1">
-                {parts.map((part, index) => {
-                  if (part.type === 'text') {
+              <div className="flex-1 min-w-0">
+                {message.parts.map((part, index) => {
+                  if (part.type === 'text' && part.content) {
                     return (
                       <div
                         className="flex-1 min-w-0 prose dark:prose-invert max-w-none prose-sm"
                         key={index}
                       >
-                        <Streamdown>{part.text}</Streamdown>
+                        <Streamdown>{part.content}</Streamdown>
                       </div>
                     )
                   }
+                  // Guitar recommendation card
                   if (
-                    part.type === 'tool-recommendGuitar' &&
-                    part.state === 'output-available' &&
-                    (part.output as { id: string })?.id
+                    part.type === 'tool-call' &&
+                    part.name === 'recommendGuitar' &&
+                    part.output
                   ) {
                     return (
-                      <div key={index} className="max-w-[80%] mx-auto">
-                        <GuitarRecommendation
-                          id={(part.output as { id: string })?.id}
-                        />
+                      <div key={part.id} className="max-w-[80%] mx-auto">
+                        <GuitarRecommendation id={String(part.output?.id)} />
                       </div>
                     )
                   }
+                  return null
                 })}
               </div>
             </div>
@@ -111,10 +117,9 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
 }
 
 function ChatPage() {
-  const { messages, sendMessage } = useChat({
-    transport: new DefaultChatTransport({
-      api: '/demo/api/tanchat',
-    }),
+  const { messages, sendMessage, isLoading, stop } = useChat({
+    connection: fetchServerSentEvents('/demo/api/tanchat'),
+    tools,
   })
   const [input, setInput] = useState('')
 
@@ -126,44 +131,60 @@ function ChatPage() {
         <Messages messages={messages} />
 
         <Layout>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              sendMessage({ text: input })
-              setInput('')
-            }}
-          >
-            <div className="relative max-w-xl mx-auto">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type something clever..."
-                className="w-full rounded-lg border border-orange-500/20 bg-gray-800/50 pl-4 pr-12 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent resize-none overflow-hidden shadow-lg"
-                rows={1}
-                style={{ minHeight: '44px', maxHeight: '200px' }}
-                onInput={(e) => {
-                  const target = e.target as HTMLTextAreaElement
-                  target.style.height = 'auto'
-                  target.style.height =
-                    Math.min(target.scrollHeight, 200) + 'px'
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    sendMessage({ text: input })
-                    setInput('')
-                  }
-                }}
-              />
-              <button
-                type="submit"
-                disabled={!input.trim()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-orange-500 hover:text-orange-400 disabled:text-gray-500 transition-colors focus:outline-none"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
-          </form>
+          <div className="space-y-3">
+            {isLoading && (
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={stop}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  <Square className="w-4 h-4 fill-current" />
+                  Stop
+                </button>
+              </div>
+            )}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                if (input.trim()) {
+                  sendMessage(input)
+                  setInput('')
+                }
+              }}
+            >
+              <div className="relative max-w-xl mx-auto">
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type something clever..."
+                  className="w-full rounded-lg border border-orange-500/20 bg-gray-800/50 pl-4 pr-12 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent resize-none overflow-hidden shadow-lg"
+                  rows={1}
+                  style={{ minHeight: '44px', maxHeight: '200px' }}
+                  disabled={isLoading}
+                  onInput={(e) => {
+                    const target = e.target as HTMLTextAreaElement
+                    target.style.height = 'auto'
+                    target.style.height =
+                      Math.min(target.scrollHeight, 200) + 'px'
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey && input.trim()) {
+                      e.preventDefault()
+                      sendMessage(input)
+                      setInput('')
+                    }
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={!input.trim() || isLoading}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-orange-500 hover:text-orange-400 disabled:text-gray-500 transition-colors focus:outline-none"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
+          </div>
         </Layout>
       </div>
     </div>

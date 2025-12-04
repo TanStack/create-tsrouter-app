@@ -1,10 +1,9 @@
 {
   "dependencies": {
-    "@ai-sdk/anthropic": "^2.0.1",
-    "@ai-sdk/mcp": "^0.0.5",
-    "@ai-sdk/react": "^2.0.8",
-    "@modelcontextprotocol/sdk": "^1.8.0",
-    "ai": "^5.0.8",
+    "@tanstack/ai": "^0.0.1",
+    "@tanstack/ai-anthropic": "^0.0.1",
+    "@tanstack/ai-client": "^0.0.1",
+    "@tanstack/ai-react": "^0.0.1",
     "highlight.js": "^11.11.1",
     "streamdown": "^1.6.5",
     "lucide-react": "^0.544.0",

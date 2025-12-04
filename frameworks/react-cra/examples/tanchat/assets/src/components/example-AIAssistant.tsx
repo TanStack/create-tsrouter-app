@@ -5,12 +5,18 @@ import { Store } from '@tanstack/store'
 import { Send, X, ChevronRight } from 'lucide-react'
 import { Streamdown } from 'streamdown'
 
-import { useChat } from '@ai-sdk/react'
-import { DefaultChatTransport } from 'ai'
+import { fetchServerSentEvents, useChat } from '@tanstack/ai-react'
+import { clientTools } from '@tanstack/ai-client'
+import type { UIMessage } from '@tanstack/ai-react'
 
 import GuitarRecommendation from './example-GuitarRecommendation'
+import { recommendGuitarToolDef } from '@/lib/example.guitar-tools'
 
-import type { UIMessage } from 'ai'
+const recommendGuitarToolClient = recommendGuitarToolDef.client(({ id }) => ({
+  id: +id,
+}))
+
+const tools = clientTools(recommendGuitarToolClient)
 
 export const showAIAssistant = new Store(false)
 
@@ -43,10 +49,10 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
               : 'bg-transparent'
           }`}
         >
-          {parts.map((part) => {
-            if (part.type === 'text') {
+          {parts.map((part, index) => {
+            if (part.type === 'text' && part.content) {
               return (
-                <div className="flex items-start gap-2 px-4">
+                <div key={index} className="flex items-start gap-2 px-4">
                   {role === 'assistant' ? (
                     <div className="w-6 h-6 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-xs font-medium text-white flex-shrink-0">
                       AI
@@ -57,21 +63,19 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
                     </div>
                   )}
                   <div className="flex-1 min-w-0 text-white prose dark:prose-invert max-w-none prose-sm">
-                    <Streamdown>{part.text}</Streamdown>
+                    <Streamdown>{part.content}</Streamdown>
                   </div>
                 </div>
               )
             }
             if (
-              part.type === 'tool-recommendGuitar' &&
-              part.state === 'output-available' &&
-              (part.output as { id: string })?.id
+              part.type === 'tool-call' &&
+              part.name === 'recommendGuitar' &&
+              part.output
             ) {
               return (
-                <div key={id} className="max-w-[80%] mx-auto">
-                  <GuitarRecommendation
-                    id={(part.output as { id: string })?.id}
-                  />
+                <div key={part.id} className="max-w-[80%] mx-auto">
+                  <GuitarRecommendation id={String(part.output?.id)} />
                 </div>
               )
             }
@@ -85,9 +89,8 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
 export default function AIAssistant() {
   const isOpen = useStore(showAIAssistant)
   const { messages, sendMessage } = useChat({
-    transport: new DefaultChatTransport({
-      api: '/demo/api/tanchat',
-    }),
+    connection: fetchServerSentEvents('/demo/api/tanchat'),
+    tools,
   })
   const [input, setInput] = useState('')
 
@@ -124,8 +127,10 @@ export default function AIAssistant() {
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                sendMessage({ text: input })
-                setInput('')
+                if (input.trim()) {
+                  sendMessage(input)
+                  setInput('')
+                }
               }}
             >
               <div className="relative">
@@ -143,9 +148,9 @@ export default function AIAssistant() {
                       Math.min(target.scrollHeight, 120) + 'px'
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    if (e.key === 'Enter' && !e.shiftKey && input.trim()) {
                       e.preventDefault()
-                      sendMessage({ text: input })
+                      sendMessage(input)
                       setInput('')
                     }
                   }}
