@@ -361,6 +361,7 @@ Remove your node_modules directory and package lock file and re-install.`,
       '--addon-details <addon-id>',
       'show detailed information about a specific add-on',
     )
+    .option('--git', 'create a git repository', false)
     .option('--no-git', 'do not create a git repository')
     .option(
       '--target-dir <path>',
