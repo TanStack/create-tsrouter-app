@@ -2,26 +2,19 @@ import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Send, Square } from 'lucide-react'
 import { Streamdown } from 'streamdown'
-import { fetchServerSentEvents, useChat } from '@tanstack/ai-react'
-import { clientTools } from '@tanstack/ai-client'
-import type { UIMessage } from '@tanstack/ai-react'
+
+import { useGuitarRecommendationChat } from '@/lib/example.ai-hook'
+import type { ChatMessages } from '@/lib/example.ai-hook'
 
 import GuitarRecommendation from '@/components/example-GuitarRecommendation'
-import { recommendGuitarToolDef } from '@/lib/example.guitar-tools'
 
 import './tanchat.css'
-
-const recommendGuitarToolClient = recommendGuitarToolDef.client(({ id }) => ({
-  id: +id,
-}))
-
-const tools = clientTools(recommendGuitarToolClient)
 
 function InitalLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex-1 flex items-center justify-center px-4">
       <div className="text-center max-w-3xl mx-auto w-full">
-        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-orange-500 to-red-600 text-transparent bg-clip-text uppercase">
+        <h1 className="text-6xl font-bold mb-4 bg-linear-to-r from-orange-500 to-red-600 text-transparent bg-clip-text uppercase">
           <span className="text-white">TanStack</span> Chat
         </h1>
         <p className="text-gray-400 mb-6 w-2/3 mx-auto text-lg">
@@ -42,7 +35,7 @@ function ChattingLayout({ children }: { children: React.ReactNode }) {
   )
 }
 
-function Messages({ messages }: { messages: Array<UIMessage> }) {
+function Messages({ messages }: { messages: ChatMessages }) {
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -67,13 +60,13 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
             key={message.id}
             className={`p-4 ${
               message.role === 'assistant'
-                ? 'bg-gradient-to-r from-orange-500/5 to-red-600/5'
+                ? 'bg-linear-to-r from-orange-500/5 to-red-600/5'
                 : 'bg-transparent'
             }`}
           >
             <div className="flex items-start gap-4 max-w-3xl mx-auto w-full">
               {message.role === 'assistant' ? (
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 mt-2 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-linear-to-r from-orange-500 to-red-600 mt-2 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
                   AI
                 </div>
               ) : (
@@ -117,10 +110,8 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
 }
 
 function ChatPage() {
-  const { messages, sendMessage, isLoading, stop } = useChat({
-    connection: fetchServerSentEvents('/demo/api/tanchat'),
-    tools,
-  })
+  const { messages, sendMessage, isLoading, stop } =
+    useGuitarRecommendationChat()
   const [input, setInput] = useState('')
 
   const Layout = messages.length ? ChattingLayout : InitalLayout

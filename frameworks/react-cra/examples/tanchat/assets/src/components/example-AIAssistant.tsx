@@ -5,22 +5,14 @@ import { Store } from '@tanstack/store'
 import { Send, X, ChevronRight } from 'lucide-react'
 import { Streamdown } from 'streamdown'
 
-import { fetchServerSentEvents, useChat } from '@tanstack/ai-react'
-import { clientTools } from '@tanstack/ai-client'
-import type { UIMessage } from '@tanstack/ai-react'
+import { useGuitarRecommendationChat } from '@/lib/example.ai-hook'
+import type { ChatMessages } from '@/lib/example.ai-hook'
 
 import GuitarRecommendation from './example-GuitarRecommendation'
-import { recommendGuitarToolDef } from '@/lib/example.guitar-tools'
-
-const recommendGuitarToolClient = recommendGuitarToolDef.client(({ id }) => ({
-  id: +id,
-}))
-
-const tools = clientTools(recommendGuitarToolClient)
 
 export const showAIAssistant = new Store(false)
 
-function Messages({ messages }: { messages: Array<UIMessage> }) {
+function Messages({ messages }: { messages: ChatMessages }) {
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -45,7 +37,7 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
           key={id}
           className={`py-3 ${
             role === 'assistant'
-              ? 'bg-gradient-to-r from-orange-500/5 to-red-600/5'
+              ? 'bg-linear-to-r from-orange-500/5 to-red-600/5'
               : 'bg-transparent'
           }`}
         >
@@ -54,7 +46,7 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
               return (
                 <div key={index} className="flex items-start gap-2 px-4">
                   {role === 'assistant' ? (
-                    <div className="w-6 h-6 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-xs font-medium text-white flex-shrink-0">
+                    <div className="w-6 h-6 rounded-lg bg-linear-to-r from-orange-500 to-red-600 flex items-center justify-center text-xs font-medium text-white flex-shrink-0">
                       AI
                     </div>
                   ) : (
@@ -88,17 +80,14 @@ function Messages({ messages }: { messages: Array<UIMessage> }) {
 
 export default function AIAssistant() {
   const isOpen = useStore(showAIAssistant)
-  const { messages, sendMessage } = useChat({
-    connection: fetchServerSentEvents('/demo/api/tanchat'),
-    tools,
-  })
+  const { messages, sendMessage } = useGuitarRecommendationChat()
   const [input, setInput] = useState('')
 
   return (
     <div className="relative z-50">
       <button
         onClick={() => showAIAssistant.setState((state) => !state)}
-        className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 text-white hover:opacity-90 transition-opacity"
+        className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-linear-to-r from-orange-500 to-red-600 text-white hover:opacity-90 transition-opacity"
       >
         <div className="flex items-center gap-2">
           <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center text-xs font-medium">

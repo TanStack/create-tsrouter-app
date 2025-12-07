@@ -31,6 +31,11 @@
       "type": "header-user",
       "path": "src/components/example-AIAssistant.tsx",
       "jsName": "TanChatAIAssistant"
+    },
+    {
+      "type": "devtools",
+      "path": "src/lib/ai-devtools.tsx",
+      "jsName": "AiDevtools"
     }
   ],
   "dependsOn": ["start", "store"],
