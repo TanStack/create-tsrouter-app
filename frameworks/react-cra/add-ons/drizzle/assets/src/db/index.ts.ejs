@@ -1,24 +1,10 @@
-<% if (addOnOption.drizzle.database === 'postgresql') { %>
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
+import { drizzle } from <% if (addOnOption.drizzle.database === 'postgresql') { %>
+'drizzle-orm/node-postgres';
 <% } else if (addOnOption.drizzle.database === 'mysql') {%>
-import { drizzle } from 'drizzle-orm/mysql2';
-import mysql from 'mysql2/promise';
+'drizzle-orm/mysql2';
 <% } else if (addOnOption.drizzle.database === 'sqlite') {%>
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import Database from 'better-sqlite3';
+'drizzle-orm/better-sqlite3';
 <% } %>
 import * as schema from './schema.ts'
 
-<% if (addOnOption.drizzle.database === 'sqlite') { %>
-const sqlite = new Database(process.env.DATABASE_URL!);
-export const db = drizzle(sqlite, { schema });
-<% } else if (addOnOption.drizzle.database === 'postgresql') { %>
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL!,
-});
-export const db = drizzle(pool, { schema });
-<% } else if (addOnOption.drizzle.database === 'mysql') { %>
-const connection = await mysql.createConnection(process.env.DATABASE_URL!);
-export const db = drizzle(connection, { schema });
-<% } %>
+export const db = drizzle(process.env.DATABASE_URL!, { schema<% if (addOnOption.drizzle.database === 'mysql') {%>, mode: 'default'<% } %>});
