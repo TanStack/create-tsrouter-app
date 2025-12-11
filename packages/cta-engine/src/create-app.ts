@@ -241,13 +241,23 @@ Errors were encountered during the creation of your app:
 ${environment.getErrors().join('\n')}`
   }
 
+  // Check if we created in current directory (user specified ".")
+  const isCurrentDirectory =
+    resolve(options.targetDir) === resolve(process.cwd())
+  const locationMessage = isCurrentDirectory
+    ? `Your ${environment.appName} app is ready.`
+    : `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.`
+  const cdInstruction = isCurrentDirectory
+    ? ''
+    : `% cd ${options.projectName}
+`
+
   // Use the force luke! :)
   environment.outro(
-    `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.
+    `${locationMessage}
 
 Use the following commands to start your app:
-% cd ${options.projectName}
-% ${formatCommand(
+${cdInstruction}% ${formatCommand(
       getPackageManagerScriptCommand(options.packageManager, ['dev']),
     )}
 

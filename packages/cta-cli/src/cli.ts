@@ -528,8 +528,20 @@ Remove your node_modules directory and package lock file and re-install.`,
           throw new Error('No options were provided')
         }
 
-        finalOptions.targetDir =
-          options.targetDir || resolve(process.cwd(), finalOptions.projectName)
+        // Determine target directory:
+        // 1. Use --target-dir if provided
+        // 2. Use targetDir from normalizeOptions if set (handles "." case)
+        // 3. If original projectName was ".", use current directory
+        // 4. Otherwise, use project name as subdirectory
+        if (options.targetDir) {
+          finalOptions.targetDir = options.targetDir
+        } else if (finalOptions.targetDir) {
+          // Keep the targetDir from normalizeOptions (handles "." case)
+        } else if (projectName === '.') {
+          finalOptions.targetDir = resolve(process.cwd())
+        } else {
+          finalOptions.targetDir = resolve(process.cwd(), finalOptions.projectName)
+        }
 
         await createApp(environment, finalOptions)
       } catch (error) {

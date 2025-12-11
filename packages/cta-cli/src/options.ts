@@ -21,7 +21,11 @@ import {
   selectTypescript,
 } from './ui-prompts.js'
 
-import { validateProjectName } from './utils.js'
+import {
+  getCurrentDirectoryName,
+  sanitizePackageName,
+  validateProjectName,
+} from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -43,12 +47,17 @@ export async function promptForCreateOptions(
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
   if (cliOptions.projectName) {
-    const { valid, error } = validateProjectName(cliOptions.projectName)
+    // Handle "." as project name - use sanitized current directory name
+    if (cliOptions.projectName === '.') {
+      options.projectName = sanitizePackageName(getCurrentDirectoryName())
+    } else {
+      options.projectName = cliOptions.projectName
+    }
+    const { valid, error } = validateProjectName(options.projectName)
     if (!valid) {
       console.error(error)
       process.exit(1)
     }
-    options.projectName = cliOptions.projectName
   } else {
     options.projectName = await getProjectName()
   }

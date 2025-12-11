@@ -9,7 +9,11 @@ import {
   populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
-import { validateProjectName } from './utils.js'
+import {
+  getCurrentDirectoryName,
+  sanitizePackageName,
+  validateProjectName,
+} from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -23,7 +27,17 @@ export async function normalizeOptions(
     forcedDeployment?: string
   },
 ): Promise<Options | undefined> {
-  const projectName = (cliOptions.projectName ?? '').trim()
+  let projectName = (cliOptions.projectName ?? '').trim()
+  let targetDir: string
+
+  // Handle "." as project name - use current directory
+  if (projectName === '.') {
+    projectName = sanitizePackageName(getCurrentDirectoryName())
+    targetDir = resolve(process.cwd())
+  } else {
+    targetDir = resolve(process.cwd(), projectName)
+  }
+
   if (!projectName && !opts?.disableNameCheck) {
     return undefined
   }
@@ -134,7 +148,7 @@ export async function normalizeOptions(
 
   return {
     projectName: projectName,
-    targetDir: resolve(process.cwd(), projectName),
+    targetDir,
     framework,
     mode,
     typescript,
