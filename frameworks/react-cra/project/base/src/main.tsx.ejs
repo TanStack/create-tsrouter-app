@@ -105,6 +105,8 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 <% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
 import * as <%= integration.jsName %> from "<%= relativePath(integration.path) %>";
+<% } %><% if (addOnEnabled.paraglide) { %>
+import { deLocalizeUrl, localizeUrl } from "./paraglide/runtime";
 <% } %>
 
 // Import the generated route tree
@@ -122,7 +124,12 @@ const <%= integration.jsName %>Context = <%= integration.jsName %>.getContext();
     <% for(const integration of integrations.filter(i => i.type === 'root-provider')) { %>
       ...<%= integration.jsName %>Context,
     <% } %>
-  },
+  },<% if (addOnEnabled.paraglide) { %>
+  // Paraglide URL rewrite docs: https://github.com/TanStack/router/tree/main/examples/react/i18n-paraglide#rewrite-url
+  rewrite: {
+    input: ({ url }) => deLocalizeUrl(url),
+    output: ({ url }) => localizeUrl(url),
+  },<% } %>
   defaultPreload: "intent",
   scrollRestoration: true,
   defaultStructuralSharing: true,
