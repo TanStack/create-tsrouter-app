@@ -3,7 +3,7 @@ import { useLiveQuery } from '@tanstack/react-db'
 
 import { messagesCollection, type Message } from '@/db-collections'
 
-import type { Collection } from '@tanstack/db'
+import type { Collection } from '@tanstack/react-db'
 
 function useStreamConnection(
   url: string,
