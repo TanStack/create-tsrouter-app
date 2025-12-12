@@ -44,7 +44,6 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@tanstack/config": "^0.16.2",
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.4",
     "@types/semver": "^7.7.0",

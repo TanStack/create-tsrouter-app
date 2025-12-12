@@ -40,7 +40,6 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@tanstack/config": "^0.16.2",
     "@types/ejs": "^3.1.5",
     "@types/node": "^22.13.4",
     "@types/parse-gitignore": "^1.0.2",
