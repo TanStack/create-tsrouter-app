@@ -21,4 +21,5 @@ export interface CliOptions {
   interactive?: boolean
   ui?: boolean
   addOnConfig?: string
+  force?: boolean
 }
