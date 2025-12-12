@@ -1,3 +1,3 @@
 // This file is auto-generated. Do not edit manually.
 // Generated from add-ons, examples, hosts, project, and toolchains directories
-export const contentChecksum = 'a13c68662e9a710c7d3339947e7e97cded66cc91a4a97f0f06a89c76b3a6f881'
+export const contentChecksum = '97450d3bd15410ec0fb6553e0b2709464dbef2b643f509e73ff124a3230f44c5'
