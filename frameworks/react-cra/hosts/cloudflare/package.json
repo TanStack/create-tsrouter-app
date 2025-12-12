@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "deploy": "wrangler deploy"
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.13.8"
