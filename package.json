@@ -1,7 +1,11 @@
 {
-  "name": "tanstack-app-creators",
-  "description": "Tanstack Application Builder",
-  "bin": "./dist/index.js",
+  "name": "root",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanStack/create-tsrouter-app.git"
+  },
+  "packageManager": "pnpm@10.24.0",
   "type": "module",
   "scripts": {
     "cleanNodeModules": "rm -rf node_modules && pnpm -r exec rm -rf node_modules",
@@ -13,10 +17,6 @@
     "update-outdated": "node scripts/check-outdated-packages.js --update",
     "prepare": "husky install"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TanStack/create-tsrouter-app.git"
-  },
   "devDependencies": {
     "@tanstack/config": "^0.16.2",
     "eslint": "^9.20.0",
@@ -27,7 +27,6 @@
     "typescript": "^5.6.3",
     "husky": "^8.0.0"
   },
-  "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "overrides": {
       "@tanstack/create-start": "workspace:*",
@@ -43,14 +42,6 @@
       "@tanstack/cta-framework-solid": "workspace:*"
     }
   },
-  "workspaces": [
-    "./cli/*",
-    "./packages/*",
-    "./frameworks/*",
-    "./examples/*",
-    "./examples/custom-cli/*",
-    "./examples/custom-cli/*/customized-ui/*"
-  ],
   "dependencies": {
     "@tanstack/config": "^0.16.2"
   }
