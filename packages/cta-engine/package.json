@@ -14,7 +14,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TanStack/create-tsrouter-app.git"
+    "url": "git+https://github.com/TanStack/create-tsrouter-app.git",
+    "directory": "packages/cta-engine"
   },
   "homepage": "https://tanstack.com/router",
   "funding": {
