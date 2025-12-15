@@ -1,6 +1,7 @@
 {
   "name": "Solid-UI",
   "description": "Add Solid-UI to your application.",
+  "aiDescription": "Solid-UI is a port of Shadcn UI for SolidJS—a collection of beautifully designed, accessible components that you copy into your project and own. Built on Kobalte (Solid's accessible component primitives) and styled with Tailwind CSS, it provides professional design with full customization control. Key features: accessible by default (ARIA compliant), dark mode support, customizable themes via CSS variables, and components you can modify directly. Unlike component libraries you install, updates don't break your customizations because the code is yours. Choose Solid-UI when you want beautiful, accessible components for Solid but need to customize them, don't want to fight library abstractions, or want consistent design across your app.",
   "phase": "add-on",
   "link": "https://ui.shadcn.com/",
   "modes": ["file-router", "code-router"],

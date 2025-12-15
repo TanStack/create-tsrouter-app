@@ -36,6 +36,7 @@ export type AddOnInfo = {
   id: string
   name: string
   description: string
+  aiDescription?: string
   type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'deployment'
   modes: Array<string>
   smallLogo?: string

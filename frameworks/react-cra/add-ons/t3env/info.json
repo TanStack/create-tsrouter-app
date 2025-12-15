@@ -1,6 +1,7 @@
 {
   "name": "T3Env",
   "description": "Add type safety to your environment variables",
+  "aiDescription": "T3 Env provides type-safe environment variables with runtime validation. Instead of accessing process.env directly (which is always string | undefined), T3 Env validates your env vars at startup and gives you typed access. Key features: Zod-based validation, separate client and server env vars (prevents accidentally exposing secrets), build-time checking with TypeScript, and clear error messages when required vars are missing. Choose T3 Env when you want to catch missing or invalid environment variables before they cause runtime errors, need to ensure sensitive vars don't leak to the client, or want IDE autocomplete for your env vars. It's particularly valuable for teams where env var misconfigurations are a common source of deployment issues. The integration sets up a typed env.ts file that validates and exports your environment variables.",
   "phase": "add-on",
   "type": "add-on",
   "priority": 29,

@@ -18,12 +18,16 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.6",
+    "@tanstack/ai": "https://pkg.pr.new/TanStack/ai/@tanstack/ai@144",
+    "@tanstack/ai-openai": "https://pkg.pr.new/TanStack/ai/@tanstack/ai-openai@144",
     "@tanstack/cta-engine": "workspace:*",
     "@tanstack/cta-ui-base": "workspace:*",
+    "@types/multer": "^2.0.0",
     "chalk": "^5.4.1",
     "cors": "^2.8.5",
     "execa": "^9.5.2",
     "express": "^4.21.2",
+    "multer": "^2.0.2",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -31,7 +35,8 @@
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.1.6",
     "tailwindcss-animate": "^1.0.7",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",

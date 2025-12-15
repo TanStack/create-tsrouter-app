@@ -2,6 +2,7 @@
   "name": "Compiler",
   "phase": "setup",
   "description": "Add React Compiler",
+  "aiDescription": "React Compiler (formerly React Forget) is an experimental build-time optimization that automatically memoizes your React components and hooks. It eliminates the need for manual useMemo, useCallback, and React.memo calls by analyzing your code and inserting memoization where beneficial. The compiler understands React's rules (like hooks rules and component purity) and optimizes re-renders automatically. Enable this when you want automatic performance optimization without manual memoization boilerplate. It's particularly valuable for large applications with complex component trees where manual optimization is tedious. Note: React Compiler is still experimental and may have edge cases. It works best with idiomatic React code that follows best practices. The compiler integrates via a Babel plugin and requires no runtime changes to your code.",
   "link": "https://react.dev/learn/react-compiler",
   "modes": ["code-router", "file-router"],
   "type": "add-on",

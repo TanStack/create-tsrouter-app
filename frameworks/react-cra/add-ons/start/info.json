@@ -2,6 +2,7 @@
   "name": "Start",
   "phase": "setup",
   "description": "Add TanStack Start for SSR, API endpoints, and more.",
+  "aiDescription": "TanStack Start transforms your TanStack Router app into a full-stack framework with server-side rendering (SSR), server functions, and API routes. It's the 'meta-framework' layer that enables building complete applications, not just SPAs. Key features: SSR with streaming support, server functions (RPC-style calls from client to server), API routes for REST endpoints, file-based routing with loaders and actions, and multiple rendering strategies (SSR, SPA, static). Start uses Vinxi under the hood and supports deployment to Node.js, Cloudflare, Netlify, Vercel, and more. Choose TanStack Start when you need SEO (SSR), want server-side data loading, need API endpoints, or want to use add-ons like Prisma/Drizzle that require server access. Start is required for most database integrations, authentication flows, and any server-side logic. It's the foundation that enables the full-stack add-ons in this list.",
   "link": "https://tanstack.com/start/latest",
   "modes": ["file-router"],
   "type": "add-on",

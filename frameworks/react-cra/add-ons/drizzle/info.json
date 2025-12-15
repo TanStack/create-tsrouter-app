@@ -1,6 +1,7 @@
 {
   "name": "Drizzle",
   "description": "Add Drizzle ORM to your application.",
+  "aiDescription": "Drizzle is a lightweight, TypeScript-first ORM that prioritizes SQL-like syntax and minimal abstraction. Unlike Prisma which uses its own query language, Drizzle queries look almost identical to SQL—if you know SQL, you know Drizzle. Key features: zero dependencies, exceptional TypeScript inference (your schema IS your types), support for PostgreSQL/MySQL/SQLite, relational queries with automatic joins, and a migrations system. Drizzle is significantly smaller than Prisma (~7KB vs ~2MB) and has no query engine overhead, making it faster for serverless deployments with cold starts. Choose Drizzle when you want SQL-like control, minimal bundle size, or are deploying to edge/serverless environments where cold start matters. Drizzle requires more manual schema definition but gives you precise control over your queries. It's the choice for developers who think in SQL and want type safety without magic.",
   "phase": "add-on",
   "type": "add-on",
   "priority": 46,

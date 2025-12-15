@@ -2,6 +2,7 @@
   "name": "Sentry",
   "phase": "setup",
   "description": "Add Sentry for error monitoring, tracing, and session replays (requires Start).",
+  "aiDescription": "Sentry is an application monitoring platform that captures errors, performance data, and user sessions. It goes beyond simple error logging—you get full stack traces with source maps, breadcrumbs showing user actions before errors, release tracking, and performance monitoring. Key features: automatic error capture for React (including component tree), distributed tracing across frontend and backend, session replays to see exactly what users experienced, and alerts/integrations for Slack/PagerDuty/etc. Sentry helps you answer 'what went wrong?' and 'how often?' with minimal debugging effort. Choose Sentry when you need production error visibility, want to track performance regressions, or need session replays for debugging user-reported issues. It's essential for any production app where you can't reproduce bugs locally. The integration sets up both client and server-side error capture with TanStack Start.",
   "link": "https://sentry.com/",
   "modes": ["file-router"],
   "type": "add-on",

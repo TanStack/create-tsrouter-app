@@ -1,6 +1,7 @@
 {
   "name": "WorkOS",
   "description": "Add WorkOS authentication to your application.",
+  "aiDescription": "WorkOS is an enterprise authentication platform focused on B2B SaaS requirements that Clerk doesn't fully address. Its core strength is enterprise SSO—connecting to your customers' identity providers (Okta, Azure AD, Google Workspace, etc.) so their employees can log in with existing credentials. Key features: SAML/OIDC SSO, SCIM directory sync (automatically provision/deprovision users), audit logs for compliance, magic link auth, and MFA. WorkOS handles the complexity of enterprise SSO protocols so you don't have to. Choose WorkOS when selling to enterprises that require SSO ('we only allow Okta login'), need directory sync for user provisioning, or have compliance requirements (SOC 2, audit logs). Unlike Clerk which focuses on consumer auth with nice UI, WorkOS focuses on enterprise protocols and features. The integration sets up WorkOS auth with session management.",
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",

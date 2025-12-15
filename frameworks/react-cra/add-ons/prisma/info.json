@@ -1,6 +1,7 @@
 {
   "name": "Prisma",
   "description": "Add Prisma Postgres, or Prisma ORM with other DBs to your application.",
+  "aiDescription": "Prisma is a full-featured ORM with a focus on developer experience and type safety. It uses a declarative schema language (schema.prisma) to define your data model, then generates a fully-typed client. Key features: intuitive data modeling with relations, automatic migrations, Prisma Studio for visual data browsing, and excellent VS Code integration. Prisma's query API is more abstracted than SQL—you work with objects and relations rather than raw queries. Choose Prisma when you want maximum productivity, are building data-heavy applications, or need visual database tools. It supports PostgreSQL, MySQL, SQLite, SQL Server, MongoDB, and CockroachDB. Trade-offs: larger bundle size and query engine overhead compared to Drizzle, which can impact serverless cold starts. Prisma also offers Prisma Postgres—their managed PostgreSQL with connection pooling and an accelerate cache layer.",
   "phase": "add-on",
   "type": "add-on",
   "priority": 120,

@@ -1,6 +1,7 @@
 {
   "name": "Shadcn",
   "description": "Add Shadcn UI to your application.",
+  "aiDescription": "Shadcn UI is not a component library you install—it's a collection of beautifully designed, accessible components that you copy into your project and own. Built on Radix UI primitives and styled with Tailwind CSS, it provides the best of both worlds: professional design and full customization control. Key features: accessible by default (ARIA compliant), dark mode support, customizable themes via CSS variables, and components you can modify directly. Unlike traditional UI libraries, updates don't break your customizations because the code is yours. Choose Shadcn when you want beautiful, accessible components but need to customize them heavily, don't want to fight library abstractions, or want consistent design across your app. It includes form inputs, dialogs, dropdowns, data tables, and more. Shadcn is the foundation for most TanStack Create App add-ons that need UI components.",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "link": "https://ui.shadcn.com/",

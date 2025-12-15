@@ -1,6 +1,7 @@
 {
   "name": "Store",
   "description": "Add TanStack Store to your application.",
+  "aiDescription": "TanStack Store is a lightweight, framework-agnostic state management library that integrates beautifully with Solid's reactivity. Unlike Solid's built-in stores, TanStack Store provides a consistent API across frameworks and includes devtools support. Key features: no boilerplate, derived state with automatic dependency tracking, actions as simple methods, and devtools for debugging. TanStack Store is intentionally minimal—it complements TanStack Query for server state, handling only client-side UI state like modals, themes, or local preferences. Choose TanStack Store when you want consistent state management patterns with other TanStack libraries or need the devtools integration.",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "add-on",

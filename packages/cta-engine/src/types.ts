@@ -32,6 +32,7 @@ export const AddOnBaseSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
+  aiDescription: z.string().optional(),
   author: z.string().optional(),
   version: z.string().optional(),
   link: z.string().optional(),

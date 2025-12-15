@@ -2,6 +2,7 @@
   "name": "Sentry",
   "phase": "setup",
   "description": "Add Sentry for error monitoring and crash reporting (requires Start).",
+  "aiDescription": "Sentry is an application monitoring platform that captures errors, performance data, and user sessions. For Solid apps, it provides error tracking with full stack traces, source map support, and breadcrumbs showing user actions before errors. Key features: automatic error capture, performance monitoring, session replays to see what users experienced, and alerts/integrations for Slack/PagerDuty/etc. Sentry helps you answer 'what went wrong?' and 'how often?' with minimal debugging effort. Choose Sentry when you need production error visibility, want to track performance regressions, or need session replays for debugging user-reported issues. It's essential for any production app where you can't reproduce bugs locally.",
   "link": "https://sentry.com/",
   "modes": ["file-router"],
   "type": "add-on",

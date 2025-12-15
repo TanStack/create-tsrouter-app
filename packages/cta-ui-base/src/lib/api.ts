@@ -98,3 +98,29 @@ export async function dryRunAddToApp(addOns: Array<string>) {
   })
   return outputReq.json() as Promise<DryRunOutput>
 }
+
+export async function checkAIEnabled() {
+  try {
+    const url = `${baseUrl}/api/ai-enabled`
+    console.log('[AI Client] Checking if AI is enabled at:', url)
+    const response = await fetch(url)
+    const data = await response.json()
+    console.log('[AI Client] AI enabled response:', data)
+    return data.enabled as boolean
+  } catch (error) {
+    console.error('[AI Client] Error checking AI enabled:', error)
+    return false
+  }
+}
+
+export function getAIChatEndpoint() {
+  return `${baseUrl}/api/ai-chat`
+}
+
+export function getTranscriptionEndpoint() {
+  return `${baseUrl}/api/transcription`
+}
+
+export function getTTSEndpoint() {
+  return `${baseUrl}/api/tts`
+}

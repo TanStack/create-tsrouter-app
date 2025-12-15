@@ -1,6 +1,7 @@
 {
   "name": "Clerk",
   "description": "Add Clerk authentication to your application.",
+  "aiDescription": "Clerk is a complete authentication and user management platform optimized for React applications. It provides drop-in UI components for sign-up, sign-in, and user profiles that are fully customizable. Key features include: passwordless authentication (magic links, OTP), social login with 20+ providers (Google, GitHub, Discord, etc.), multi-factor authentication (TOTP, SMS, backup codes), and organization/team management for B2B apps. Clerk handles session management, JWT tokens, and provides React hooks like useUser() and useAuth() for easy access to auth state. Choose Clerk when you want a polished developer experience with beautiful default UI, extensive social provider support, and don't need deep enterprise SSO integration. Clerk excels at consumer-facing apps and developer tools. It includes built-in user profile pages, email verification, and can sync user data to your database via webhooks.",
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",

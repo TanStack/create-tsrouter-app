@@ -8,7 +8,7 @@ import {
 
 import SidebarContainer from './sidebar-container'
 
-export default function ProjectName() {
+export default function ProjectName({ aiButtons }: { aiButtons?: React.ReactNode }) {
   const name = useProjectName()
   const mode = useApplicationMode()
 
@@ -24,8 +24,9 @@ export default function ProjectName() {
           value={name}
           placeholder="my-app"
           onChange={(e) => setProjectName(e.target.value)}
-          className="w-full bg-gray-500/10 rounded-md px-2 py-1 min-w-[200px] text-sm"
+          className="flex-1 bg-gray-500/10 rounded-md px-2 py-1 min-w-[120px] text-sm"
         />
+        {aiButtons}
       </div>
     </SidebarContainer>
   )

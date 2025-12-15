@@ -1,6 +1,7 @@
 {
   "name": "Neon",
   "description": "Add the Neon database to your application.",
+  "aiDescription": "Neon is a serverless PostgreSQL database designed for modern cloud applications. Its killer feature is database branching—you can create instant copy-on-write branches of your database for development, testing, or preview deployments, just like git branches for code. Key features: scales to zero (no charges when idle), instant branching with no storage duplication, automatic connection pooling via their serverless driver, and a generous free tier. Neon separates storage from compute, allowing independent scaling and instant cold starts. Choose Neon when you want PostgreSQL compatibility with serverless scaling, need database branches for CI/CD or preview deployments, or want to minimize costs for variable workloads. It works great with Drizzle or Prisma for type-safe queries. Neon provides both standard PostgreSQL connections and an HTTP-based serverless driver optimized for edge functions with minimal latency.",
   "link": "https://neon.com",
   "phase": "add-on",
   "type": "add-on",

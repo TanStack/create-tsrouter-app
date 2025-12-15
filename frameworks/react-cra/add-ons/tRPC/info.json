@@ -1,6 +1,7 @@
 {
   "name": "tRPC",
   "description": "Integrate tRPC into your application.",
+  "aiDescription": "tRPC enables end-to-end type safety between your React frontend and Node.js backend without code generation or schemas. You write TypeScript on the server, and the client automatically knows the types—change a server function's return type and TypeScript immediately catches mismatches in your frontend. Key features: automatic type inference, middleware for auth/validation, subscriptions for real-time, and seamless TanStack Query integration. tRPC uses a custom protocol optimized for internal APIs, not REST conventions. Choose tRPC when your frontend and backend are in the same repo (monorepo), you want maximum type safety with minimum setup, and you don't need to expose a REST API to external consumers. It's perfect for full-stack TypeScript apps where the API is only consumed by your own frontend. For public APIs or OpenAPI needs, consider oRPC instead.",
   "phase": "add-on",
   "modes": ["file-router"],
   "link": "https://trpc.io/",

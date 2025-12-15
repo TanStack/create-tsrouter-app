@@ -1,6 +1,7 @@
 {
   "name": "Store",
   "description": "Add TanStack Store to your application.",
+  "aiDescription": "TanStack Store is a lightweight, framework-agnostic state management library for client-side state. Unlike Redux or Zustand, TanStack Store is designed for fine-grained reactivity—components only re-render when the specific state they use changes. Key features: no boilerplate (just create a store and use it), derived state with automatic dependency tracking, actions as simple methods, and devtools for debugging. TanStack Store is intentionally minimal—it's not trying to replace server state solutions like TanStack Query, but complement them for UI state like modals, themes, or local preferences. Choose TanStack Store when you need simple, performant client state without the ceremony of Redux or the complexity of state machines. It's perfect for form state, UI toggles, or any local state that doesn't come from the server.",
   "phase": "add-on",
   "link": "https://tanstack.com/store/latest",
   "type": "add-on",

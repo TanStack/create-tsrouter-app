@@ -1,6 +1,7 @@
 {
   "name": "Storybook",
   "description": "Integrate Storybook into your application.",
+  "aiDescription": "Storybook is a development environment for building, documenting, and testing UI components in isolation. It renders your components outside of your main app, letting you develop them without running the full application or setting up complex state. Key features: component stories that capture different states, visual testing and interaction testing, automatic documentation generation, and accessibility checks. Storybook serves as living documentation for your component library and enables visual regression testing with tools like Chromatic. Choose Storybook when building a design system, working on a team that needs component documentation, want visual testing for UI components, or want to develop components in isolation without app context. It's invaluable for component libraries and large teams where designers and developers need a shared component catalog.",
   "phase": "add-on",
   "modes": ["file-router"],
   "link": "https://storybook.js.org/",

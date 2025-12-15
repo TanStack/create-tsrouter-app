@@ -1,6 +1,7 @@
 {
   "name": "Netlify",
   "description": "Netlify deployment setup",
+  "aiDescription": "Netlify provides a streamlined deployment platform with excellent DX for frontend and full-stack apps. Key features: automatic deployments from Git, preview deployments for every PR, edge functions, serverless functions, forms handling, split testing, and a CDN. Choose Netlify when you want simple deployments with great CI/CD integration, need preview deployments for team collaboration, or want built-in features like form handling without backend code. Netlify's edge functions run on Deno at the edge for low latency. Trade-offs: serverless functions have cold starts, and complex backend needs may require additional services. Netlify excels at JAMstack/static sites with serverless functions and is very popular for frontend-focused teams.",
   "link": "https://docs.netlify.com",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],

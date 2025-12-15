@@ -1,6 +1,7 @@
 {
   "name": "ESLint",
   "description": "ESLint + Prettier toolchain support.",
+  "aiDescription": "ESLint is the industry-standard JavaScript/TypeScript linter with the largest plugin ecosystem. Combined with Prettier for code formatting, it's the most flexible and widely-adopted linting setup. Key features: extensive rule library, plugin ecosystem (React, accessibility, imports, testing, etc.), custom rule authoring, and IDE integration. ESLint catches bugs, enforces coding standards, and can auto-fix many issues. Choose ESLint when you need specific plugins (like eslint-plugin-react-hooks, eslint-plugin-jsx-a11y), want maximum customization, or are working in a codebase already using ESLint. This setup includes Prettier for formatting, configured to avoid conflicts with ESLint. Trade-off: slower than Biome and requires more configuration, but offers unmatched flexibility and ecosystem.",
   "phase": "setup",
   "type": "toolchain",
   "priority": 0,

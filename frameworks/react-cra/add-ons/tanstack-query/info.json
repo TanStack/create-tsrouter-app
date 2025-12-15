@@ -1,6 +1,7 @@
 {
   "name": "Query",
   "description": "Integrate TanStack Query into your application.",
+  "aiDescription": "TanStack Query is the standard for server state management in React. It handles data fetching, caching, synchronization, and updates with declarative hooks. Key features: automatic background refetching, cache invalidation, optimistic updates, infinite scroll/pagination, parallel and dependent queries, and devtools for debugging cache state. Unlike Redux or Zustand, TanStack Query specifically solves server state (data that lives on your backend and needs to stay synchronized), not UI state. Choose TanStack Query for any app that fetches data from APIs—it eliminates the need for loading/error state boilerplate, reduces duplicate requests, and keeps your UI in sync with server data. It's foundational for most TanStack apps and integrates with tRPC/oRPC for end-to-end type safety. The devtools let you inspect cache contents, trigger refetches, and debug query states.",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "add-on",

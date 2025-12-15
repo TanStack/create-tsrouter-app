@@ -1,6 +1,7 @@
 {
   "name": "TanStack Query",
   "description": "Integrate TanStack Query into your application.",
+  "aiDescription": "TanStack Query is the standard for server state management, now with first-class Solid support. It handles data fetching, caching, synchronization, and updates with declarative primitives that integrate with Solid's reactivity. Key features: automatic background refetching, cache invalidation, optimistic updates, infinite scroll/pagination, parallel and dependent queries, and devtools for debugging cache state. TanStack Query specifically solves server state (data that lives on your backend and needs to stay synchronized), not UI state. Choose TanStack Query for any Solid app that fetches data from APIs—it eliminates the need for loading/error state boilerplate, reduces duplicate requests, and keeps your UI in sync with server data.",
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",

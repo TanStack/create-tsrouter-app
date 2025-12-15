@@ -1,6 +1,7 @@
 {
   "name": "Module Federation",
   "description": "Module Federation",
+  "aiDescription": "Module Federation is a webpack/Vite feature that enables micro-frontend architecture by allowing separately deployed applications to share code at runtime. Instead of building a monolith or using iframes, federated modules let you split your app into independent deployable units that load each other's components dynamically. Key features: runtime code sharing (no rebuild needed when dependencies update), shared dependencies to avoid duplication, bi-directional sharing (apps can both consume and expose modules), and version negotiation for shared libraries. Choose Module Federation when you have multiple teams working on different parts of a large application, need independent deployment cycles, or want to incrementally migrate a legacy app. It's ideal for enterprise applications, design systems shared across apps, or A/B testing different implementations. Trade-offs: adds complexity to builds and debugging, requires careful dependency version management.",
   "phase": "add-on",
   "modes": ["code-router"],
   "link": "https://module-federation.io/",

@@ -1,6 +1,7 @@
 {
   "name": "oRPC",
   "description": "Integrate oRPC into your application.",
+  "aiDescription": "oRPC is a modern TypeScript RPC framework and a next-generation alternative to tRPC. It provides end-to-end type safety between your server and client, but with a focus on OpenAPI compatibility and standards compliance. Key differences from tRPC: oRPC generates OpenAPI specs automatically (great for external API consumers), supports standard HTTP semantics (GET/POST/PUT/DELETE), has built-in file upload handling, and works with any HTTP client. Key features: type-safe client generation, middleware support, input/output validation with Zod, and contract-first development option. Choose oRPC when you need both internal type-safe RPC AND external REST API access, want OpenAPI documentation, or prefer standards-based HTTP over custom protocols. It integrates with TanStack Query for client-side caching. oRPC is ideal for public APIs that also serve your own frontend.",
   "phase": "add-on",
   "modes": ["file-router"],
   "link": "https://orpc.unnoq.com/",

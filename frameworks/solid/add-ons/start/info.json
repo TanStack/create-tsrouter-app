@@ -2,6 +2,7 @@
   "name": "Start",
   "phase": "setup",
   "description": "Add TanStack Start for SSR, API endpoints, and more.",
+  "aiDescription": "TanStack Start transforms your TanStack Router Solid app into a full-stack framework with server-side rendering (SSR), server functions, and API routes. It's the 'meta-framework' layer that enables building complete applications, not just SPAs. Key features: SSR with streaming support, server functions (RPC-style calls from client to server), API routes for REST endpoints, and multiple rendering strategies. Start uses Vinxi under the hood and supports deployment to Node.js, Cloudflare, Netlify, and more. Choose TanStack Start when you need SEO (SSR), want server-side data loading, need API endpoints, or want to access server-only resources. Start is the foundation that enables most full-stack features in Solid apps.",
   "link": "https://tanstack.com/start/latest",
   "modes": ["file-router"],
   "type": "add-on",

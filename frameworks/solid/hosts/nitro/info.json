@@ -1,6 +1,7 @@
 {
   "name": "Nitro (agnostic)",
   "description": "Nitro deployment setup",
+  "aiDescription": "Nitro is a universal deployment layer that lets you deploy to any platform with the same codebase. Key features: deploy anywhere presets (Node.js, Cloudflare, Vercel, Netlify, Deno, Bun, etc.), automatic runtime optimization per platform, and built-in caching/storage utilities. Choose Nitro when you want deployment flexibility—start on Node.js and move to edge later without code changes. It's the default adapter because it works everywhere and abstracts away platform differences.",
   "link": "https://v3.nitro.build/",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],

@@ -1,6 +1,7 @@
 {
   "name": "Form",
   "description": "TanStack Form",
+  "aiDescription": "TanStack Form is a headless, framework-agnostic form library focused on performance and flexibility. It provides first-class TypeScript support with inferred types from your form schema, field-level and form-level validation (sync and async), and fine-grained reactivity that only re-renders changed fields. Key features: built-in validation adapter support (Zod, Valibot, Yup), nested object and array fields, dependent field validation, and submission handling with loading states. Unlike React Hook Form which uses uncontrolled inputs by default, TanStack Form gives you explicit control over form state. Choose TanStack Form when you need complex form logic, dynamic field arrays, or want validation library flexibility. It integrates with TanStack Query for async validation and submission. The headless design means you bring your own UI components—pair it with Shadcn for beautiful accessible form elements.",
   "phase": "add-on",
   "type": "add-on",
   "priority": 44,

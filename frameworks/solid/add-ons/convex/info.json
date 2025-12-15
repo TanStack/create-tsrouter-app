@@ -1,6 +1,7 @@
 {
   "name": "Convex",
   "description": "Add the Convex database to your application.",
+  "aiDescription": "Convex is a reactive backend-as-a-service that combines a real-time database, serverless functions, and file storage into one platform. Unlike traditional databases, Convex automatically syncs data to all connected clients in real-time—when one user makes a change, all other users see it instantly without polling or manual subscriptions. Key features: TypeScript-first with end-to-end type safety from database to UI, automatic caching and optimistic updates, built-in file storage, scheduled functions (cron jobs), and ACID transactions. Convex uses a document-based data model similar to MongoDB but with a relational-like query system. Choose Convex when building collaborative apps (docs, whiteboards, chat), real-time dashboards, or any app where instant data sync matters. It eliminates the need for separate database, API layer, and WebSocket infrastructure. Trade-off: Convex is a managed service with its own query language, so you're committed to their platform.",
   "link": "https://convex.dev",
   "phase": "add-on",
   "type": "add-on",

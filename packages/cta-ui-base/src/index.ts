@@ -18,9 +18,15 @@ import StarterDialog from './components/sidebar-items/starter'
 import SidebarGroup from './components/sidebar-items/sidebar-group'
 import WebContainerProvider from './components/web-container-provider'
 import { WebContainerPreview } from './components/webcontainer-preview'
+import { AIChatDialog, AISparkleButton } from './components/ai-chat-dialog'
+import { AIVoiceDialog, AIVoiceButton } from './components/ai-voice-dialog'
+import { AIVoiceOrb } from './components/ai-voice-orb'
 
 import { useApplicationMode, useManager, useReady } from './store/project'
 import { useWebContainer } from './hooks/use-web-container'
+import { useAudioRecorder } from './hooks/use-audio-recorder'
+import { useVADRecorder } from './hooks/use-vad-recorder'
+import { useTTS } from './hooks/use-tts'
 
 export {
   FileNavigator,
@@ -41,10 +47,18 @@ export {
   SidebarGroup,
   WebContainerProvider,
   WebContainerPreview,
+  AIChatDialog,
+  AISparkleButton,
+  AIVoiceDialog,
+  AIVoiceButton,
+  AIVoiceOrb,
   useApplicationMode,
   useManager,
   useReady,
   useWebContainer,
+  useAudioRecorder,
+  useVADRecorder,
+  useTTS,
 }
 
 export default RootComponent

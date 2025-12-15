@@ -1,6 +1,7 @@
 {
   "name": "Table",
   "description": "Integrate TanStack Table into your application.",
+  "aiDescription": "TanStack Table is a headless table library that handles all the complex table logic while you control the UI. It supports sorting, filtering, pagination, row selection, column resizing, pinning, virtualization (for huge datasets), and grouping/aggregation. Key features: server-side or client-side data, column definitions with TypeScript inference, flexible cell/header/footer rendering, and faceted filters. Unlike data grid components that come with fixed styling, TanStack Table is unstyled—you bring your own markup and CSS, making it perfect for custom designs or integrating with Shadcn UI. Choose TanStack Table when you need a complex data table with sorting/filtering/pagination, want full control over appearance, or need virtualization for large datasets. It's the go-to solution for admin dashboards, data management UIs, and any app that displays tabular data.",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "link": "https://tanstack.com/table/latest",

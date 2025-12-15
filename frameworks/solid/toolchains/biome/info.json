@@ -1,6 +1,7 @@
 {
   "name": "Biome",
   "description": "Biome toolchain support.",
+  "aiDescription": "Biome is an ultra-fast linter, formatter, and more—written in Rust. It's a unified tool that replaces ESLint + Prettier with a single dependency that's 10-100x faster. Key features: instant formatting and linting, JavaScript/TypeScript/JSX support, 200+ lint rules, and an opinionated formatter. Choose Biome for faster CI times, simpler tooling setup, or if you're frustrated with ESLint performance. Trade-offs: smaller ecosystem than ESLint, fewer plugins, less configuration flexibility. Biome is ideal for new projects or teams who value speed and simplicity.",
   "phase": "setup",
   "type": "toolchain",
   "modes": ["code-router", "file-router"],

@@ -1,6 +1,7 @@
 {
   "name": "DB",
   "description": "TanStack DB",
+  "aiDescription": "TanStack DB is a reactive client-side database and sync engine for building local-first applications. It provides a reactive data layer that keeps your UI in sync with data changes, supports offline-first patterns, and can sync with various backends. Key features: fine-grained reactivity (only re-render what changed), optimistic updates with automatic rollback, collection-based data organization, and built-in support for live queries. TanStack DB works as a client-side cache that can persist to IndexedDB and sync with your server. Choose TanStack DB when building apps that need to work offline, require instant UI updates, or want to reduce server round-trips. It integrates seamlessly with TanStack Query for server state and TanStack Start for SSR. Note: TanStack DB is newer and still evolving—it's ideal for teams who want a TanStack-native solution for reactive local state.",
   "phase": "add-on",
   "type": "add-on",
   "priority": 48,

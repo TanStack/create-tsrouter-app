@@ -1,6 +1,7 @@
 {
   "name": "Netlify",
   "description": "Netlify deployment setup",
+  "aiDescription": "Netlify provides a streamlined deployment platform with excellent DX for Solid apps. Key features: automatic deployments from Git, preview deployments for every PR, edge functions, serverless functions, forms handling, and a CDN. Choose Netlify when you want simple deployments with great CI/CD integration, need preview deployments for team collaboration, or want built-in features like form handling. Netlify excels at frontend-focused teams and is very popular for modern web applications.",
   "link": "https://docs.netlify.com",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],

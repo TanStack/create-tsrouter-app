@@ -1,6 +1,7 @@
 {
   "name": "TanStack Chat",
   "description": "A chat example that uses TanStack Start and TanStack Store. Features chat with Anthropic Sonnet, chat history and custom prompts.",
+  "aiDescription": "TanStack Chat is a fully-featured AI chat example built with @tanstack/ai that you can use as a starting point for your own AI-powered applications. It demonstrates: streaming chat with Anthropic Claude (Sonnet), persistent chat history, custom system prompts, a polished chat UI with message bubbles, an AI assistant button in the header, and integration with TanStack Store for state management. This example shows best practices for building AI chat interfaces including proper streaming SSE handling, message rendering with Markdown, loading states, and error handling. Choose this example when you want to add AI chat capabilities to your app—it provides production-ready patterns for @tanstack/ai integration that you can customize for your specific LLM and use case.",
   "phase": "example",
   "modes": ["file-router"],
   "type": "example",

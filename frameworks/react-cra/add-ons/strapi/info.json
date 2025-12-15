@@ -1,6 +1,7 @@
 {
   "name": "Strapi",
   "description": "Use the Strapi CMS to manage your content.",
+  "aiDescription": "Strapi is a headless CMS that lets non-developers manage content through an admin UI while developers consume it via REST or GraphQL APIs. Unlike WordPress, Strapi is 'headless'—it only provides the content API, you build your own frontend. Key features: customizable content types builder, role-based access control, media library, internationalization (i18n), and a plugin ecosystem. Strapi can run self-hosted (Node.js) or via Strapi Cloud. Choose Strapi when you have content that needs to be edited by non-developers (blogs, marketing pages, product catalogs), want to decouple content management from code deployments, or need a CMS that's more developer-friendly than WordPress. The integration sets up a Strapi client for fetching content. You'll need to set up a Strapi instance separately—either locally or on Strapi Cloud.",
   "link": "https://strapi.io/",
   "phase": "add-on",
   "type": "add-on",

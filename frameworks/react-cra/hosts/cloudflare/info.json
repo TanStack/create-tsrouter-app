@@ -1,6 +1,7 @@
 {
   "name": "Cloudflare",
   "description": "Cloudflare deployment setup",
+  "aiDescription": "Cloudflare Workers/Pages provides edge deployment—your app runs in data centers worldwide, close to your users. Key features: sub-50ms cold starts, global distribution (300+ locations), built-in KV storage, Durable Objects for stateful edge apps, and integration with Cloudflare's CDN/security services. Choose Cloudflare when you need the lowest latency globally, want edge computing capabilities, or are already using Cloudflare for DNS/CDN. It excels at API endpoints that need to be fast everywhere. Trade-offs: Workers have a more constrained runtime than Node.js (no filesystem, limited Node APIs), and debugging can be trickier. Pair with Neon or another edge-compatible database for full-stack edge apps.",
   "link": "https://developers.cloudflare.com/workers/vite-plugin/",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],

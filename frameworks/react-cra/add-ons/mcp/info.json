@@ -2,6 +2,7 @@
   "name": "MCP",
   "phase": "setup",
   "description": "Add Model Context Protocol (MCP) support.",
+  "aiDescription": "Model Context Protocol (MCP) is an open standard for connecting AI assistants to external data sources and tools. This add-on sets up your application as an MCP server, allowing AI assistants (like Claude, Cursor, or other MCP-compatible tools) to interact with your app's data and functionality. Key features: expose your app's data to AI assistants, define tools that AI can invoke, enable AI-powered automation of app functions. Use cases include: letting an AI assistant manage todos in your app, querying your database through natural language, or building AI-powered admin interfaces. Choose MCP when you want to make your application's functionality accessible to AI assistants. Note: MCP is an emerging standard—this implementation provides a foundation that may evolve. The integration requires TanStack Start for server-side routes.",
   "link": "https://mcp.dev",
   "modes": ["file-router"],
   "type": "add-on",
