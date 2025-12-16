@@ -285,6 +285,16 @@ function RouteComponent() {
   const [results, setResults] = useState<
     Record<string, { type: 'success' | 'error'; spanOp: string }>
   >({})
+  const [sentryConfigured, setSentryConfigured] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    // Check if Sentry DSN environment variable is set
+    const hasDsn = !!import.meta.env.VITE_SENTRY_DSN
+    setSentryConfigured(hasDsn)
+  }, [])
+
+  // Don't show warning until we've checked on the client
+  const showWarning = sentryConfigured === false
 
   const handleClientError = async () => {
     setIsLoading((prev) => ({ ...prev, clientError: true }))
@@ -394,8 +404,8 @@ function RouteComponent() {
             </div>
           </div>
           <p className="text-lg text-[#A49FB5] max-w-xl mx-auto leading-relaxed">
-            Click the buttons below to trigger errors and traces, then view
-            them in your{' '}
+            Click the buttons below to trigger errors and traces, then view them
+            in your{' '}
             <a
               href="https://sentry.io"
               target="_blank"
@@ -407,6 +417,32 @@ function RouteComponent() {
             .
           </p>
         </div>
+
+        {/* Sentry Not Initialized Warning */}
+        {showWarning && (
+          <div className="mb-8 flex items-center gap-3 bg-[#E5A000]/10 border border-[#E5A000]/30 rounded-xl px-6 py-4">
+            <svg
+              className="w-6 h-6 text-[#E5A000] flex-shrink-0"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <title>Warning</title>
+              <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div>
+              <p className="text-[#E5A000] font-medium">
+                Sentry is not initialized
+              </p>
+              <p className="text-[#A49FB5] text-sm mt-1">
+                Set the <code className="bg-[#1C1825] px-1.5 py-0.5 rounded text-[#B3A1FF]">VITE_SENTRY_DSN</code> environment variable to enable error tracking and performance monitoring.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
@@ -463,6 +499,7 @@ function RouteComponent() {
                   variant="error"
                   onClick={handleClientError}
                   loading={isLoading.clientError}
+                  disabled={sentryConfigured === false}
                 >
                   Trigger Client Error
                 </SentryButton>
@@ -483,6 +520,7 @@ function RouteComponent() {
                   variant="primary"
                   onClick={handleClientTrace}
                   loading={isLoading.clientTrace}
+                  disabled={sentryConfigured === false}
                 >
                   Test Client Trace
                 </SentryButton>
@@ -513,6 +551,7 @@ function RouteComponent() {
                   variant="error"
                   onClick={handleServerError}
                   loading={isLoading.serverError}
+                  disabled={sentryConfigured === false}
                 >
                   Trigger Server Error
                 </SentryButton>
@@ -533,6 +572,7 @@ function RouteComponent() {
                   variant="primary"
                   onClick={handleServerTrace}
                   loading={isLoading.serverTrace}
+                  disabled={sentryConfigured === false}
                 >
                   Test Server Trace
                 </SentryButton>
