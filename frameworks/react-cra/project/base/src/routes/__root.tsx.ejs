@@ -1,5 +1,6 @@
+<% let hasContext = addOnEnabled["apollo-client"] || addOnEnabled["tanstack-query"]; %>
 <% if (!fileRouter) { ignoreFile() } %>import { <% if (addOnEnabled.start) { %>
-  HeadContent<% } else { %>Outlet<% } %><% if (addOnEnabled.start) { %>, Scripts<% } %>, <% if (addOnEnabled["tanstack-query"]) { %>createRootRouteWithContext<% } else { %>createRootRoute<% } %> } from '@tanstack/react-router'
+  HeadContent<% } else { %>Outlet<% } %><% if (addOnEnabled.start) { %>, Scripts<% } %>, <% if (hasContext) { %>createRootRouteWithContext<% } else { %>createRootRoute<% } %> } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools'
 <% if (addOns.length) { %>
@@ -9,21 +10,28 @@ import <%= integration.jsName %> from '<%= relativePath(integration.path, true) 
 <% } %>
 <% if (addOnEnabled.start) { %>
 import appCss from '../styles.css?url'
-<% } %><% if (addOnEnabled["tanstack-query"]) { %>
+<% } %>
+<% if (addOnEnabled["apollo-client"]) { %>
+import type { ApolloClientIntegration } from "@apollo/client-integration-tanstack-start";
+<% } %>
+<% if (addOnEnabled["tanstack-query"]) { %>
 import type { QueryClient } from '@tanstack/react-query'
 <% if (addOnEnabled.tRPC) { %>
 import type { TRPCRouter } from '@/integrations/trpc/router'
 import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
 <% } %>
-
-interface MyRouterContext {
+<% } %>
+<% if (hasContext) { %>
+interface MyRouterContext <% if (addOnEnabled["apollo-client"]) {%> extends ApolloClientIntegration.RouterContext <%} %>{
+<% if (addOnEnabled["tanstack-query"]) { %>
   queryClient: QueryClient
   <% if (addOnEnabled.tRPC) { %>
   trpc: TRPCOptionsProxy<TRPCRouter>
   <% } %>
+<% } %>
 }<% } %>
-  
-export const Route = <% if (addOnEnabled["tanstack-query"]) { %>createRootRouteWithContext<MyRouterContext>()<% } else { %>createRootRoute<% } %>({
+
+export const Route = <% if (hasContext) { %>createRootRouteWithContext<MyRouterContext>()<% } else { %>createRootRoute<% } %>({
 <% if (addOnEnabled.start) { %>
     head: () => ({
     meta: [
