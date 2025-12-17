@@ -5,13 +5,12 @@ import React from 'react'
 
 // Example GraphQL query - replace with your own schema
 const EXAMPLE_QUERY: TypedDocumentNode<{
-  posts: { id: string; title: string; content: string }
+  continents: { __typename: string; code: string; name: string }
 }> = gql`
   query ExampleQuery {
-    posts {
-      id
-      title
-      content
+    continents {
+      code
+      name
     }
   }
 `

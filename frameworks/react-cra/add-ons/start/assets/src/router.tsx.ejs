@@ -23,7 +23,7 @@ export const getRouter = () => {
   const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
-      uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || "https://your-graphql-api.example.com/graphql"
+      uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || "https://countries.trevorblades.com/"
     }),
   });
 <% } %>
