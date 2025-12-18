@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/cta-framework-react-cra",
-  "version": "0.41.2",
+  "version": "0.43.0",
   "description": "CTA Framework for React (Create React App)",
   "type": "module",
   "main": "./dist/index.js",

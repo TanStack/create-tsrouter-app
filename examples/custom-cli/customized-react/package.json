@@ -28,9 +28,9 @@
   "license": "MIT",
   "packageManager": "pnpm@9.15.5",
   "dependencies": {
-    "@tanstack/cta-cli": "^0.41.2",
-    "@tanstack/cta-engine": "^0.41.2",
-    "@tanstack/cta-framework-react-cra": "1.96.1"
+    "@tanstack/cta-cli": "^0.43.0",
+    "@tanstack/cta-engine": "^0.43.0",
+    "@tanstack/cta-framework-react-cra": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.13.4",

@@ -12,22 +12,22 @@ await publish({
       name: '@tanstack/create-start',
       packageDir: './cli/ts-create-start',
     },
-    {
-      name: 'create-tsrouter-app',
-      packageDir: './cli/create-tsrouter-app',
-    },
+    // {
+    //   name: 'create-tsrouter-app',
+    //   packageDir: './cli/create-tsrouter-app',
+    // },
     {
       name: 'create-start-app',
       packageDir: './cli/create-start-app',
     },
-    {
-      name: 'create-tanstack-app',
-      packageDir: './cli/create-tanstack-app',
-    },
-    {
-      name: 'create-tanstack',
-      packageDir: './cli/create-tanstack',
-    },
+    // {
+    //   name: 'create-tanstack-app',
+    //   packageDir: './cli/create-tanstack-app',
+    // },
+    // {
+    //   name: 'create-tanstack',
+    //   packageDir: './cli/create-tanstack',
+    // },
     {
       name: '@tanstack/cta-cli',
       packageDir: './packages/cta-cli',
