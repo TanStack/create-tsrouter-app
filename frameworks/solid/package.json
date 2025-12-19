@@ -1,12 +1,11 @@
 {
   "name": "@tanstack/cta-framework-solid",
-  "version": "0.43.0",
+  "version": "0.43.1",
   "description": "CTA Framework for Solid",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
-    "prebuild": "node ../../scripts/generate-checksums.js",
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "eslint ./src && vitest run",
