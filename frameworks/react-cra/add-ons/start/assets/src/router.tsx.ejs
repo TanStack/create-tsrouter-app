@@ -1,6 +1,13 @@
 import { createRouter } from '@tanstack/react-router'<% if (addOnEnabled['tanstack-query']) { %>
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import * as TanstackQuery from "./integrations/tanstack-query/root-provider";
+<% } %><% if (addOnEnabled['apollo-client']) { %>
+import {
+  routerWithApolloClient,
+  ApolloClient,
+  InMemoryCache,
+} from "@apollo/client-integration-tanstack-start";
+import { HttpLink } from "@apollo/client";
 <% } %>
 <% if (addOnEnabled.sentry) { %>
 import * as Sentry from "@sentry/tanstackstart-react";
@@ -11,22 +18,39 @@ import { routeTree } from './routeTree.gen'
 
 // Create a new router instance
 export const getRouter = () => {
+<% if (addOnEnabled['apollo-client']) { %>
+  // Configure Apollo Client
+  const apolloClient = new ApolloClient({
+    cache: new InMemoryCache(),
+    link: new HttpLink({
+      uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || "https://countries.trevorblades.com/"
+    }),
+  });
+<% } %>
 <% if (addOnEnabled['tanstack-query']) { %>
-    const rqContext = TanstackQuery.getContext();
+  const rqContext = TanstackQuery.getContext();
+<% } %>
 
-    const router = createRouter({
-        routeTree,
-        context: { ...rqContext },
-        defaultPreload: "intent",
-      })
-
-    setupRouterSsrQueryIntegration({router, queryClient: rqContext.queryClient})
-<% } else { %>
   const router = createRouter({
     routeTree,
+    context: {
+<% if (addOnEnabled['apollo-client']) { %>
+      ...routerWithApolloClient.defaultContext,
+<% } %>
+<% if (addOnEnabled['tanstack-query']) { %>
+      ...rqContext,
+<% } %>
+    },
+<% if (addOnEnabled['tanstack-query'] || addOnEnabled['apollo-client']) { %>
+    defaultPreload: "intent",
+<% } else { %>
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
+<% } %>
   })
+
+<% if (addOnEnabled['tanstack-query']) { %>
+  setupRouterSsrQueryIntegration({router, queryClient: rqContext.queryClient})
 <% } %>
 
 <% if (addOnEnabled.sentry) { %>
@@ -40,5 +64,5 @@ export const getRouter = () => {
   }
 <% } %>
 
-  return router;
+  return <% if (addOnEnabled['apollo-client']) { %>routerWithApolloClient(router, apolloClient)<% } else { %>router<% } %>;
 }
