@@ -15,15 +15,18 @@
       "jsName": "ChatDemo"
     },
     {
-      "icon": "Guitar",
-      "url": "/example/guitars",
-      "name": "Guitar Demo",
-      "path": "src/routes/example.guitars.tsx",
-      "jsName": "GuitarDemo"
+      "icon": "ImageIcon",
+      "url": "/demo/image",
+      "name": "Generate Image",
+      "path": "src/routes/demo/image.tsx",
+      "jsName": "ImageDemo"
     },
     {
-      "path": "src/routes/example.guitars/$guitarId.tsx",
-      "jsName": "GuitarById"
+      "icon": "ChefHat",
+      "url": "/demo/structured",
+      "name": "Structured Output",
+      "path": "src/routes/demo/structured.tsx",
+      "jsName": "StructuredDemo"
     }
   ],
   "integrations": [
