@@ -11,7 +11,7 @@
       "icon": "Network",
       "url": "/demo/tanstack-query",
       "name": "TanStack Query",
-      "path": "src/routes/demo.tanstack-query.tsx",
+      "path": "src/routes/demo/tanstack-query.tsx",
       "jsName": "TanStackQueryDemo"
     }
   ],
