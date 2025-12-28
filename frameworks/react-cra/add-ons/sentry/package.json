@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "vite build && cp instrument.server.mjs .output/server",
-    "dev": "NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000",
+    "dev": "dotenv -e .env.local -- sh -c \"NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000\"",
     "start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs"
   },
   "dependencies": {

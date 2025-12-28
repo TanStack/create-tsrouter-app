@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "@orpc/client": "^1.7.5",
-    "@orpc/json-schema": "^1.7.5",
-    "@orpc/openapi": "^1.7.5",
-    "@orpc/server": "^1.7.5",
-    "@orpc/tanstack-query": "^1.7.5",
-    "@orpc/zod": "^1.7.5",
-    "zod": "^4.0.10"
+    "@orpc/client": "^1.13.0",
+    "@orpc/json-schema": "^1.13.0",
+    "@orpc/openapi": "^1.13.0",
+    "@orpc/server": "^1.13.0",
+    "@orpc/tanstack-query": "^1.13.0",
+    "@orpc/zod": "^1.13.0",
+    "zod": "^4.2.1"
   }
 }
