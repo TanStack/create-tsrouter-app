@@ -10,7 +10,6 @@
   "scripts": {
     "cleanNodeModules": "rm -rf node_modules && pnpm -r exec rm -rf node_modules",
     "build": "nx run-many --target=build --parallel 5",
-    "cipublish": "node scripts/publish.js",
     "dev": "nx run-many --target=dev --parallel 20",
     "test": "nx run-many --target=test",
     "check-outdated": "node scripts/check-outdated-packages.js",
@@ -24,7 +23,6 @@
     "@changesets/cli": "^2.29.8",
     "@svitejs/changesets-changelog-github-compact": "^1.2.0",
     "@tanstack/eslint-config": "^0.3.4",
-    "@tanstack/publish-config": "^0.2.2",
     "eslint": "^9.20.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-unused-imports": "^4.1.4",
