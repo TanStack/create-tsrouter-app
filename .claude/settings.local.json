@@ -8,7 +8,9 @@
       "Bash(nvm use:*)",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(pnpm test:*)"
+      "Bash(pnpm test:*)",
+      "Bash(cat:*)",
+      "Bash(xargs:*)"
     ],
     "deny": []
   }
