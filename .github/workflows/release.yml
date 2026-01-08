@@ -1,17 +1,15 @@
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: override release tag
-        required: false
   push:
-    branches: [main, alpha, beta]
+    branches: [main, alpha, beta, rc]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
 permissions:
   contents: write
@@ -34,11 +32,17 @@ jobs:
         run: pnpm build
       - name: Test
         run: pnpm test
-      - name: Publish
-        run: |
-          git config --global user.name 'Tanner Linsley'
-          git config --global user.email 'tannerlinsley@users.noreply.github.com'
-          pnpm run cipublish
+      - name: Run Changesets (version or publish)
+        uses: changesets/action@v1.5.3
+        with:
+          version: pnpm run changeset:version
+          publish: pnpm run changeset:publish
+          commit: "ci: Version Packages"
+          title: "ci: Version Packages"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ inputs.tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Comment on PRs about release
+        if: steps.changesets.outputs.published == 'true'
+        uses: tanstack/config/.github/comment-on-release@main
+        with:
+          published-packages: ${{ steps.changesets.outputs.publishedPackages }}
