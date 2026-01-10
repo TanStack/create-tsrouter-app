@@ -32,6 +32,7 @@ interface MyRouterContext <% if (addOnEnabled["apollo-client"]) {%> extends Apol
   <% } %>
 <% } %>
 }<% } %>
+
 export const Route = <% if (hasContext) { %>createRootRouteWithContext<MyRouterContext>()<% } else { %>createRootRoute<% } %>({
 <% if (addOnEnabled.paraglide) { %>
   beforeLoad: async () => {
