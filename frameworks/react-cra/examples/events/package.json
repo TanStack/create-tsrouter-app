@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@tanstack/ai": "latest",
+    "@tanstack/ai-anthropic": "latest",
+    "@tanstack/ai-client": "latest",
+    "@tanstack/ai-gemini": "latest",
+    "@tanstack/ai-ollama": "latest",
+    "@tanstack/ai-openai": "latest",
+    "@tanstack/ai-react": "latest",
+    "@tanstack/store": "^0.7.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "marked": "^15.0.8",
+    "streamdown": "^1.6.5",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@content-collections/core": "^0.13.1",
+    "@content-collections/vite": "^0.2.8"
+  }
+}
