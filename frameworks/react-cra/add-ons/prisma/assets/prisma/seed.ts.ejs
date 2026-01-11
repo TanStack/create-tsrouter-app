@@ -16,8 +16,8 @@ const adapter = new PrismaMariaDb({
 });<% } %>
 
 <% if (addOnOption.prisma.database === 'sqlite') { %>
-import { PrismaBetterSQLite3 } from '@prisma/adapter-better-sqlite3';
-const adapter = new PrismaBetterSQLite3({
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+const adapter = new PrismaBetterSqlite3({
   url: process.env.DATABASE_URL || 'file:./dev.db'
 });<% } %>
 
