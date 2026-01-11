@@ -146,8 +146,9 @@ export async function promptForCreateOptions(
       options.framework,
       options.mode,
       'example',
-      'Would you like any examples?',
+      'Would you like an example?',
       forcedAddOns,
+      false,
     )) {
       addOns.add(addOn)
     }
