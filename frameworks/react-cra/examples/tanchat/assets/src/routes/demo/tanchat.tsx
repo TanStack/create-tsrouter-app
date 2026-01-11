@@ -28,7 +28,7 @@ import GuitarRecommendation from '@/components/example-GuitarRecommendation'
 
 import './tanchat.css'
 
-function InitalLayout({ children }: { children: React.ReactNode }) {
+function InitialLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex-1 flex items-center justify-center px-4">
       <div className="text-center max-w-3xl mx-auto w-full">
@@ -253,7 +253,7 @@ function ChatPage() {
     }
   }
 
-  const Layout = messages.length ? ChattingLayout : InitalLayout
+  const Layout = messages.length ? ChattingLayout : InitialLayout
 
   if (isCheckingProviders) {
     return (
