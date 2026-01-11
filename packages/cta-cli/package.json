@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/cta-cli",
-  "version": "0.44.3",
+  "version": "0.45.0",
   "description": "Tanstack Application Builder CLI",
   "type": "module",
   "main": "./dist/index.js",
