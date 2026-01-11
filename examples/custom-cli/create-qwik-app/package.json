@@ -1,6 +1,6 @@
 {
   "name": "create-qwik-app",
-  "version": "0.15.2",
+  "private": true,
   "description": "CTA Qwik Builder",
   "bin": "./dist/index.js",
   "type": "module",
