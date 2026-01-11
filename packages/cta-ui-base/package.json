@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/cta-ui-base",
-  "version": "0.44.2",
+  "version": "0.44.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
