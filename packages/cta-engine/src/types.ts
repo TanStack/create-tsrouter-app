@@ -179,6 +179,7 @@ export interface Options {
 
   packageManager: PackageManager
   git: boolean
+  install?: boolean
 
   chosenAddOns: Array<AddOn>
   addOnOptions: Record<string, Record<string, any>>

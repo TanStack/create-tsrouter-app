@@ -38,13 +38,18 @@
     "@tanstack/cta-engine": "workspace:*",
     "@tanstack/cta-ui": "workspace:*",
     "chalk": "^5.4.1",
+    "chokidar": "^3.6.0",
     "commander": "^13.1.0",
+    "diff": "^7.0.0",
     "express": "^4.21.2",
     "semver": "^7.7.2",
+    "tempy": "^3.1.0",
     "validate-npm-package-name": "^7.0.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@tanstack/config": "^0.16.2",
+    "@types/diff": "^5.2.0",
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.4",
     "@types/semver": "^7.7.0",

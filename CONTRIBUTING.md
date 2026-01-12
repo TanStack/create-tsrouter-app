@@ -40,6 +40,38 @@ npm_config_user_agent=pnpm node ../create-tsrouter-app/cli/create-start-app/dist
 
 If you want to specify a package manager.
 
+# Framework Development with --dev-watch
+
+The `--dev-watch` command provides real-time feedback while developing frameworks, add-ons, and starters. It watches for changes in your framework files and automatically rebuilds them.
+
+## Using --dev-watch
+
+To start developing a framework with live rebuilding:
+
+```bash
+node [root of the monorepo]/cli/create-tsrouter-app/dist/index.js --dev-watch ./frameworks/react-cra test-app --template typescript --package-manager bun --tailwind --add-ons shadcn
+```
+
+This command will:
+
+- Watch the selected folder for changes (the folder with the add-ons in it)
+- Automatically rebuild your app / install packages in the target folder when changes are detected (in this case it will install the shadcn addon)
+- Show build output, diffs detected and any errors in real-time
+
+## Example Workflow
+
+1. Start the dev watch mode:
+
+   ```bash
+   pnpm dev # Build in watch mode
+   rm -rf test-app && node cli/create-tsrouter-app/dist/index.js --dev-watch ./frameworks/react-cra test-app --template typescript --package-manager bun --tailwind --add-ons shadcn
+   cd my-test-app && pnpm run dev # run the tsrouter vite app
+   ```
+
+2. Select the framework you want to work on from the displayed list
+
+3. Make changes to the add-ons - they will be automatically rebuilt and your vite app will reflect the changes
+
 # Testing Add-ons and Starters
 
 Create the add-on or starter using the CLI. Then serve it locally from the project directory using `npx static-server`.
