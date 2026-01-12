@@ -34,7 +34,7 @@ export function getPackageManagerScriptCommand(
     case 'pnpm':
       return { command: 'pnpm', args: [...args] }
     case 'bun':
-      return { command: 'bunx', args: ['--bun', 'run', ...args] }
+      return { command: 'bun', args: ['--bun', 'run', ...args] }
     case 'deno':
       return { command: 'deno', args: ['task', ...args] }
     default:
@@ -51,13 +51,13 @@ export function getPackageManagerExecuteCommand(
     case 'yarn':
       return { command: 'yarn', args: ['dlx', pkg, ...args] }
     case 'pnpm':
-      return { command: 'pnpx', args: [pkg, ...args] }
+      return { command: 'pnpm', args: ['dlx', pkg, ...args] }
     case 'bun':
       return { command: 'bunx', args: ['--bun', pkg, ...args] }
     case 'deno':
       return { command: 'deno', args: ['run', `npm:${pkg}`, ...args] }
     default:
-      return { command: 'npx', args: [pkg, ...args] }
+      return { command: 'npx', args: ['-y', pkg, ...args] }
   }
 }
 

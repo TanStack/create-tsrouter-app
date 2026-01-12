@@ -1,0 +1,7 @@
+<% if (addOnOption.prisma.database === 'postgres') { %>
+# Database URL for PostgreSQL
+DATABASE_URL="postgresql://username:password@localhost:5432/mydb"<% } else if (addOnOption.prisma.database === 'mysql') { %>
+# Database URL for MySQL
+DATABASE_URL="mysql://username:password@localhost:3306/mydb"<% } else if (addOnOption.prisma.database === 'sqlite') { %>
+# Database URL for SQLite
+DATABASE_URL="file:./dev.db"<% } %>

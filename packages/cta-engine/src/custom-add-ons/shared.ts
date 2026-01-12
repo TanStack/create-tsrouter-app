@@ -2,7 +2,7 @@ import { readdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { createApp } from '../create-app.js'
 import { createMemoryEnvironment } from '../environment.js'
-import { finalizeAddOns } from '../add-ons.js'
+import { finalizeAddOns, populateAddOnOptionsDefaults } from '../add-ons.js'
 import { getFrameworkById } from '../frameworks.js'
 import { readConfigFileFromEnvironment } from '../config-file.js'
 import { readFileHelper } from '../file-helpers.js'
@@ -66,6 +66,9 @@ export async function createAppOptionsFromPersisted(
   const { version, ...rest } = json
   /* eslint-enable unused-imports/no-unused-vars */
   const framework = getFrameworkById(rest.framework)
+  const chosenAddOns = await finalizeAddOns(framework!, json.mode!, [
+    ...json.chosenAddOns,
+  ])
   return {
     ...rest,
     mode: json.mode!,
@@ -77,9 +80,8 @@ export async function createAppOptionsFromPersisted(
     targetDir: '',
     framework: framework!,
     starter: json.starter ? await loadStarter(json.starter) : undefined,
-    chosenAddOns: await finalizeAddOns(framework!, json.mode!, [
-      ...json.chosenAddOns,
-    ]),
+    chosenAddOns,
+    addOnOptions: populateAddOnOptionsDefaults(chosenAddOns),
   }
 }
 
@@ -100,6 +102,7 @@ export function createSerializedOptionsFromPersisted(
     targetDir: '',
     framework: json.framework,
     starter: json.starter,
+    addOnOptions: {},
   }
 }
 

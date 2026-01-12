@@ -3,16 +3,19 @@
   "description": "TanStack Form",
   "phase": "add-on",
   "type": "add-on",
+  "priority": 44,
   "modes": ["file-router", "code-router"],
   "link": "https://tanstack.com/form/latest",
   "routes": [
     {
+      "icon": "ClipboardType",
       "url": "/demo/form/simple",
       "name": "Simple Form",
       "path": "src/routes/demo.form.simple.tsx",
       "jsName": "FormSimpleDemo"
     },
     {
+      "icon": "ClipboardType",
       "url": "/demo/form/address",
       "name": "Address Form",
       "path": "src/routes/demo.form.address.tsx",

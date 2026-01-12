@@ -14,11 +14,12 @@
   "type": "starter",
   "packageAdditions": {
     "dependencies": {
-      "marked": "^15.0.8"
+      "marked": "^15.0.8",
+      "zod": "^3.25.0"
     },
     "devDependencies": {
-      "@content-collections/core": "^0.8.2",
-      "@content-collections/vite": "^0.2.6"
+      "@content-collections/core": "^0.13.1",
+      "@content-collections/vite": "^0.2.8"
     }
   },
   "dependsOn": ["shadcn", "start"],

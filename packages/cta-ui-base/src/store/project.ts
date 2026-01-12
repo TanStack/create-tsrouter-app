@@ -23,6 +23,7 @@ export const useProjectOptions = create<
   tailwind: true,
   git: true,
   chosenAddOns: [],
+  addOnOptions: {},
   packageManager: 'pnpm',
 }))
 
@@ -47,6 +48,8 @@ export const useOriginalOptions = () => useInitialData().data?.options
 export const useOriginalSelectedAddOns = () =>
   useOriginalOptions()?.chosenAddOns
 export const useApplicationMode = () => useInitialData().data?.applicationMode
+export const useShowDeploymentOptions = () =>
+  useInitialData().data?.showDeploymentOptions
 export const useAddOnsByMode = () => useInitialData().data?.addOns
 export const useSupportedModes = () => useInitialData().data?.supportedModes
 
@@ -140,25 +143,72 @@ export function useAddOns() {
   const toggleAddOn = useCallback(
     (addOnId: string) => {
       if (!ready) return
-      if (addOnState[addOnId].enabled) {
-        if (addOnState[addOnId].selected) {
-          useMutableAddOns.setState((state) => ({
-            userSelectedAddOns: state.userSelectedAddOns.filter(
-              (addOn) => addOn !== addOnId,
-            ),
-          }))
-        } else {
-          useMutableAddOns.setState((state) => ({
-            userSelectedAddOns: [...state.userSelectedAddOns, addOnId],
-          }))
+
+      if (addOnState[addOnId].isSingleSelect) {
+        if (!addOnState[addOnId].selected) {
+          // Find the currently selected addOn with the same isSingleSelect value and unselect it
+          const singleSelectType = addOnState[addOnId].isSingleSelect
+          const currentlySelected = Object.keys(addOnState).find(
+            (id) =>
+              id !== addOnId &&
+              addOnState[id].isSingleSelect === singleSelectType &&
+              addOnState[id].selected,
+          )
+          useMutableAddOns.setState((state) => {
+            let newUserSelectedAddOns = state.userSelectedAddOns.filter(
+              (id) => id !== currentlySelected, // remove the previously selected one
+            )
+            if (!newUserSelectedAddOns.includes(addOnId)) {
+              newUserSelectedAddOns = [...newUserSelectedAddOns, addOnId]
+            }
+            return {
+              userSelectedAddOns: newUserSelectedAddOns,
+            }
+          })
+        }
+      } else {
+        if (addOnState[addOnId].enabled) {
+          if (addOnState[addOnId].selected) {
+            useMutableAddOns.setState((state) => ({
+              userSelectedAddOns: state.userSelectedAddOns.filter(
+                (addOn) => addOn !== addOnId,
+              ),
+            }))
+          } else {
+            useMutableAddOns.setState((state) => ({
+              userSelectedAddOns: [...state.userSelectedAddOns, addOnId],
+            }))
+          }
         }
       }
     },
-    [ready, addOnState],
+    [ready, addOnState, availableAddOns],
   )
+
+  const setAddOnOption = useCallback(
+    (addOnId: string, optionName: string, value: any) => {
+      if (!ready) return
+      useProjectOptions.setState((state) => ({
+        addOnOptions: {
+          ...state.addOnOptions,
+          [addOnId]: {
+            ...state.addOnOptions[addOnId],
+            [optionName]: value,
+          },
+        },
+      }))
+    },
+    [ready],
+  )
+
+  const getAddOnOptions = useCallback((addOnId: string) => {
+    return useProjectOptions.getState().addOnOptions[addOnId] || {}
+  }, [])
 
   return {
     toggleAddOn,
+    setAddOnOption,
+    getAddOnOptions,
     chosenAddOns,
     availableAddOns,
     userSelectedAddOns,

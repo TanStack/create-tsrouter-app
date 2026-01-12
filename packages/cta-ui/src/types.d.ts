@@ -32,12 +32,13 @@ export type AddOnInfo = {
   id: string
   name: string
   description: string
-  type: 'add-on' | 'example' | 'starter' | 'toolchain'
+  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'deployment'
   modes: Array<string>
   smallLogo?: string
   logo?: string
   link: string
   dependsOn?: Array<string>
+  options?: Record<string, any>
 }
 
 export type FileClass =

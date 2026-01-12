@@ -1,0 +1,27 @@
+import { render, route, layout } from "rwsdk/router";
+import { defineApp } from "rwsdk/worker";
+import { realtimeRoute } from "rwsdk/realtime/worker";
+import { env } from "cloudflare:workers";
+
+import { Document } from "@/app/Document";
+import { setCommonHeaders } from "@/app/headers";
+import { Home } from "@/app/pages/Home";
+<% for(const route of routes) { %>import { <%= route.jsName %> } from "<%= relativePath(route.path) %>";
+<% } %>
+import { Layout } from "./app/Layout";
+
+export type AppContext = {};
+
+export { RealtimeDurableObject } from "rwsdk/realtime/durableObject";
+
+export default defineApp([
+  realtimeRoute(() => env.REALTIME_DURABLE_OBJECT),
+  setCommonHeaders(),
+  ({ ctx }) => {
+    // setup ctx here
+    ctx;
+  },
+  render(Document, [layout(Layout, [route("/", Home)
+  <% for(const route of routes) { %>,route("<%= route.url %>", <%= route.jsName %>)<% } %>
+  ])]),
+]);

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@workos-inc/authkit-react": "^0.13.0",
+    "zod": "^4.1.11"
+  }
+}

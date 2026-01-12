@@ -16,8 +16,11 @@ import ModeSelector from './components/sidebar-items/mode-selector'
 import TypescriptSwitch from './components/sidebar-items/typescript-switch'
 import StarterDialog from './components/sidebar-items/starter'
 import SidebarGroup from './components/sidebar-items/sidebar-group'
+import WebContainerProvider from './components/web-container-provider'
+import { WebContainerPreview } from './components/webcontainer-preview'
 
 import { useApplicationMode, useManager, useReady } from './store/project'
+import { useWebContainer } from './hooks/use-web-container'
 
 export {
   FileNavigator,
@@ -36,9 +39,12 @@ export {
   TypescriptSwitch,
   StarterDialog,
   SidebarGroup,
+  WebContainerProvider,
+  WebContainerPreview,
   useApplicationMode,
   useManager,
   useReady,
+  useWebContainer,
 }
 
 export default RootComponent

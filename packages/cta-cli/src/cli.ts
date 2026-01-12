@@ -24,15 +24,20 @@ import { launchUI } from '@tanstack/cta-ui'
 import { runMCPServer } from './mcp.js'
 
 import { promptForAddOns, promptForCreateOptions } from './options.js'
-import { normalizeOptions } from './command-line.js'
+import { normalizeOptions, validateDevWatchOptions } from './command-line.js'
 
 import { createUIEnvironment } from './ui-environment.js'
 import { convertTemplateToMode } from './utils.js'
+import { DevWatchManager } from './dev-watch.js'
 
 import type { CliOptions, TemplateOptions } from './types.js'
-import type { Options, PackageManager } from '@tanstack/cta-engine'
+import type {
+  FrameworkDefinition,
+  Options,
+  PackageManager,
+} from '@tanstack/cta-engine'
 
-// This CLI assumes that all of the registered frameworks have the same set of toolchains, modes, etc.
+// This CLI assumes that all of the registered frameworks have the same set of toolchains, deployments, modes, etc.
 
 export function cli({
   name,
@@ -40,18 +45,24 @@ export function cli({
   forcedMode,
   forcedAddOns = [],
   defaultTemplate = 'javascript',
+  forcedDeployment,
   defaultFramework,
   craCompatible = false,
   webBase,
+  frameworkDefinitionInitializers,
+  showDeploymentOptions = false,
 }: {
   name: string
   appName: string
   forcedMode?: string
   forcedAddOns?: Array<string>
+  forcedDeployment?: string
   defaultTemplate?: TemplateOptions
   defaultFramework?: string
   craCompatible?: boolean
   webBase?: string
+  frameworkDefinitionInitializers?: Array<() => FrameworkDefinition>
+  showDeploymentOptions?: boolean
 }) {
   const environment = createUIEnvironment(appName, false)
 
@@ -64,6 +75,15 @@ export function cli({
     for (const addOn of framework.getAddOns()) {
       if (addOn.type === 'toolchain') {
         toolchains.add(addOn.id)
+      }
+    }
+  }
+
+  const deployments = new Set<string>()
+  for (const framework of getFrameworks()) {
+    for (const addOn of framework.getAddOns()) {
+      if (addOn.type === 'deployment') {
+        deployments.add(addOn.id)
       }
     }
   }
@@ -189,6 +209,7 @@ Remove your node_modules directory and package lock file and re-install.`,
           forcedAddOns,
           environmentFactory: () => createUIEnvironment(appName, false),
           webBase,
+          showDeploymentOptions,
         })
       } else if (parsedAddOns.length < 1) {
         const addOns = await promptForAddOns()
@@ -279,6 +300,7 @@ Remove your node_modules directory and package lock file and re-install.`,
       'initialize this project from a starter URL',
       false,
     )
+    .option('--no-install', 'skip installing dependencies')
     .option<PackageManager>(
       `--package-manager <${SUPPORTED_PACKAGE_MANAGERS.join('|')}>`,
       `Explicitly tell the CLI to use this package manager`,
@@ -293,6 +315,27 @@ Remove your node_modules directory and package lock file and re-install.`,
         return value as PackageManager
       },
     )
+    .option(
+      '--dev-watch <path>',
+      'Watch a framework directory for changes and auto-rebuild',
+    )
+
+  if (deployments.size > 0) {
+    program.option<string>(
+      `--deployment <${Array.from(deployments).join('|')}>`,
+      `Explicitly tell the CLI to use this deployment adapter`,
+      (value) => {
+        if (!deployments.has(value)) {
+          throw new InvalidArgumentError(
+            `Invalid adapter: ${value}. The following are allowed: ${Array.from(
+              deployments,
+            ).join(', ')}`,
+          )
+        }
+        return value
+      },
+    )
+  }
 
   if (toolchains.size > 0) {
     program.option<string>(
@@ -313,7 +356,8 @@ Remove your node_modules directory and package lock file and re-install.`,
 
   program
     .option('--interactive', 'interactive mode', false)
-    .option('--tailwind', 'add Tailwind CSS', false)
+    .option('--tailwind', 'add Tailwind CSS')
+    .option('--no-tailwind', 'skip Tailwind CSS')
     .option<Array<string> | boolean>(
       '--add-ons [...add-ons]',
       'pick from a list of available add-ons (comma separated list)',
@@ -326,6 +370,10 @@ Remove your node_modules directory and package lock file and re-install.`,
       },
     )
     .option('--list-add-ons', 'list all available add-ons', false)
+    .option(
+      '--addon-details <addon-id>',
+      'show detailed information about a specific add-on',
+    )
     .option('--no-git', 'do not create a git repository')
     .option(
       '--target-dir <path>',
@@ -334,6 +382,10 @@ Remove your node_modules directory and package lock file and re-install.`,
     .option('--mcp', 'run the MCP server', false)
     .option('--mcp-sse', 'run the MCP server in SSE mode', false)
     .option('--ui', 'Add with the UI')
+    .option(
+      '--add-on-config <config>',
+      'JSON string with add-on configuration options',
+    )
 
   program.action(async (projectName: string, options: CliOptions) => {
     if (options.listAddOns) {
@@ -342,8 +394,80 @@ Remove your node_modules directory and package lock file and re-install.`,
         defaultMode ||
           convertTemplateToMode(options.template || defaultTemplate),
       )
+      let hasConfigurableAddOns = false
       for (const addOn of addOns.filter((a) => !forcedAddOns.includes(a.id))) {
-        console.log(`${chalk.bold(addOn.id)}: ${addOn.description}`)
+        const hasOptions =
+          addOn.options && Object.keys(addOn.options).length > 0
+        const optionMarker = hasOptions ? '*' : ' '
+        if (hasOptions) hasConfigurableAddOns = true
+        console.log(
+          `${optionMarker} ${chalk.bold(addOn.id)}: ${addOn.description}`,
+        )
+      }
+      if (hasConfigurableAddOns) {
+        console.log('\n* = has configuration options')
+      }
+    } else if (options.addonDetails) {
+      const addOns = await getAllAddOns(
+        getFrameworkByName(options.framework || defaultFramework || 'React')!,
+        defaultMode ||
+          convertTemplateToMode(options.template || defaultTemplate),
+      )
+      const addOn = addOns.find((a) => a.id === options.addonDetails)
+      if (!addOn) {
+        console.error(`Add-on '${options.addonDetails}' not found`)
+        process.exit(1)
+      }
+
+      console.log(
+        `${chalk.bold.cyan('Add-on Details:')} ${chalk.bold(addOn.name)}`,
+      )
+      console.log(`${chalk.bold('ID:')} ${addOn.id}`)
+      console.log(`${chalk.bold('Description:')} ${addOn.description}`)
+      console.log(`${chalk.bold('Type:')} ${addOn.type}`)
+      console.log(`${chalk.bold('Phase:')} ${addOn.phase}`)
+      console.log(`${chalk.bold('Supported Modes:')} ${addOn.modes.join(', ')}`)
+
+      if (addOn.link) {
+        console.log(`${chalk.bold('Link:')} ${chalk.blue(addOn.link)}`)
+      }
+
+      if (addOn.dependsOn && addOn.dependsOn.length > 0) {
+        console.log(
+          `${chalk.bold('Dependencies:')} ${addOn.dependsOn.join(', ')}`,
+        )
+      }
+
+      if (addOn.options && Object.keys(addOn.options).length > 0) {
+        console.log(`\n${chalk.bold.yellow('Configuration Options:')}`)
+        for (const [optionName, option] of Object.entries(addOn.options)) {
+          if (option && typeof option === 'object' && 'type' in option) {
+            const opt = option as any
+            console.log(`  ${chalk.bold(optionName)}:`)
+            console.log(`    Label: ${opt.label}`)
+            if (opt.description) {
+              console.log(`    Description: ${opt.description}`)
+            }
+            console.log(`    Type: ${opt.type}`)
+            console.log(`    Default: ${opt.default}`)
+            if (opt.type === 'select' && opt.options) {
+              console.log(`    Available values:`)
+              for (const choice of opt.options) {
+                console.log(`      - ${choice.value}: ${choice.label}`)
+              }
+            }
+          }
+        }
+      } else {
+        console.log(`\n${chalk.gray('No configuration options available')}`)
+      }
+
+      if (addOn.routes && addOn.routes.length > 0) {
+        console.log(`\n${chalk.bold.green('Routes:')}`)
+        for (const route of addOn.routes) {
+          console.log(`  ${chalk.bold(route.url)} (${route.name})`)
+          console.log(`    File: ${route.path}`)
+        }
       }
     } else if (options.mcp || options.mcpSse) {
       await runMCPServer(!!options.mcpSse, {
@@ -351,6 +475,73 @@ Remove your node_modules directory and package lock file and re-install.`,
         forcedAddOns,
         appName,
       })
+    } else if (options.devWatch) {
+      // Validate dev watch options
+      const validation = validateDevWatchOptions({ ...options, projectName })
+      if (!validation.valid) {
+        console.error(validation.error)
+        process.exit(1)
+      }
+
+      // Enter dev watch mode
+      if (!projectName && !options.targetDir) {
+        console.error(
+          'Project name/target directory is required for dev watch mode',
+        )
+        process.exit(1)
+      }
+
+      if (!options.framework) {
+        console.error('Failed to detect framework')
+        process.exit(1)
+      }
+
+      const framework = getFrameworkByName(options.framework)
+      if (!framework) {
+        console.error('Failed to detect framework')
+        process.exit(1)
+      }
+
+      // First, create the app normally using the standard flow
+      const normalizedOpts = await normalizeOptions(
+        {
+          ...options,
+          projectName,
+          framework: framework.id,
+        },
+        defaultMode,
+        forcedAddOns,
+      )
+
+      if (!normalizedOpts) {
+        throw new Error('Failed to normalize options')
+      }
+
+      normalizedOpts.targetDir =
+        options.targetDir || resolve(process.cwd(), projectName)
+
+      // Create the initial app with minimal output for dev watch mode
+      console.log(chalk.bold('\ndev-watch'))
+      console.log(chalk.gray('├─') + ' ' + `creating initial ${appName} app...`)
+      if (normalizedOpts.install !== false) {
+        console.log(chalk.gray('├─') + ' ' + chalk.yellow('⟳') + ' installing packages...')
+      }
+      const silentEnvironment = createUIEnvironment(appName, true)
+      await createApp(silentEnvironment, normalizedOpts)
+      console.log(chalk.gray('└─') + ' ' + chalk.green('✓') + ` app created`)
+
+      // Now start the dev watch mode
+      const manager = new DevWatchManager({
+        watchPath: options.devWatch,
+        targetDir: normalizedOpts.targetDir,
+        framework,
+        cliOptions: normalizedOpts,
+        packageManager: normalizedOpts.packageManager,
+        environment,
+        frameworkDefinitionInitializers,
+      })
+
+      await manager.start()
     } else {
       try {
         const cliOptions = {
@@ -374,6 +565,7 @@ Remove your node_modules directory and package lock file and re-install.`,
             cliOptions,
             defaultMode,
             forcedAddOns,
+            { forcedDeployment },
           )
         }
 
@@ -382,19 +574,21 @@ Remove your node_modules directory and package lock file and re-install.`,
             cliOptions,
             defaultMode,
             forcedAddOns,
-            { disableNameCheck: true },
+            { disableNameCheck: true, forcedDeployment },
           )
+          const options = {
+            ...createSerializedOptions(optionsFromCLI!),
+            projectName: 'my-app',
+            targetDir: resolve(process.cwd(), 'my-app'),
+          }
           launchUI({
             mode: 'setup',
-            options: {
-              ...createSerializedOptions(optionsFromCLI!),
-              projectName: 'my-app',
-              targetDir: resolve(process.cwd(), 'my-app'),
-            },
+            options,
             forcedRouterMode: defaultMode,
             forcedAddOns,
             environmentFactory: () => createUIEnvironment(appName, false),
             webBase,
+            showDeploymentOptions,
           })
           return
         }
@@ -406,6 +600,7 @@ Remove your node_modules directory and package lock file and re-install.`,
           finalOptions = await promptForCreateOptions(cliOptions, {
             forcedMode: defaultMode,
             forcedAddOns,
+            showDeploymentOptions,
           })
         }
 
@@ -413,8 +608,20 @@ Remove your node_modules directory and package lock file and re-install.`,
           throw new Error('No options were provided')
         }
 
-        finalOptions.targetDir =
-          options.targetDir || resolve(process.cwd(), finalOptions.projectName)
+        // Determine target directory:
+        // 1. Use --target-dir if provided
+        // 2. Use targetDir from normalizeOptions if set (handles "." case)
+        // 3. If original projectName was ".", use current directory
+        // 4. Otherwise, use project name as subdirectory
+        if (options.targetDir) {
+          finalOptions.targetDir = options.targetDir
+        } else if (finalOptions.targetDir) {
+          // Keep the targetDir from normalizeOptions (handles "." case)
+        } else if (projectName === '.') {
+          finalOptions.targetDir = resolve(process.cwd())
+        } else {
+          finalOptions.targetDir = resolve(process.cwd(), finalOptions.projectName)
+        }
 
         await createApp(environment, finalOptions)
       } catch (error) {

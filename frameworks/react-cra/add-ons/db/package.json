@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "@tanstack/db": "^0.1.1",
-    "@tanstack/query-db-collection": "^0.2.0",
+    "@tanstack/query-db-collection": "^1.0.8",
     "@tanstack/react-db": "^0.1.1",
     "zod": "^4.0.14"
   }

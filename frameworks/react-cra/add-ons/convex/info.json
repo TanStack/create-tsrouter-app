@@ -4,6 +4,7 @@
   "link": "https://convex.dev",
   "phase": "add-on",
   "type": "add-on",
+  "priority": 140,
   "modes": ["file-router"],
   "routes": [
     {

@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import fs from 'node:fs'
 
 import {
   DEFAULT_PACKAGE_MANAGER,
@@ -6,8 +7,14 @@ import {
   getFrameworkById,
   getPackageManager,
   loadStarter,
+  populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
+import {
+  getCurrentDirectoryName,
+  sanitizePackageName,
+  validateProjectName,
+} from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -18,11 +25,30 @@ export async function normalizeOptions(
   forcedAddOns?: Array<string>,
   opts?: {
     disableNameCheck?: boolean
+    forcedDeployment?: string
   },
 ): Promise<Options | undefined> {
-  const projectName = (cliOptions.projectName ?? '').trim()
+  let projectName = (cliOptions.projectName ?? '').trim()
+  let targetDir: string
+
+  // Handle "." as project name - use current directory
+  if (projectName === '.') {
+    projectName = sanitizePackageName(getCurrentDirectoryName())
+    targetDir = resolve(process.cwd())
+  } else {
+    targetDir = resolve(process.cwd(), projectName)
+  }
+
   if (!projectName && !opts?.disableNameCheck) {
     return undefined
+  }
+
+  if (projectName) {
+    const { valid, error } = validateProjectName(projectName)
+    if (!valid) {
+      console.error(error)
+      process.exit(1)
+    }
   }
 
   let tailwind = !!cliOptions.tailwind
@@ -74,7 +100,8 @@ export async function normalizeOptions(
       Array.isArray(cliOptions.addOns) ||
       starter?.dependsOn ||
       forcedAddOns ||
-      cliOptions.toolchain
+      cliOptions.toolchain ||
+      cliOptions.deployment
     ) {
       const selectedAddOns = new Set<string>([
         ...(starter?.dependsOn || []),
@@ -88,6 +115,13 @@ export async function normalizeOptions(
       if (cliOptions.toolchain) {
         selectedAddOns.add(cliOptions.toolchain)
       }
+      if (cliOptions.deployment) {
+        selectedAddOns.add(cliOptions.deployment)
+      }
+
+      if (!cliOptions.deployment && opts?.forcedDeployment) {
+        selectedAddOns.add(opts.forcedDeployment)
+      }
 
       return await finalizeAddOns(framework, mode, Array.from(selectedAddOns))
     }
@@ -98,13 +132,41 @@ export async function normalizeOptions(
   const chosenAddOns = await selectAddOns()
 
   if (chosenAddOns.length) {
-    tailwind = true
     typescript = true
+
+    // Check if any add-on explicitly requires tailwind
+    const addOnsRequireTailwind = chosenAddOns.some(
+      (addOn) => addOn.tailwind === true,
+    )
+
+    // Only set tailwind to true if:
+    // 1. An add-on explicitly requires it, OR
+    // 2. User explicitly set it via CLI
+    if (addOnsRequireTailwind) {
+      tailwind = true
+    } else if (cliOptions.tailwind === true) {
+      tailwind = true
+    } else if (cliOptions.tailwind === false) {
+      tailwind = false
+    }
+    // If cliOptions.tailwind is undefined and no add-ons require it,
+    // leave tailwind as is (will be prompted in interactive mode)
+  }
+
+  // Handle add-on configuration option
+  let addOnOptionsFromCLI = {}
+  if (cliOptions.addOnConfig) {
+    try {
+      addOnOptionsFromCLI = JSON.parse(cliOptions.addOnConfig)
+    } catch (error) {
+      console.error('Error parsing add-on config:', error)
+      process.exit(1)
+    }
   }
 
   return {
     projectName: projectName,
-    targetDir: resolve(process.cwd(), projectName),
+    targetDir,
     framework,
     mode,
     typescript,
@@ -114,7 +176,61 @@ export async function normalizeOptions(
       getPackageManager() ||
       DEFAULT_PACKAGE_MANAGER,
     git: !!cliOptions.git,
+    install: cliOptions.install,
     chosenAddOns,
+    addOnOptions: {
+      ...populateAddOnOptionsDefaults(chosenAddOns),
+      ...addOnOptionsFromCLI,
+    },
     starter: starter,
   }
+}
+
+export function validateDevWatchOptions(cliOptions: CliOptions): {
+  valid: boolean
+  error?: string
+} {
+  if (!cliOptions.devWatch) {
+    return { valid: true }
+  }
+
+  // Validate watch path exists
+  const watchPath = resolve(process.cwd(), cliOptions.devWatch)
+  if (!fs.existsSync(watchPath)) {
+    return {
+      valid: false,
+      error: `Watch path does not exist: ${watchPath}`,
+    }
+  }
+
+  // Validate it's a directory
+  const stats = fs.statSync(watchPath)
+  if (!stats.isDirectory()) {
+    return {
+      valid: false,
+      error: `Watch path is not a directory: ${watchPath}`,
+    }
+  }
+
+  // Ensure target directory is specified
+  if (!cliOptions.projectName && !cliOptions.targetDir) {
+    return {
+      valid: false,
+      error: 'Project name or target directory is required for dev watch mode',
+    }
+  }
+
+  // Check for framework structure
+  const hasAddOns = fs.existsSync(resolve(watchPath, 'add-ons'))
+  const hasAssets = fs.existsSync(resolve(watchPath, 'assets'))
+  const hasFrameworkJson = fs.existsSync(resolve(watchPath, 'framework.json'))
+
+  if (!hasAddOns && !hasAssets && !hasFrameworkJson) {
+    return {
+      valid: false,
+      error: `Watch path does not appear to be a valid framework directory: ${watchPath}`,
+    }
+  }
+
+  return { valid: true }
 }

@@ -9,8 +9,10 @@ registerSolid()
 
 cli({
   name: '@tanstack/create-start',
+  forcedDeployment: 'nitro',
   appName: 'TanStack Start',
   forcedMode: 'file-router',
   forcedAddOns: ['start'],
   craCompatible: true,
+  showDeploymentOptions: true,
 })

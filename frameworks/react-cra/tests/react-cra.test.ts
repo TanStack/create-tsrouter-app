@@ -148,3 +148,17 @@ test('file router with add-on start on npm', async () => {
     './snapshots/react-cra/cr-ts-start-tanstack-query-npm.json',
   )
 })
+
+test('file router with add-on start and apollo-client on npm', async () => {
+  const { environment, output } = createMemoryEnvironment()
+  const options = {
+    ...(await createReactOptions(['start', 'apollo-client'])),
+    tailwind: true,
+    typescript: true,
+  } as Options
+  await createApp(environment, options)
+  const cleanedOutput = cleanupOutput(options, output)
+  await expect(JSON.stringify(cleanedOutput, null, 2)).toMatchFileSnapshot(
+    './snapshots/react-cra/cr-ts-start-apollo-client-npm.json',
+  )
+})

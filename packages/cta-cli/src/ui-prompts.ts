@@ -3,6 +3,7 @@ import {
   confirm,
   isCancel,
   multiselect,
+  note,
   select,
   text,
 } from '@clack/prompts'
@@ -13,9 +14,11 @@ import {
   getAllAddOns,
 } from '@tanstack/cta-engine'
 
+import { validateProjectName } from './utils.js'
 import type { AddOn, PackageManager } from '@tanstack/cta-engine'
 
 import type { Framework } from '@tanstack/cta-engine/dist/types/types.js'
+import { InitialData } from '../../cta-ui/src/types'
 
 export async function getProjectName(): Promise<string> {
   const value = await text({
@@ -24,6 +27,11 @@ export async function getProjectName(): Promise<string> {
     validate(value) {
       if (!value) {
         return 'Please enter a name'
+      }
+
+      const { valid, error } = validateProjectName(value)
+      if (!valid) {
+        return error
       }
     },
   })
@@ -102,12 +110,16 @@ export async function selectPackageManager(): Promise<PackageManager> {
   return packageManager
 }
 
+// Track if we've shown the multiselect help text
+let hasShownMultiselectHelp = false
+
 export async function selectAddOns(
   framework: Framework,
   mode: string,
   type: string,
   message: string,
   forcedAddOns: Array<string> = [],
+  allowMultiple: boolean = true,
 ): Promise<Array<string>> {
   const allAddOns = await getAllAddOns(framework, mode)
   const addOns = allAddOns.filter((addOn) => addOn.type === type)
@@ -115,24 +127,60 @@ export async function selectAddOns(
     return []
   }
 
-  const value = await multiselect({
-    message,
-    options: addOns
-      .filter((addOn) => !forcedAddOns.includes(addOn.id))
-      .map((addOn) => ({
-        value: addOn.id,
-        label: addOn.name,
-        hint: addOn.description,
-      })),
-    required: false,
-  })
-
-  if (isCancel(value)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
+  // Show help text only once
+  if (!hasShownMultiselectHelp) {
+    note(
+      'Use ↑/↓ to navigate • Space to select/deselect • Enter to confirm',
+      'Keyboard Shortcuts',
+    )
+    hasShownMultiselectHelp = true
   }
 
-  return value
+  if (allowMultiple) {
+    const value = await multiselect({
+      message,
+      options: addOns
+        .filter((addOn) => !forcedAddOns.includes(addOn.id))
+        .map((addOn) => ({
+          value: addOn.id,
+          label: addOn.name,
+          hint: addOn.description,
+        })),
+      required: false,
+    })
+
+    if (isCancel(value)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+
+    return value
+  } else {
+    const value = await select({
+      message,
+      options: [
+        {
+          value: 'none',
+          label: 'None',
+        },
+        ...addOns
+          .filter((addOn) => !forcedAddOns.includes(addOn.id))
+          .map((addOn) => ({
+            value: addOn.id,
+            label: addOn.name,
+            hint: addOn.description,
+          })),
+      ],
+      initialValue: 'none',
+    })
+
+    if (isCancel(value)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+
+    return value === 'none' ? [] : [value]
+  }
 }
 
 export async function selectGit(): Promise<boolean> {
@@ -182,4 +230,90 @@ export async function selectToolchain(
   }
 
   return tc
+}
+
+export async function promptForAddOnOptions(
+  addOnIds: Array<string>,
+  framework: Framework,
+): Promise<Record<string, Record<string, any>>> {
+  const addOnOptions: Record<string, Record<string, any>> = {}
+
+  for (const addOnId of addOnIds) {
+    const addOn = framework.getAddOns().find((a) => a.id === addOnId)
+    if (!addOn || !addOn.options) continue
+
+    addOnOptions[addOnId] = {}
+
+    for (const [optionName, option] of Object.entries(addOn.options)) {
+      if (option && typeof option === 'object' && 'type' in option) {
+        if (option.type === 'select') {
+          const selectOption = option as {
+            type: 'select'
+            label: string
+            description?: string
+            default: string
+            options: Array<{ value: string; label: string }>
+          }
+
+          const value = await select({
+            message: `${addOn.name}: ${selectOption.label}`,
+            options: selectOption.options.map((opt) => ({
+              value: opt.value,
+              label: opt.label,
+            })),
+            initialValue: selectOption.default,
+          })
+
+          if (isCancel(value)) {
+            cancel('Operation cancelled.')
+            process.exit(0)
+          }
+
+          addOnOptions[addOnId][optionName] = value
+        }
+        // Future option types can be added here
+      }
+    }
+  }
+
+  return addOnOptions
+}
+
+export async function selectDeployment(
+  framework: Framework,
+  deployment?: string,
+): Promise<string | undefined> {
+  const deployments = new Set<AddOn>()
+  let initialValue: string | undefined = undefined
+  for (const addOn of framework
+    .getAddOns()
+    .sort((a, b) => a.name.localeCompare(b.name))) {
+    if (addOn.type === 'deployment') {
+      deployments.add(addOn)
+      if (deployment && addOn.id === deployment) {
+        return deployment
+      }
+      if (addOn.default) {
+        initialValue = addOn.id
+      }
+    }
+  }
+
+  const dp = await select({
+    message: 'Select deployment adapter',
+    options: [
+      ...Array.from(deployments).map((d) => ({
+        value: d.id,
+        label: d.name,
+      })),
+    ],
+    initialValue: initialValue,
+  })
+
+  if (isCancel(dp)) {
+    cancel('Operation cancelled.')
+    process.exit(0)
+  }
+
+  return dp
 }

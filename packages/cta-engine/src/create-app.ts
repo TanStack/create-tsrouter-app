@@ -20,8 +20,10 @@ async function writeFiles(environment: Environment, options: Options) {
 
   async function writeFileBundle(bundle: FileBundleHandler) {
     const files = await bundle.getFiles()
+
     for (const file of files) {
       const contents = await bundle.getFileContents(file)
+
       const isBinaryFile = isBase64(contents)
       if (isBinaryFile) {
         await environment.writeFileBase64(
@@ -48,7 +50,7 @@ async function writeFiles(environment: Environment, options: Options) {
   environment.finishStep('write-framework-files', 'Framework files written')
 
   let wroteAddonFiles = false
-  for (const type of ['add-on', 'example', 'toolchain']) {
+  for (const type of ['add-on', 'example', 'toolchain', 'deployment']) {
     for (const phase of ['setup', 'add-on', 'example']) {
       for (const addOn of options.chosenAddOns.filter(
         (addOn) => addOn.phase === phase && addOn.type === type,
@@ -133,19 +135,45 @@ async function runCommandsAndInstallDependencies(
   }
 
   // Install dependencies
-  s.start(`Installing dependencies via ${options.packageManager}...`)
-  environment.startStep({
-    id: 'install-dependencies',
-    type: 'package-manager',
-    message: `Installing dependencies via ${options.packageManager}...`,
-  })
-  await packageManagerInstall(
-    environment,
-    options.targetDir,
-    options.packageManager,
-  )
-  environment.finishStep('install-dependencies', 'Installed dependencies')
-  s.stop(`Installed dependencies`)
+  if (options.install !== false) {
+    s.start(`Installing dependencies via ${options.packageManager}...`)
+    environment.startStep({
+      id: 'install-dependencies',
+      type: 'package-manager',
+      message: `Installing dependencies via ${options.packageManager}...`,
+    })
+    await packageManagerInstall(
+      environment,
+      options.targetDir,
+      options.packageManager,
+    )
+    environment.finishStep('install-dependencies', 'Installed dependencies')
+    s.stop(`Installed dependencies`)
+  } else {
+    s.start(`Skipping dependency installation...`)
+    environment.startStep({
+      id: 'skip-dependencies',
+      type: 'info',
+      message: `Skipping dependency installation...`,
+    })
+    environment.finishStep('skip-dependencies', 'Dependency installation skipped')
+    s.stop(`Dependency installation skipped`)
+  }
+
+  // Run any post-init special steps for the new add-ons
+  const postInitSpecialSteps = new Set<string>([])
+  for (const addOn of options.chosenAddOns) {
+    for (const step of addOn.postInitSpecialSteps || []) {
+      postInitSpecialSteps.add(step)
+    }
+  }
+  if (postInitSpecialSteps.size) {
+    await runSpecialSteps(
+      environment,
+      options,
+      Array.from(postInitSpecialSteps),
+    )
+  }
 
   for (const phase of ['setup', 'add-on', 'example']) {
     for (const addOn of options.chosenAddOns.filter(
@@ -166,6 +194,7 @@ async function runCommandsAndInstallDependencies(
         addOn.command!.command,
         addOn.command!.args || [],
         options.targetDir,
+        { inherit: true },
       )
       environment.finishStep('run-commands', 'Setup commands complete')
       s.stop(`${addOn.name} commands complete`)
@@ -193,6 +222,7 @@ async function runCommandsAndInstallDependencies(
       options.starter.command.command,
       options.starter.command.args || [],
       options.targetDir,
+      { inherit: true },
     )
 
     environment.finishStep('run-starter-command', 'Starter command complete')
@@ -224,17 +254,27 @@ Errors were encountered during the creation of your app:
 ${environment.getErrors().join('\n')}`
   }
 
+  // Check if we created in current directory (user specified ".")
+  const isCurrentDirectory =
+    resolve(options.targetDir) === resolve(process.cwd())
+  const locationMessage = isCurrentDirectory
+    ? `Your ${environment.appName} app is ready.`
+    : `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.`
+  const cdInstruction = isCurrentDirectory
+    ? ''
+    : `% cd ${options.projectName}
+`
+
   // Use the force luke! :)
   environment.outro(
-    `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.
+    `${locationMessage}
 
 Use the following commands to start your app:
-% cd ${options.projectName}
-% ${formatCommand(
+${cdInstruction}% ${formatCommand(
       getPackageManagerScriptCommand(options.packageManager, ['dev']),
     )}
 
-Please read the README.md for information on testing, styling, adding routes, etc.${errorStatement}`,
+Please read the README.md file for information on testing, styling, adding routes, etc.${errorStatement}`,
   )
 }
 

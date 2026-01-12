@@ -1,0 +1,32 @@
+import { PrismaClient } from './generated/prisma/client.js'
+
+<% if (addOnOption.prisma.database === 'postgres') { %>
+import { PrismaPg } from '@prisma/adapter-pg';
+
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL!,
+});<% } %>
+
+<% if (addOnOption.prisma.database === 'mysql') { %>
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+const adapter = new PrismaMariaDb({
+  host: "localhost",
+  port: 3306,
+  connectionLimit: 5
+});<% } %>
+
+<% if (addOnOption.prisma.database === 'sqlite') { %>
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+const adapter = new PrismaBetterSqlite3({
+  url: process.env.DATABASE_URL || 'file:./dev.db'
+});<% } %>
+
+declare global {
+  var __prisma: PrismaClient | undefined
+}
+
+export const prisma = globalThis.__prisma || new PrismaClient({ adapter })
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma
+}

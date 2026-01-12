@@ -9,7 +9,7 @@ import {
 } from './package-manager.js'
 import { relativePath } from './file-helpers.js'
 
-import type { AddOn, Environment, Options } from './types.js'
+import type { AddOn, Environment, Integration, Options } from './types.js'
 
 function convertDotFilesAndPaths(path: string) {
   return path
@@ -75,6 +75,16 @@ export function createTemplateFile(environment: Environment, options: Options) {
   )
 
   return async function templateFile(file: string, content: string) {
+    const localRelativePath = (path: string, stripExtension: boolean = false) =>
+      relativePath(file, path, stripExtension)
+
+    const integrationImportContent = (integration: Integration) =>
+      integration.import ||
+      `import ${integration.jsName} from '${localRelativePath(integration.path || '')}'`
+
+    const integrationImportCode = (integration: Integration) =>
+      integration.code || integration.jsName
+
     const templateValues = {
       packageManager: options.packageManager,
       projectName: options.projectName,
@@ -85,6 +95,7 @@ export function createTemplateFile(environment: Environment, options: Options) {
       fileRouter: options.mode === 'file-router',
       codeRouter: options.mode === 'code-router',
       addOnEnabled,
+      addOnOption: options.addOnOptions,
       addOns: options.chosenAddOns,
       integrations,
       routes,
@@ -94,6 +105,9 @@ export function createTemplateFile(environment: Environment, options: Options) {
 
       relativePath: (path: string, stripExtension: boolean = false) =>
         relativePath(file, path, stripExtension),
+
+      integrationImportContent,
+      integrationImportCode,
 
       ignoreFile: () => {
         throw new IgnoreFileError()
@@ -121,6 +135,13 @@ export function createTemplateFile(environment: Environment, options: Options) {
     }
 
     let target = convertDotFilesAndPaths(file.replace('.ejs', ''))
+
+    // Strip option prefixes from filename (e.g., __postgres__schema.prisma -> schema.prisma)
+    const prefixMatch = target.match(/^(.+\/)?__([^_]+)__(.+)$/)
+    if (prefixMatch) {
+      const [, directory, , filename] = prefixMatch
+      target = (directory || '') + filename
+    }
 
     let append = false
     if (target.endsWith('.append')) {

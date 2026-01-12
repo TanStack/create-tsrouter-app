@@ -1,0 +1,10 @@
+import { drizzle } from <% if (addOnOption.drizzle.database === 'postgresql') { %>
+'drizzle-orm/node-postgres';
+<% } else if (addOnOption.drizzle.database === 'mysql') {%>
+'drizzle-orm/mysql2';
+<% } else if (addOnOption.drizzle.database === 'sqlite') {%>
+'drizzle-orm/better-sqlite3';
+<% } %>
+import * as schema from './schema.ts'
+
+export const db = drizzle(process.env.DATABASE_URL!, { schema<% if (addOnOption.drizzle.database === 'mysql') {%>, mode: 'default'<% } %>});

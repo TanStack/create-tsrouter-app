@@ -1,0 +1,25 @@
+{
+  "name": "Neon",
+  "description": "Add the Neon database to your application.",
+  "link": "https://neon.com",
+  "phase": "add-on",
+  "type": "add-on",
+  "modes": ["default"],
+  "routes": [
+    {
+      "icon": "Database",
+      "url": "/neon",
+      "name": "Neon",
+      "path": "src/app/pages/demo-neon",
+      "jsName": "NeonDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "jsName": "neon",
+      "path": "neon-vite-plugin.ts"
+    }
+  ],
+  "dependsOn": []
+}

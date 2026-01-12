@@ -4,12 +4,14 @@
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "add-on",
+  "priority": 10,
   "link": "https://tanstack.com/query/latest",
   "routes": [
     {
+      "icon": "Network",
       "url": "/demo/tanstack-query",
       "name": "TanStack Query",
-      "path": "src/routes/demo.tanstack-query.tsx",
+      "path": "src/routes/demo/tanstack-query.tsx",
       "jsName": "TanStackQueryDemo"
     }
   ],

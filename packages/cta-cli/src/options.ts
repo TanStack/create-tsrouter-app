@@ -4,13 +4,16 @@ import {
   finalizeAddOns,
   getFrameworkById,
   getPackageManager,
+  populateAddOnOptionsDefaults,
   readConfigFile,
 } from '@tanstack/cta-engine'
 
 import {
   getProjectName,
+  promptForAddOnOptions,
   selectAddOns,
   selectGit,
+  selectDeployment,
   selectPackageManager,
   selectRouterType,
   selectTailwind,
@@ -18,6 +21,11 @@ import {
   selectTypescript,
 } from './ui-prompts.js'
 
+import {
+  getCurrentDirectoryName,
+  sanitizePackageName,
+  validateProjectName,
+} from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -27,16 +35,32 @@ export async function promptForCreateOptions(
   {
     forcedAddOns = [],
     forcedMode,
+    showDeploymentOptions = false,
   }: {
     forcedAddOns?: Array<string>
     forcedMode?: string
+    showDeploymentOptions?: boolean
   },
 ): Promise<Required<Options> | undefined> {
   const options = {} as Required<Options>
 
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
-  options.projectName = cliOptions.projectName || (await getProjectName())
+  if (cliOptions.projectName) {
+    // Handle "." as project name - use sanitized current directory name
+    if (cliOptions.projectName === '.') {
+      options.projectName = sanitizePackageName(getCurrentDirectoryName())
+    } else {
+      options.projectName = cliOptions.projectName
+    }
+    const { valid, error } = validateProjectName(options.projectName)
+    if (!valid) {
+      console.error(error)
+      process.exit(1)
+    }
+  } else {
+    options.projectName = await getProjectName()
+  }
 
   // Router type selection
   if (forcedMode) {
@@ -77,16 +101,35 @@ export async function promptForCreateOptions(
     cliOptions.toolchain,
   )
 
+  // Deployment selection
+  const deployment = showDeploymentOptions
+    ? await selectDeployment(options.framework, cliOptions.deployment)
+    : undefined
+
+  console.log('[DEBUG] Deployment selection:')
+  console.log('  - showDeploymentOptions:', showDeploymentOptions)
+  console.log('  - cliOptions.deployment:', cliOptions.deployment)
+  console.log('  - deployment result:', deployment)
+
   // Add-ons selection
   const addOns: Set<string> = new Set()
 
   if (toolchain) {
     addOns.add(toolchain)
   }
+  if (deployment) {
+    addOns.add(deployment)
+  }
 
   for (const addOn of forcedAddOns) {
     addOns.add(addOn)
   }
+
+  console.log('[DEBUG] Add-ons before finalize:')
+  console.log('  - forcedAddOns:', forcedAddOns)
+  console.log('  - toolchain:', toolchain)
+  console.log('  - deployment:', deployment)
+  console.log('  - addOns set:', Array.from(addOns))
 
   if (Array.isArray(cliOptions.addOns)) {
     for (const addOn of cliOptions.addOns) {
@@ -107,8 +150,9 @@ export async function promptForCreateOptions(
       options.framework,
       options.mode,
       'example',
-      'Would you like any examples?',
+      'Would you like an example?',
       forcedAddOns,
+      false,
     )) {
       addOns.add(addOn)
     }
@@ -123,18 +167,56 @@ export async function promptForCreateOptions(
   }
 
   // Tailwind selection
+  // Only treat add-ons as requiring tailwind if they explicitly have "tailwind": true
   const addOnsRequireTailwind = options.chosenAddOns.some(
-    (addOn) => addOn.tailwind,
+    (addOn) => addOn.tailwind === true,
   )
 
-  if (
-    !cliOptions.tailwind &&
-    options.framework.id === 'react-cra' &&
-    !addOnsRequireTailwind
-  ) {
+  // Debug logging
+  console.log('[DEBUG] Tailwind selection:')
+  console.log('  - Framework:', options.framework.id)
+  console.log('  - CLI tailwind flag:', cliOptions.tailwind)
+  console.log('  - Chosen add-ons:', options.chosenAddOns.map((a) => ({
+    id: a.id,
+    tailwind: a.tailwind,
+    tailwindType: typeof a.tailwind,
+    tailwindIsTrue: a.tailwind === true,
+  })))
+  console.log('  - Add-ons require tailwind:', addOnsRequireTailwind)
+
+  if (addOnsRequireTailwind) {
+    // If any add-on explicitly requires tailwind, enable it automatically
+    console.log('  - Branch: addOnsRequireTailwind is true, setting tailwind to true')
+    options.tailwind = true
+  } else if (cliOptions.tailwind !== undefined) {
+    // User explicitly provided a CLI flag, respect it
+    console.log('  - Branch: CLI flag provided, setting tailwind to', !!cliOptions.tailwind)
+    options.tailwind = !!cliOptions.tailwind
+  } else if (options.framework.id === 'react-cra') {
+    // Only show prompt for react-cra when no CLI flag and no add-ons require it
+    console.log('  - Branch: react-cra framework, showing tailwind prompt')
     options.tailwind = await selectTailwind()
   } else {
+    // For other frameworks (like solid), default to true
+    console.log('  - Branch: other framework, defaulting tailwind to true')
     options.tailwind = true
+  }
+  
+  console.log('  - Final tailwind value:', options.tailwind)
+
+  // Prompt for add-on options in interactive mode
+  if (Array.isArray(cliOptions.addOns)) {
+    // Non-interactive mode: use defaults
+    options.addOnOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
+  } else {
+    // Interactive mode: prompt for options
+    const userOptions = await promptForAddOnOptions(
+      options.chosenAddOns.map((a) => a.id),
+      options.framework,
+    )
+    const defaultOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
+    // Merge user options with defaults
+    options.addOnOptions = { ...defaultOptions, ...userOptions }
   }
 
   options.git = cliOptions.git || (await selectGit())

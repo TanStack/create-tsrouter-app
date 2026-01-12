@@ -11,10 +11,12 @@ export type AddOnInfo = {
   id: string
   name: string
   description: string
-  type: 'add-on' | 'example' | 'starter' | 'toolchain'
+  priority?: number
+  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'deployment'
   modes: Array<'code-router' | 'file-router'>
   smallLogo?: string
   logo?: string
   link: string
   dependsOn?: Array<string>
+  options?: Record<string, any>
 }

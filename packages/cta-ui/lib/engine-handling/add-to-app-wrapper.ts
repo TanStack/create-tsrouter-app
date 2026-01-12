@@ -129,7 +129,8 @@ export async function addToAppWrapper(
     writeConfigFileToEnvironment(environment, options)
     environment.finishRun()
 
-    output.files = cleanUpFiles(output.files, projectPath)
+    // Preserve base64 content for WebContainer, FileViewer will display placeholders
+    output.files = cleanUpFiles(output.files, projectPath, true)
     output.deletedFiles = cleanUpFileArray(output.deletedFiles, projectPath)
     return output
   }
