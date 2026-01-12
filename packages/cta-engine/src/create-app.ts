@@ -261,7 +261,7 @@ ${cdInstruction}% ${formatCommand(
       getPackageManagerScriptCommand(options.packageManager, ['dev']),
     )}
 
-Please check the README.md for information on testing, styling, adding routes, etc.${errorStatement}`,
+Please check the README.md file for information on testing, styling, adding routes, etc.${errorStatement}`,
   )
 }
 

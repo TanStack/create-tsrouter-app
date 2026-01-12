@@ -1,0 +1,25 @@
+{
+  "name": "Paraglide (i18n)",
+  "description": "i18n with localized routing",
+  "phase": "add-on",
+  "modes": ["file-router"],
+  "type": "add-on",
+  "priority": 30,
+  "link": "https://github.com/paraglidejs/paraglide-js",
+  "routes": [
+    {
+      "icon": "Languages",
+      "url": "/demo/i18n",
+      "name": "I18n example",
+      "path": "src/routes/demo.i18n.tsx",
+      "jsName": "I18nDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "header-user",
+      "path": "src/components/LocaleSwitcher.tsx",
+      "jsName": "ParaglideLocaleSwitcher"
+    }
+  ]
+}

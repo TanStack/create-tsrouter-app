@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "@radix-ui/react-checkbox": "^1.2.2",
+    "@radix-ui/react-hover-card": "^1.1.10",
+    "@radix-ui/react-separator": "^1.1.4",
+    "@radix-ui/react-slot": "^1.2.0",
+    "@tanstack/ai": "latest",
+    "@tanstack/ai-anthropic": "latest",
+    "@tanstack/ai-client": "latest",
+    "@tanstack/ai-gemini": "latest",
+    "@tanstack/ai-ollama": "latest",
+    "@tanstack/ai-openai": "latest",
+    "@tanstack/ai-react": "latest",
+    "@tanstack/store": "latest",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "marked": "^15.0.8",
+    "streamdown": "^1.6.5",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@content-collections/core": "^0.13.1",
+    "@content-collections/vite": "^0.2.8"
+  }
+}
