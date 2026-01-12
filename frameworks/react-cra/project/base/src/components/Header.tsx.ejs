@@ -1,9 +1,160 @@
 <% if (addOns.length === 0 && integrations.length === 0 && routes.length === 0) { ignoreFile() } %>import { Link } from '@tanstack/react-router'
 <% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
 import <%= integration.jsName %> from "<%= relativePath(integration.path) %>";
+<% } %><% if (tailwind) {
+const icons = new Set([
+  "Menu",
+  "X",
+  "Home",
+])
+
+const hasRoutesWithChildren = addOns.some(a => a.routes?.some(r => r.children));
+
+if (hasRoutesWithChildren) {
+  icons.add("ChevronDown");
+  icons.add("ChevronRight");
+}
+
+for(const addOn of addOns) {
+  for(const route of (addOn?.routes||[])?.filter(r => r.url && r.name)) {
+    icons.add( route.icon || "Globe");
+  }
+}
+%>
+import { useState } from 'react';
+import {
+  <%= Array.from(icons).sort().join(", ") %>
+} from "lucide-react";
 <% } %>
 
 export default function Header() {
+<% if (tailwind) {
+const menusWithChildren = addOns.filter(a => a.routes?.some(r => r.children));
+const userHeaders = integrations.filter(i => i.type === 'header-user');
+%>
+  const [isOpen, setIsOpen] = useState(false);
+  <% if (menusWithChildren.length > 0) { %>const [groupedExpanded, setGroupedExpanded] = useState<Record<string, boolean>>({});
+  <% } %>
+
+  return (
+    <>
+      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+          aria-label="Open menu"
+        >
+          <Menu size={24} />
+        </button>
+        <h1 className="ml-4 text-xl font-semibold">
+          <Link to="/">
+            <img
+              src="/tanstack-word-logo-white.svg"
+              alt="TanStack Logo"
+              className="h-10"
+            />
+          </Link>
+        </h1>
+      </header>
+
+      <aside
+        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between p-4 border-b border-gray-700">
+          <h2 className="text-xl font-bold">Navigation</h2>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <nav className="flex-1 p-4 overflow-y-auto">
+          <Link
+            to="/"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            activeProps={{
+              className:
+                "flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2",
+            }}
+          >
+            <Home size={20} />
+            <span className="font-medium">Home</span>
+          </Link>
+
+          {/* Demo Links Start */}
+          <% for(const addOn of addOns) {
+            for(const route of (addOn?.routes||[])?.filter(r => r.url && r.name)) {
+              if (route.children) { %>
+                <div className="flex flex-row justify-between">
+                  <Link to="<%= route.url %>"
+                    onClick={() => setIsOpen(false)}
+                    className="flex-1 flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+                    activeProps={{
+                      className:
+                        "flex-1 flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2",
+                    }}
+                  >
+                    <<%= route.icon || "Globe" %> size={20} />
+                    <span className="font-medium"><%= route.name %></span>  
+                  </Link>
+                  <button
+                    className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                    onClick={() => setGroupedExpanded(prev => ({ ...prev, <%= route.jsName %>: !prev.<%= route.jsName %> }))}>
+                    {groupedExpanded.<%= route.jsName %> ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                  </button>
+                </div>
+                {groupedExpanded.<%= route.jsName %> && (
+                  <div className="flex flex-col ml-4">
+                    <% for(const child of route.children) { %>
+                      <Link
+                        to="<%= child.url %>"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+                        activeProps={{
+                          className:
+                            "flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2",
+                        }}
+                      >
+                        <<%= child.icon || "Globe" %> size={20} />
+                        <span className="font-medium"><%= child.name %></span>
+                      </Link>
+                    <% } %>
+                </div>
+                )}
+            <% } else { %>
+              <Link
+                to="<%= route.url %>"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+                activeProps={{
+                  className:
+                    "flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2",
+                }}
+              >
+                <<%= route.icon || "Globe" %> size={20} />
+                <span className="font-medium"><%= route.name %></span>
+              </Link>
+          <% } } } %>
+          {/* Demo Links End */}
+        </nav>
+
+        <% if (userHeaders.length > 0) { %>
+        <div className="p-4 border-t border-gray-700 bg-gray-800 flex flex-col gap-2">
+          <% for(const integration of userHeaders) { %>
+            <<%= integration.jsName %> />
+          <% } %>
+        </div>
+        <% } %>
+      </aside>
+    </>
+  );
+<% } else { %>
   return (
     <header className="p-2 flex gap-2 bg-white text-black justify-between">
       <nav className="flex flex-row">
@@ -24,4 +175,5 @@ export default function Header() {
 <% } %>
     </header>
   )
+<% } %>
 }

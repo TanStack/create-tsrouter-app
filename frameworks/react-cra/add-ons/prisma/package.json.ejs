@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "prisma": "^7.2.0",
+    "@prisma/client": "^7.2.0"<% if (addOnOption.prisma.database === 'postgres') { %>,
+    "@prisma/adapter-pg": "^7.2.0"<% } %><% if (addOnOption.prisma.database === 'mysql') { %>,
+    "@prisma/adapter-mariadb": "^7.2.0"<% } %><% if (addOnOption.prisma.database === 'sqlite') { %>,
+    "@prisma/adapter-better-sqlite3": "^7.2.0"<% } %>
+  },
+  "devDependencies": {
+    "dotenv-cli": "^10.0.0",
+    "tsx": "^4.20.6"
+  },
+  "scripts": {<% if (addOnOption.prisma.database === 'postgres') { %>
+    "post-cta-init": "npx create-db@latest --user-agent tanstack/tsrouter",<% } %>
+    "db:generate": "dotenv -e .env.local -- prisma generate",
+    "db:push": "dotenv -e .env.local -- prisma db push",
+    "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
+    "db:studio": "dotenv -e .env.local -- prisma studio",
+    "db:seed": "dotenv -e .env.local -- prisma db seed"
+  }
+}

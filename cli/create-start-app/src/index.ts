@@ -18,6 +18,8 @@ cli({
   appName: 'TanStack Start',
   forcedMode: 'file-router',
   forcedAddOns: ['start'],
+  showDeploymentOptions: true,
+  forcedDeployment: 'nitro',
   craCompatible: true,
   frameworkDefinitionInitializers: [
     createReactCraFrameworkDefinitionInitalizer,

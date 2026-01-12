@@ -9,6 +9,25 @@ export type StatusStepType =
   | 'package-manager'
   | 'other'
 
+export const AddOnSelectOptionSchema = z.object({
+  type: z.literal('select'),
+  label: z.string(),
+  description: z.string().optional(),
+  default: z.string(),
+  options: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+    }),
+  ),
+})
+
+export const AddOnOptionSchema = z.discriminatedUnion('type', [
+  AddOnSelectOptionSchema,
+])
+
+export const AddOnOptionsSchema = z.record(z.string(), AddOnOptionSchema)
+
 export const AddOnBaseSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -18,7 +37,8 @@ export const AddOnBaseSchema = z.object({
   link: z.string().optional(),
   license: z.string().optional(),
   warning: z.string().optional(),
-  type: z.enum(['add-on', 'example', 'starter', 'toolchain']),
+  type: z.enum(['add-on', 'example', 'starter', 'toolchain', 'deployment']),
+  priority: z.number().optional(),
   command: z
     .object({
       command: z.string(),
@@ -48,6 +68,9 @@ export const AddOnBaseSchema = z.object({
   logo: z.string().optional(),
   addOnSpecialSteps: z.array(z.string()).optional(),
   createSpecialSteps: z.array(z.string()).optional(),
+  postInitSpecialSteps: z.array(z.string()).optional(),
+  options: AddOnOptionsSchema.optional(),
+  default: z.boolean().optional(),
 })
 
 export const StarterSchema = AddOnBaseSchema.extend({
@@ -64,9 +87,11 @@ export const StarterCompiledSchema = StarterSchema.extend({
 })
 
 export const IntegrationSchema = z.object({
-  type: z.string(),
-  path: z.string(),
-  jsName: z.string(),
+  type: z.string().optional(),
+  path: z.string().optional(),
+  jsName: z.string().optional(),
+  import: z.string().optional(),
+  code: z.string().optional(),
 })
 
 export const AddOnInfoSchema = AddOnBaseSchema.extend({
@@ -79,7 +104,14 @@ export const AddOnInfoSchema = AddOnBaseSchema.extend({
 export const AddOnCompiledSchema = AddOnInfoSchema.extend({
   files: z.record(z.string(), z.string()),
   deletedFiles: z.array(z.string()),
+  packageTemplate: z.string().optional(),
 })
+
+export type AddOnSelectOption = z.infer<typeof AddOnSelectOptionSchema>
+
+export type AddOnOption = z.infer<typeof AddOnOptionSchema>
+
+export type AddOnOptions = z.infer<typeof AddOnOptionsSchema>
 
 export type Integration = z.infer<typeof IntegrationSchema>
 
@@ -93,13 +125,19 @@ export type AddOnInfo = z.infer<typeof AddOnInfoSchema>
 
 export type AddOnCompiled = z.infer<typeof AddOnCompiledSchema>
 
+export interface AddOnSelection {
+  id: string
+  enabled: boolean
+  options: Record<string, any>
+}
+
 export type FileBundleHandler = {
   getFiles: () => Promise<Array<string>>
   getFileContents: (path: string) => Promise<string>
   getDeletedFiles: () => Promise<Array<string>>
 }
 
-export type AddOn = AddOnInfo & FileBundleHandler
+export type AddOn = AddOnCompiled & FileBundleHandler
 
 export type Starter = StarterCompiled & FileBundleHandler
 
@@ -144,6 +182,7 @@ export interface Options {
   install?: boolean
 
   chosenAddOns: Array<AddOn>
+  addOnOptions: Record<string, Record<string, any>>
   starter?: Starter | undefined
 }
 
@@ -171,6 +210,7 @@ type FileEnvironment = {
     command: string,
     args: Array<string>,
     cwd: string,
+    options?: { inherit?: boolean },
   ) => Promise<{ stdout: string }>
   deleteFile: (path: string) => Promise<void>
 

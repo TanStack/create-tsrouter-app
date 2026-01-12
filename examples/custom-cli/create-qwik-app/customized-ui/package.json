@@ -1,7 +1,6 @@
 {
   "name": "customized-ui",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev:ui": "VITE_API_BASE_URL=http://localhost:8080 vite",
@@ -11,7 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.6",
-    "@tanstack/cta-ui-base": "^0.17.5",
+    "@tanstack/cta-ui-base": "^0.46.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.6",
@@ -28,6 +27,6 @@
     "globals": "^16.0.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5"
+    "vite": "^7.1.7"
   }
 }

@@ -1,0 +1,37 @@
+{
+  "name": "create-rwsdk-app",
+  "private": true,
+  "description": "CTA RedwoodSDK Builder",
+  "bin": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TanStack/create-router-app.git"
+  },
+  "homepage": "https://tanstack.com/router",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/tannerlinsley"
+  },
+  "keywords": [
+    "rwsdk",
+    "RedwoodSDK",
+    "create-rwsdk-app"
+  ],
+  "author": "Jack Herrington <jherr@pobox.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.5",
+  "dependencies": {
+    "@tanstack/cta-cli": "^0.46.2",
+    "@tanstack/cta-engine": "^0.46.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.6.3"
+  }
+}

@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: 💬 Community Chat
     url: https://discord.gg/mQd7egN
-    about: A dedicated discord server hosted by Tanner Linsley
-  - name: 💬 Tanstack Twitter
-    url: https://twitter.com/tan_stack
+    about: A dedicated discord server hosted by TanStack
+  - name: 🦋 TanStack Bluesky
+    url: https://bsky.app/profile/tanstack.com
     about: Stay up to date with new releases of our libraries

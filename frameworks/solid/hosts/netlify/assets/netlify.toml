@@ -1,0 +1,7 @@
+[build]
+  command = "vite build"
+  dir = "dist/client"
+[dev]
+  command = "npm run dev"
+  targetPort = 3000
+  port = 8888

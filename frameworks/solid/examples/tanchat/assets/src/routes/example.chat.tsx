@@ -355,7 +355,7 @@ function Home() {
                           handleSubmit(e)
                         }
                       }}
-                      placeholder="Type something clever (or don't, we won't judge)..."
+                      placeholder="Type something clever..."
                       class="w-full rounded-lg border border-orange-500/20 bg-gray-800/50 pl-4 pr-12 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent resize-none overflow-hidden shadow-lg"
                       rows={1}
                       style={{ 'min-height': '44px', 'max-height': '200px' }}
@@ -400,7 +400,7 @@ function Home() {
                         handleSubmit(e)
                       }
                     }}
-                    placeholder="Type something clever (or don't, we won't judge)..."
+                    placeholder="Type something clever..."
                     class="w-full rounded-lg border border-orange-500/20 bg-gray-800/50 pl-4 pr-12 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-transparent resize-none overflow-hidden"
                     rows={1}
                     style={{ 'min-height': '88px' }}

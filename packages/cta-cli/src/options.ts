@@ -4,13 +4,16 @@ import {
   finalizeAddOns,
   getFrameworkById,
   getPackageManager,
+  populateAddOnOptionsDefaults,
   readConfigFile,
 } from '@tanstack/cta-engine'
 
 import {
   getProjectName,
+  promptForAddOnOptions,
   selectAddOns,
   selectGit,
+  selectDeployment,
   selectPackageManager,
   selectRouterType,
   selectTailwind,
@@ -18,6 +21,11 @@ import {
   selectTypescript,
 } from './ui-prompts.js'
 
+import {
+  getCurrentDirectoryName,
+  sanitizePackageName,
+  validateProjectName,
+} from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -27,16 +35,32 @@ export async function promptForCreateOptions(
   {
     forcedAddOns = [],
     forcedMode,
+    showDeploymentOptions = false,
   }: {
     forcedAddOns?: Array<string>
     forcedMode?: string
+    showDeploymentOptions?: boolean
   },
 ): Promise<Required<Options> | undefined> {
   const options = {} as Required<Options>
 
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
-  options.projectName = cliOptions.projectName || (await getProjectName())
+  if (cliOptions.projectName) {
+    // Handle "." as project name - use sanitized current directory name
+    if (cliOptions.projectName === '.') {
+      options.projectName = sanitizePackageName(getCurrentDirectoryName())
+    } else {
+      options.projectName = cliOptions.projectName
+    }
+    const { valid, error } = validateProjectName(options.projectName)
+    if (!valid) {
+      console.error(error)
+      process.exit(1)
+    }
+  } else {
+    options.projectName = await getProjectName()
+  }
 
   // Router type selection
   if (forcedMode) {
@@ -84,11 +108,19 @@ export async function promptForCreateOptions(
     cliOptions.toolchain,
   )
 
+  // Deployment selection
+  const deployment = showDeploymentOptions
+    ? await selectDeployment(options.framework, cliOptions.deployment)
+    : undefined
+
   // Add-ons selection
   const addOns: Set<string> = new Set()
 
   if (toolchain) {
     addOns.add(toolchain)
+  }
+  if (deployment) {
+    addOns.add(deployment)
   }
 
   for (const addOn of forcedAddOns) {
@@ -114,8 +146,9 @@ export async function promptForCreateOptions(
       options.framework,
       options.mode,
       'example',
-      'Would you like any examples?',
+      'Would you like an example?',
       forcedAddOns,
+      false,
     )) {
       addOns.add(addOn)
     }
@@ -130,6 +163,20 @@ export async function promptForCreateOptions(
     options.typescript = true
   }
 
+  // Prompt for add-on options in interactive mode
+  if (Array.isArray(cliOptions.addOns)) {
+    // Non-interactive mode: use defaults
+    options.addOnOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
+  } else {
+    // Interactive mode: prompt for options
+    const userOptions = await promptForAddOnOptions(
+      options.chosenAddOns.map((a) => a.id),
+      options.framework,
+    )
+    const defaultOptions = populateAddOnOptionsDefaults(options.chosenAddOns)
+    // Merge user options with defaults
+    options.addOnOptions = { ...defaultOptions, ...userOptions }
+  }
   options.git = cliOptions.git || (await selectGit())
 
   return options

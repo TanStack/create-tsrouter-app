@@ -1,30 +1,36 @@
 {
-  "name": "tanstack-app-creators",
-  "description": "Tanstack Application Builder",
-  "bin": "./dist/index.js",
+  "name": "root",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanStack/create-tsrouter-app.git"
+  },
+  "packageManager": "pnpm@10.24.0",
   "type": "module",
   "scripts": {
     "cleanNodeModules": "rm -rf node_modules && pnpm -r exec rm -rf node_modules",
     "build": "nx run-many --target=build --parallel 5",
-    "cipublish": "node scripts/publish.js",
-    "dev": "nx run-many --target=dev --parallel 10",
-    "test": "nx run-many -t test",
-    "prepare": "husky install"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TanStack/create-tsrouter-app.git"
+    "dev": "nx run-many --target=dev --parallel 20",
+    "test": "nx run-many --target=test",
+    "check-outdated": "node scripts/check-outdated-packages.js",
+    "update-outdated": "node scripts/check-outdated-packages.js --update",
+    "prepare": "husky install",
+    "changeset": "changeset",
+    "changeset:publish": "changeset publish",
+    "changeset:version": "changeset version && pnpm install --no-frozen-lockfile"
   },
   "devDependencies": {
-    "@tanstack/config": "^0.16.2",
+    "@changesets/cli": "^2.29.8",
+    "@svitejs/changesets-changelog-github-compact": "^1.2.0",
+    "@tanstack/eslint-config": "^0.3.4",
     "eslint": "^9.20.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "nx": "20.6.4",
-    "typescript": "^5.6.3",
-    "husky": "^8.0.0"
+    "husky": "^8.0.0",
+    "nx": "22.1.3",
+    "semver": "^7.6.3",
+    "typescript": "^5.6.3"
   },
-  "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "overrides": {
       "@tanstack/create-start": "workspace:*",
@@ -35,16 +41,9 @@
       "@tanstack/cta-cli": "workspace:*",
       "@tanstack/cta-engine": "workspace:*",
       "@tanstack/cta-ui": "workspace:*",
+      "@tanstack/cta-ui-base": "workspace:*",
       "@tanstack/cta-framework-react-cra": "workspace:*",
       "@tanstack/cta-framework-solid": "workspace:*"
     }
-  },
-  "workspaces": [
-    "./cli/*",
-    "./packages/*",
-    "./frameworks/*"
-  ],
-  "dependencies": {
-    "@tanstack/config": "^0.16.2"
   }
 }

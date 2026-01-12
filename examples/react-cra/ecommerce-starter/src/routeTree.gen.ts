@@ -8,27 +8,56 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as MotorcyclesMotorcycleIdRouteImport } from './routes/motorcycles/$motorcycleId'
+import { Route as ApiMotorcycleChatRouteImport } from './routes/api.motorcycle-chat'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as MotorcyclesMotorcycleIdImport } from './routes/motorcycles/$motorcycleId'
-
-// Create/Update Routes
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const MotorcyclesMotorcycleIdRoute = MotorcyclesMotorcycleIdImport.update({
+const MotorcyclesMotorcycleIdRoute = MotorcyclesMotorcycleIdRouteImport.update({
   id: '/motorcycles/$motorcycleId',
   path: '/motorcycles/$motorcycleId',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMotorcycleChatRoute = ApiMotorcycleChatRouteImport.update({
+  id: '/api/motorcycle-chat',
+  path: '/api/motorcycle-chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/api/motorcycle-chat': typeof ApiMotorcycleChatRoute
+  '/motorcycles/$motorcycleId': typeof MotorcyclesMotorcycleIdRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/api/motorcycle-chat': typeof ApiMotorcycleChatRoute
+  '/motorcycles/$motorcycleId': typeof MotorcyclesMotorcycleIdRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/api/motorcycle-chat': typeof ApiMotorcycleChatRoute
+  '/motorcycles/$motorcycleId': typeof MotorcyclesMotorcycleIdRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/api/motorcycle-chat' | '/motorcycles/$motorcycleId'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/api/motorcycle-chat' | '/motorcycles/$motorcycleId'
+  id: '__root__' | '/' | '/api/motorcycle-chat' | '/motorcycles/$motorcycleId'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  ApiMotorcycleChatRoute: typeof ApiMotorcycleChatRoute
+  MotorcyclesMotorcycleIdRoute: typeof MotorcyclesMotorcycleIdRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
@@ -36,76 +65,40 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/motorcycles/$motorcycleId': {
       id: '/motorcycles/$motorcycleId'
       path: '/motorcycles/$motorcycleId'
       fullPath: '/motorcycles/$motorcycleId'
-      preLoaderRoute: typeof MotorcyclesMotorcycleIdImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof MotorcyclesMotorcycleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/motorcycle-chat': {
+      id: '/api/motorcycle-chat'
+      path: '/api/motorcycle-chat'
+      fullPath: '/api/motorcycle-chat'
+      preLoaderRoute: typeof ApiMotorcycleChatRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
-}
-
-// Create and export the route tree
-
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/motorcycles/$motorcycleId': typeof MotorcyclesMotorcycleIdRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/motorcycles/$motorcycleId': typeof MotorcyclesMotorcycleIdRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/motorcycles/$motorcycleId': typeof MotorcyclesMotorcycleIdRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/motorcycles/$motorcycleId'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/motorcycles/$motorcycleId'
-  id: '__root__' | '/' | '/motorcycles/$motorcycleId'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  MotorcyclesMotorcycleIdRoute: typeof MotorcyclesMotorcycleIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiMotorcycleChatRoute: ApiMotorcycleChatRoute,
   MotorcyclesMotorcycleIdRoute: MotorcyclesMotorcycleIdRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/motorcycles/$motorcycleId"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/motorcycles/$motorcycleId": {
-      "filePath": "motorcycles/$motorcycleId.tsx"
-    }
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
   }
 }
-ROUTE_MANIFEST_END */

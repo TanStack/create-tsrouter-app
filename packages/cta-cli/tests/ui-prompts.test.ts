@@ -93,7 +93,8 @@ describe('selectPackageManager', () => {
 })
 
 describe('selectAddOns', () => {
-  it('should select some add-ons', async () => {
+  it('should show keyboard shortcuts help and select add-ons', async () => {
+    const noteSpy = vi.spyOn(clack, 'note').mockImplementation(() => {})
     vi.spyOn(clack, 'multiselect').mockImplementation(async () => ['add-on-1'])
     vi.spyOn(clack, 'isCancel').mockImplementation(() => false)
 
@@ -114,7 +115,12 @@ describe('selectAddOns', () => {
       'add-on',
       'Select add-ons',
     )
+
     expect(packageManager).toEqual(['add-on-1'])
+    expect(noteSpy).toHaveBeenCalledWith(
+      'Use ↑/↓ to navigate • Space to select/deselect • Enter to confirm',
+      'Keyboard Shortcuts',
+    )
   })
 
   it('should exit on cancel', async () => {

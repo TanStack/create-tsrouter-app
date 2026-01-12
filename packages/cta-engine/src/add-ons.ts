@@ -3,7 +3,14 @@ import { loadRemoteAddOn } from './custom-add-ons/add-on.js'
 import type { AddOn, Framework } from './types.js'
 
 export function getAllAddOns(framework: Framework, mode: string): Array<AddOn> {
-  return framework.getAddOns().filter((a) => a.modes.includes(mode))
+  return framework
+    .getAddOns()
+    .filter((a) => a.modes.includes(mode))
+    .sort((a, b) => {
+      const aPriority = a.priority ?? 0
+      const bPriority = b.priority ?? 0
+      return bPriority - aPriority // Higher priority first
+    })
 }
 
 // Turn the list of chosen add-on IDs into a final list of add-ons by resolving dependencies
@@ -46,4 +53,22 @@ export async function finalizeAddOns(
 
 function loadAddOn(addOn: AddOn): AddOn {
   return addOn
+}
+
+export function populateAddOnOptionsDefaults(
+  chosenAddOns: Array<AddOn>,
+): Record<string, Record<string, any>> {
+  const addOnOptions: Record<string, Record<string, any>> = {}
+
+  for (const addOn of chosenAddOns) {
+    if (addOn.options) {
+      const defaults: Record<string, any> = {}
+      for (const [optionKey, optionDef] of Object.entries(addOn.options)) {
+        defaults[optionKey] = optionDef.default
+      }
+      addOnOptions[addOn.id] = defaults
+    }
+  }
+
+  return addOnOptions
 }

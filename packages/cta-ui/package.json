@@ -1,5 +1,6 @@
 {
   "name": "@tanstack/cta-ui",
+  "version": "0.46.2",
   "type": "module",
   "main": "./lib-dist/index.js",
   "types": "./lib-dist/index.d.ts",
@@ -9,6 +10,11 @@
     "build:lib": "tsc -p tsconfig.lib.json",
     "dev": "tsc --watch -p tsconfig.lib.json",
     "dev:ui": "VITE_API_BASE_URL=http://localhost:8080 vite dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanStack/create-tsrouter-app.git",
+    "directory": "packages/cta-ui"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.6",
@@ -40,9 +46,8 @@
     "@vitest/coverage-v8": "3.1.1",
     "jsdom": "^26.0.0",
     "typescript": "^5.7.2",
-    "vite": "^6.3.3",
+    "vite": "^7.1.7",
     "vitest": "^3.0.5",
     "web-vitals": "^4.2.4"
-  },
-  "version": "0.17.5"
+  }
 }

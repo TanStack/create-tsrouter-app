@@ -7,8 +7,14 @@ import {
   getFrameworkById,
   getPackageManager,
   loadStarter,
+  populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
+import {
+  getCurrentDirectoryName,
+  sanitizePackageName,
+  validateProjectName,
+} from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -19,11 +25,30 @@ export async function normalizeOptions(
   forcedAddOns?: Array<string>,
   opts?: {
     disableNameCheck?: boolean
+    forcedDeployment?: string
   },
 ): Promise<Options | undefined> {
-  const projectName = (cliOptions.projectName ?? '').trim()
+  let projectName = (cliOptions.projectName ?? '').trim()
+  let targetDir: string
+
+  // Handle "." as project name - use current directory
+  if (projectName === '.') {
+    projectName = sanitizePackageName(getCurrentDirectoryName())
+    targetDir = resolve(process.cwd())
+  } else {
+    targetDir = resolve(process.cwd(), projectName)
+  }
+
   if (!projectName && !opts?.disableNameCheck) {
     return undefined
+  }
+
+  if (projectName) {
+    const { valid, error } = validateProjectName(projectName)
+    if (!valid) {
+      console.error(error)
+      process.exit(1)
+    }
   }
 
   let tailwind = !!cliOptions.tailwind
@@ -75,7 +100,8 @@ export async function normalizeOptions(
       Array.isArray(cliOptions.addOns) ||
       starter?.dependsOn ||
       forcedAddOns ||
-      cliOptions.toolchain
+      cliOptions.toolchain ||
+      cliOptions.deployment
     ) {
       const selectedAddOns = new Set<string>([
         ...(starter?.dependsOn || []),
@@ -88,6 +114,13 @@ export async function normalizeOptions(
       }
       if (cliOptions.toolchain) {
         selectedAddOns.add(cliOptions.toolchain)
+      }
+      if (cliOptions.deployment) {
+        selectedAddOns.add(cliOptions.deployment)
+      }
+
+      if (!cliOptions.deployment && opts?.forcedDeployment) {
+        selectedAddOns.add(opts.forcedDeployment)
       }
 
       return await finalizeAddOns(framework, mode, Array.from(selectedAddOns))
@@ -103,9 +136,20 @@ export async function normalizeOptions(
     typescript = true
   }
 
+  // Handle add-on configuration option
+  let addOnOptionsFromCLI = {}
+  if (cliOptions.addOnConfig) {
+    try {
+      addOnOptionsFromCLI = JSON.parse(cliOptions.addOnConfig)
+    } catch (error) {
+      console.error('Error parsing add-on config:', error)
+      process.exit(1)
+    }
+  }
+
   return {
     projectName: projectName,
-    targetDir: resolve(process.cwd(), projectName),
+    targetDir,
     framework,
     mode,
     typescript,
@@ -117,6 +161,10 @@ export async function normalizeOptions(
     git: !!cliOptions.git,
     install: cliOptions.install,
     chosenAddOns,
+    addOnOptions: {
+      ...populateAddOnOptionsDefaults(chosenAddOns),
+      ...addOnOptionsFromCLI,
+    },
     starter: starter,
   }
 }

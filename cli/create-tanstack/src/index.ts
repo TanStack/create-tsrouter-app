@@ -10,6 +10,7 @@ registerSolid()
 cli({
   name: 'create-tanstack',
   appName: 'TanStack',
+  forcedDeployment: 'nitro',
   defaultTemplate: 'file-router',
   craCompatible: true,
 })

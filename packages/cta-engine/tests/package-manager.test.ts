@@ -20,7 +20,7 @@ describe('getPackageManagerScriptCommand', () => {
   })
   it('bun', () => {
     expect(formatCommand(getPackageManagerScriptCommand('bun', ['dev']))).toBe(
-      'bunx --bun run dev',
+      'bun --bun run dev',
     )
   })
   it('deno', () => {
@@ -48,7 +48,7 @@ describe('getPackageManagerExecuteCommand', () => {
       formatCommand(
         getPackageManagerExecuteCommand('pnpm', 'shadcn', ['add', 'button']),
       ),
-    ).toBe('pnpx shadcn add button')
+    ).toBe('pnpm dlx shadcn add button')
   })
   it('bun', () => {
     expect(
@@ -69,7 +69,7 @@ describe('getPackageManagerExecuteCommand', () => {
       formatCommand(
         getPackageManagerExecuteCommand('npm', 'shadcn', ['add', 'button']),
       ),
-    ).toBe('npx shadcn add button')
+    ).toBe('npx -y shadcn add button')
   })
 })
 

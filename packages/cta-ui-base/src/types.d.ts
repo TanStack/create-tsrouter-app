@@ -1,4 +1,8 @@
-import type { StatusStepType } from '@tanstack/cta-engine'
+import type {
+  StatusStepType,
+  AddOnOption,
+  AddOnOptions,
+} from '@tanstack/cta-engine'
 
 export type ApplicationMode = 'add' | 'setup' | 'none'
 
@@ -32,12 +36,14 @@ export type AddOnInfo = {
   id: string
   name: string
   description: string
-  type: 'add-on' | 'example' | 'starter' | 'toolchain'
+  type: 'add-on' | 'example' | 'starter' | 'toolchain' | 'deployment'
   modes: Array<string>
   smallLogo?: string
+  priority?: number
   logo?: string
   link: string
   dependsOn?: Array<string>
+  options?: AddOnOptions
 }
 
 export type FileClass =
@@ -83,6 +89,7 @@ export type InitialData = {
   localFiles: Record<string, string>
   addOns: Record<string, Array<AddOnInfo>>
   applicationMode: ApplicationMode
+  showDeploymentOptions?: boolean
   forcedRouterMode?: string
   forcedAddOns?: Array<string>
   registry?: Registry | undefined

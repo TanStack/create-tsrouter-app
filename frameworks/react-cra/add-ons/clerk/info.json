@@ -4,6 +4,7 @@
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",
+  "priority": 150,
   "link": "https://clerk.com",
   "tailwind": true,
   "routes": [

@@ -7,6 +7,7 @@ import {
   finalizeAddOns,
   getFrameworkById,
   loadStarter,
+  populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
 import { TMP_TARGET_DIR } from '../constants.js'
@@ -64,6 +65,11 @@ export async function createAppWrapper(
     starter,
     framework,
     chosenAddOns,
+    addOnOptions:
+      !projectOptions.addOnOptions ||
+      Object.keys(projectOptions.addOnOptions).length === 0
+        ? populateAddOnOptionsDefaults(chosenAddOns)
+        : projectOptions.addOnOptions,
   }
 
   function createEnvironment() {
@@ -109,7 +115,8 @@ export async function createAppWrapper(
   } else {
     await createApp(environment, options)
 
-    output.files = cleanUpFiles(output.files, targetDir)
+    // Preserve base64 content for WebContainer, FileViewer will display placeholders
+    output.files = cleanUpFiles(output.files, targetDir, true)
     output.deletedFiles = cleanUpFileArray(output.deletedFiles, targetDir)
 
     return output

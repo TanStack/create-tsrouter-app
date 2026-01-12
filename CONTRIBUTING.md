@@ -20,6 +20,26 @@
 - Run `pnpm build` and `pnpm test` to make sure the changes work
 - Check your work and PR
 
+# Testing Your Changes
+
+When testing use `pnpm dev` at the top level of the `create-tsrouter-app` repo.
+
+Then from a peer directory use:
+
+```bash
+node ../create-tsrouter-app/cli/create-start-app/dist/index.js
+```
+
+To test `create-start-app` (or any of the CLIs).
+
+You can also do:
+
+```bash
+npm_config_user_agent=pnpm node ../create-tsrouter-app/cli/create-start-app/dist/index.js
+```
+
+If you want to specify a package manager.
+
 # Framework Development with --dev-watch
 
 The `--dev-watch` command provides real-time feedback while developing frameworks, add-ons, and starters. It watches for changes in your framework files and automatically rebuilds them.

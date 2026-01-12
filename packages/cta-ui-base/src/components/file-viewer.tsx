@@ -45,10 +45,18 @@ export default function FileViewer({
   }
   const language = getLanguage(filePath)
 
-  if (!originalFile || originalFile === modifiedFile) {
+  // Display placeholder for binary files
+  const displayModified = modifiedFile.startsWith('base64::')
+    ? '<binary file>'
+    : modifiedFile
+  const displayOriginal = originalFile?.startsWith('base64::')
+    ? '<binary file>'
+    : originalFile
+
+  if (!displayOriginal || displayOriginal === displayModified) {
     return (
       <CodeMirror
-        value={modifiedFile}
+        value={displayModified}
         theme={theme}
         height="100vh"
         width="100%"
@@ -60,8 +68,14 @@ export default function FileViewer({
   }
   return (
     <CodeMirrorMerge orientation="a-b" theme={theme} className="text-lg">
-      <CodeMirrorMerge.Original value={originalFile} extensions={[language]} />
-      <CodeMirrorMerge.Modified value={modifiedFile} extensions={[language]} />
+      <CodeMirrorMerge.Original
+        value={displayOriginal}
+        extensions={[language]}
+      />
+      <CodeMirrorMerge.Modified
+        value={displayModified}
+        extensions={[language]}
+      />
     </CodeMirrorMerge>
   )
 }

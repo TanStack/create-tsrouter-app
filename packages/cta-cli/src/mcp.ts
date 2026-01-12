@@ -13,6 +13,7 @@ import {
   finalizeAddOns,
   getFrameworkByName,
   getFrameworks,
+  populateAddOnOptionsDefaults,
 } from '@tanstack/cta-engine'
 
 function createServer({
@@ -53,7 +54,10 @@ function createServer({
                 .filter((addOn) => addOn.modes.includes('file-router'))
                 .map((addOn) => ({
                   id: addOn.id,
+                  name: addOn.name,
                   description: addOn.description,
+                  options: addOn.options,
+                  dependsOn: addOn.dependsOn,
                 })),
             ),
           },
@@ -77,7 +81,8 @@ function createServer({
           'The package.json module name of the application (will also be the directory name)',
         ),
       cwd: z.string().describe('The directory to create the application in'),
-      addOns: z.array(z.string()).describe('The IDs of the add-ons to install'),
+      addOns: z.array(z.string()).describe('Array of add-on IDs to install. Use listTanStackAddOns tool to see available add-ons and their configuration options. Example: ["prisma", "shadcn", "tanstack-query"]'),
+      addOnOptions: z.record(z.record(z.any())).optional().describe('Configuration options for add-ons. Format: {"addOnId": {"optionName": "value"}}. Use listTanStackAddOns to see available options for each add-on.'),
       targetDir: z
         .string()
         .describe(
@@ -88,6 +93,7 @@ function createServer({
       framework: frameworkName,
       projectName,
       addOns,
+      addOnOptions,
       cwd,
       targetDir,
     }) => {
@@ -114,6 +120,7 @@ function createServer({
             packageManager: 'pnpm',
             mode: 'file-router',
             chosenAddOns,
+            addOnOptions: addOnOptions || populateAddOnOptionsDefaults(chosenAddOns),
             git: true,
           })
         } catch (error) {

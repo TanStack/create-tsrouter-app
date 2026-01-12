@@ -4,4 +4,7 @@ dist
 dist-ssr
 *.local
 .output
-.vinxi
+.env
+.nitro
+.tanstack
+.content-collections

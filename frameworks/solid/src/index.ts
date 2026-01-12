@@ -6,6 +6,7 @@ import {
   scanAddOnDirectories,
   scanProjectDirectory,
 } from '@tanstack/cta-engine'
+
 import type { FrameworkDefinition } from '@tanstack/cta-engine'
 
 export function createFrameworkDefinition(): FrameworkDefinition {
@@ -15,6 +16,7 @@ export function createFrameworkDefinition(): FrameworkDefinition {
     join(baseDirectory, 'add-ons'),
     join(baseDirectory, 'toolchains'),
     join(baseDirectory, 'examples'),
+    join(baseDirectory, 'hosts'),
   ])
 
   const { files, basePackageJSON, optionalPackages } = scanProjectDirectory(

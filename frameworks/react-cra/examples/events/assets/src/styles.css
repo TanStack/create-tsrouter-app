@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap');
+@import 'tailwindcss';
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+body {
+  @apply m-0;
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Haute Patisserie Dark Theme */
+:root {
+  /* Core colors - Dark elegant bakery */
+  --background: oklch(0.13 0.01 60);
+  --foreground: oklch(0.93 0.02 85);
+
+  /* Warm cream for cards */
+  --card: oklch(0.17 0.015 55);
+  --card-foreground: oklch(0.93 0.02 85);
+
+  /* Copper accent */
+  --primary: oklch(0.65 0.14 55);
+  --primary-foreground: oklch(0.13 0.01 60);
+
+  /* Antique gold */
+  --secondary: oklch(0.72 0.12 85);
+  --secondary-foreground: oklch(0.13 0.01 60);
+
+  /* Muted warm tones */
+  --muted: oklch(0.22 0.02 55);
+  --muted-foreground: oklch(0.65 0.03 85);
+
+  /* Accent - rich copper */
+  --accent: oklch(0.55 0.15 45);
+  --accent-foreground: oklch(0.95 0.02 85);
+
+  /* Destructive */
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.95 0.02 85);
+
+  /* Borders and inputs */
+  --border: oklch(0.28 0.03 55);
+  --input: oklch(0.22 0.02 55);
+  --ring: oklch(0.65 0.14 55);
+
+  /* Chart colors - pastry inspired */
+  --chart-1: oklch(0.65 0.14 55);
+  --chart-2: oklch(0.72 0.12 85);
+  --chart-3: oklch(0.55 0.15 45);
+  --chart-4: oklch(0.6 0.1 30);
+  --chart-5: oklch(0.5 0.08 150);
+
+  --radius: 0.625rem;
+
+  /* Popover */
+  --popover: oklch(0.17 0.015 55);
+  --popover-foreground: oklch(0.93 0.02 85);
+
+  /* Sidebar */
+  --sidebar: oklch(0.15 0.01 55);
+  --sidebar-foreground: oklch(0.93 0.02 85);
+  --sidebar-primary: oklch(0.65 0.14 55);
+  --sidebar-primary-foreground: oklch(0.95 0.02 85);
+  --sidebar-accent: oklch(0.22 0.02 55);
+  --sidebar-accent-foreground: oklch(0.93 0.02 85);
+  --sidebar-border: oklch(0.28 0.03 55);
+  --sidebar-ring: oklch(0.65 0.14 55);
+}
+
+@theme inline {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom colors for the theme */
+  --color-copper: oklch(0.65 0.14 55);
+  --color-copper-light: oklch(0.75 0.12 55);
+  --color-copper-dark: oklch(0.5 0.15 50);
+  --color-gold: oklch(0.72 0.12 85);
+  --color-gold-light: oklch(0.82 0.1 85);
+  --color-cream: oklch(0.93 0.02 85);
+  --color-cream-dark: oklch(0.85 0.03 80);
+  --color-charcoal: oklch(0.13 0.01 60);
+  --color-charcoal-light: oklch(0.2 0.015 55);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utilities for the theme */
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-body {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Elegant grain texture overlay */
+.grain-texture {
+  position: relative;
+}
+
+.grain-texture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Golden border accent */
+.border-gold-accent {
+  border-image: linear-gradient(
+      135deg,
+      oklch(0.72 0.12 85),
+      oklch(0.65 0.14 55),
+      oklch(0.72 0.12 85)
+    )
+    1;
+}
+
+/* Copper glow effect */
+.glow-copper {
+  box-shadow:
+    0 0 20px oklch(0.65 0.14 55 / 0.3),
+    0 0 40px oklch(0.65 0.14 55 / 0.1);
+}
+
+/* Elegant card hover effect */
+.card-hover {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 40px oklch(0 0 0 / 0.4),
+    0 0 20px oklch(0.65 0.14 55 / 0.15);
+}

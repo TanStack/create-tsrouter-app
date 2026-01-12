@@ -136,6 +136,32 @@ Configuration in `info.json`:
 ]
 ```
 
+## vite-plugin
+
+The code is integrated into `src/vite.config.ts`
+
+### Examples
+
+Code in `assets/vite-plugins/netlify.ts`:
+
+```ts
+import netlify from '@netlify/vite-plugin-tanstack-start'
+
+export default netlify()
+```
+
+Configuration in `info.json`:
+
+```json
+"integrations": [
+  {
+    "type": "vite-plugin",
+    "jsName": "netlify",
+    "path": "vite-plugins/netlify.ts"
+  },
+]
+```
+
 # Routes
 
 If your add-on creates routes you need to specify those in the `info.json` file.
@@ -167,3 +193,171 @@ If you don't want a header link you can omit the `url` and `name` properties.
 You **MUST** specify routes in the `info.json` file if your add-on supports the `code-router` mode. This is because the `code-routers` setup needs to import the routes in order to add them to the router.
 
 By convension you should prefix demo routes with `demo` to make it clear that they are demo routes so they can be easily identified and removed.
+
+# Add-on Options
+
+The CTA framework supports configurable add-ons through an options system that allows users to customize add-on behavior during creation. This enables more flexible and reusable add-ons that can adapt to different use cases.
+
+## Overview
+
+Add-on options allow developers to create configurable add-ons where users can select from predefined choices that affect:
+
+- Which files are included in the generated project
+- Template variable values used during file generation
+- Package dependencies that get installed
+- Configuration file contents
+
+## Configuration Format
+
+Options are defined in the `info.json` file using the following schema:
+
+```json
+{
+  "name": "My Add-on",
+  "description": "A configurable add-on",
+  "options": {
+    "optionName": {
+      "type": "select",
+      "label": "Display Label",
+      "description": "Optional description shown to users",
+      "default": "defaultValue",
+      "options": [
+        { "value": "option1", "label": "Option 1" },
+        { "value": "option2", "label": "Option 2" }
+      ]
+    }
+  }
+}
+```
+
+### Option Types
+
+#### Select Options
+
+The `select` type allows users to choose from a predefined list of options:
+
+```json
+"database": {
+  "type": "select",
+  "label": "Database Provider",
+  "description": "Choose your database provider",
+  "default": "postgres",
+  "options": [
+    { "value": "postgres", "label": "PostgreSQL" },
+    { "value": "mysql", "label": "MySQL" },
+    { "value": "sqlite", "label": "SQLite" }
+  ]
+}
+```
+
+**Properties:**
+
+- `type`: Must be `"select"`
+- `label`: Display text shown to users
+- `description`: Optional help text
+- `default`: Default value that must match one of the option values
+- `options`: Array of value/label pairs
+
+## Template Usage
+
+Option values are available in EJS templates through the `addOnOption` variable:
+
+```ejs
+<!-- Access option value -->
+<% if (addOnOption.myAddOnId.database === 'postgres') { %>
+  PostgreSQL specific code
+<% } %>
+
+<!-- Use option value in output -->
+const driver = '<%= addOnOption.myAddOnId.database %>'
+```
+
+The structure is: `addOnOption.{addOnId}.{optionName}`
+
+### Template Conditional Logic
+
+Within template files, use `ignoreFile()` to skip file generation:
+
+```ejs
+<% if (addOnOption.prisma.database !== 'postgres') { ignoreFile() } %>
+import { PrismaClient } from '@prisma/client'
+
+declare global {
+  var __prisma: PrismaClient | undefined
+}
+
+export const prisma = globalThis.__prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma
+}
+```
+
+## Complete Example: Prisma Add-on
+
+Here's how the Prisma add-on implements configurable database support:
+
+### Examples
+
+Configuration in `info.json`:
+
+```json
+{
+  "name": "Prisma ORM",
+  "description": "Add Prisma ORM with configurable database support to your application.",
+  "options": {
+    "database": {
+      "type": "select",
+      "label": "Database Provider",
+      "description": "Choose your database provider",
+      "default": "postgres",
+      "options": [
+        { "value": "postgres", "label": "PostgreSQL" },
+        { "value": "mysql", "label": "MySQL" },
+        { "value": "sqlite", "label": "SQLite" }
+      ]
+    }
+  }
+}
+```
+
+Code in `package.json.ejs`:
+
+```ejs
+{
+  "prisma": "^6.16.3",
+  "@prisma/client": "^6.16.3"<% if (addOnOption.prisma.database === 'postgres') { %>,
+  "pg": "^8.11.0",
+  "@types/pg": "^8.10.0"<% } else if (addOnOption.prisma.database === 'mysql') { %>,
+  "mysql2": "^3.6.0"<% } else if (addOnOption.prisma.database === 'sqlite') { %><% } %>
+}
+```
+
+## CLI Usage
+
+### Interactive Mode
+
+When using the CLI interactively, users are prompted for each option:
+
+```bash
+create-tsrouter-app my-app
+# User selects Prisma add-on
+# CLI prompts: "Prisma ORM: Database Provider" with options
+```
+
+### Non-Interactive Mode
+
+Options can be specified via JSON configuration:
+
+```bash
+create-tsrouter-app my-app --add-ons prisma --add-on-config '{"prisma":{"database":"mysql"}}'
+```
+
+## Best Practices
+
+1. **Use descriptive labels** - Make option purposes clear to users
+2. **Provide sensible defaults** - Choose the most common use case
+3. **Group related files** - Use consistent prefixing for option-specific files
+4. **Document options** - Include descriptions to help users understand choices
+5. **Test all combinations** - Ensure each option value generates working code
+6. **Use validation** - The system validates options against the schema automatically

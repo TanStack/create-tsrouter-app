@@ -44,12 +44,12 @@ describe('createPackageJSON', () => {
 
     const expected = {
       name: 'test',
+      devDependencies: {
+        typescript: '^5.0.0',
+      },
       dependencies: {
         'file-router': '^1.0.0',
         tailwindcss: '^3.0.0',
-      },
-      devDependencies: {
-        typescript: '^5.0.0',
       },
       scripts: {
         dev: 'file-router dev',

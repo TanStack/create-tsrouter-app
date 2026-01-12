@@ -3,11 +3,13 @@
   "description": "TanStack DB",
   "phase": "add-on",
   "type": "add-on",
+  "priority": 48,
   "modes": ["file-router"],
   "link": "https://tanstack.com/db/latest",
   "dependsOn": ["tanstack-query", "start"],
   "routes": [
     {
+      "icon": "Database",
       "url": "/demo/db-chat",
       "name": "DB Chat",
       "path": "src/routes/demo.db-chat.tsx",

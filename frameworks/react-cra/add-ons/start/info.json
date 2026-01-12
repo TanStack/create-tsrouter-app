@@ -5,25 +5,53 @@
   "link": "https://tanstack.com/start/latest",
   "modes": ["file-router"],
   "type": "add-on",
-  "warning": "TanStack Start is not yet at 1.0 and may change significantly or not be compatible with other add-ons.\nMigrating to Start might require deleting node_modules and re-installing.",
+  "priority": 26,
   "routes": [
     {
+      "icon": "SquareFunction",
       "url": "/demo/start/server-funcs",
       "name": "Start - Server Functions",
       "path": "src/routes/demo.start.server-funcs.tsx",
       "jsName": "StartServerFuncsDemo"
     },
     {
+      "icon": "Network",
       "url": "/demo/start/api-request",
       "name": "Start - API Request",
       "path": "src/routes/demo.start.api-request.tsx",
       "jsName": "StartApiRequestDemo"
+    },
+    {
+      "icon": "StickyNote",
+      "url": "/demo/start/ssr",
+      "name": "Start - SSR Demos",
+      "path": "src/routes/demo.start.ssr.index.tsx",
+      "jsName": "StartSSRDemo",
+      "children": [
+        {
+          "icon": "StickyNote",
+          "url": "/demo/start/ssr/spa-mode",
+          "name": "SPA Mode",
+          "path": "src/routes/demo.start.ssr.spa-mode.tsx",
+          "jsName": "StartSSRSpamodeDemo"
+        },
+        {
+          "icon": "StickyNote",
+          "url": "/demo/start/ssr/full-ssr",
+          "name": "Full SSR",
+          "path": "src/routes/demo.start.ssr.full-ssr.tsx",
+          "jsName": "StartSSRFullSsrDemo"
+        },
+        {
+          "icon": "StickyNote",
+          "url": "/demo/start/ssr/data-only",
+          "name": "Data Only",
+          "path": "src/routes/demo.start.ssr.data-only.tsx",
+          "jsName": "StartSSRDataOnlyDemo"
+        }
+      ]
     }
   ],
-  "deletedFiles": [
-    "./index.html",
-    "./src/main.tsx",
-    "./src/App.css"
-  ],
+  "deletedFiles": ["./index.html", "./src/main.tsx", "./src/App.css"],
   "addOnSpecialSteps": ["rimraf-node-modules"]
 }

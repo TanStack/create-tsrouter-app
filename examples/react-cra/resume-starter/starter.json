@@ -23,15 +23,15 @@
     },
     "devDependencies": {
       "@content-collections/core": "^0.8.2",
-      "@content-collections/vinxi": "^0.1.0"
+      "@content-collections/vite": "^0.2.6"
     }
   },
   "dependsOn": ["start", "shadcn"],
   "typescript": true,
   "tailwind": true,
   "files": {
-    "./.gitignore": "node_modules\n.DS_Store\ndist\ndist-ssr\n*.local\n.output\n.vinxi\n.content-collections",
-    "./app.config.ts": "import { defineConfig } from \"@tanstack/react-start/config\";\nimport contentCollections from \"@content-collections/vinxi\";\nimport viteTsConfigPaths from \"vite-tsconfig-paths\";\nimport tailwindcss from \"@tailwindcss/vite\";\n\nconst config = defineConfig({\n  tsr: {\n    appDirectory: \"src\",\n  },\n  vite: {\n    plugins: [\n      contentCollections(),\n      viteTsConfigPaths({\n        projects: [\"./tsconfig.json\"],\n      }),\n      tailwindcss(),\n    ],\n  },\n});\n\nexport default config;\n",
+    "./.gitignore": "node_modules\n.DS_Store\ndist\ndist-ssr\n*.local\n.output\n.content-collections",
+    "./app.config.ts": "import { defineConfig } from \"@tanstack/start/config\";\nimport contentCollections from \"@content-collections/vite\";\nimport viteTsConfigPaths from \"vite-tsconfig-paths\";\nimport tailwindcss from \"@tailwindcss/vite\";\n\nconst config = defineConfig({\n  tsr: {\n    appDirectory: \"src\",\n  },\n  vite: {\n    plugins: [\n      contentCollections(),\n      viteTsConfigPaths({\n        projects: [\"./tsconfig.json\"],\n      }),\n      tailwindcss(),\n    ],\n  },\n});\n\nexport default config;\n",
     "./content/education/code-school.md": "---\nschool: Code School\nsummary: Full Stack Development\nstartDate: 2020-01-01\nendDate: 2020-12-31\ntags:\n  [\n    \"Full Stack Development\",\n    \"JavaScript\",\n    \"React\",\n    \"Node.js\",\n    \"Express\",\n    \"MongoDB\",\n  ]\n---\n\nCompleted a comprehensive full stack development course covering JavaScript, React, Node.js, Express, and MongoDB. Gained hands-on experience with modern web development frameworks and databases while building a full stack application.\n",
     "./content/jobs/freelance.md": "---\njobTitle: Frontend Development Consultant\ncompany: Freelance\nlocation: Remote\nstartDate: 2020-01-01\nendDate: 2020-12-31\nsummary: Independent frontend development consultant working with multiple clients on web applications and sites\ndescription:\ntags:\n  [\"React\", \"TypeScript\", \"Frontend Development\", \"JavaScript\", \"CSS\", \"HTML\"]\n---\n\nProvided expert frontend development services to various clients, specializing in React, TypeScript, and modern web technologies. Delivered responsive and performant web applications while maintaining high code quality and best practices.\n",
     "./content/jobs/initech-junior.md": "---\njobTitle: Junior Frontend Developer\ncompany: IniTech\nlocation: Remote\nstartDate: 2021-01-01\nendDate: 2021-12-31\nsummary: Junior frontend developer working on React-based web applications using modern development practices\ndescription:\ntags:\n  [\n    \"React\",\n    \"TypeScript\",\n    \"Frontend Development\",\n    \"JavaScript\",\n    \"TanStack\",\n    \"Web Development\",\n  ]\n---\n\nWorked as a junior frontend developer at IniTech, contributing to React-based web applications. Collaborated with the development team to implement responsive user interfaces, integrate REST APIs, and maintain code quality. Gained hands-on experience with modern frontend technologies and development workflows while working on production applications.\n",

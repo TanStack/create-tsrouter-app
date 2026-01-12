@@ -1,0 +1,616 @@
+/**
+ * FILE OVERVIEW:
+ * Purpose: Interactive demo page showcasing Sentry's monitoring capabilities
+ * Key Concepts: Error tracking, Performance monitoring, Session replay
+ * Module Type: Route Component
+ * @ai_context: Demonstrates Sentry features through interactive examples with educational context
+ */
+
+import * as fs from 'node:fs/promises'
+import { createFileRoute } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/react-start'
+import * as Sentry from '@sentry/tanstackstart-react'
+import { useState, useEffect } from 'react'
+
+export const Route = createFileRoute('/demo/sentry/testing')({
+  component: RouteComponent,
+  errorComponent: ({ error }) => {
+    useEffect(() => {
+      Sentry.captureException(error)
+    }, [error])
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#181423]">
+        <div className="text-center p-8">
+          <SentryLogo />
+          <h1 className="text-2xl font-bold text-white mt-4 mb-2">
+            Something went wrong
+          </h1>
+          <p className="text-[#A49FB5]">{error.message}</p>
+        </div>
+      </div>
+    )
+  },
+})
+
+// Sentry Logo Component
+function SentryLogo({ size = 48 }: { size?: number }) {
+  return (
+    <svg
+      height={size}
+      width={size}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 40 40"
+    >
+      <path
+        d="M21.85 2.995a3.698 3.698 0 0 1 1.353 1.354l16.303 28.278a3.703 3.703 0 0 1-1.354 5.053 3.694 3.694 0 0 1-1.848.496h-3.828a31.149 31.149 0 0 0 0-3.09h3.815a.61.61 0 0 0 .537-.917L20.523 5.893a.61.61 0 0 0-1.057 0l-3.739 6.494a28.948 28.948 0 0 1 9.63 10.453 28.988 28.988 0 0 1 3.499 13.78v1.542h-9.852v-1.544a19.106 19.106 0 0 0-2.182-8.85 19.08 19.08 0 0 0-6.032-6.829l-1.85 3.208a15.377 15.377 0 0 1 6.382 12.484v1.542H3.696A3.694 3.694 0 0 1 0 34.473c0-.648.17-1.286.494-1.849l2.33-4.074a8.562 8.562 0 0 1 2.689 1.536L3.158 34.17a.611.611 0 0 0 .538.917h8.448a12.481 12.481 0 0 0-6.037-9.09l-1.344-.772 4.908-8.545 1.344.77a22.16 22.16 0 0 1 7.705 7.444 22.193 22.193 0 0 1 3.316 10.193h3.699a25.892 25.892 0 0 0-3.811-12.033 25.856 25.856 0 0 0-9.046-8.796l-1.344-.772 5.269-9.136a3.698 3.698 0 0 1 3.2-1.849c.648 0 1.285.17 1.847.495Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+// Server function that will error
+const badServerFunc = createServerFn({
+  method: 'GET',
+}).handler(async () => {
+  return await Sentry.startSpan(
+    {
+      name: 'Reading non-existent file',
+      op: 'file.read',
+    },
+    async () => {
+      try {
+        await fs.readFile('./doesnt-exist', 'utf-8')
+        return true
+      } catch (error) {
+        Sentry.captureException(error)
+        throw error
+      }
+    },
+  )
+})
+
+// Server function that will succeed but be traced
+const goodServerFunc = createServerFn({
+  method: 'GET',
+}).handler(async () => {
+  return await Sentry.startSpan(
+    {
+      name: 'Successful server operation',
+      op: 'demo.success',
+    },
+    async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      return { success: true }
+    },
+  )
+})
+
+// 3D Button Component inspired by Sentry wizard
+function SentryButton({
+  children,
+  onClick,
+  variant = 'primary',
+  disabled = false,
+  loading = false,
+}: {
+  children: React.ReactNode
+  onClick: () => void
+  variant?: 'primary' | 'error'
+  disabled?: boolean
+  loading?: boolean
+}) {
+  const baseColor = variant === 'error' ? '#E50045' : '#553DB8'
+  const topColor = variant === 'error' ? '#FF1A5C' : '#7553FF'
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled || loading}
+      className="group w-full rounded-lg text-white cursor-pointer border-none p-0 transition-all disabled:cursor-not-allowed disabled:opacity-60"
+      style={{ backgroundColor: baseColor }}
+    >
+      <span
+        className="flex items-center justify-center gap-3 px-6 py-4 rounded-lg text-lg font-semibold transition-transform group-hover:-translate-y-1 group-active:translate-y-0 group-disabled:translate-y-0"
+        style={{
+          backgroundColor: topColor,
+          border: `1px solid ${baseColor}`,
+        }}
+      >
+        {loading && (
+          <svg
+            className="animate-spin h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+        )}
+        {children}
+      </span>
+    </button>
+  )
+}
+
+// Feature Card Component
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode
+  title: string
+  description: string
+}) {
+  return (
+    <div className="bg-[#1C1825] rounded-xl p-4 border border-[#2D2640] hover:border-[#7553FF]/50 transition-all group">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="text-[#7553FF] group-hover:scale-110 transition-transform">
+          {icon}
+        </div>
+        <h3 className="font-semibold text-white">{title}</h3>
+      </div>
+      <p className="text-sm text-[#A49FB5] pl-9">{description}</p>
+    </div>
+  )
+}
+
+// Result Badge Component
+function ResultBadge({
+  type,
+  spanOp,
+  onCopy,
+}: {
+  type: 'success' | 'error'
+  spanOp: string
+  onCopy: () => void
+}) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(spanOp)
+    setCopied(true)
+    onCopy()
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="mt-4 space-y-3">
+      {type === 'error' && (
+        <div className="flex items-center gap-2 bg-[#E50045]/10 border border-[#E50045]/30 rounded-lg px-4 py-3">
+          <svg
+            className="w-5 h-5 text-[#FF1A5C]"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <title>Error captured</title>
+            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span className="text-[#FF1A5C] text-sm font-medium">
+            Error captured and sent to Sentry
+          </span>
+        </div>
+      )}
+
+      {type === 'success' && (
+        <div className="flex items-center gap-2 bg-[#00F261]/10 border border-[#00BF4D]/30 rounded-lg px-4 py-3">
+          <svg
+            className="w-5 h-5 text-[#00F261]"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <title>Trace complete</title>
+            <path d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="text-[#00F261] text-sm font-medium">
+            Trace completed successfully
+          </span>
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="relative flex items-center gap-2 bg-[#7553FF]/10 hover:bg-[#7553FF]/20 border border-[#7553FF]/30 rounded-lg px-4 py-2 transition-all cursor-pointer w-full"
+      >
+        <span className="text-[#B3A1FF] text-sm">span.op:</span>
+        <code className="text-[#7553FF] font-mono text-sm">{spanOp}</code>
+        <svg
+          className="w-4 h-4 text-[#B3A1FF] ml-auto"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <title>Copy to clipboard</title>
+          <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        {copied && (
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#00F261] text-[#181423] text-xs font-medium px-2 py-1 rounded animate-pulse">
+            Copied!
+          </span>
+        )}
+      </button>
+    </div>
+  )
+}
+
+// Progress Bar Component
+function ProgressBar({ loading }: { loading: boolean }) {
+  return (
+    <div className="mt-4 flex items-center gap-3">
+      <div
+        className={`w-3 h-3 rounded-full transition-all ${loading ? 'bg-[#7553FF] animate-pulse' : 'bg-[#00F261]'}`}
+      />
+      <div className="flex-1 h-2 bg-[#2D2640] rounded-full overflow-hidden">
+        <div
+          className="h-full bg-gradient-to-r from-[#7553FF] to-[#B3A1FF] rounded-full transition-all duration-500"
+          style={{ width: loading ? '60%' : '100%' }}
+        />
+      </div>
+      <span className="text-xs text-[#A49FB5] w-16 text-right">
+        {loading ? 'Running...' : 'Complete'}
+      </span>
+    </div>
+  )
+}
+
+function RouteComponent() {
+  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({})
+  const [results, setResults] = useState<
+    Record<string, { type: 'success' | 'error'; spanOp: string }>
+  >({})
+  const [sentryConfigured, setSentryConfigured] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    // Check if Sentry DSN environment variable is set
+    const hasDsn = !!import.meta.env.VITE_SENTRY_DSN
+    setSentryConfigured(hasDsn)
+  }, [])
+
+  // Don't show warning until we've checked on the client
+  const showWarning = sentryConfigured === false
+
+  const handleClientError = async () => {
+    setIsLoading((prev) => ({ ...prev, clientError: true }))
+    try {
+      await Sentry.startSpan(
+        { name: 'Client Error Flow Demo', op: 'demo.client-error' },
+        async () => {
+          Sentry.setContext('demo', {
+            feature: 'client-error-demo',
+            triggered_at: new Date().toISOString(),
+          })
+          throw new Error('Client-side error demonstration')
+        },
+      )
+    } catch (error) {
+      Sentry.captureException(error)
+      setResults((prev) => ({
+        ...prev,
+        clientError: { type: 'error', spanOp: 'demo.client-error' },
+      }))
+    } finally {
+      setIsLoading((prev) => ({ ...prev, clientError: false }))
+    }
+  }
+
+  const handleServerError = async () => {
+    setIsLoading((prev) => ({ ...prev, serverError: true }))
+    try {
+      await Sentry.startSpan(
+        { name: 'Server Error Flow Demo', op: 'demo.server-error' },
+        async () => {
+          Sentry.setContext('demo', {
+            feature: 'server-error-demo',
+            triggered_at: new Date().toISOString(),
+          })
+          await badServerFunc()
+        },
+      )
+    } catch (error) {
+      Sentry.captureException(error)
+      setResults((prev) => ({
+        ...prev,
+        serverError: { type: 'error', spanOp: 'demo.server-error' },
+      }))
+    } finally {
+      setIsLoading((prev) => ({ ...prev, serverError: false }))
+    }
+  }
+
+  const handleClientTrace = async () => {
+    setIsLoading((prev) => ({ ...prev, clientTrace: true }))
+    await Sentry.startSpan(
+      { name: 'Client Operation', op: 'demo.client-trace' },
+      async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+      },
+    )
+    setResults((prev) => ({
+      ...prev,
+      clientTrace: { type: 'success', spanOp: 'demo.client-trace' },
+    }))
+    setIsLoading((prev) => ({ ...prev, clientTrace: false }))
+  }
+
+  const handleServerTrace = async () => {
+    setIsLoading((prev) => ({ ...prev, serverTrace: true }))
+    try {
+      await Sentry.startSpan(
+        { name: 'Server Operation', op: 'demo.server-trace' },
+        async () => {
+          await goodServerFunc()
+        },
+      )
+      setResults((prev) => ({
+        ...prev,
+        serverTrace: { type: 'success', spanOp: 'demo.server-trace' },
+      }))
+    } finally {
+      setIsLoading((prev) => ({ ...prev, serverTrace: false }))
+    }
+  }
+
+  return (
+    <div
+      className="min-h-screen text-white"
+      style={{
+        fontFamily:
+          'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+        background:
+          'linear-gradient(180deg, #181423 0%, #1C1825 50%, #181423 100%)',
+      }}
+    >
+      <div className="max-w-5xl mx-auto px-6 py-16">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-4 mb-8">
+            <div className="text-[#7553FF]">
+              <SentryLogo size={56} />
+            </div>
+            <div className="text-left">
+              <h1 className="text-3xl font-bold text-white tracking-tight">
+                Sentry Demo
+              </h1>
+              <p className="text-[#A49FB5] text-sm">
+                Error monitoring & performance tracing
+              </p>
+            </div>
+          </div>
+          <p className="text-lg text-[#A49FB5] max-w-xl mx-auto leading-relaxed">
+            Click the buttons below to trigger errors and traces, then view them
+            in your{' '}
+            <a
+              href="https://sentry.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#7553FF] hover:text-[#B3A1FF] underline transition-colors"
+            >
+              Sentry dashboard
+            </a>
+            .
+          </p>
+        </div>
+
+        {/* Sentry Not Initialized Warning */}
+        {showWarning && (
+          <div className="mb-8 flex items-center gap-3 bg-[#E5A000]/10 border border-[#E5A000]/30 rounded-xl px-6 py-4">
+            <svg
+              className="w-6 h-6 text-[#E5A000] flex-shrink-0"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <title>Warning</title>
+              <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div>
+              <p className="text-[#E5A000] font-medium">
+                Sentry is not initialized
+              </p>
+              <p className="text-[#A49FB5] text-sm mt-1">
+                Set the <code className="bg-[#1C1825] px-1.5 py-0.5 rounded text-[#B3A1FF]">VITE_SENTRY_DSN</code> environment variable to enable error tracking and performance monitoring.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+          <FeatureCard
+            icon={
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+              </svg>
+            }
+            title="Error Monitoring"
+            description="Client & server error tracking"
+          />
+          <FeatureCard
+            icon={
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M13 3v18h-2V3h2zm6 6v12h-2V9h2zM7 14v7H5v-7h2z" />
+              </svg>
+            }
+            title="Performance"
+            description="Tracing and spans visualization"
+          />
+          <FeatureCard
+            icon={
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+              </svg>
+            }
+            title="Session Replay"
+            description="Real user session playback"
+          />
+          <FeatureCard
+            icon={
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+              </svg>
+            }
+            title="Real-time Alerts"
+            description="Instant issue notifications"
+          />
+        </div>
+
+        {/* Testing Panels */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Client-Side Panel */}
+          <div className="bg-[#1C1825] rounded-2xl p-8 border border-[#2D2640]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-3 h-3 rounded-full bg-[#00F261]" />
+              <h2 className="text-xl font-semibold">Client-Side Testing</h2>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <SentryButton
+                  variant="error"
+                  onClick={handleClientError}
+                  loading={isLoading.clientError}
+                  disabled={sentryConfigured === false}
+                >
+                  Trigger Client Error
+                </SentryButton>
+                {isLoading.clientError && (
+                  <ProgressBar loading={isLoading.clientError} />
+                )}
+                {results.clientError && !isLoading.clientError && (
+                  <ResultBadge
+                    type={results.clientError.type}
+                    spanOp={results.clientError.spanOp}
+                    onCopy={() => {}}
+                  />
+                )}
+              </div>
+
+              <div>
+                <SentryButton
+                  variant="primary"
+                  onClick={handleClientTrace}
+                  loading={isLoading.clientTrace}
+                  disabled={sentryConfigured === false}
+                >
+                  Test Client Trace
+                </SentryButton>
+                {isLoading.clientTrace && (
+                  <ProgressBar loading={isLoading.clientTrace} />
+                )}
+                {results.clientTrace && !isLoading.clientTrace && (
+                  <ResultBadge
+                    type={results.clientTrace.type}
+                    spanOp={results.clientTrace.spanOp}
+                    onCopy={() => {}}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Server-Side Panel */}
+          <div className="bg-[#1C1825] rounded-2xl p-8 border border-[#2D2640]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-3 h-3 rounded-full bg-[#7553FF]" />
+              <h2 className="text-xl font-semibold">Server-Side Testing</h2>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <SentryButton
+                  variant="error"
+                  onClick={handleServerError}
+                  loading={isLoading.serverError}
+                  disabled={sentryConfigured === false}
+                >
+                  Trigger Server Error
+                </SentryButton>
+                {isLoading.serverError && (
+                  <ProgressBar loading={isLoading.serverError} />
+                )}
+                {results.serverError && !isLoading.serverError && (
+                  <ResultBadge
+                    type={results.serverError.type}
+                    spanOp={results.serverError.spanOp}
+                    onCopy={() => {}}
+                  />
+                )}
+              </div>
+
+              <div>
+                <SentryButton
+                  variant="primary"
+                  onClick={handleServerTrace}
+                  loading={isLoading.serverTrace}
+                  disabled={sentryConfigured === false}
+                >
+                  Test Server Trace
+                </SentryButton>
+                {isLoading.serverTrace && (
+                  <ProgressBar loading={isLoading.serverTrace} />
+                )}
+                {results.serverTrace && !isLoading.serverTrace && (
+                  <ResultBadge
+                    type={results.serverTrace.type}
+                    spanOp={results.serverTrace.spanOp}
+                    onCopy={() => {}}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Note */}
+        <div className="mt-12 text-center">
+          <p className="text-sm text-[#6E6C75]">
+            This page uses{' '}
+            <code className="bg-[#1C1825] px-2 py-1 rounded text-[#B3A1FF]">
+              @sentry/tanstackstart-react
+            </code>{' '}
+            for full-stack error monitoring.
+            <br />
+            <a
+              href="https://docs.sentry.io/platforms/javascript/guides/tanstackstart-react/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#7553FF] hover:text-[#B3A1FF] underline transition-colors"
+            >
+              Read the documentation →
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -1,6 +1,6 @@
 {
   "name": "@tanstack/cta-framework-react-cra",
-  "version": "0.17.5",
+  "version": "0.46.2",
   "description": "CTA Framework for React (Create React App)",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TanStack/create-tsrouter-app.git"
+    "url": "git+https://github.com/TanStack/create-tsrouter-app.git"
   },
   "homepage": "https://tanstack.com/router",
   "funding": {
@@ -33,7 +33,7 @@
     "@tanstack/cta-engine": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22.13.4",
+    "@types/node": "^24.6.0",
     "typescript": "^5.6.3",
     "vitest": "^3.1.1"
   }

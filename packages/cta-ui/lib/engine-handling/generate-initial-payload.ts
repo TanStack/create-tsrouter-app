@@ -19,6 +19,7 @@ import {
   getProjectOptions,
   getProjectPath,
   getRegistry as getRegistryURL,
+  getShowDeploymentOptions,
 } from './server-environment.js'
 
 import type { AddOn, SerializedOptions } from '@tanstack/cta-engine'
@@ -28,6 +29,7 @@ function convertAddOnToAddOnInfo(addOn: AddOn): AddOnInfo {
   return {
     id: addOn.id,
     name: addOn.name,
+    priority: addOn.priority,
     description: addOn.description,
     modes: addOn.modes as Array<'code-router' | 'file-router'>,
     type: addOn.type,
@@ -35,6 +37,7 @@ function convertAddOnToAddOnInfo(addOn: AddOn): AddOnInfo {
     logo: addOn.logo,
     link: addOn.link!,
     dependsOn: addOn.dependsOn,
+    options: addOn.options,
   }
 }
 
@@ -44,7 +47,11 @@ export async function generateInitialPayload() {
 
   const localFiles =
     applicationMode === 'add'
-      ? await cleanUpFiles(await recursivelyGatherFiles(projectPath, false))
+      ? await cleanUpFiles(
+          await recursivelyGatherFiles(projectPath, false),
+          undefined,
+          true,
+        )
       : {}
 
   const forcedRouterMode = getForcedRouterMode()
@@ -113,6 +120,7 @@ export async function generateInitialPayload() {
   return {
     supportedModes: framework!.supportedModes,
     applicationMode,
+    showDeploymentOptions: getShowDeploymentOptions(),
     localFiles,
     addOns,
     options: serializedOptions,

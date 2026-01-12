@@ -1,5 +1,10 @@
+cleanupUnusedCatalogs: true
+linkWorkspacePackages: true
+preferWorkspacePackages: true
+
 packages:
-  - 'packages/*'
   - 'cli/*'
+  - 'packages/*'
   - 'frameworks/*'
   - 'examples/custom-cli/*'
+  - 'examples/custom-cli/*/customized-ui'

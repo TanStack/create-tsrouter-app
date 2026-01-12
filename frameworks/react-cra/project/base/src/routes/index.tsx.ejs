@@ -1,4 +1,4 @@
-<% if (codeRouter) { ignoreFile() } %>
+<% if (codeRouter || addOnEnabled.start) { ignoreFile() } %>
 import { createFileRoute } from "@tanstack/react-router";
 import logo from "../logo.svg";<% if (!tailwind) { %>
 import "../App.css";

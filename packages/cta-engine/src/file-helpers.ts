@@ -36,7 +36,11 @@ export function getBinaryFile(content: string): string | null {
   return null
 }
 
-export function relativePath(from: string, to: string) {
+export function relativePath(
+  from: string,
+  to: string,
+  stripExtension: boolean = false,
+) {
   const fixedOnWindows = from.startsWith('.\\')
     ? from.replace(/\\/g, '/')
     : from
@@ -62,6 +66,10 @@ export function relativePath(from: string, to: string) {
 
   const upLevels = fromSegments.length - commonIndex
   const downLevels = toSegments.slice(commonIndex)
+
+  if (stripExtension) {
+    to = to.replace(extname(to), '')
+  }
 
   if (upLevels === 0 && downLevels.length === 0) {
     return `./${basename(to)}`
