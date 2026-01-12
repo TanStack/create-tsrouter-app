@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router"; <% if (!tailwind) { %>
-import logo from "../logo.svg"
 import "../App.css"
 <% } else { %>
 import {
@@ -115,7 +114,10 @@ return (
   ); <% } else { %> return (
   <div className="App">
     <header className="App-header">
-      <img src="{logo}" className="App-logo" alt="logo" />
+      <img
+        src="/tanstack-circle-logo.png"
+        className="App-logo" alt="TanStack Logo"
+      />
       <p>Edit <code>src/routes/index.tsx</code> and save to reload.</p>
       <a
         className="App-link"

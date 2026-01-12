@@ -236,7 +236,9 @@ describe('normalizeOptions', () => {
     )
     expect(options?.chosenAddOns.map((a) => a.id).includes('foo')).toBe(true)
     expect(options?.chosenAddOns.map((a) => a.id).includes('baz')).toBe(true)
-    expect(options?.tailwind).toBe(true)
+    // Tailwind is not automatically set to true unless an add-on explicitly requires it
+    // Since mock add-ons don't have tailwind: true, tailwind should be false
+    expect(options?.tailwind).toBe(false)
     expect(options?.typescript).toBe(true)
   })
 
@@ -263,7 +265,9 @@ describe('normalizeOptions', () => {
       toolchain: 'biome',
     })
     expect(options?.chosenAddOns.map((a) => a.id).includes('biome')).toBe(true)
-    expect(options?.tailwind).toBe(true)
+    // Tailwind is not automatically set to true unless an add-on explicitly requires it
+    // Since mock add-ons don't have tailwind: true, tailwind should be false
+    expect(options?.tailwind).toBe(false)
     expect(options?.typescript).toBe(true)
   })
 

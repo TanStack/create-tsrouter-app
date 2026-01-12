@@ -356,7 +356,8 @@ Remove your node_modules directory and package lock file and re-install.`,
 
   program
     .option('--interactive', 'interactive mode', false)
-    .option('--tailwind', 'add Tailwind CSS', false)
+    .option('--tailwind', 'add Tailwind CSS')
+    .option('--no-tailwind', 'skip Tailwind CSS')
     .option<Array<string> | boolean>(
       '--add-ons [...add-ons]',
       'pick from a list of available add-ons (comma separated list)',

@@ -1,7 +1,8 @@
 <% if (addOnEnabled.start) { ignoreFile() } %>import { defineConfig } from "vite";
 import { devtools } from '@tanstack/devtools-vite'<% if (addOnEnabled.paraglide) { %>
 import { paraglideVitePlugin } from "@inlang/paraglide-js"<% } %>
-import viteReact from "@vitejs/plugin-react";<% if (tailwind) { %>
+import viteReact from "@vitejs/plugin-react";
+<% if (tailwind) { %>
 import tailwindcss from "@tailwindcss/vite";
 <% } %><%if (fileRouter) { %>
 import { tanstackRouter } from "@tanstack/router-plugin/vite";<% } %><% if (addOnEnabled['module-federation']) { %>

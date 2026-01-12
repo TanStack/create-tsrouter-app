@@ -132,8 +132,25 @@ export async function normalizeOptions(
   const chosenAddOns = await selectAddOns()
 
   if (chosenAddOns.length) {
-    tailwind = true
     typescript = true
+
+    // Check if any add-on explicitly requires tailwind
+    const addOnsRequireTailwind = chosenAddOns.some(
+      (addOn) => addOn.tailwind === true,
+    )
+
+    // Only set tailwind to true if:
+    // 1. An add-on explicitly requires it, OR
+    // 2. User explicitly set it via CLI
+    if (addOnsRequireTailwind) {
+      tailwind = true
+    } else if (cliOptions.tailwind === true) {
+      tailwind = true
+    } else if (cliOptions.tailwind === false) {
+      tailwind = false
+    }
+    // If cliOptions.tailwind is undefined and no add-ons require it,
+    // leave tailwind as is (will be prompted in interactive mode)
   }
 
   // Handle add-on configuration option

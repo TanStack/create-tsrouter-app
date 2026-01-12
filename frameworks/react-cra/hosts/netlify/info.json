@@ -6,6 +6,7 @@
   "modes": ["file-router", "code-router"],
   "type": "deployment",
   "priority": 180,
+  "tailwind": false,
   "integrations": [
     {
       "type": "vite-plugin",
