@@ -106,11 +106,6 @@ export async function promptForCreateOptions(
     ? await selectDeployment(options.framework, cliOptions.deployment)
     : undefined
 
-  console.log('[DEBUG] Deployment selection:')
-  console.log('  - showDeploymentOptions:', showDeploymentOptions)
-  console.log('  - cliOptions.deployment:', cliOptions.deployment)
-  console.log('  - deployment result:', deployment)
-
   // Add-ons selection
   const addOns: Set<string> = new Set()
 
@@ -124,12 +119,6 @@ export async function promptForCreateOptions(
   for (const addOn of forcedAddOns) {
     addOns.add(addOn)
   }
-
-  console.log('[DEBUG] Add-ons before finalize:')
-  console.log('  - forcedAddOns:', forcedAddOns)
-  console.log('  - toolchain:', toolchain)
-  console.log('  - deployment:', deployment)
-  console.log('  - addOns set:', Array.from(addOns))
 
   if (Array.isArray(cliOptions.addOns)) {
     for (const addOn of cliOptions.addOns) {
@@ -172,37 +161,19 @@ export async function promptForCreateOptions(
     (addOn) => addOn.tailwind === true,
   )
 
-  // Debug logging
-  console.log('[DEBUG] Tailwind selection:')
-  console.log('  - Framework:', options.framework.id)
-  console.log('  - CLI tailwind flag:', cliOptions.tailwind)
-  console.log('  - Chosen add-ons:', options.chosenAddOns.map((a) => ({
-    id: a.id,
-    tailwind: a.tailwind,
-    tailwindType: typeof a.tailwind,
-    tailwindIsTrue: a.tailwind === true,
-  })))
-  console.log('  - Add-ons require tailwind:', addOnsRequireTailwind)
-
   if (addOnsRequireTailwind) {
     // If any add-on explicitly requires tailwind, enable it automatically
-    console.log('  - Branch: addOnsRequireTailwind is true, setting tailwind to true')
     options.tailwind = true
   } else if (cliOptions.tailwind !== undefined) {
     // User explicitly provided a CLI flag, respect it
-    console.log('  - Branch: CLI flag provided, setting tailwind to', !!cliOptions.tailwind)
     options.tailwind = !!cliOptions.tailwind
   } else if (options.framework.id === 'react-cra') {
     // Only show prompt for react-cra when no CLI flag and no add-ons require it
-    console.log('  - Branch: react-cra framework, showing tailwind prompt')
     options.tailwind = await selectTailwind()
   } else {
     // For other frameworks (like solid), default to true
-    console.log('  - Branch: other framework, defaulting tailwind to true')
     options.tailwind = true
   }
-  
-  console.log('  - Final tailwind value:', options.tailwind)
 
   // Prompt for add-on options in interactive mode
   if (Array.isArray(cliOptions.addOns)) {

@@ -54,6 +54,6 @@
       ]
     }
   ],
-  "deletedFiles": ["./index.html", "./src/main.tsx", "./src/App.css"],
+  "deletedFiles": ["./index.html", "./src/main.tsx"],
   "addOnSpecialSteps": ["rimraf-node-modules"]
 }
