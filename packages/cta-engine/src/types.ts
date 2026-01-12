@@ -37,6 +37,7 @@ export const AddOnBaseSchema = z.object({
   link: z.string().optional(),
   license: z.string().optional(),
   warning: z.string().optional(),
+  tailwind: z.boolean().optional().default(true),
   type: z.enum(['add-on', 'example', 'starter', 'toolchain', 'deployment']),
   priority: z.number().optional(),
   command: z
@@ -160,7 +161,6 @@ export type FrameworkDefinition = {
       forceTypescript: boolean
     }
   >
-  contentChecksum?: string
 }
 
 export type Framework = Omit<FrameworkDefinition, 'base' | 'addOns'> &
@@ -180,6 +180,7 @@ export interface Options {
 
   packageManager: PackageManager
   git: boolean
+  install?: boolean
 
   chosenAddOns: Array<AddOn>
   addOnOptions: Record<string, Record<string, any>>

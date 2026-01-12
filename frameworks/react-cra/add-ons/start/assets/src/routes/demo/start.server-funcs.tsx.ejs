@@ -42,7 +42,9 @@ function Home() {
 <% } else { %>import fs from 'node:fs'
 import { useCallback, useState } from 'react'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
+import { createServerFn } from '@tanstack/react-start'<% if (!tailwind) { %>
+import './start.css'
+<% } %>
 
 /*
 const loggingMiddleware = createMiddleware().server(
@@ -104,6 +106,7 @@ function Home() {
   }, [addTodo, todo])
 
   return (
+<% if (tailwind) { %>
     <div
       className="flex items-center justify-center min-h-screen bg-gradient-to-br from-zinc-800 to-black p-4 text-white"
       style={{
@@ -146,6 +149,35 @@ function Home() {
         </div>
       </div>
     </div>
+<% } else { %>
+    <div>
+      <h1>Start Server Functions - Todo Example</h1>
+      <ul>
+        {todos?.map((t) => (
+          <li key={t.id}>{t.name}</li>
+        ))}
+      </ul>
+      <div className="flex flex-col gap-2">
+      <input
+        type="text"
+        value={todo}
+        onChange={(e) => setTodo(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            submitTodo()
+          }
+        }}
+        placeholder="Enter a new todo..."
+      />
+      <button
+        disabled={todo.trim().length === 0}
+        onClick={submitTodo}
+      >
+        Add todo
+      </button>
+    </div>
+</div>
+<% } %>
   )
 }
 <% } %>

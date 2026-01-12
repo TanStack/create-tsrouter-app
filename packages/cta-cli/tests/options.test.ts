@@ -257,6 +257,7 @@ describe('promptForCreateOptions', () => {
     expect(options?.chosenAddOns.map((a) => a.id).sort()).toEqual([
       'react-query',
     ])
+    // Tailwind should be prompted (and mock returns true) since no add-on explicitly requires it
     expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })
@@ -273,6 +274,9 @@ describe('promptForCreateOptions', () => {
       'biome',
       'react-query',
     ])
+    // In non-interactive mode with add-ons, tailwind defaults to false unless explicitly required
+    // But since we're in interactive mode (addOns is an array but we still prompt), tailwind is prompted
+    // The mock returns true, so tailwind should be true
     expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })
@@ -293,6 +297,7 @@ describe('promptForCreateOptions', () => {
       'biome',
       'react-query',
     ])
+    // Tailwind should be prompted (and mock returns true) since no add-on explicitly requires it
     expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })

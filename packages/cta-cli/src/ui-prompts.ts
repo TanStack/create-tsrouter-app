@@ -118,6 +118,7 @@ export async function selectAddOns(
   type: string,
   message: string,
   forcedAddOns: Array<string> = [],
+  allowMultiple: boolean = true,
 ): Promise<Array<string>> {
   const allAddOns = await getAllAddOns(framework, mode)
   const addOns = allAddOns.filter((addOn) => addOn.type === type)
@@ -127,28 +128,58 @@ export async function selectAddOns(
 
   // Show help text only once
   if (!hasShownMultiselectHelp) {
-    note('Use ↑/↓ to navigate • Space to select/deselect • Enter to confirm', 'Keyboard Shortcuts')
+    note(
+      'Use ↑/↓ to navigate • Space to select/deselect • Enter to confirm',
+      'Keyboard Shortcuts',
+    )
     hasShownMultiselectHelp = true
   }
 
-  const value = await multiselect({
-    message,
-    options: addOns
-      .filter((addOn) => !forcedAddOns.includes(addOn.id))
-      .map((addOn) => ({
-        value: addOn.id,
-        label: addOn.name,
-        hint: addOn.description,
-      })),
-    required: false,
-  })
+  if (allowMultiple) {
+    const value = await multiselect({
+      message,
+      options: addOns
+        .filter((addOn) => !forcedAddOns.includes(addOn.id))
+        .map((addOn) => ({
+          value: addOn.id,
+          label: addOn.name,
+          hint: addOn.description,
+        })),
+      required: false,
+    })
 
-  if (isCancel(value)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
+    if (isCancel(value)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+
+    return value
+  } else {
+    const value = await select({
+      message,
+      options: [
+        {
+          value: 'none',
+          label: 'None',
+        },
+        ...addOns
+          .filter((addOn) => !forcedAddOns.includes(addOn.id))
+          .map((addOn) => ({
+            value: addOn.id,
+            label: addOn.name,
+            hint: addOn.description,
+          })),
+      ],
+      initialValue: 'none',
+    })
+
+    if (isCancel(value)) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
+
+    return value === 'none' ? [] : [value]
   }
-
-  return value
 }
 
 export async function selectGit(): Promise<boolean> {

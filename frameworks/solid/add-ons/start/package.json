@@ -8,6 +8,8 @@
     "@tanstack/solid-start": "^1.132.25",
     "vite": "^7.1.7",
     "vite-tsconfig-paths": "^5.1.4",
-    "lucide-solid": "^0.544.0"
+    "lucide-solid": "^0.544.0",
+    "@tanstack/solid-router-ssr-query": "^1.132.25",
+    "vite-plugin-lucide-preprocess": "^1.4.6"
   }
 }

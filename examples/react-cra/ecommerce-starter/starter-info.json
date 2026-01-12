@@ -1,18 +1,27 @@
 {
-  "id": "my-commerce-app-starter",
-  "name": "my-commerce-app-starter",
+  "id": "ecommerce-starter",
+  "name": "E-commerce Starter",
   "version": "0.0.1",
-  "description": "Project starter",
+  "description": "AI-powered e-commerce starter with TanStack Start",
   "author": "Jane Smith <jane.smith@example.com>",
   "license": "MIT",
-  "link": "https://github.com/jane-smith/my-commerce-app-starter",
+  "link": "https://github.com/TanStack/create-tsrouter-app",
   "shadcnComponents": [],
   "framework": "react-cra",
   "mode": "file-router",
   "routes": [],
   "warning": "",
   "type": "starter",
-  "packageAdditions": {},
+  "packageAdditions": {
+    "dependencies": {
+      "@ai-sdk/anthropic": "^1.1.17",
+      "@ai-sdk/react": "^1.1.23",
+      "@modelcontextprotocol/sdk": "^1.8.0",
+      "ai": "^4.1.65",
+      "highlight.js": "^11.11.1",
+      "streamdown": "^1.6.5"
+    }
+  },
   "dependsOn": ["tanchat", "start", "store"],
   "typescript": true,
   "tailwind": true,

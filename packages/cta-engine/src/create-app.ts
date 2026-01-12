@@ -20,8 +20,10 @@ async function writeFiles(environment: Environment, options: Options) {
 
   async function writeFileBundle(bundle: FileBundleHandler) {
     const files = await bundle.getFiles()
+
     for (const file of files) {
       const contents = await bundle.getFileContents(file)
+
       const isBinaryFile = isBase64(contents)
       if (isBinaryFile) {
         await environment.writeFileBase64(
@@ -133,19 +135,30 @@ async function runCommandsAndInstallDependencies(
   }
 
   // Install dependencies
-  s.start(`Installing dependencies via ${options.packageManager}...`)
-  environment.startStep({
-    id: 'install-dependencies',
-    type: 'package-manager',
-    message: `Installing dependencies via ${options.packageManager}...`,
-  })
-  await packageManagerInstall(
-    environment,
-    options.targetDir,
-    options.packageManager,
-  )
-  environment.finishStep('install-dependencies', 'Installed dependencies')
-  s.stop(`Installed dependencies`)
+  if (options.install !== false) {
+    s.start(`Installing dependencies via ${options.packageManager}...`)
+    environment.startStep({
+      id: 'install-dependencies',
+      type: 'package-manager',
+      message: `Installing dependencies via ${options.packageManager}...`,
+    })
+    await packageManagerInstall(
+      environment,
+      options.targetDir,
+      options.packageManager,
+    )
+    environment.finishStep('install-dependencies', 'Installed dependencies')
+    s.stop(`Installed dependencies`)
+  } else {
+    s.start(`Skipping dependency installation...`)
+    environment.startStep({
+      id: 'skip-dependencies',
+      type: 'info',
+      message: `Skipping dependency installation...`,
+    })
+    environment.finishStep('skip-dependencies', 'Dependency installation skipped')
+    s.stop(`Dependency installation skipped`)
+  }
 
   // Run any post-init special steps for the new add-ons
   const postInitSpecialSteps = new Set<string>([])
@@ -241,13 +254,23 @@ Errors were encountered during the creation of your app:
 ${environment.getErrors().join('\n')}`
   }
 
+  // Check if we created in current directory (user specified ".")
+  const isCurrentDirectory =
+    resolve(options.targetDir) === resolve(process.cwd())
+  const locationMessage = isCurrentDirectory
+    ? `Your ${environment.appName} app is ready.`
+    : `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.`
+  const cdInstruction = isCurrentDirectory
+    ? ''
+    : `% cd ${options.projectName}
+`
+
   // Use the force luke! :)
   environment.outro(
-    `Your ${environment.appName} app is ready in '${basename(options.targetDir)}'.
+    `${locationMessage}
 
 Use the following commands to start your app:
-% cd ${options.projectName}
-% ${formatCommand(
+${cdInstruction}% ${formatCommand(
       getPackageManagerScriptCommand(options.packageManager, ['dev']),
     )}
 

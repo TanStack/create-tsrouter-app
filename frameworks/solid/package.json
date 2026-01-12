@@ -1,12 +1,11 @@
 {
   "name": "@tanstack/cta-framework-solid",
-  "version": "0.40.1",
+  "version": "0.46.2",
   "description": "CTA Framework for Solid",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
-    "prebuild": "node ../../scripts/generate-checksums.js",
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "eslint ./src && vitest run",
@@ -14,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TanStack/create-tsrouter-app.git"
+    "url": "git+https://github.com/TanStack/create-tsrouter-app.git"
   },
   "homepage": "https://tanstack.com/router",
   "funding": {

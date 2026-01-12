@@ -2,10 +2,10 @@
   "id": "resume-example-starter",
   "name": "Resume Starter",
   "version": "0.0.1",
-  "description": "Project starter",
+  "description": "Professional resume template with content-collections",
   "author": "Jane Smith <jane.smith@example.com>",
   "license": "MIT",
-  "link": "https://github.com/jane-smith/resume-example-starter",
+  "link": "https://github.com/TanStack/create-tsrouter-app",
   "shadcnComponents": [],
   "framework": "react-cra",
   "mode": "file-router",
@@ -18,11 +18,12 @@
       "@radix-ui/react-hover-card": "^1.1.10",
       "@radix-ui/react-separator": "^1.1.4",
       "@radix-ui/react-slot": "^1.2.0",
-      "marked": "^15.0.8"
+      "marked": "^15.0.8",
+      "zod": "^3.25.0"
     },
     "devDependencies": {
-      "@content-collections/core": "^0.8.2",
-      "@content-collections/vite": "^0.2.6"
+      "@content-collections/core": "^0.13.1",
+      "@content-collections/vite": "^0.2.8"
     }
   },
   "dependsOn": ["start", "shadcn"],

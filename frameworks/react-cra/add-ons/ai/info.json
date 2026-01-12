@@ -1,0 +1,46 @@
+{
+  "name": "AI",
+  "description": "TanStack AI integration and examples.",
+  "phase": "add-on",
+  "modes": ["file-router"],
+  "type": "add-on",
+  "priority": 60,
+  "link": "",
+  "routes": [
+    {
+      "icon": "MessagesSquare",
+      "url": "/demo/ai-chat",
+      "name": "Chat",
+      "path": "src/routes/demo/ai-chat.tsx",
+      "jsName": "AIChatDemo"
+    },
+    {
+      "icon": "ImageIcon",
+      "url": "/demo/ai-image",
+      "name": "Generate Image",
+      "path": "src/routes/demo/ai-image.tsx",
+      "jsName": "AIImageDemo"
+    },
+    {
+      "icon": "ChefHat",
+      "url": "/demo/ai-structured",
+      "name": "Structured Output",
+      "path": "src/routes/demo/ai-structured.tsx",
+      "jsName": "AISturcturedDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "header-user",
+      "path": "src/components/demo-AIAssistant.tsx",
+      "jsName": "TanChatAIAssistant"
+    },
+    {
+      "type": "devtools",
+      "path": "src/lib/ai-devtools.tsx",
+      "jsName": "AiDevtools"
+    }
+  ],
+  "dependsOn": ["start", "store"],
+  "variables": []
+}

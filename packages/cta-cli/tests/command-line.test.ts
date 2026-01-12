@@ -1,6 +1,11 @@
+import { basename, resolve } from 'node:path'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { normalizeOptions } from '../src/command-line.js'
+import {
+  sanitizePackageName,
+  getCurrentDirectoryName,
+} from '../src/utils.js'
 import {
   __testRegisterFramework,
   __testClearFrameworks,
@@ -10,10 +15,56 @@ beforeEach(() => {
   __testClearFrameworks()
 })
 
+describe('sanitizePackageName', () => {
+  it('should convert to lowercase', () => {
+    expect(sanitizePackageName('MyProject')).toBe('myproject')
+  })
+
+  it('should replace spaces with hyphens', () => {
+    expect(sanitizePackageName('my project')).toBe('my-project')
+  })
+
+  it('should replace underscores with hyphens', () => {
+    expect(sanitizePackageName('my_project')).toBe('my-project')
+  })
+
+  it('should remove invalid characters', () => {
+    expect(sanitizePackageName('my@project!')).toBe('myproject')
+  })
+
+  it('should ensure it starts with a letter', () => {
+    expect(sanitizePackageName('123project')).toBe('project')
+    expect(sanitizePackageName('_myproject')).toBe('myproject')
+  })
+
+  it('should collapse multiple hyphens', () => {
+    expect(sanitizePackageName('my--project')).toBe('my-project')
+  })
+
+  it('should remove trailing hyphen', () => {
+    expect(sanitizePackageName('myproject-')).toBe('myproject')
+  })
+})
+
+describe('getCurrentDirectoryName', () => {
+  it('should return the basename of the current working directory', () => {
+    expect(getCurrentDirectoryName()).toBe(basename(process.cwd()))
+  })
+})
+
 describe('normalizeOptions', () => {
   it('should return undefined if project name is not provided', async () => {
     const options = await normalizeOptions({})
     expect(options).toBeUndefined()
+  })
+
+  it('should handle "." as project name by using sanitized current directory name', async () => {
+    const options = await normalizeOptions({
+      projectName: '.',
+    })
+    const expectedName = sanitizePackageName(getCurrentDirectoryName())
+    expect(options?.projectName).toBe(expectedName)
+    expect(options?.targetDir).toBe(resolve(process.cwd()))
   })
 
   it('should return enable typescript based on the framework', async () => {
@@ -185,7 +236,9 @@ describe('normalizeOptions', () => {
     )
     expect(options?.chosenAddOns.map((a) => a.id).includes('foo')).toBe(true)
     expect(options?.chosenAddOns.map((a) => a.id).includes('baz')).toBe(true)
-    expect(options?.tailwind).toBe(true)
+    // Tailwind is not automatically set to true unless an add-on explicitly requires it
+    // Since mock add-ons don't have tailwind: true, tailwind should be false
+    expect(options?.tailwind).toBe(false)
     expect(options?.typescript).toBe(true)
   })
 
@@ -212,7 +265,9 @@ describe('normalizeOptions', () => {
       toolchain: 'biome',
     })
     expect(options?.chosenAddOns.map((a) => a.id).includes('biome')).toBe(true)
-    expect(options?.tailwind).toBe(true)
+    // Tailwind is not automatically set to true unless an add-on explicitly requires it
+    // Since mock add-ons don't have tailwind: true, tailwind should be false
+    expect(options?.tailwind).toBe(false)
     expect(options?.typescript).toBe(true)
   })
 

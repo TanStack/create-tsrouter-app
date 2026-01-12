@@ -22,7 +22,11 @@ import {
   selectTypescript,
 } from './ui-prompts.js'
 
-import { validateProjectName } from './utils.js'
+import {
+  getCurrentDirectoryName,
+  sanitizePackageName,
+  validateProjectName,
+} from './utils.js'
 import type { Options } from '@tanstack/cta-engine'
 
 import type { CliOptions } from './types.js'
@@ -45,12 +49,17 @@ export async function promptForCreateOptions(
 
   // Validate project name
   if (cliOptions.projectName) {
-    const { valid, error } = validateProjectName(cliOptions.projectName)
+    // Handle "." as project name - use sanitized current directory name
+    if (cliOptions.projectName === '.') {
+      options.projectName = sanitizePackageName(getCurrentDirectoryName())
+    } else {
+      options.projectName = cliOptions.projectName
+    }
+    const { valid, error } = validateProjectName(options.projectName)
     if (!valid) {
       console.error(error)
       process.exit(1)
     }
-    options.projectName = cliOptions.projectName
   } else {
     options.projectName = await getProjectName()
   }
@@ -94,13 +103,6 @@ export async function promptForCreateOptions(
   }
   if (!options.typescript && options.mode === 'code-router') {
     options.typescript = await selectTypescript()
-  }
-
-  // Tailwind selection
-  if (!cliOptions.tailwind && options.framework.id === 'react-cra') {
-    options.tailwind = await selectTailwind()
-  } else {
-    options.tailwind = true
   }
 
   // Package manager selection
@@ -156,8 +158,9 @@ export async function promptForCreateOptions(
       options.framework,
       options.mode,
       'example',
-      'Would you like any examples?',
+      'Would you like an example?',
       forcedAddOns,
+      false,
     )) {
       addOns.add(addOn)
     }
@@ -168,8 +171,27 @@ export async function promptForCreateOptions(
   )
 
   if (options.chosenAddOns.length) {
-    options.tailwind = true
     options.typescript = true
+  }
+
+  // Tailwind selection
+  // Only treat add-ons as requiring tailwind if they explicitly have "tailwind": true
+  const addOnsRequireTailwind = options.chosenAddOns.some(
+    (addOn) => addOn.tailwind === true,
+  )
+
+  if (addOnsRequireTailwind) {
+    // If any add-on explicitly requires tailwind, enable it automatically
+    options.tailwind = true
+  } else if (cliOptions.tailwind !== undefined) {
+    // User explicitly provided a CLI flag, respect it
+    options.tailwind = !!cliOptions.tailwind
+  } else if (options.framework.id === 'react-cra') {
+    // Only show prompt for react-cra when no CLI flag and no add-ons require it
+    options.tailwind = await selectTailwind()
+  } else {
+    // For other frameworks (like solid), default to true
+    options.tailwind = true
   }
 
   // Prompt for add-on options in interactive mode
@@ -186,6 +208,7 @@ export async function promptForCreateOptions(
     // Merge user options with defaults
     options.addOnOptions = { ...defaultOptions, ...userOptions }
   }
+
   options.git = cliOptions.git || (await selectGit())
 
   return options
