@@ -1,6 +1,6 @@
 {
   "name": "customized-react-app",
-  "version": "0.15.2",
+  "private": true,
   "description": "CTA Qwik Builder",
   "bin": "./dist/index.js",
   "type": "module",
@@ -28,8 +28,8 @@
   "license": "MIT",
   "packageManager": "pnpm@9.15.5",
   "dependencies": {
-    "@tanstack/cta-cli": "^0.43.1",
-    "@tanstack/cta-engine": "^0.43.1",
+    "@tanstack/cta-cli": "^0.46.2",
+    "@tanstack/cta-engine": "^0.46.2",
     "@tanstack/cta-framework-react-cra": "workspace:*"
   },
   "devDependencies": {
