@@ -20,5 +20,7 @@ export interface CliOptions {
   targetDir?: string
   interactive?: boolean
   ui?: boolean
+  devWatch?: string
+  install?: boolean
   addOnConfig?: string
 }

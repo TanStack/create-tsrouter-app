@@ -5,7 +5,9 @@
   "link": "https://tanstack.com/start/latest",
   "modes": ["file-router"],
   "type": "add-on",
+  "tailwind": false,
   "priority": 26,
+  "warning": "TanStack Start is not yet at 1.0 and may change significantly or not be compatible with other add-ons.\nMigrating to Start might require deleting node_modules and re-installing.",
   "routes": [
     {
       "icon": "SquareFunction",
@@ -52,6 +54,6 @@
       ]
     }
   ],
-  "deletedFiles": ["./index.html", "./src/main.tsx", "./src/App.css"],
+  "deletedFiles": ["./index.html", "./src/main.tsx"],
   "addOnSpecialSteps": ["rimraf-node-modules"]
 }

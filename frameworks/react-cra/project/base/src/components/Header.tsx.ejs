@@ -1,7 +1,8 @@
 <% if (addOns.length === 0 && integrations.length === 0 && routes.length === 0) { ignoreFile() } %>import { Link } from '@tanstack/react-router'
 <% for(const integration of integrations.filter(i => i.type === 'header-user')) { %>
 import <%= integration.jsName %> from "<%= relativePath(integration.path) %>";
-<% } %><% if (tailwind) {
+<% } %><% if (!tailwind) { %>
+import './Header.css'<% } %><% if (tailwind) {
 const icons = new Set([
   "Menu",
   "X",
@@ -156,9 +157,15 @@ const userHeaders = integrations.filter(i => i.type === 'header-user');
   );
 <% } else { %>
   return (
+<% if (tailwind) { %>
     <header className="p-2 flex gap-2 bg-white text-black justify-between">
       <nav className="flex flex-row">
         <div className="px-2 font-bold">
+<% } else { %>
+  <header className="header">
+    <nav className="nav">
+      <div className="nav-item">
+<% } %>
           <Link to="/">Home</Link>
         </div>
 <% for(const addOn of addOns) {

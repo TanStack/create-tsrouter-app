@@ -24,13 +24,18 @@ import { launchUI } from '@tanstack/cta-ui'
 import { runMCPServer } from './mcp.js'
 
 import { promptForAddOns, promptForCreateOptions } from './options.js'
-import { normalizeOptions } from './command-line.js'
+import { normalizeOptions, validateDevWatchOptions } from './command-line.js'
 
 import { createUIEnvironment } from './ui-environment.js'
 import { convertTemplateToMode } from './utils.js'
+import { DevWatchManager } from './dev-watch.js'
 
 import type { CliOptions, TemplateOptions } from './types.js'
-import type { Options, PackageManager } from '@tanstack/cta-engine'
+import type {
+  FrameworkDefinition,
+  Options,
+  PackageManager,
+} from '@tanstack/cta-engine'
 
 // This CLI assumes that all of the registered frameworks have the same set of toolchains, deployments, modes, etc.
 
@@ -44,6 +49,7 @@ export function cli({
   defaultFramework,
   craCompatible = false,
   webBase,
+  frameworkDefinitionInitializers,
   showDeploymentOptions = false,
 }: {
   name: string
@@ -55,6 +61,7 @@ export function cli({
   defaultFramework?: string
   craCompatible?: boolean
   webBase?: string
+  frameworkDefinitionInitializers?: Array<() => FrameworkDefinition>
   showDeploymentOptions?: boolean
 }) {
   const environment = createUIEnvironment(appName, false)
@@ -293,6 +300,7 @@ Remove your node_modules directory and package lock file and re-install.`,
       'initialize this project from a starter URL',
       false,
     )
+    .option('--no-install', 'skip installing dependencies')
     .option<PackageManager>(
       `--package-manager <${SUPPORTED_PACKAGE_MANAGERS.join('|')}>`,
       `Explicitly tell the CLI to use this package manager`,
@@ -306,6 +314,10 @@ Remove your node_modules directory and package lock file and re-install.`,
         }
         return value as PackageManager
       },
+    )
+    .option(
+      '--dev-watch <path>',
+      'Watch a framework directory for changes and auto-rebuild',
     )
 
   if (deployments.size > 0) {
@@ -344,7 +356,8 @@ Remove your node_modules directory and package lock file and re-install.`,
 
   program
     .option('--interactive', 'interactive mode', false)
-    .option('--tailwind', 'add Tailwind CSS', false)
+    .option('--tailwind', 'add Tailwind CSS')
+    .option('--no-tailwind', 'skip Tailwind CSS')
     .option<Array<string> | boolean>(
       '--add-ons [...add-ons]',
       'pick from a list of available add-ons (comma separated list)',
@@ -462,6 +475,73 @@ Remove your node_modules directory and package lock file and re-install.`,
         forcedAddOns,
         appName,
       })
+    } else if (options.devWatch) {
+      // Validate dev watch options
+      const validation = validateDevWatchOptions({ ...options, projectName })
+      if (!validation.valid) {
+        console.error(validation.error)
+        process.exit(1)
+      }
+
+      // Enter dev watch mode
+      if (!projectName && !options.targetDir) {
+        console.error(
+          'Project name/target directory is required for dev watch mode',
+        )
+        process.exit(1)
+      }
+
+      if (!options.framework) {
+        console.error('Failed to detect framework')
+        process.exit(1)
+      }
+
+      const framework = getFrameworkByName(options.framework)
+      if (!framework) {
+        console.error('Failed to detect framework')
+        process.exit(1)
+      }
+
+      // First, create the app normally using the standard flow
+      const normalizedOpts = await normalizeOptions(
+        {
+          ...options,
+          projectName,
+          framework: framework.id,
+        },
+        defaultMode,
+        forcedAddOns,
+      )
+
+      if (!normalizedOpts) {
+        throw new Error('Failed to normalize options')
+      }
+
+      normalizedOpts.targetDir =
+        options.targetDir || resolve(process.cwd(), projectName)
+
+      // Create the initial app with minimal output for dev watch mode
+      console.log(chalk.bold('\ndev-watch'))
+      console.log(chalk.gray('├─') + ' ' + `creating initial ${appName} app...`)
+      if (normalizedOpts.install !== false) {
+        console.log(chalk.gray('├─') + ' ' + chalk.yellow('⟳') + ' installing packages...')
+      }
+      const silentEnvironment = createUIEnvironment(appName, true)
+      await createApp(silentEnvironment, normalizedOpts)
+      console.log(chalk.gray('└─') + ' ' + chalk.green('✓') + ` app created`)
+
+      // Now start the dev watch mode
+      const manager = new DevWatchManager({
+        watchPath: options.devWatch,
+        targetDir: normalizedOpts.targetDir,
+        framework,
+        cliOptions: normalizedOpts,
+        packageManager: normalizedOpts.packageManager,
+        environment,
+        frameworkDefinitionInitializers,
+      })
+
+      await manager.start()
     } else {
       try {
         const cliOptions = {

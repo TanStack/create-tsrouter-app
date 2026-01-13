@@ -20,8 +20,10 @@ async function writeFiles(environment: Environment, options: Options) {
 
   async function writeFileBundle(bundle: FileBundleHandler) {
     const files = await bundle.getFiles()
+
     for (const file of files) {
       const contents = await bundle.getFileContents(file)
+
       const isBinaryFile = isBase64(contents)
       if (isBinaryFile) {
         await environment.writeFileBase64(
@@ -133,19 +135,30 @@ async function runCommandsAndInstallDependencies(
   }
 
   // Install dependencies
-  s.start(`Installing dependencies via ${options.packageManager}...`)
-  environment.startStep({
-    id: 'install-dependencies',
-    type: 'package-manager',
-    message: `Installing dependencies via ${options.packageManager}...`,
-  })
-  await packageManagerInstall(
-    environment,
-    options.targetDir,
-    options.packageManager,
-  )
-  environment.finishStep('install-dependencies', 'Installed dependencies')
-  s.stop(`Installed dependencies`)
+  if (options.install !== false) {
+    s.start(`Installing dependencies via ${options.packageManager}...`)
+    environment.startStep({
+      id: 'install-dependencies',
+      type: 'package-manager',
+      message: `Installing dependencies via ${options.packageManager}...`,
+    })
+    await packageManagerInstall(
+      environment,
+      options.targetDir,
+      options.packageManager,
+    )
+    environment.finishStep('install-dependencies', 'Installed dependencies')
+    s.stop(`Installed dependencies`)
+  } else {
+    s.start(`Skipping dependency installation...`)
+    environment.startStep({
+      id: 'skip-dependencies',
+      type: 'info',
+      message: `Skipping dependency installation...`,
+    })
+    environment.finishStep('skip-dependencies', 'Dependency installation skipped')
+    s.stop(`Dependency installation skipped`)
+  }
 
   // Run any post-init special steps for the new add-ons
   const postInitSpecialSteps = new Set<string>([])
@@ -261,7 +274,7 @@ ${cdInstruction}% ${formatCommand(
       getPackageManagerScriptCommand(options.packageManager, ['dev']),
     )}
 
-Please check the README.md for information on testing, styling, adding routes, etc.${errorStatement}`,
+Please read the README.md file for information on testing, styling, adding routes, etc.${errorStatement}`,
   )
 }
 

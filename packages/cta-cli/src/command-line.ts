@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import fs from 'node:fs'
 
 import {
   DEFAULT_PACKAGE_MANAGER,
@@ -131,8 +132,25 @@ export async function normalizeOptions(
   const chosenAddOns = await selectAddOns()
 
   if (chosenAddOns.length) {
-    tailwind = true
     typescript = true
+
+    // Check if any add-on explicitly requires tailwind
+    const addOnsRequireTailwind = chosenAddOns.some(
+      (addOn) => addOn.tailwind === true,
+    )
+
+    // Only set tailwind to true if:
+    // 1. An add-on explicitly requires it, OR
+    // 2. User explicitly set it via CLI
+    if (addOnsRequireTailwind) {
+      tailwind = true
+    } else if (cliOptions.tailwind === true) {
+      tailwind = true
+    } else if (cliOptions.tailwind === false) {
+      tailwind = false
+    }
+    // If cliOptions.tailwind is undefined and no add-ons require it,
+    // leave tailwind as is (will be prompted in interactive mode)
   }
 
   // Handle add-on configuration option
@@ -158,6 +176,7 @@ export async function normalizeOptions(
       getPackageManager() ||
       DEFAULT_PACKAGE_MANAGER,
     git: !!cliOptions.git,
+    install: cliOptions.install,
     chosenAddOns,
     addOnOptions: {
       ...populateAddOnOptionsDefaults(chosenAddOns),
@@ -165,4 +184,53 @@ export async function normalizeOptions(
     },
     starter: starter,
   }
+}
+
+export function validateDevWatchOptions(cliOptions: CliOptions): {
+  valid: boolean
+  error?: string
+} {
+  if (!cliOptions.devWatch) {
+    return { valid: true }
+  }
+
+  // Validate watch path exists
+  const watchPath = resolve(process.cwd(), cliOptions.devWatch)
+  if (!fs.existsSync(watchPath)) {
+    return {
+      valid: false,
+      error: `Watch path does not exist: ${watchPath}`,
+    }
+  }
+
+  // Validate it's a directory
+  const stats = fs.statSync(watchPath)
+  if (!stats.isDirectory()) {
+    return {
+      valid: false,
+      error: `Watch path is not a directory: ${watchPath}`,
+    }
+  }
+
+  // Ensure target directory is specified
+  if (!cliOptions.projectName && !cliOptions.targetDir) {
+    return {
+      valid: false,
+      error: 'Project name or target directory is required for dev watch mode',
+    }
+  }
+
+  // Check for framework structure
+  const hasAddOns = fs.existsSync(resolve(watchPath, 'add-ons'))
+  const hasAssets = fs.existsSync(resolve(watchPath, 'assets'))
+  const hasFrameworkJson = fs.existsSync(resolve(watchPath, 'framework.json'))
+
+  if (!hasAddOns && !hasAssets && !hasFrameworkJson) {
+    return {
+      valid: false,
+      error: `Watch path does not appear to be a valid framework directory: ${watchPath}`,
+    }
+  }
+
+  return { valid: true }
 }
