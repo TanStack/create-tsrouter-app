@@ -338,20 +338,22 @@ Remove your node_modules directory and package lock file and re-install.`,
   }
 
   if (toolchains.size > 0) {
-    program.option<string>(
-      `--toolchain <${Array.from(toolchains).join('|')}>`,
-      `Explicitly tell the CLI to use this toolchain`,
-      (value) => {
-        if (!toolchains.has(value)) {
-          throw new InvalidArgumentError(
-            `Invalid toolchain: ${value}. The following are allowed: ${Array.from(
-              toolchains,
-            ).join(', ')}`,
-          )
-        }
-        return value
-      },
-    )
+    program
+      .option<string>(
+        `--toolchain <${Array.from(toolchains).join('|')}>`,
+        `Explicitly tell the CLI to use this toolchain`,
+        (value) => {
+          if (!toolchains.has(value)) {
+            throw new InvalidArgumentError(
+              `Invalid toolchain: ${value}. The following are allowed: ${Array.from(
+                toolchains,
+              ).join(', ')}`,
+            )
+          }
+          return value
+        },
+      )
+      .option('--no-toolchain', 'skip toolchain selection')
   }
 
   program
