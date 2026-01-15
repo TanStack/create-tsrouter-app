@@ -23,4 +23,5 @@ export interface CliOptions {
   devWatch?: string
   install?: boolean
   addOnConfig?: string
+  force?: boolean
 }

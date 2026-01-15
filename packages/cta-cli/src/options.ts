@@ -1,4 +1,5 @@
-import { intro } from '@clack/prompts'
+import fs from 'node:fs'
+import { cancel, confirm, intro, isCancel } from '@clack/prompts'
 
 import {
   finalizeAddOns,
@@ -12,8 +13,8 @@ import {
   getProjectName,
   promptForAddOnOptions,
   selectAddOns,
-  selectGit,
   selectDeployment,
+  selectGit,
   selectPackageManager,
   selectRouterType,
   selectTailwind,
@@ -46,6 +47,7 @@ export async function promptForCreateOptions(
 
   options.framework = getFrameworkById(cliOptions.framework || 'react-cra')!
 
+  // Validate project name
   if (cliOptions.projectName) {
     // Handle "." as project name - use sanitized current directory name
     if (cliOptions.projectName === '.') {
@@ -60,6 +62,23 @@ export async function promptForCreateOptions(
     }
   } else {
     options.projectName = await getProjectName()
+  }
+
+  // Check if target directory is empty
+  if (
+    !cliOptions.force &&
+    fs.existsSync(options.projectName) &&
+    fs.readdirSync(options.projectName).length > 0
+  ) {
+    const shouldContinue = await confirm({
+      message: `Target directory ${options.projectName} is not empty. Do you want to continue?`,
+      initialValue: true,
+    })
+
+    if (isCancel(shouldContinue) || !shouldContinue) {
+      cancel('Operation cancelled.')
+      process.exit(0)
+    }
   }
 
   // Router type selection
