@@ -7,7 +7,7 @@ export interface CliOptions {
   framework?: string
   tailwind?: boolean
   packageManager?: PackageManager
-  toolchain?: string
+  toolchain?: string | false
   deployment?: string
   projectName?: string
   git?: boolean

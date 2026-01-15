@@ -197,8 +197,12 @@ export async function selectGit(): Promise<boolean> {
 
 export async function selectToolchain(
   framework: Framework,
-  toolchain?: string,
+  toolchain?: string | false,
 ): Promise<string | undefined> {
+  if (toolchain === false) {
+    return undefined
+  }
+
   const toolchains = new Set<AddOn>()
   for (const addOn of framework.getAddOns()) {
     if (addOn.type === 'toolchain') {
