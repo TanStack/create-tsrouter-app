@@ -1,5 +1,16 @@
 # @tanstack/cta-framework-react-cra
 
+## 0.48.0
+
+### Minor Changes
+
+- no will prompt about overriding a directory that has contents ([#289](https://github.com/TanStack/create-tsrouter-app/pull/289))
+
+### Patch Changes
+
+- Updated dependencies [[`3087532`](https://github.com/TanStack/create-tsrouter-app/commit/308753249af11bf5c9e374789e973a934c753520)]:
+  - @tanstack/cta-engine@0.48.0
+
 ## 0.47.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @tanstack/cta-engine
 
+## 0.48.0
+
+### Minor Changes
+
+- no will prompt about overriding a directory that has contents ([#289](https://github.com/TanStack/create-tsrouter-app/pull/289))
+
 ## 0.47.0
 
 ### Minor Changes
