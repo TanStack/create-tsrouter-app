@@ -191,6 +191,9 @@ export async function promptForCreateOptions(
   }
 
   options.git = cliOptions.git || (await selectGit())
+  if (cliOptions.install === false) {
+    options.install = false
+  }
 
   return options
 }
