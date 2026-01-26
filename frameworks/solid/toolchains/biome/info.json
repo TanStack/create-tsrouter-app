@@ -3,6 +3,9 @@
   "description": "Biome toolchain support.",
   "phase": "setup",
   "type": "toolchain",
+  "category": "tooling",
+  "exclusive": ["linter"],
+  "color": "#60A5FA",
   "modes": ["code-router", "file-router"],
   "link": "https://biomejs.dev"
 }

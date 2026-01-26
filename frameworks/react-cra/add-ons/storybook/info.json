@@ -5,6 +5,8 @@
   "modes": ["file-router"],
   "link": "https://storybook.js.org/",
   "type": "add-on",
+  "category": "tooling",
+  "color": "#FF4785",
   "priority": 18,
   "routes": [
     {

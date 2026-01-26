@@ -5,6 +5,9 @@
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "deployment",
+  "category": "deploy",
+  "exclusive": ["deploy"],
+  "color": "#ECDC5A",
   "tailwind": false,
   "integrations": [
     {

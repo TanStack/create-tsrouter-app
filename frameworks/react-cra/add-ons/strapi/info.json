@@ -4,6 +4,8 @@
   "link": "https://strapi.io/",
   "phase": "add-on",
   "type": "add-on",
+  "category": "cms",
+  "color": "#4945FF",
   "priority": 110,
   "modes": ["file-router"],
   "routes": [

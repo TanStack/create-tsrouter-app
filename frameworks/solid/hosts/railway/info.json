@@ -1,14 +1,14 @@
 {
-  "name": "Nitro (agnostic)",
-  "description": "Nitro deployment setup",
-  "link": "https://v3.nitro.build/",
+  "name": "Railway",
+  "description": "Railway deployment setup",
+  "link": "https://railway.com/",
   "phase": "add-on",
   "modes": ["file-router", "code-router"],
   "type": "deployment",
   "category": "deploy",
   "exclusive": ["deploy"],
-  "color": "#ECDC5A",
-  "priority": 0,
+  "color": "#9B4DCA",
+  "priority": 160,
   "tailwind": false,
   "integrations": [
     {
@@ -16,6 +16,5 @@
       "import": "import { nitro } from 'nitro/vite'",
       "code": "nitro()"
     }
-  ],
-  "default": true
+  ]
 }

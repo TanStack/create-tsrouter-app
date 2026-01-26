@@ -4,6 +4,8 @@
   "phase": "example",
   "modes": ["file-router"],
   "type": "example",
+  "category": "other",
+  "color": "#F59E0B",
   "priority": 10,
   "link": "",
   "routes": [

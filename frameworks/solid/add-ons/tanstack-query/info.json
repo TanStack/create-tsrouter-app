@@ -4,6 +4,8 @@
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",
+  "category": "tanstack",
+  "color": "#EF4444",
   "link": "https://tanstack.com/query/latest",
   "routes": [
     {

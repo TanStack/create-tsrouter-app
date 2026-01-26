@@ -4,6 +4,9 @@
   "link": "https://neon.com",
   "phase": "add-on",
   "type": "add-on",
+  "category": "database",
+  "exclusive": ["database"],
+  "color": "#00E599",
   "priority": 170,
   "modes": ["file-router"],
   "routes": [

@@ -5,6 +5,8 @@
   "link": "https://ui.shadcn.com/",
   "modes": ["file-router", "code-router"],
   "type": "add-on",
+  "category": "styling",
+  "color": "#000000",
   "command": {
     "command": "npx",
     "args": ["solidui-cli@latest", "add", "button", "input"]

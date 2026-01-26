@@ -3,6 +3,8 @@
   "description": "A chat example that uses TanStack Start and TanStack Store. Features chat with Anthropic Sonnet, chat history and custom prompts.",
   "phase": "example",
   "type": "example",
+  "category": "other",
+  "color": "#00D1B2",
   "modes": ["file-router"],
   "link": "",
   "routes": [

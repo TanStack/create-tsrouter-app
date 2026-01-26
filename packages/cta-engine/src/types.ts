@@ -39,6 +39,26 @@ export const AddOnBaseSchema = z.object({
   warning: z.string().optional(),
   tailwind: z.boolean().optional().default(true),
   type: z.enum(['add-on', 'example', 'starter', 'toolchain', 'deployment']),
+  category: z
+    .enum([
+      'tanstack',
+      'database',
+      'orm',
+      'auth',
+      'deploy',
+      'styling',
+      'monitoring',
+      'cms',
+      'api',
+      'i18n',
+      'tooling',
+      'other',
+    ])
+    .optional(),
+  exclusive: z
+    .array(z.enum(['orm', 'auth', 'deploy', 'database', 'linter']))
+    .optional(),
+  color: z.string().optional(),
   priority: z.number().optional(),
   command: z
     .object({

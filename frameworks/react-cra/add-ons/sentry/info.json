@@ -5,6 +5,8 @@
   "link": "https://sentry.com/",
   "modes": ["file-router"],
   "type": "add-on",
+  "category": "monitoring",
+  "color": "#362D59",
   "priority": 130,
   "routes": [
     {
