@@ -55,7 +55,9 @@ export const AddOnBaseSchema = z.object({
       'other',
     ])
     .optional(),
-  exclusive: z.array(z.string()).optional(),
+  exclusive: z
+    .array(z.enum(['orm', 'auth', 'deploy', 'database', 'linter']))
+    .optional(),
   color: z.string().optional(),
   priority: z.number().optional(),
   command: z
