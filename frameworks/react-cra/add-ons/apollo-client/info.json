@@ -4,6 +4,8 @@
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",
+  "category": "api",
+  "color": "#311C87",
   "priority": 15,
   "link": "https://github.com/apollographql/apollo-client-integrations/tree/main/packages/tanstack-start",
   "dependsOn": ["start"],

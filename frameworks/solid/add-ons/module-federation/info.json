@@ -4,5 +4,7 @@
   "phase": "add-on",
   "modes": ["code-router"],
   "link": "https://module-federation.io/",
-  "type": "add-on"
+  "type": "add-on",
+  "category": "tooling",
+  "color": "#1B72BE"
 }

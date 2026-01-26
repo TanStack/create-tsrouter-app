@@ -3,6 +3,8 @@
   "description": "TanStack Form",
   "phase": "add-on",
   "type": "add-on",
+  "category": "tanstack",
+  "color": "#FACC15",
   "priority": 44,
   "modes": ["file-router", "code-router"],
   "link": "https://tanstack.com/form/latest",

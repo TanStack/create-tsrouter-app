@@ -4,6 +4,8 @@
   "phase": "add-on",
   "modes": ["file-router"],
   "type": "add-on",
+  "category": "i18n",
+  "color": "#14B8A6",
   "priority": 30,
   "link": "https://github.com/paraglidejs/paraglide-js",
   "routes": [

@@ -5,6 +5,8 @@
   "modes": ["file-router", "code-router"],
   "link": "https://tanstack.com/table/latest",
   "type": "add-on",
+  "category": "tanstack",
+  "color": "#00D1B2",
   "priority": 28,
   "routes": [
     {

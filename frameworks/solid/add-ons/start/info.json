@@ -5,6 +5,8 @@
   "link": "https://tanstack.com/start/latest",
   "modes": ["file-router"],
   "type": "add-on",
+  "category": "tanstack",
+  "color": "#00D1B2",
   "routes": [
     {
       "url": "/demo/start/server-funcs",

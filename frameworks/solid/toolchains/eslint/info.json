@@ -3,6 +3,9 @@
   "description": "ESLint + Prettier toolchain support.",
   "phase": "setup",
   "type": "toolchain",
+  "category": "tooling",
+  "exclusive": ["linter"],
+  "color": "#4B32C3",
   "modes": ["code-router", "file-router"],
   "link": "https://eslint.org"
 }

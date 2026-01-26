@@ -4,6 +4,9 @@
   "link": "https://convex.dev",
   "phase": "add-on",
   "type": "add-on",
+  "category": "database",
+  "exclusive": ["database", "orm"],
+  "color": "#EE342F",
   "priority": 140,
   "modes": ["file-router"],
   "routes": [

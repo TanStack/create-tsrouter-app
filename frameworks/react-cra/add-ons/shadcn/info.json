@@ -5,5 +5,7 @@
   "modes": ["file-router", "code-router"],
   "link": "https://ui.shadcn.com/",
   "type": "add-on",
+  "category": "styling",
+  "color": "#000000",
   "priority": 30
 }

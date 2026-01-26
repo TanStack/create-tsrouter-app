@@ -6,6 +6,8 @@
   "link": "https://trpc.io/",
   "dependsOn": ["tanstack-query", "start"],
   "type": "add-on",
+  "category": "api",
+  "color": "#2596BE",
   "priority": 27,
   "routes": [
     {

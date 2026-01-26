@@ -6,6 +6,8 @@
   "link": "https://orpc.unnoq.com/",
   "dependsOn": ["tanstack-query", "start"],
   "type": "add-on",
+  "category": "api",
+  "color": "#FF6B6B",
   "priority": 34,
   "routes": [
     {
