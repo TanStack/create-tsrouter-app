@@ -1,13 +1,13 @@
 import type {
   AddOn,
-  Framework,
-  Starter,
   AttributedFile,
   DependencyAttribution,
   FileProvenance,
-  LineAttribution,
+  Framework,
   Integration,
   IntegrationWithSource,
+  LineAttribution,
+  Starter,
 } from './types.js'
 
 export interface AttributionInput {
