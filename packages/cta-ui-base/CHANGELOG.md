@@ -1,5 +1,12 @@
 # @tanstack/cta-ui-base
 
+## 0.48.1
+
+### Patch Changes
+
+- Updated dependencies [[`cdb6eef`](https://github.com/TanStack/create-tsrouter-app/commit/cdb6eef79274a4041eae5e8cd9d43539c9a9a77a)]:
+  - @tanstack/cta-engine@0.49.0
+
 ## 0.48.0
 
 ### Minor Changes

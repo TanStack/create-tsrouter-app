@@ -1,5 +1,11 @@
 # @tanstack/cta-engine
 
+## 0.49.0
+
+### Minor Changes
+
+- Added categories, colors, exclusive tagging, addon file attribution utils, and railway addon ([#303](https://github.com/TanStack/create-tsrouter-app/pull/303))
+
 ## 0.48.0
 
 ### Minor Changes
