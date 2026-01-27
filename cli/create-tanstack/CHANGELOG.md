@@ -1,5 +1,14 @@
 # create-tanstack
 
+## 0.43.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @tanstack/cta-framework-react-cra@0.48.1
+  - @tanstack/cta-framework-solid@0.48.1
+  - @tanstack/cta-cli@0.48.1
+
 ## 0.43.0
 
 ### Minor Changes
