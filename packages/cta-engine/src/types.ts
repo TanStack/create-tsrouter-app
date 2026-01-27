@@ -276,3 +276,37 @@ type UIEnvironment = {
 }
 
 export type Environment = ProjectEnvironment & FileEnvironment & UIEnvironment
+
+// Attribution tracking types for file provenance
+export interface LineAttribution {
+  line: number
+  sourceId: string
+  sourceName: string
+  type: 'original' | 'injected'
+}
+
+export interface FileProvenance {
+  source: 'framework' | 'add-on' | 'starter'
+  sourceId: string
+  sourceName: string
+}
+
+export interface AttributedFile {
+  content: string
+  provenance: FileProvenance
+  lineAttributions: Array<LineAttribution>
+}
+
+export interface DependencyAttribution {
+  name: string
+  version: string
+  type: 'dependency' | 'devDependency'
+  sourceId: string
+  sourceName: string
+}
+
+// Integration with source add-on tracking (used in templates and attribution)
+export type IntegrationWithSource = Integration & {
+  _sourceId: string
+  _sourceName: string
+}

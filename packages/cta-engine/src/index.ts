@@ -1,7 +1,12 @@
 export { createApp } from './create-app.js'
+export { computeAttribution } from './attribution.js'
 export { addToApp } from './add-to-app.js'
 
-export { finalizeAddOns, getAllAddOns, populateAddOnOptionsDefaults } from './add-ons.js'
+export {
+  finalizeAddOns,
+  getAllAddOns,
+  populateAddOnOptionsDefaults,
+} from './add-ons.js'
 
 export { loadRemoteAddOn } from './custom-add-ons/add-on.js'
 export { loadStarter } from './custom-add-ons/starter.js'
@@ -85,6 +90,12 @@ export type {
   SerializedOptions,
   Starter,
   StarterCompiled,
+  LineAttribution,
+  FileProvenance,
+  AttributedFile,
+  DependencyAttribution,
 } from './types.js'
+export type { AttributionInput, AttributionOutput } from './attribution.js'
+export type { MemoryEnvironmentOutput } from './environment.js'
 export type { PersistedOptions } from './config-file.js'
 export type { PackageManager } from './package-manager.js'
