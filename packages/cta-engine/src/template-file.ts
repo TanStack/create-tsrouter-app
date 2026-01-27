@@ -9,7 +9,13 @@ import {
 } from './package-manager.js'
 import { relativePath } from './file-helpers.js'
 
-import type { AddOn, Environment, Integration, Options } from './types.js'
+import type {
+  AddOn,
+  Environment,
+  Integration,
+  IntegrationWithSource,
+  Options,
+} from './types.js'
 
 function convertDotFilesAndPaths(path: string) {
   return path
@@ -50,11 +56,16 @@ export function createTemplateFile(environment: Environment, options: Options) {
     }
   }
 
-  const integrations: Array<Required<AddOn>['integrations'][number]> = []
+  // Collect integrations and tag them with source add-on for attribution
+  const integrations: Array<IntegrationWithSource> = []
   for (const addOn of options.chosenAddOns) {
     if (addOn.integrations) {
       for (const integration of addOn.integrations) {
-        integrations.push(integration)
+        integrations.push({
+          ...integration,
+          _sourceId: addOn.id,
+          _sourceName: addOn.name,
+        })
       }
     }
   }

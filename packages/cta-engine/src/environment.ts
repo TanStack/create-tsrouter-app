@@ -21,6 +21,12 @@ import {
 
 import type { Environment } from './types.js'
 
+export interface MemoryEnvironmentOutput {
+  files: Record<string, string>
+  deletedFiles: Array<string>
+  commands: Array<{ command: string; args: Array<string> }>
+}
+
 export function createDefaultEnvironment(): Environment {
   let errors: Array<string> = []
   return {
@@ -46,7 +52,12 @@ export function createDefaultEnvironment(): Environment {
       await mkdir(dirname(path), { recursive: true })
       return writeFile(path, getBinaryFile(base64Contents) as string)
     },
-    execute: async (command: string, args: Array<string>, cwd: string, options?: { inherit?: boolean }) => {
+    execute: async (
+      command: string,
+      args: Array<string>,
+      cwd: string,
+      options?: { inherit?: boolean },
+    ) => {
       try {
         if (options?.inherit) {
           // For commands that should show output directly to the user
@@ -106,14 +117,7 @@ export function createDefaultEnvironment(): Environment {
 export function createMemoryEnvironment(returnPathsRelativeTo: string = '') {
   const environment = createDefaultEnvironment()
 
-  const output: {
-    files: Record<string, string>
-    deletedFiles: Array<string>
-    commands: Array<{
-      command: string
-      args: Array<string>
-    }>
-  } = {
+  const output: MemoryEnvironmentOutput = {
     files: {},
     commands: [],
     deletedFiles: [],
