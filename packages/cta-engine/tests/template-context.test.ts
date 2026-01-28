@@ -32,7 +32,7 @@ describe('Template Context - Add-on Options', () => {
       }
     })
     environment.startRun()
-    await templateFile('./test.txt.ejs', 'Database: <%= addOnOption.testAddon.database %>')
+    await templateFile('test.txt.ejs', 'Database: <%= addOnOption.testAddon.database %>')
     environment.finishRun()
 
     expect(output.files['/test/test.txt']).toEqual('Database: postgres')
@@ -53,7 +53,7 @@ describe('Template Context - Add-on Options', () => {
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       'Drizzle: <%= addOnOption.testAddon.database %>, shadcn: <%= addOnOption.shadcn.theme %>'
     )
     environment.finishRun()
@@ -75,7 +75,7 @@ describe('Template Context - Add-on Options', () => {
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       'DB: <%= addOnOption["complex-addon"].database %>, Theme: <%= addOnOption["complex-addon"].theme %>, Port: <%= addOnOption["complex-addon"].port %>'
     )
     environment.finishRun()
@@ -95,7 +95,7 @@ describe('Template Context - Add-on Options', () => {
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       `<% if (addOnOption.testAddon.database === 'postgres') { %>
 PostgreSQL configuration
 <% } else if (addOnOption.testAddon.database === 'mysql') { %>
@@ -121,11 +121,11 @@ SQLite configuration
     })
     environment.startRun()
     await templateFile(
-      './postgres-config.ts.ejs',
+      'postgres-config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL configuration\nexport const config = "postgres"'
     )
     await templateFile(
-      './mysql-config.ts.ejs',
+      'mysql-config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL configuration\nexport const config = "mysql"'
     )
     environment.finishRun()
@@ -143,7 +143,7 @@ SQLite configuration
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       'Options: <%= JSON.stringify(addOnOption) %>'
     )
     environment.finishRun()
@@ -163,7 +163,7 @@ SQLite configuration
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       'Database: <%= addOnOption.testAddon.database || "not set" %>'
     )
     environment.finishRun()
@@ -190,7 +190,7 @@ SQLite configuration
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       'Project: <%= projectName %>, Add-ons: <%= Object.keys(addOnEnabled).join(", ") %>, Database: <%= addOnOption.testAddon.database %>'
     )
     environment.finishRun()
@@ -210,7 +210,7 @@ SQLite configuration
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       'Exists: <%= addOnOption.testAddon ? "yes" : "no" %>, Non-existent: <%= addOnOption.nonexistent ? "yes" : "no" %>'
     )
     environment.finishRun()
@@ -230,7 +230,7 @@ SQLite configuration
     })
     environment.startRun()
     await templateFile(
-      './db-config.ts.ejs',
+      'db-config.ts.ejs',
       `<% if (addOnOption.testAddon.database === 'postgres') { %>
 import { testAddon } from 'testAddon-orm/postgres-js'
 import postgres from 'postgres'
@@ -264,11 +264,11 @@ export const db = testAddon(/* connection */)`
     })
     environment.startRun()
     await templateFile(
-      './__postgres__testAddon.config.ts.ejs',
+      '__postgres__testAddon.config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL Drizzle config\nexport default { driver: "postgres" }'
     )
     await templateFile(
-      './__mysql__testAddon.config.ts.ejs',
+      '__mysql__testAddon.config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL Drizzle config\nexport default { driver: "mysql" }'
     )
     environment.finishRun()
@@ -294,11 +294,11 @@ export const db = testAddon(/* connection */)`
     })
     environment.startRun()
     await templateFile(
-      './src/db/__sqlite__index.ts.ejs',
+      'src/db/__sqlite__index.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "sqlite") { ignoreFile() } %>\n// SQLite database connection\nexport const db = "sqlite"'
     )
     await templateFile(
-      './src/db/__postgres__index.ts.ejs',
+      'src/db/__postgres__index.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL database connection\nexport const db = "postgres"'
     )
     environment.finishRun()

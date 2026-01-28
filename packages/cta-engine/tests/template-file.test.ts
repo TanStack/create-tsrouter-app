@@ -25,7 +25,7 @@ describe('createTemplateFile', () => {
     const { environment, output } = createMemoryEnvironment()
     const templateFile = createTemplateFile(environment, simpleOptions)
     environment.startRun()
-    await templateFile('./test.ts', 'let a = 1')
+    await templateFile('test.ts', 'let a = 1')
     environment.finishRun()
 
     expect(output.files['/test/test.ts'].trim()).toEqual('let a = 1')
@@ -37,7 +37,7 @@ describe('createTemplateFile', () => {
       ...simpleOptions,
     } as unknown as Options)
     environment.startRun()
-    await templateFile('./test.ts.ejs', '<% ignoreFile() %>let a = 1')
+    await templateFile('test.ts.ejs', '<% ignoreFile() %>let a = 1')
     environment.finishRun()
 
     expect(output.files['/test/test.ts']).toBeUndefined()
@@ -47,8 +47,8 @@ describe('createTemplateFile', () => {
     const { environment, output } = createMemoryEnvironment()
     const templateFile = createTemplateFile(environment, simpleOptions)
     environment.startRun()
-    await templateFile('./test.txt.ejs', 'Line 1\n')
-    await templateFile('./test.txt.append', 'Line 2\n')
+    await templateFile('test.txt.ejs', 'Line 1\n')
+    await templateFile('test.txt.append', 'Line 2\n')
     environment.finishRun()
 
     expect(output.files['/test/test.txt']).toEqual('Line 1\nLine 2\n')
@@ -71,7 +71,7 @@ describe('createTemplateFile', () => {
     })
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       "Addons: <%= Object.keys(addOnEnabled).join(', ') %>",
     )
     environment.finishRun()
@@ -84,8 +84,8 @@ describe('createTemplateFile', () => {
     const templateFile = createTemplateFile(environment, simpleOptions)
     environment.startRun()
     await templateFile(
-      './src/test/test.txt.ejs',
-      "import { foo } from '<%= relativePath('./foo.ts') %>'",
+      'src/test/test.txt.ejs',
+      "import { foo } from '<%= relativePath('foo.ts') %>'",
     )
     environment.finishRun()
 
@@ -116,7 +116,7 @@ describe('createTemplateFile', () => {
 
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       "<%= routes.map((route) => route.url).join(', ') %>",
     )
     environment.finishRun()
@@ -145,7 +145,7 @@ describe('createTemplateFile', () => {
 
     environment.startRun()
     await templateFile(
-      './test.txt.ejs',
+      'test.txt.ejs',
       "<%= integrations.map((integration) => integration.path).join(', ') %>",
     )
     environment.finishRun()
@@ -158,15 +158,15 @@ describe('createTemplateFile', () => {
     const templateFile = createTemplateFile(environment, simpleOptions)
     environment.startRun()
     await templateFile(
-      './foo.txt.ejs',
+      'foo.txt.ejs',
       "<%= getPackageManagerAddScript('foo') %>",
     )
     await templateFile(
-      './foo-dev.txt.ejs',
+      'foo-dev.txt.ejs',
       "<%= getPackageManagerAddScript('foo', true) %>",
     )
     await templateFile(
-      './run-dev.txt.ejs',
+      'run-dev.txt.ejs',
       "<%= getPackageManagerRunScript('dev') %>",
     )
     environment.finishRun()

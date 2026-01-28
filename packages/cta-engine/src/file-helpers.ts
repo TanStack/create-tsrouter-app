@@ -36,6 +36,16 @@ export function getBinaryFile(content: string): string | null {
   return null
 }
 
+/**
+ * Convert an absolute path to a clean relative path by removing a base directory.
+ * Returns a path without leading ./ or / prefix.
+ */
+export function toCleanPath(absolutePath: string, baseDir: string): string {
+  let cleanPath = absolutePath.replace(baseDir, '')
+  if (cleanPath.startsWith('/')) cleanPath = cleanPath.slice(1)
+  return cleanPath
+}
+
 export function relativePath(
   from: string,
   to: string,
@@ -122,7 +132,7 @@ async function recursivelyGatherFilesHelper(
       )
     } else {
       const filePath = resolve(path, file.name)
-      files[filePath.replace(basePath, '.')] = await readFileHelper(filePath)
+      files[toCleanPath(filePath, basePath)] = await readFileHelper(filePath)
     }
   }
 }
@@ -159,7 +169,7 @@ async function recursivelyGatherFilesFromEnvironmentHelper(
       )
     } else {
       const filePath = resolve(path, file)
-      files[filePath.replace(basePath, '.')] =
+      files[toCleanPath(filePath, basePath)] =
         await environment.readFile(filePath)
     }
   }
@@ -232,7 +242,7 @@ export function cleanUpFiles(
 ) {
   return Object.keys(files).reduce<Record<string, string>>((acc, file) => {
     if (basename(file) !== '.cta.json') {
-      acc[targetDir ? file.replace(targetDir, '.') : file] = files[file]
+      acc[targetDir ? toCleanPath(file, targetDir) : file] = files[file]
     }
     return acc
   }, {})
@@ -241,7 +251,7 @@ export function cleanUpFiles(
 export function cleanUpFileArray(files: Array<string>, targetDir?: string) {
   return files.reduce<Array<string>>((acc, file) => {
     if (basename(file) !== '.cta.json') {
-      acc.push(targetDir ? file.replace(targetDir, '.') : file)
+      acc.push(targetDir ? toCleanPath(file, targetDir) : file)
     }
     return acc
   }, [])

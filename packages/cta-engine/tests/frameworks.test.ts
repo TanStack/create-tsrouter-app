@@ -35,7 +35,7 @@ describe('registerFramework', () => {
       description: 'Test',
       version: '1.0.0',
       base: {
-        './package.json': JSON.stringify(basePackageJSON),
+        'package.json': JSON.stringify(basePackageJSON),
       },
       basePackageJSON,
       optionalPackages: {},
@@ -51,9 +51,9 @@ describe('registerFramework', () => {
     const f = getFrameworkById('test')!
 
     const baseFiles = await f.getFiles()
-    expect(baseFiles).toEqual(['./package.json'])
+    expect(baseFiles).toEqual(['package.json'])
 
-    const fileContents = await f.getFileContents('./package.json')
+    const fileContents = await f.getFileContents('package.json')
     expect(fileContents).toEqual(JSON.stringify(basePackageJSON))
 
     expect(getFrameworkByName('Test')).not.toBeUndefined()

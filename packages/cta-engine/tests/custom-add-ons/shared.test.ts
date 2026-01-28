@@ -23,7 +23,7 @@ beforeEach(() => {
   vol.reset()
 
   const fakeFiles = {
-    './package.json': JSON.stringify({
+    'package.json': JSON.stringify({
       name: 'test',
       version: '1.0.0',
       dependencies: {},
@@ -69,7 +69,7 @@ beforeEach(() => {
           },
         },
         dependsOn: [],
-        getFiles: () => Promise.resolve(['./jack.txt']),
+        getFiles: () => Promise.resolve(['jack.txt']),
         getFileContents: () => Promise.resolve('foo'),
         getDeletedFiles: () => Promise.resolve([]),
       },

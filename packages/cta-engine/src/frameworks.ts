@@ -5,6 +5,7 @@ import {
   findFilesRecursively,
   isDirectory,
   readFileHelper,
+  toCleanPath,
 } from './file-helpers.js'
 
 import type { AddOn, Framework, FrameworkDefinition } from './types.js'
@@ -20,7 +21,7 @@ export function scanProjectDirectory(
 
   const files = Object.keys(absolutePaths).reduce(
     (acc, path) => {
-      acc[path.replace(baseDirectory, '.')] = absolutePaths[path]
+      acc[toCleanPath(path, baseDirectory)] = absolutePaths[path]
       return acc
     },
     {} as Record<string, string>,
@@ -59,13 +60,16 @@ export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
 
       let packageAdditions: Record<string, any> = {}
       let packageTemplate: string | undefined = undefined
-      
+
       if (existsSync(resolve(addOnsBase, dir, 'package.json'))) {
         packageAdditions = JSON.parse(
           readFileSync(resolve(addOnsBase, dir, 'package.json'), 'utf-8'),
         )
       } else if (existsSync(resolve(addOnsBase, dir, 'package.json.ejs'))) {
-        packageTemplate = readFileSync(resolve(addOnsBase, dir, 'package.json.ejs'), 'utf-8')
+        packageTemplate = readFileSync(
+          resolve(addOnsBase, dir, 'package.json.ejs'),
+          'utf-8',
+        )
       }
 
       let readme: string | undefined
@@ -88,7 +92,7 @@ export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
       }
       const files: Record<string, string> = {}
       for (const file of Object.keys(absoluteFiles)) {
-        files[file.replace(assetsDir, '.')] = readFileHelper(file)
+        files[toCleanPath(file, assetsDir)] = readFileHelper(file)
       }
 
       const getFiles = () => {

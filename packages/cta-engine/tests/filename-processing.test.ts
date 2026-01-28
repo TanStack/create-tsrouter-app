@@ -31,7 +31,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './__postgres__testAddon.config.ts.ejs',
+      '__postgres__testAddon.config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL config\nexport default { driver: "postgres" }'
     )
     environment.finishRun()
@@ -54,7 +54,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './src/db/__mysql__connection.ts.ejs',
+      'src/db/__mysql__connection.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL connection\nexport const connection = "mysql"'
     )
     environment.finishRun()
@@ -77,15 +77,15 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './__postgres__testAddon.config.ts.ejs',
+      '__postgres__testAddon.config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\n// PostgreSQL config'
     )
     await templateFile(
-      './__mysql__testAddon.config.ts.ejs',
+      '__mysql__testAddon.config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "mysql") { ignoreFile() } %>\n// MySQL config'
     )
     await templateFile(
-      './__sqlite__testAddon.config.ts.ejs',
+      '__sqlite__testAddon.config.ts.ejs',
       '<% if (addOnOption.testAddon.database !== "sqlite") { ignoreFile() } %>\n// SQLite config'
     )
     environment.finishRun()
@@ -110,7 +110,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './__auth0__auth.config.js.ejs',
+      '__auth0__auth.config.js.ejs',
       '<% if (addOnOption.auth.provider !== "auth0") { ignoreFile() } %>\n// Auth0 configuration\nmodule.exports = { provider: "auth0" }'
     )
     environment.finishRun()
@@ -131,12 +131,12 @@ describe('Filename Processing - Prefix Stripping', () => {
     environment.startRun()
     // Create base file first
     await templateFile(
-      './.env.ejs',
+      '.env.ejs',
       'BASE_VAR=value\n'
     )
     // Then append with prefixed filename
     await templateFile(
-      './__postgres__.env.append.ejs',
+      '__postgres__.env.append.ejs',
       '<% if (addOnOption.testAddon.database !== "postgres") { ignoreFile() } %>\nDATABASE_URL=postgresql://localhost:5432/mydb\n'
     )
     environment.finishRun()
@@ -151,7 +151,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     const templateFile = createTemplateFile(environment, simpleOptions)
     environment.startRun()
     await templateFile(
-      './regular-file.ts.ejs',
+      'regular-file.ts.ejs',
       'export const config = "normal"'
     )
     environment.finishRun()
@@ -166,15 +166,15 @@ describe('Filename Processing - Prefix Stripping', () => {
     const templateFile = createTemplateFile(environment, simpleOptions)
     environment.startRun()
     await templateFile(
-      './__malformed_prefix.ts.ejs',
+      '__malformed_prefix.ts.ejs',
       'export const config = "malformed"'
     )
     await templateFile(
-      './__only_one_underscore.ts.ejs',
+      '__only_one_underscore.ts.ejs',
       'export const config = "malformed2"'
     )
     await templateFile(
-      './____.ts.ejs',
+      '____.ts.ejs',
       'export const config = "empty"'
     )
     environment.finishRun()
@@ -195,7 +195,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './src/styles/components/__tailwind__button.css.ejs',
+      'src/styles/components/__tailwind__button.css.ejs',
       '<% if (addOnOption.styling.framework !== "tailwind") { ignoreFile() } %>\n@tailwind base;\n@tailwind components;\n@tailwind utilities;'
     )
     environment.finishRun()
@@ -215,11 +215,11 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './__chakra__theme.ts.ejs',
+      '__chakra__theme.ts.ejs',
       '<% if (addOnOption.ui.library !== "chakra") { ignoreFile() } %>\n// Chakra UI theme\nexport const theme = { colors: {} }'
     )
     await templateFile(
-      './__mui__theme.ts.ejs',
+      '__mui__theme.ts.ejs',
       '<% if (addOnOption.ui.library !== "mui") { ignoreFile() } %>\n// Material-UI theme\nexport const theme = { palette: {} }'
     )
     environment.finishRun()
@@ -243,7 +243,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './__vercel-edge__api.ts.ejs',
+      '__vercel-edge__api.ts.ejs',
       '<% if (addOnOption.deployment.platform !== "vercel-edge") { ignoreFile() } %>\n// Vercel Edge API\nexport const runtime = "edge"'
     )
     environment.finishRun()
@@ -263,7 +263,7 @@ describe('Filename Processing - Prefix Stripping', () => {
     })
     environment.startRun()
     await templateFile(
-      './__postgres__file__with__underscores.ts.ejs',
+      '__postgres__file__with__underscores.ts.ejs',
       '<% if (addOnOption.test.value !== "postgres") { ignoreFile() } %>\n// File with underscores\nexport const value = "test"'
     )
     environment.finishRun()

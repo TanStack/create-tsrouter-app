@@ -34,7 +34,7 @@ const fakeCTAJSON: PersistedOptions = {
 
 beforeEach(() => {
   const fakeFiles = {
-    './package.json': JSON.stringify({
+    'package.json': JSON.stringify({
       name: 'test',
       version: '1.0.0',
       dependencies: {},
@@ -71,7 +71,7 @@ beforeEach(() => {
           },
         },
         dependsOn: [],
-        getFiles: () => Promise.resolve(['./jack.txt']),
+        getFiles: () => Promise.resolve(['jack.txt']),
         getFileContents: () => Promise.resolve('foo'),
         getDeletedFiles: () => Promise.resolve([]),
       },
@@ -152,8 +152,8 @@ describe('writeFiles', () => {
       '/foo',
       {
         files: {
-          './bar.txt': 'baz',
-          './blarg.txt': 'blarg',
+          'bar.txt': 'baz',
+          'blarg.txt': 'blarg',
         },
         deletedFiles: [],
       },
@@ -177,8 +177,8 @@ describe('writeFiles', () => {
       '/foo',
       {
         files: {
-          './bar.txt': 'baz',
-          './blarg.txt': 'blarg',
+          'bar.txt': 'baz',
+          'blarg.txt': 'blarg',
         },
         deletedFiles: [],
       },
@@ -186,9 +186,9 @@ describe('writeFiles', () => {
     )
     environment.finishRun()
     expect(output.files).toEqual({
-      './blooop.txt': 'blooop',
-      './bar.txt': 'baz',
-      './blarg.txt': 'blarg',
+      'blooop.txt': 'blooop',
+      'bar.txt': 'baz',
+      'blarg.txt': 'blarg',
     })
   })
 
@@ -203,9 +203,9 @@ describe('writeFiles', () => {
       '/foo',
       {
         files: {
-          './unchanged.jpg': 'base64::foobaz',
-          './changing.jpg': 'base64::aGVsbG8=',
-          './new.jpg': 'base64::aGVsbG8=',
+          'unchanged.jpg': 'base64::foobaz',
+          'changing.jpg': 'base64::aGVsbG8=',
+          'new.jpg': 'base64::aGVsbG8=',
         },
         deletedFiles: [],
       },
@@ -214,9 +214,9 @@ describe('writeFiles', () => {
     environment.finishRun()
     // It's ok for unchanged.jpg not to be written, because it matches the existing file
     expect(output.files).toEqual({
-      './unchanged.jpg': 'base64::foobaz',
-      './changing.jpg': 'base64::aGVsbG8=',
-      './new.jpg': 'base64::aGVsbG8=',
+      'unchanged.jpg': 'base64::foobaz',
+      'changing.jpg': 'base64::aGVsbG8=',
+      'new.jpg': 'base64::aGVsbG8=',
     })
   })
 
@@ -245,7 +245,7 @@ describe('writeFiles', () => {
       '/foo',
       {
         files: {
-          './package.json': JSON.stringify(
+          'package.json': JSON.stringify(
             {
               scripts: {
                 test: 'echo "test"',
@@ -264,7 +264,7 @@ describe('writeFiles', () => {
     )
     environment.finishRun()
     expect(output.files).toEqual({
-      './package.json': JSON.stringify(
+      'package.json': JSON.stringify(
         {
           name: 'test',
           version: '1.0.0',
@@ -291,11 +291,11 @@ describe('writeFiles', () => {
     await writeFiles(
       environment,
       '/foo',
-      { files: {}, deletedFiles: ['./bloop.txt'] },
+      { files: {}, deletedFiles: ['bloop.txt'] },
       true,
     )
     environment.finishRun()
-    expect(output.deletedFiles).toEqual(['./bloop.txt'])
+    expect(output.deletedFiles).toEqual(['bloop.txt'])
   })
 })
 
@@ -338,8 +338,8 @@ describe('addToApp', () => {
     })
     environment.finishRun()
     expect(output.files).toEqual({
-      './jack.txt': 'foo',
-      './package.json': JSON.stringify(
+      'jack.txt': 'foo',
+      'package.json': JSON.stringify(
         {
           name: 'test',
           version: '1.0.0',

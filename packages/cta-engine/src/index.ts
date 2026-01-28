@@ -46,6 +46,7 @@ export {
   getBinaryFile,
   recursivelyGatherFiles,
   relativePath,
+  toCleanPath,
 } from './file-helpers.js'
 
 export { formatCommand, handleSpecialURL } from './utils.js'

@@ -45,7 +45,7 @@ describe('relativePath', () => {
   it('relative path with a different directory', () => {
     expect(
       relativePath(
-        './src/routes/__root.tsx.ejs',
+        'src/routes/__root.tsx.ejs',
         'src/integrations/tanstack-query/layout.tsx',
       ),
     ).toBe('../integrations/tanstack-query/layout.tsx')

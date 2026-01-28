@@ -5,7 +5,7 @@ import { createMemoryEnvironment } from '../environment.js'
 import { finalizeAddOns, populateAddOnOptionsDefaults } from '../add-ons.js'
 import { getFrameworkById } from '../frameworks.js'
 import { readConfigFileFromEnvironment } from '../config-file.js'
-import { readFileHelper } from '../file-helpers.js'
+import { readFileHelper, toCleanPath } from '../file-helpers.js'
 import { loadStarter } from '../custom-add-ons/starter.js'
 
 import type { Environment, Options, SerializedOptions } from '../types.js'
@@ -117,9 +117,10 @@ export async function runCreateApp(options: Required<Options>) {
   })
 
   output.files = Object.fromEntries(
-    Object.entries(output.files).map(([key, value]) => {
-      return [key.replace(targetDir, '.'), value]
-    }),
+    Object.entries(output.files).map(([key, value]) => [
+      toCleanPath(key, targetDir),
+      value,
+    ]),
   )
 
   return output
