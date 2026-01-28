@@ -1,5 +1,11 @@
 # @tanstack/cta-framework-react-cra
 
+## 0.48.3
+
+### Patch Changes
+
+- fix: Updated colors ([`8e0b52b`](https://github.com/TanStack/create-tsrouter-app/commit/8e0b52b4f9e8a3bcd20458b92eac249c756372da))
+
 ## 0.48.2
 
 ### Patch Changes
