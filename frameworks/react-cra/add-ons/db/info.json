@@ -4,7 +4,7 @@
   "phase": "add-on",
   "type": "add-on",
   "category": "tanstack",
-  "color": "#00D1B2",
+  "color": "#F97316",
   "priority": 48,
   "modes": ["file-router"],
   "link": "https://tanstack.com/db/latest",

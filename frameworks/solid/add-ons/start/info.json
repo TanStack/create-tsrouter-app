@@ -6,7 +6,7 @@
   "modes": ["file-router"],
   "type": "add-on",
   "category": "tanstack",
-  "color": "#00D1B2",
+  "color": "#14B8A6",
   "routes": [
     {
       "url": "/demo/start/server-funcs",

@@ -5,7 +5,7 @@
   "modes": ["file-router"],
   "type": "add-on",
   "category": "tanstack",
-  "color": "#00D1B2",
+  "color": "#EC4899",
   "priority": 60,
   "link": "",
   "routes": [

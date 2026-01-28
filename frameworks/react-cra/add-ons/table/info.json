@@ -6,7 +6,7 @@
   "link": "https://tanstack.com/table/latest",
   "type": "add-on",
   "category": "tanstack",
-  "color": "#00D1B2",
+  "color": "#06B6D4",
   "priority": 28,
   "routes": [
     {

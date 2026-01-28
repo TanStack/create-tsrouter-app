@@ -6,7 +6,7 @@
   "modes": ["file-router"],
   "type": "add-on",
   "category": "tanstack",
-  "color": "#00D1B2",
+  "color": "#14B8A6",
   "tailwind": false,
   "priority": 26,
   "warning": "TanStack Start is not yet at 1.0 and may change significantly or not be compatible with other add-ons.\nMigrating to Start might require deleting node_modules and re-installing.",
