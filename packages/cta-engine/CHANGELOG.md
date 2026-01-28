@@ -1,5 +1,11 @@
 # @tanstack/cta-engine
 
+## 0.49.1
+
+### Patch Changes
+
+- fix: remove relative file prefixes ([`78af490`](https://github.com/TanStack/create-tsrouter-app/commit/78af49072b54a08ebfdafe72be146efecf4ce77c))
+
 ## 0.49.0
 
 ### Minor Changes
