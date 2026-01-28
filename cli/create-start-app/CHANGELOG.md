@@ -1,5 +1,14 @@
 # create-start-app
 
+## 0.48.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @tanstack/cta-framework-react-cra@0.48.2
+  - @tanstack/cta-framework-solid@0.48.2
+  - @tanstack/cta-cli@0.48.2
+
 ## 0.48.1
 
 ### Patch Changes
