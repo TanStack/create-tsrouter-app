@@ -289,6 +289,22 @@ export function cli({
         cliOptions.template = defaultMode as TemplateOptions
       }
 
+      // Default to Start unless --router-only is specified
+      // Skip this if forcedAddOns already includes 'start' (e.g., from cli-aliases)
+      if (!options.routerOnly && !forcedAddOns.includes('start')) {
+        if (Array.isArray(cliOptions.addOns)) {
+          if (!cliOptions.addOns.includes('start')) {
+            cliOptions.addOns = [...cliOptions.addOns, 'start']
+          }
+        } else if (cliOptions.addOns !== true) {
+          cliOptions.addOns = ['start']
+        }
+        // Also set template to file-router for Start
+        if (!cliOptions.template) {
+          cliOptions.template = 'file-router'
+        }
+      }
+
       let finalOptions: Options | undefined
       if (cliOptions.interactive) {
         cliOptions.addOns = true
@@ -470,6 +486,7 @@ export function cli({
     }
 
     cmd
+      .option('--router-only', 'create a Router-only SPA without TanStack Start (SSR)', false)
       .option('--interactive', 'interactive mode', false)
       .option('--tailwind', 'add Tailwind CSS')
       .option('--no-tailwind', 'skip Tailwind CSS')
@@ -509,9 +526,10 @@ export function cli({
   }
 
   // === CREATE SUBCOMMAND ===
+  // By default creates a TanStack Start app. Use --router-only for SPA without Start.
   const createCommand = program
     .command('create')
-    .description(`Create a new ${appName} application`)
+    .description(`Create a new TanStack Start application`)
 
   configureCreateCommand(createCommand)
   createCommand.action(handleCreate)
