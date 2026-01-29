@@ -1,5 +1,13 @@
 # create-tanstack
 
+## 0.43.3
+
+### Patch Changes
+
+- Updated dependencies [[`8e0b52b`](https://github.com/TanStack/create-tsrouter-app/commit/8e0b52b4f9e8a3bcd20458b92eac249c756372da)]:
+  - @tanstack/cta-framework-react-cra@0.48.3
+  - @tanstack/cta-framework-solid@0.48.3
+
 ## 0.43.2
 
 ### Patch Changes
