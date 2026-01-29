@@ -32,7 +32,7 @@ tanstack --version                        # Show version
 ## Monorepo Structure
 
 ```
-create-tsrouter-app/
+cli/
 ├── packages/
 │   ├── cli/                # @tanstack/cli - Main CLI with subcommands
 │   ├── create/             # @tanstack/create - Core engine + frameworks
@@ -165,7 +165,7 @@ pnpm test:coverage
 
 ## Contributing
 
-1. Clone: `gh repo clone TanStack/create-tsrouter-app`
+1. Clone: `gh repo clone TanStack/cli`
 2. Install: `pnpm install`
 3. Build: `pnpm build`
 4. Develop: `pnpm dev`

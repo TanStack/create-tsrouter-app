@@ -6,8 +6,8 @@
 <a href="https://www.npmjs.com/package/@tanstack/cli" target="_parent">
   <img alt="" src="https://img.shields.io/npm/dm/@tanstack/cli.svg" />
 </a>
-<a href="https://github.com/TanStack/create-tsrouter-app/stargazers" target="_parent">
-  <img alt="" src="https://img.shields.io/github/stars/TanStack/create-tsrouter-app.svg?style=social&label=Star" />
+<a href="https://github.com/TanStack/cli/stargazers" target="_parent">
+  <img alt="" src="https://img.shields.io/github/stars/TanStack/cli.svg?style=social&label=Star" />
 </a>
 <a href="https://twitter.com/tan_stack"><img src="https://img.shields.io/twitter/follow/tan_stack.svg?style=social" /></a>
 </div>
@@ -38,7 +38,7 @@ npx @tanstack/cli create my-app
 ## Get Involved
 
 - We welcome issues and pull requests!
-- Participate in [GitHub discussions](https://github.com/TanStack/create-tsrouter-app/discussions)
+- Participate in [GitHub discussions](https://github.com/TanStack/cli/discussions)
 - Chat with the community on [Discord](https://discord.com/invite/WrRKjPJ)
 - See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions
 

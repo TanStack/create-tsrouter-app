@@ -1,7 +1,7 @@
 # Contributing
 
 - Clone the repo
-  - `gh repo clone TanStack/create-tsrouter-app`
+  - `gh repo clone TanStack/cli`
 - Ensure `node` is installed
   - https://nodejs.org/en/
 - Ensure `pnpm` is installed
@@ -22,22 +22,22 @@
 
 # Testing Your Changes
 
-When testing use `pnpm dev` at the top level of the `create-tsrouter-app` repo.
+When testing use `pnpm dev` at the top level of the `cli` repo.
 
 Then from a peer directory use:
 
 ```bash
 # Using the main CLI
-node ../create-tsrouter-app/packages/cli/dist/index.js create my-app
+node ../cli/packages/cli/dist/index.js create my-app
 
 # Or using a deprecated alias (will show deprecation warning)
-node ../create-tsrouter-app/cli-aliases/create-start-app/dist/index.js my-app
+node ../cli/cli-aliases/create-start-app/dist/index.js my-app
 ```
 
 You can also do:
 
 ```bash
-npm_config_user_agent=pnpm node ../create-tsrouter-app/packages/cli/dist/index.js create my-app
+npm_config_user_agent=pnpm node ../cli/packages/cli/dist/index.js create my-app
 ```
 
 If you want to specify a package manager.
@@ -99,7 +99,7 @@ The Create UI is somewhat tricky to develop on because it's both a web server an
 Let's start off with how to run the CLI in "API" mode. Here we are running the CLI in an empty directory in app creation mode.
 
 ```bash
-CTA_DISABLE_UI=true node ../create-tsrouter-app/packages/cli/dist/index.js create --ui
+CTA_DISABLE_UI=true node ../cli/packages/cli/dist/index.js create --ui
 ```
 
 If this is working you will see the following output:
@@ -113,7 +113,7 @@ Note that it say "Create TanStack **API**" and not "Create TanStack **App**". Th
 Here is the same command for the `add` mode:
 
 ```bash
-CTA_DISABLE_UI=true node ../create-tsrouter-app/packages/cli/dist/index.js add --ui
+CTA_DISABLE_UI=true node ../cli/packages/cli/dist/index.js add --ui
 ```
 
 ## Starting the React App
