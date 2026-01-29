@@ -42,7 +42,10 @@ export function getBinaryFile(content: string): string | null {
  */
 export function toCleanPath(absolutePath: string, baseDir: string): string {
   let cleanPath = absolutePath.replace(baseDir, '')
-  if (cleanPath.startsWith('/')) cleanPath = cleanPath.slice(1)
+  // Handle both Unix (/) and Windows (\) path separators
+  if (cleanPath.startsWith('/') || cleanPath.startsWith('\\')) {
+    cleanPath = cleanPath.slice(1)
+  }
   return cleanPath
 }
 

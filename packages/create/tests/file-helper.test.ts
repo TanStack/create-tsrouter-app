@@ -6,6 +6,7 @@ import {
   isDirectory,
   readFileHelper,
   relativePath,
+  toCleanPath,
 } from '../src/file-helpers.js'
 
 vi.mock('node:fs', () => fs)
@@ -13,6 +14,24 @@ vi.mock('node:fs/promises', () => fs.promises)
 
 beforeEach(() => {
   vol.reset()
+})
+
+describe('toCleanPath', () => {
+  it('should strip Unix-style leading slash', () => {
+    expect(toCleanPath('/projects/my-app/src/file.ts', '/projects/my-app')).toBe(
+      'src/file.ts',
+    )
+  })
+
+  it('should strip Windows-style leading backslash', () => {
+    expect(
+      toCleanPath('C:\\Projects\\my-app\\src\\file.ts', 'C:\\Projects\\my-app'),
+    ).toBe('src\\file.ts')
+  })
+
+  it('should handle paths without leading separator', () => {
+    expect(toCleanPath('/projects/my-app', '/projects/my-app')).toBe('')
+  })
 })
 
 describe('relativePath', () => {
