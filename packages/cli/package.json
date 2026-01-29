@@ -1,0 +1,66 @@
+{
+  "name": "@tanstack/cli",
+  "version": "0.48.2",
+  "description": "TanStack CLI",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "bin": {
+    "tanstack": "./dist/bin.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test:lint": "eslint ./src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanStack/create-tsrouter-app.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://tanstack.com/router",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/tannerlinsley"
+  },
+  "keywords": [
+    "react",
+    "tanstack",
+    "router",
+    "create-react-app"
+  ],
+  "author": "Jack Herrington <jherr@pobox.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.5",
+  "dependencies": {
+    "@clack/prompts": "^0.10.0",
+    "@modelcontextprotocol/sdk": "^1.6.0",
+    "@tanstack/create": "workspace:*",
+    "@tanstack/create-ui": "workspace:*",
+    "chalk": "^5.4.1",
+    "chokidar": "^3.6.0",
+    "commander": "^13.1.0",
+    "diff": "^7.0.0",
+    "express": "^4.21.2",
+    "semver": "^7.7.2",
+    "tempy": "^3.1.0",
+    "validate-npm-package-name": "^7.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@tanstack/config": "^0.16.2",
+    "@types/diff": "^5.2.0",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.4",
+    "@types/semver": "^7.7.0",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "@vitest/coverage-v8": "3.1.1",
+    "eslint": "^9.20.0",
+    "typescript": "^5.6.3",
+    "vitest": "^3.1.1",
+    "vitest-fetch-mock": "^0.4.5"
+  }
+}

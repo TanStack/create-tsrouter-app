@@ -2,11 +2,14 @@
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { cli } from '@tanstack/cta-cli'
-import { registerFramework, scanProjectDirectory } from '@tanstack/cta-engine'
-import { createFrameworkDefinition } from '@tanstack/cta-framework-react-cra'
+import { cli } from '@tanstack/cli'
+import {
+  registerFramework,
+  scanProjectDirectory,
+  createReactFrameworkDefinition,
+} from '@tanstack/create'
 
-const frameworkDefinition = createFrameworkDefinition()
+const frameworkDefinition = createReactFrameworkDefinition()
 
 frameworkDefinition.id = 'react'
 frameworkDefinition.name = 'react'

@@ -1,33 +1,35 @@
 ## Nomenclature
 
-- `cta` - Create Tanstack Application
-- CTA Framework - A framework that supports the creation of a TanStack Application using a specific technology (e.g. React, Solid, Vue, etc.)
+- TanStack CLI - The command line interface for creating and managing TanStack applications
+- Framework - A framework that supports the creation of a TanStack Application using a specific technology (e.g. React, Solid)
 - `code-router` - One of two _modes_ of TanStack Application. The other is `file-router`. The code router is when the applications routes are defined in code.
 - `file-router` - One of two _modes_ of TanStack Application. The other is `code-router`. The file router is when the applications routes are defined in files (usually in the `src/routes` directory).
 - `add-on` - A plugin that extends the capabilities of a TanStack Application (e.g. the `tanstack-query` add-on integrates TanStack Query into the application).
 - custom `add-on` - An externalized `add-on` contained in a single JSON file that can integate technologies that aren't covered with the built-in add-ons.
-- `starter` - An application template that is constructed from an existing CTA created application that has been modified to the customers needs. The advantage of a starter over a cloneable git repo is that when a starter is used the add-ons and project will be created using the latest version of the CTA framework and the add-ons. This reduces the versioning burden on the customer. This does come with a risk of potential breaking changes.
+- `starter` - An application template that is constructed from an existing application that has been modified to the customers needs. The advantage of a starter over a cloneable git repo is that when a starter is used the add-ons and project will be created using the latest version of the framework and the add-ons. This reduces the versioning burden on the customer. This does come with a risk of potential breaking changes.
 
-## CLI applications
+## CLI Applications
 
-- `create-tanstack` - The CLI application for creating a TanStack Application.
-- `create-start-app` - The CLI application for creating a TanStack Start Application.
-- `create-tsrouter-app` - The CLI application for creating a TanStack Router Application.
+- `tanstack` - The main CLI application (`@tanstack/cli`)
+- `create-tanstack` - Deprecated alias for `tanstack create`
+- `create-start-app` - Deprecated alias for `tanstack create`
+- `create-tsrouter-app` - Deprecated alias for `tanstack create`
 
 ## Packages
 
-- `@tanstack/cta-cli` - The command line interface for TanStack CTA.
-- `@tanstack/cta-engine` - The core engine that powers TanStack CTA.
-- `@tanstack/cta-ui` - The UI components for TanStack CTA.
+- `@tanstack/cli` - The command line interface for TanStack
+- `@tanstack/create` - The core engine that powers app creation
+- `@tanstack/create-ui` - The UI components for the visual app creator
 
 ## Frameworks
 
-- `@tanstack/cta-frameworks-react-cra` - The React (Create React App) framework for TanStack CTA.
-- `@tanstack/cta-frameworks-solid` - The Solid framework for TanStack CTA.
+Frameworks are now bundled within `@tanstack/create`:
+- React framework (`packages/create/src/frameworks/react`)
+- Solid framework (`packages/create/src/frameworks/solid`)
 
 ## File Templates
 
-The CTA system uses EJS to render the files into the final application.
+The system uses EJS to render the files into the final application.
 
 Below are all of the variables that are available to the file templates.
 
@@ -48,4 +50,4 @@ Below are all of the variables that are available to the file templates.
 | `getPackageManagerAddScript` | A function that returns the script to add a dependency to the project.                                                                                                                               |
 | `getPackageManagerRunScript` | A function that returns the script to run a command in the project.                                                                                                                                  |
 | `relativePath`               | A function that returns the relative path from the current file to the specified target file.                                                                                                        |
-| `ignoreFile`                 | A function that if called will tell CTA to not include this file in the application.                                                                                                                 |
+| `ignoreFile`                 | A function that if called will tell the engine to not include this file in the application.                                                                                                          |

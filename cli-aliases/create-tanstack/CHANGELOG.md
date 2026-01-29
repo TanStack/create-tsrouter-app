@@ -1,0 +1,47 @@
+# create-tanstack
+
+## 0.43.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @tanstack/cta-framework-react-cra@0.48.2
+  - @tanstack/cta-framework-solid@0.48.2
+  - @tanstack/cta-cli@0.48.2
+
+## 0.43.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @tanstack/cta-framework-react-cra@0.48.1
+  - @tanstack/cta-framework-solid@0.48.1
+  - @tanstack/cta-cli@0.48.1
+
+## 0.43.0
+
+### Minor Changes
+
+- no will prompt about overriding a directory that has contents ([#289](https://github.com/TanStack/create-tsrouter-app/pull/289))
+
+### Patch Changes
+
+- Updated dependencies [[`3087532`](https://github.com/TanStack/create-tsrouter-app/commit/308753249af11bf5c9e374789e973a934c753520)]:
+  - @tanstack/cta-cli@0.48.0
+  - @tanstack/cta-framework-react-cra@0.48.0
+  - @tanstack/cta-framework-solid@0.48.0
+
+## 0.42.0
+
+### Minor Changes
+
+- Smakll content fixes ([`7647683`](https://github.com/TanStack/create-tsrouter-app/commit/76476838fc427d71535881b959530307ca4664a2))
+
+- allowing for no tailwind ([#151](https://github.com/TanStack/create-tsrouter-app/pull/151))
+
+### Patch Changes
+
+- Updated dependencies [[`7647683`](https://github.com/TanStack/create-tsrouter-app/commit/76476838fc427d71535881b959530307ca4664a2), [`f1f58fe`](https://github.com/TanStack/create-tsrouter-app/commit/f1f58feed7d7df1e0c5e0fc4dd3af02e11df09e5)]:
+  - @tanstack/cta-framework-react-cra@0.47.0
+  - @tanstack/cta-framework-solid@0.47.0
+  - @tanstack/cta-cli@0.47.0

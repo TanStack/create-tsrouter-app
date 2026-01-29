@@ -1,92 +1,76 @@
-# TanStack Application Builders (CTA) - Claude Code Assistant
+# TanStack CLI - Claude Code Assistant
 
 ## Project Overview
 
-This monorepo contains the TanStack Application Builders (CTA - Create TanStack Application), a comprehensive tool for creating modern React and Solid applications with TanStack Router and TanStack Start.
+This monorepo contains the TanStack CLI (`@tanstack/cli`), a comprehensive tool for creating modern React and Solid applications with TanStack Router and TanStack Start.
 
 ## Quick Start
 
 ```bash
-# Create a new TanStack Router app
+# Create a new TanStack app (recommended)
+npx @tanstack/cli@latest create my-app
+
+# Legacy CLI aliases (deprecated, will show warning)
 npx create-tsrouter-app@latest my-app
-
-# Create a new TanStack Start app (SSR)
 npx create-start-app@latest my-app
-
-# Alternative CLI names (all create TanStack Router apps)
 npx create-tanstack@latest my-app
 npx create-tanstack-app@latest my-app
+```
+
+## CLI Commands
+
+```bash
+tanstack create [project-name] [options]  # Create a new TanStack app
+tanstack add [add-ons...]                 # Add add-ons to existing project
+tanstack add-on init|compile              # Manage custom add-ons
+tanstack starter init|compile             # Manage custom starters
+tanstack mcp [--sse]                      # Start MCP server
+tanstack pin-versions                     # Pin package versions
+tanstack --version                        # Show version
 ```
 
 ## Monorepo Structure
 
 ```
 create-tsrouter-app/
-├── cli/                    # CLI applications
-│   ├── create-start-app/   # TanStack Start CLI
-│   ├── create-tanstack/    # TanStack Router CLI (alias)
-│   ├── create-tanstack-app/ # TanStack Router CLI (alias)
-│   └── create-tsrouter-app/ # TanStack Router CLI (main)
-├── packages/               # Core packages
-│   ├── cta-cli/           # CLI interface
-│   ├── cta-engine/        # Core engine
-│   ├── cta-ui/            # Web UI components
-│   └── cta-ui-base/       # Base UI components
-├── frameworks/             # Framework implementations
-│   ├── react-cra/         # React CRA framework
-│   └── solid/             # Solid framework
-└── examples/              # Example projects and starters
+├── packages/
+│   ├── cli/                # @tanstack/cli - Main CLI with subcommands
+│   ├── create/             # @tanstack/create - Core engine + frameworks
+│   │   └── src/
+│   │       └── frameworks/
+│   │           ├── react-cra/  # React framework
+│   │           └── solid/      # Solid framework
+│   └── create-ui/          # @tanstack/create-ui - Web UI components
+├── cli-aliases/            # Deprecated thin wrapper CLIs
+│   ├── create-tsrouter-app/
+│   ├── create-start-app/
+│   ├── create-tanstack/
+│   ├── create-tanstack-app/
+│   └── ts-create-start/
+└── examples/               # Example projects and custom CLIs
 ```
 
 ## Core Packages
 
-### @tanstack/cta-cli
+### @tanstack/cli
 
-- **Purpose**: Main CLI interface for the application builder
+- **Purpose**: Main CLI interface with subcommands
+- **Binary**: `tanstack`
 - **Key Dependencies**: `@clack/prompts`, `commander`, `express`, `chalk`
-- **Scripts**: `build`, `dev`, `test`, `test:watch`, `test:coverage`
+- **Features**: `create`, `add`, `add-on`, `starter`, `mcp`, `pin-versions` subcommands
 
-### @tanstack/cta-engine
+### @tanstack/create
 
-- **Purpose**: Core business logic and file generation engine
+- **Purpose**: Core engine, frameworks, add-ons, and starters
 - **Key Dependencies**: `ejs`, `execa`, `memfs`, `prettier`, `zod`
 - **Features**: Template processing, project generation, validation
+- **Contains**: React and Solid frameworks with all add-ons
 
-### @tanstack/cta-ui
+### @tanstack/create-ui
 
 - **Purpose**: Web interface for the application builder
 - **Key Dependencies**: `react`, `tailwindcss`, `next-themes`, `sonner`
 - **Scripts**: `build:ui`, `dev:ui` (React dev server)
-
-## CLI Applications
-
-### create-start-app
-
-- **Purpose**: Creates TanStack Start applications (SSR)
-- **Features**: Server-side rendering, React/Solid support, Vite build system
-- **Usage**: `npx create-start-app@latest my-app`
-
-### create-tsrouter-app (and aliases)
-
-- **Purpose**: Creates TanStack Router applications (client-side routing)
-- **Features**: File-based routing, TypeScript/JavaScript, React/Solid support
-- **Usage**: `npx create-tsrouter-app@latest my-app`
-
-## Framework Support
-
-### React CRA Framework
-
-- **Location**: `frameworks/react-cra/`
-- **Add-ons**: Clerk, Shadcn, Neon, TanStack Query, tRPC, Form, Store, etc.
-- **Toolchains**: Biome, ESLint + Prettier
-- **Examples**: Blog starter, E-commerce starter, TanChat
-
-### Solid Framework
-
-- **Location**: `frameworks/solid/`
-- **Add-ons**: Solid UI, TanStack Query, Form, Store, etc.
-- **Toolchains**: Biome, ESLint + Prettier
-- **Examples**: TanChat
 
 ## Development Scripts
 
@@ -113,23 +97,23 @@ pnpm cleanNodeModules
 
 ```bash
 # Build with CLI (outside monorepo)
-node cli/create-tsrouter-app/dist/index.js my-app
+node packages/cli/dist/index.js create my-app
 
 # Test with local add-ons
-node cli/create-tsrouter-app/dist/index.js my-app --add-ons http://localhost:9080/add-on.json
+node packages/cli/dist/index.js create my-app --add-ons http://localhost:9080/add-on.json
 
 # Test with local starters
-node cli/create-tsrouter-app/dist/index.js my-app --starter http://localhost:9080/starter.json
+node packages/cli/dist/index.js create my-app --starter http://localhost:9080/starter.json
 ```
 
-### Developing CTA UI
+### Developing Create UI
 
 ```bash
 # Start API server
-CTA_DISABLE_UI=true node cli/create-tsrouter-app/dist/index.js --ui
+CTA_DISABLE_UI=true node packages/cli/dist/index.js create --ui
 
 # Start React dev server
-cd packages/cta-ui && pnpm dev:ui
+cd packages/create-ui && pnpm dev:ui
 
 # Run monorepo in watch mode
 pnpm dev
@@ -149,10 +133,8 @@ pnpm dev
 
 ### Example Starters
 
-- **Blog Starter**: TanStack Router blog with file-based routing
-- **E-commerce Starter**: AI-powered chat application
-- **Resume Starter**: Professional resume template
-- **TanChat**: AI chat application with Claude integration
+- **Events**: Conference/events website
+- **Resume**: Professional resume template
 
 ## EJS Template Variables
 
@@ -174,8 +156,8 @@ The system uses EJS templates with these variables:
 # Run all tests
 pnpm test
 
-# Test specific framework
-cd frameworks/react-cra && pnpm test
+# Test specific package
+cd packages/create && pnpm test
 
 # Test with coverage
 pnpm test:coverage
@@ -196,7 +178,6 @@ pnpm test:coverage
 - **Node Version**: Requires Node.js (see .nvmrc if available)
 - **Build System**: TypeScript compilation, Vite for UI
 - **Testing**: Vitest for unit tests, ESLint for linting
-- **Versioning**: All packages share the same version (currently 0.16.5)
 
 ## Important Files
 
