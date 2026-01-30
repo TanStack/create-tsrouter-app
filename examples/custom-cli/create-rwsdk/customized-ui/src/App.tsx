@@ -1,7 +1,7 @@
 import {
   FileNavigator,
   StartupDialog,
-  CTAProvider,
+  CreateProvider,
   SelectedAddOns,
   RunAddOns,
   RunCreateApp,
@@ -10,7 +10,7 @@ import {
   SidebarGroup,
   useApplicationMode,
   useReady,
-} from '@tanstack/cta-ui-base'
+} from '@tanstack/create-ui'
 
 import { Header } from './custom-header'
 
@@ -41,7 +41,7 @@ function AppSidebar() {
 
 export default function App() {
   return (
-    <CTAProvider>
+    <CreateProvider>
       <main className="min-w-[1280px]">
         <div className="min-h-dvh p-2 sm:p-4 space-y-2 sm:space-y-4 @container">
           <Header />
@@ -56,6 +56,6 @@ export default function App() {
         </div>
         <StartupDialog />
       </main>
-    </CTAProvider>
+    </CreateProvider>
   )
 }

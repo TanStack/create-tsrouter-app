@@ -1,17 +1,78 @@
-# TanStack Application Builders
+<div align="center">
+  <h1>TanStack CLI</h1>
+</div>
 
-This monorepo contains the code for the TanStack Application Builders.
+<div align="center">
+<a href="https://www.npmjs.com/package/@tanstack/cli" target="_parent">
+  <img alt="" src="https://img.shields.io/npm/dm/@tanstack/cli.svg" />
+</a>
+<a href="https://github.com/TanStack/cli/stargazers" target="_parent">
+  <img alt="" src="https://img.shields.io/github/stars/TanStack/cli.svg?style=social&label=Star" />
+</a>
+<a href="https://twitter.com/tan_stack"><img src="https://img.shields.io/twitter/follow/tan_stack.svg?style=social" /></a>
+</div>
 
-# How to Use
+<div align="center">
 
-In your terminal, run the following command and walk through a series of options to create a Tanstack application:
+### [Become a Sponsor!](https://github.com/sponsors/tannerlinsley/)
+
+</div>
+
+# TanStack CLI
+
+Create and manage TanStack Router and Start applications.
 
 ```bash
-npx create-tsrouter-app@latest
+npx @tanstack/cli create my-app
 ```
 
-Navigate to `http://localhost:8080` to see your app.
+## Features
 
-# How to Contribute
+- **TanStack Start** - Full-stack SSR framework (default)
+- **TanStack Router** - Type-safe routing (`--router-only` for SPA)
+- **Add-ons** - Auth, database, deployment, monitoring, and more
+- **MCP Server** - AI-assisted development
 
-For more information on how to contribute to the project, please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
+## Quick Start
+
+```bash
+# Create TanStack Start app (recommended)
+npx @tanstack/cli create my-app
+
+# Create Router-only SPA (no SSR)
+npx @tanstack/cli create my-app --router-only
+
+# With add-ons
+npx @tanstack/cli create my-app --add-ons clerk,drizzle,tanstack-query
+
+# Add to existing project
+npx @tanstack/cli add clerk drizzle
+
+# List available add-ons
+npx @tanstack/cli create --list-add-ons
+```
+
+## Documentation
+
+- [CLI Reference](https://tanstack.com/start/latest/docs/framework/react/quick-start)
+- [TanStack Start](https://tanstack.com/start)
+- [TanStack Router](https://tanstack.com/router)
+
+## Get Involved
+
+- [GitHub Issues](https://github.com/TanStack/cli/issues)
+- [GitHub Discussions](https://github.com/TanStack/cli/discussions)
+- [Discord](https://discord.com/invite/WrRKjPJ)
+- [Contributing Guide](./CONTRIBUTING.md)
+
+## TanStack Ecosystem
+
+- [TanStack Query](https://github.com/tanstack/query) - Async state & caching
+- [TanStack Router](https://github.com/tanstack/router) - Type-safe routing
+- [TanStack Start](https://github.com/tanstack/router) - Full-stack SSR
+- [TanStack Form](https://github.com/tanstack/form) - Type-safe forms
+- [TanStack Table](https://github.com/tanstack/table) - Headless datagrids
+- [TanStack Store](https://github.com/tanstack/store) - Reactive state
+- [TanStack Virtual](https://github.com/tanstack/virtual) - Virtualized rendering
+
+[More at TanStack.com](https://tanstack.com)

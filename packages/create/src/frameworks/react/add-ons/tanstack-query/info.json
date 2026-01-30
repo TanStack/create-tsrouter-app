@@ -1,0 +1,32 @@
+{
+  "name": "Query",
+  "description": "Integrate TanStack Query into your application.",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "type": "add-on",
+  "category": "tanstack",
+  "color": "#EF4444",
+  "priority": 10,
+  "link": "https://tanstack.com/query/latest",
+  "routes": [
+    {
+      "icon": "Network",
+      "url": "/demo/tanstack-query",
+      "name": "TanStack Query",
+      "path": "src/routes/demo/tanstack-query.tsx",
+      "jsName": "TanStackQueryDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "root-provider",
+      "path": "src/integrations/tanstack-query/root-provider.tsx",
+      "jsName": "TanStackQueryProvider"
+    },
+    {
+      "type": "devtools",
+      "path": "src/integrations/tanstack-query/devtools.tsx",
+      "jsName": "TanStackQueryDevtools"
+    }
+  ]
+}

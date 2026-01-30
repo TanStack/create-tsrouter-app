@@ -6,6 +6,12 @@ import { tanstackConfig } from '@tanstack/eslint-config'
 import unusedImports from 'eslint-plugin-unused-imports'
 
 export default [
+  {
+    ignores: [
+      '**/assets/**',
+      '**/dist/**',
+    ],
+  },
   ...tanstackConfig,
   {
     name: 'tanstack/temp',

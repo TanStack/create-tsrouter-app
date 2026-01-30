@@ -1,0 +1,11 @@
+{
+  "name": "Module Federation",
+  "description": "Module Federation",
+  "phase": "add-on",
+  "modes": ["code-router"],
+  "link": "https://module-federation.io/",
+  "type": "add-on",
+  "category": "tooling",
+  "color": "#1B72BE",
+  "priority": 38
+}

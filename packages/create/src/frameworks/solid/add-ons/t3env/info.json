@@ -1,0 +1,10 @@
+{
+  "name": "T3Env",
+  "description": "Add type safety to your environment variables",
+  "phase": "add-on",
+  "link": "https://github.com/t3-oss/t3-env",
+  "type": "add-on",
+  "category": "tooling",
+  "color": "#6366F1",
+  "modes": ["file-router", "code-router"]
+}

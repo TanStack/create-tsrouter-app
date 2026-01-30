@@ -32,6 +32,12 @@ jobs:
         run: pnpm build
       - name: Test
         run: pnpm test
+      - name: Generate changesets from commits (if none exist)
+        run: |
+          # Check if any changeset files exist (excluding README.md)
+          if ! find .changeset -name "*.md" ! -name "README.md" 2>/dev/null | grep -q .; then
+            npx changeset-conventional-commits
+          fi
       - name: Run Changesets (version or publish)
         uses: changesets/action@v1.5.3
         with:

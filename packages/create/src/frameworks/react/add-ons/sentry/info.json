@@ -1,0 +1,20 @@
+{
+  "name": "Sentry",
+  "phase": "setup",
+  "description": "Add Sentry for error monitoring, tracing, and session replays (requires Start).",
+  "link": "https://sentry.com/",
+  "modes": ["file-router"],
+  "type": "add-on",
+  "category": "monitoring",
+  "color": "#362D59",
+  "priority": 130,
+  "routes": [
+    {
+      "url": "/demo/sentry/testing",
+      "name": "Sentry",
+      "path": "src/routes/demo.sentry.testing.tsx",
+      "jsName": "SentryDemo"
+    }
+  ],
+  "dependsOn": ["start"]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Table",
+  "description": "Integrate TanStack Table into your application.",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "link": "https://tanstack.com/table/latest",
+  "type": "add-on",
+  "category": "tanstack",
+  "color": "#06B6D4",
+  "priority": 28,
+  "routes": [
+    {
+      "icon": "Table",
+      "url": "/demo/table",
+      "name": "TanStack Table",
+      "path": "src/routes/demo.table.tsx",
+      "jsName": "TableDemo"
+    }
+  ]
+}

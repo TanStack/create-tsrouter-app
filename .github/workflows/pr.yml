@@ -28,7 +28,6 @@ jobs:
         run: pnpm build
       - name: Test
         run: pnpm test
-  preview:
   provenance:
     name: Provenance
     runs-on: ubuntu-latest

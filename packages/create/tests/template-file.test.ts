@@ -1,0 +1,178 @@
+import { describe, expect, it } from 'vitest'
+
+import { createMemoryEnvironment } from '../src/environment.js'
+import { createTemplateFile } from '../src/template-file.js'
+import { FILE_ROUTER } from '../src/constants.js'
+
+import type { AddOn, Integration, Options } from '../src/types.js'
+
+const simpleOptions = {
+  projectName: 'test',
+  targetDir: '/test',
+  framework: {
+    id: 'test',
+    name: 'Test',
+  },
+  chosenAddOns: [],
+  packageManager: 'pnpm',
+  typescript: true,
+  tailwind: true,
+  mode: FILE_ROUTER,
+} as unknown as Options
+
+describe('createTemplateFile', () => {
+  it('should template a simple file', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, simpleOptions)
+    environment.startRun()
+    await templateFile('test.ts', 'let a = 1')
+    environment.finishRun()
+
+    expect(output.files['/test/test.ts'].trim()).toEqual('let a = 1')
+  })
+
+  it('should handle ignore files', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, {
+      ...simpleOptions,
+    } as unknown as Options)
+    environment.startRun()
+    await templateFile('test.ts.ejs', '<% ignoreFile() %>let a = 1')
+    environment.finishRun()
+
+    expect(output.files['/test/test.ts']).toBeUndefined()
+  })
+
+  it('should handle append files', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, simpleOptions)
+    environment.startRun()
+    await templateFile('test.txt.ejs', 'Line 1\n')
+    await templateFile('test.txt.append', 'Line 2\n')
+    environment.finishRun()
+
+    expect(output.files['/test/test.txt']).toEqual('Line 1\nLine 2\n')
+  })
+
+  it('should handle enabled add-ons', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, {
+      ...simpleOptions,
+      chosenAddOns: [
+        {
+          id: 'test1',
+          name: 'Test 1',
+        },
+        {
+          id: 'test2',
+          name: 'Test 2',
+        },
+      ] as Array<AddOn>,
+    })
+    environment.startRun()
+    await templateFile(
+      'test.txt.ejs',
+      "Addons: <%= Object.keys(addOnEnabled).join(', ') %>",
+    )
+    environment.finishRun()
+
+    expect(output.files['/test/test.txt']).toEqual('Addons: test1, test2')
+  })
+
+  it('should handle relative paths', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, simpleOptions)
+    environment.startRun()
+    await templateFile(
+      'src/test/test.txt.ejs',
+      "import { foo } from '<%= relativePath('foo.ts') %>'",
+    )
+    environment.finishRun()
+
+    expect(output.files['/test/src/test/test.txt']).toEqual(
+      "import { foo } from '../../foo.ts'",
+    )
+  })
+
+  it('should handle routes', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, {
+      ...simpleOptions,
+      chosenAddOns: [
+        {
+          id: 'test',
+          name: 'Test',
+          routes: [
+            {
+              path: '/test',
+              name: 'Test',
+              url: '/test',
+              jsName: 'test',
+            },
+          ],
+        } as AddOn,
+      ],
+    })
+
+    environment.startRun()
+    await templateFile(
+      'test.txt.ejs',
+      "<%= routes.map((route) => route.url).join(', ') %>",
+    )
+    environment.finishRun()
+
+    expect(output.files['/test/test.txt']).toEqual('/test')
+  })
+
+  it('should handle integrations', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, {
+      ...simpleOptions,
+      chosenAddOns: [
+        {
+          id: 'test',
+          name: 'Test',
+          integrations: [
+            {
+              type: 'header-user',
+              path: '/test',
+              jsName: 'test',
+            } as Integration,
+          ],
+        } as AddOn,
+      ],
+    })
+
+    environment.startRun()
+    await templateFile(
+      'test.txt.ejs',
+      "<%= integrations.map((integration) => integration.path).join(', ') %>",
+    )
+    environment.finishRun()
+
+    expect(output.files['/test/test.txt']).toEqual('/test')
+  })
+
+  it('should handle package manager', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, simpleOptions)
+    environment.startRun()
+    await templateFile(
+      'foo.txt.ejs',
+      "<%= getPackageManagerAddScript('foo') %>",
+    )
+    await templateFile(
+      'foo-dev.txt.ejs',
+      "<%= getPackageManagerAddScript('foo', true) %>",
+    )
+    await templateFile(
+      'run-dev.txt.ejs',
+      "<%= getPackageManagerRunScript('dev') %>",
+    )
+    environment.finishRun()
+
+    expect(output.files['/test/foo.txt']).toEqual('pnpm add foo')
+    expect(output.files['/test/foo-dev.txt']).toEqual('pnpm add foo --dev')
+    expect(output.files['/test/run-dev.txt']).toEqual('pnpm dev')
+  })
+})

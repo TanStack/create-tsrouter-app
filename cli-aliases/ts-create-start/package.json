@@ -1,0 +1,40 @@
+{
+  "name": "@tanstack/create-start",
+  "version": "0.50.0",
+  "description": "Tanstack Start Builder",
+  "bin": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanStack/cli.git",
+    "directory": "cli-aliases/ts-create-start"
+  },
+  "homepage": "https://tanstack.com/router",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/tannerlinsley"
+  },
+  "keywords": [
+    "react",
+    "tanstack",
+    "router",
+    "tanstack start",
+    "create-react-app"
+  ],
+  "author": "Jack Herrington <jherr@pobox.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.5",
+  "dependencies": {
+    "@tanstack/cli": "workspace:*",
+    "@tanstack/create": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.6.3"
+  }
+}

@@ -3,7 +3,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TanStack/create-tsrouter-app.git"
+    "url": "git+https://github.com/TanStack/cli.git"
   },
   "packageManager": "pnpm@10.24.0",
   "type": "module",
@@ -38,12 +38,9 @@
       "create-tanstack": "workspace:*",
       "create-tanstack-app": "workspace:*",
       "create-tsrouter-app": "workspace:*",
-      "@tanstack/cta-cli": "workspace:*",
-      "@tanstack/cta-engine": "workspace:*",
-      "@tanstack/cta-ui": "workspace:*",
-      "@tanstack/cta-ui-base": "workspace:*",
-      "@tanstack/cta-framework-react-cra": "workspace:*",
-      "@tanstack/cta-framework-solid": "workspace:*"
+      "@tanstack/cli": "workspace:*",
+      "@tanstack/create": "workspace:*",
+      "@tanstack/create-ui": "workspace:*"
     }
   }
 }

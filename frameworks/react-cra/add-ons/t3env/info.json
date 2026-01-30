@@ -1,9 +1,0 @@
-{
-  "name": "T3Env",
-  "description": "Add type safety to your environment variables",
-  "phase": "add-on",
-  "type": "add-on",
-  "priority": 29,
-  "link": "https://github.com/t3-oss/t3-env",
-  "modes": ["file-router", "code-router"]
-}

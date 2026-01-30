@@ -1,0 +1,32 @@
+{
+  "name": "Resume",
+  "description": "Professional resume template with content-collections and shadcn UI components for Netlify.",
+  "phase": "example",
+  "modes": ["file-router"],
+  "type": "example",
+  "category": "other",
+  "color": "#8B5CF6",
+  "priority": 10,
+  "link": "",
+  "routes": [
+    {
+      "url": "/",
+      "path": "src/routes/index.tsx",
+      "jsName": "ResumeHome"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "header-user",
+      "path": "src/components/ResumeAssistantButton",
+      "jsName": "ResumeAssistantButton"
+    },
+    {
+      "type": "vite-plugin",
+      "import": "import contentCollections from '@content-collections/vite'",
+      "code": "contentCollections()"
+    }
+  ],
+  "dependsOn": [],
+  "variables": []
+}

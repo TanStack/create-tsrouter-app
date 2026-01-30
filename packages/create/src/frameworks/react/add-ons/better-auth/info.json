@@ -1,0 +1,29 @@
+{
+  "name": "Better Auth",
+  "description": "Add Better Auth authentication to your application.",
+  "phase": "add-on",
+  "type": "add-on",
+  "category": "auth",
+  "exclusive": ["auth"],
+  "color": "#000000",
+  "priority": 26,
+  "link": "https://www.better-auth.com",
+  "modes": ["file-router"],
+  "tailwind": true,
+  "dependsOn": ["start"],
+  "routes": [
+    {
+      "url": "/demo/better-auth",
+      "name": "Better Auth",
+      "path": "src/routes/demo/better-auth.tsx",
+      "jsName": "BetterAuthDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "header-user",
+      "jsName": "BetterAuthHeader",
+      "path": "src/integrations/better-auth/header-user.tsx"
+    }
+  ]
+}

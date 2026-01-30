@@ -1,0 +1,18 @@
+{
+  "name": "Strapi",
+  "description": "Use the Strapi CMS to manage your content.",
+  "link": "https://strapi.io/",
+  "phase": "add-on",
+  "type": "add-on",
+  "category": "cms",
+  "color": "#4945FF",
+  "modes": ["file-router"],
+  "routes": [
+    {
+      "url": "/demo/strapi",
+      "name": "Strapi",
+      "path": "src/routes/demo.strapi.tsx",
+      "jsName": "StrapiDemo"
+    }
+  ]
+}

@@ -1,9 +1,0 @@
-{
-  "name": "Biome",
-  "description": "Biome toolchain support.",
-  "phase": "setup",
-  "type": "toolchain",
-  "priority": 2,
-  "modes": ["code-router", "file-router"],
-  "link": "https://biomejs.dev"
-}

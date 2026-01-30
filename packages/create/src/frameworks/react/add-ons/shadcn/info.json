@@ -1,0 +1,11 @@
+{
+  "name": "Shadcn",
+  "description": "Add Shadcn UI to your application.",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "link": "https://ui.shadcn.com/",
+  "type": "add-on",
+  "category": "styling",
+  "color": "#000000",
+  "priority": 30
+}

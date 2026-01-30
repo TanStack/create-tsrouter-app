@@ -1,0 +1,83 @@
+{
+  "$schema": "https://raw.githubusercontent.com/TanStack/tanstack.com/main/tanstack-docs-config.schema.json",
+  "docSearch": {
+    "appId": "FQ0DQ6MA3C",
+    "apiKey": "10c34d6a5c89f6048cf644d601e65172",
+    "indexName": "tanstack-test"
+  },
+  "sections": [
+    {
+      "label": "Getting Started",
+      "children": [
+        {
+          "label": "Overview",
+          "to": "overview"
+        },
+        {
+          "label": "Installation",
+          "to": "installation"
+        },
+        {
+          "label": "Quick Start",
+          "to": "quick-start"
+        }
+      ]
+    },
+    {
+      "label": "Usage",
+      "children": [
+        {
+          "label": "CLI Reference",
+          "to": "cli-reference"
+        },
+        {
+          "label": "Add-ons",
+          "to": "add-ons"
+        },
+        {
+          "label": "Starters",
+          "to": "starters"
+        },
+        {
+          "label": "Examples",
+          "to": "examples"
+        }
+      ]
+    },
+    {
+      "label": "Authoring",
+      "children": [
+        {
+          "label": "Creating Add-ons",
+          "to": "creating-add-ons"
+        }
+      ]
+    },
+    {
+      "label": "MCP Server",
+      "children": [
+        {
+          "label": "Overview",
+          "to": "mcp/overview"
+        },
+        {
+          "label": "Connecting",
+          "to": "mcp/connecting"
+        },
+        {
+          "label": "Tools Reference",
+          "to": "mcp/tools"
+        }
+      ]
+    },
+    {
+      "label": "Help",
+      "children": [
+        {
+          "label": "Troubleshooting",
+          "to": "troubleshooting"
+        }
+      ]
+    }
+  ]
+}

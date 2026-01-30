@@ -1,0 +1,27 @@
+{
+  "name": "Convex",
+  "description": "Add the Convex database to your application.",
+  "link": "https://convex.dev",
+  "phase": "add-on",
+  "type": "add-on",
+  "category": "database",
+  "exclusive": ["database", "orm"],
+  "color": "#EE342F",
+  "priority": 140,
+  "modes": ["file-router"],
+  "routes": [
+    {
+      "url": "/demo/convex",
+      "name": "Convex",
+      "path": "src/routes/demo.convex.tsx",
+      "jsName": "ConvexDemo"
+    }
+  ],
+  "integrations": [
+    {
+      "type": "provider",
+      "path": "src/integrations/convex/provider.tsx",
+      "jsName": "ConvexProvider"
+    }
+  ]
+}

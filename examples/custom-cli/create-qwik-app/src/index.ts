@@ -6,8 +6,8 @@ import {
   registerFramework,
   scanAddOnDirectories,
   scanProjectDirectory,
-} from '@tanstack/cta-engine'
-import { cli } from '@tanstack/cta-cli'
+} from '@tanstack/create'
+import { cli } from '@tanstack/cli'
 
 const projectDirectory = join(
   dirname(dirname(fileURLToPath(import.meta.url))),

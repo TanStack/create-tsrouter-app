@@ -1,0 +1,20 @@
+{
+  "name": "Storybook",
+  "description": "Integrate Storybook into your application.",
+  "phase": "add-on",
+  "modes": ["file-router"],
+  "link": "https://storybook.js.org/",
+  "type": "add-on",
+  "category": "tooling",
+  "color": "#FF4785",
+  "priority": 18,
+  "routes": [
+    {
+      "icon": "BookOpen",
+      "url": "/demo/storybook",
+      "name": "Storybook",
+      "path": "src/routes/demo.storybook.tsx",
+      "jsName": "StorybookDemo"
+    }
+  ]
+}

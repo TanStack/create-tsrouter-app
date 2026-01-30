@@ -1,0 +1,20 @@
+{
+  "name": "Netlify",
+  "description": "Netlify deployment setup",
+  "link": "https://docs.netlify.com",
+  "phase": "add-on",
+  "modes": ["file-router", "code-router"],
+  "type": "deployment",
+  "category": "deploy",
+  "exclusive": ["deploy"],
+  "color": "#00C7B7",
+  "priority": 180,
+  "tailwind": false,
+  "integrations": [
+    {
+      "type": "vite-plugin",
+      "import": "import netlify from '@netlify/vite-plugin-tanstack-start'",
+      "code": "netlify()"
+    }
+  ]
+}

@@ -1,138 +1,102 @@
 # Contributing
 
-- Clone the repo
-  - `gh repo clone TanStack/create-tsrouter-app`
-- Ensure `node` is installed
-  - https://nodejs.org/en/
-- Ensure `pnpm` is installed
-  - https://pnpm.io/installation
-  - Why? We use `pnpm` to manage workspace dependencies. It's easily the best monorepo/workspace experience available as of when this was written.
-- Install dependencies
-  - `pnpm install`
-  - This installs dependencies for all of the packages in the monorepo, even examples!
-  - Dependencies inside of the packages and examples are automatically linked together as local/dynamic dependencies.
-- Run the build
-  - `pnpm build`
-- Build an example app with the builder:
-  - `node [root of the monorepo]/cli/create-tsrouter-app/dist/index.js app-js`
-  - Do not attempt to build an app within the monorepo because the dependencies will be hoisted into the monorepo.
-- Run `pnpm dev` at that top level to build everything in watch mode
-- Run `pnpm build` and `pnpm test` to make sure the changes work
-- Check your work and PR
-
-# Testing Your Changes
-
-When testing use `pnpm dev` at the top level of the `create-tsrouter-app` repo.
-
-Then from a peer directory use:
+## Setup
 
 ```bash
-node ../create-tsrouter-app/cli/create-start-app/dist/index.js
+gh repo clone TanStack/cli
+cd cli
+pnpm install
+pnpm build
 ```
 
-To test `create-start-app` (or any of the CLIs).
-
-You can also do:
+## Development
 
 ```bash
-npm_config_user_agent=pnpm node ../create-tsrouter-app/cli/create-start-app/dist/index.js
+pnpm dev  # Build and watch all packages
 ```
 
-If you want to specify a package manager.
+### Testing the CLI
 
-# Framework Development with --dev-watch
-
-The `--dev-watch` command provides real-time feedback while developing frameworks, add-ons, and starters. It watches for changes in your framework files and automatically rebuilds them.
-
-## Using --dev-watch
-
-To start developing a framework with live rebuilding:
+Run from a **peer directory** (not inside the monorepo):
 
 ```bash
-node [root of the monorepo]/cli/create-tsrouter-app/dist/index.js --dev-watch ./frameworks/react-cra test-app --template typescript --package-manager bun --tailwind --add-ons shadcn
+# Create an app
+node ../cli/packages/cli/dist/index.js create my-app
+
+# With specific package manager
+npm_config_user_agent=pnpm node ../cli/packages/cli/dist/index.js create my-app
+
+# With local add-on
+node ../cli/packages/cli/dist/index.js create my-app --add-ons http://localhost:9080/info.json
 ```
 
-This command will:
-
-- Watch the selected folder for changes (the folder with the add-ons in it)
-- Automatically rebuild your app / install packages in the target folder when changes are detected (in this case it will install the shadcn addon)
-- Show build output, diffs detected and any errors in real-time
-
-## Example Workflow
-
-1. Start the dev watch mode:
-
-   ```bash
-   pnpm dev # Build in watch mode
-   rm -rf test-app && node cli/create-tsrouter-app/dist/index.js --dev-watch ./frameworks/react-cra test-app --template typescript --package-manager bun --tailwind --add-ons shadcn
-   cd my-test-app && pnpm run dev # run the tsrouter vite app
-   ```
-
-2. Select the framework you want to work on from the displayed list
-
-3. Make changes to the add-ons - they will be automatically rebuilt and your vite app will reflect the changes
-
-# Testing Add-ons and Starters
-
-Create the add-on or starter using the CLI. Then serve it locally from the project directory using `npx static-server`.
-
-Then, when creating apps with add-ons:
+### Testing Add-ons Locally
 
 ```bash
-node [root of the monorepo]/cli/create-tsrouter-app/dist/index.js app-js --add-ons http://localhost:9080/add-on.json
+# In your add-on directory
+npx serve .add-on -l 9080
+
+# Create app with local add-on
+node ../cli/packages/cli/dist/index.js create my-app --add-ons http://localhost:9080/info.json
 ```
 
-And when creating apps with a starter:
+### Testing Starters Locally
 
 ```bash
-node [root of the monorepo]/cli/create-tsrouter-app/dist/index.js app-js --starter http://localhost:9080/starter.json
+# In your starter directory
+npx serve .starter -l 9080
+
+# Create app with local starter
+node ../cli/packages/cli/dist/index.js create my-app --starter http://localhost:9080/starter.json
 ```
 
-# Developing on the CTA UI
+## Dev Watch Mode
 
-The CTA UI is somewhat tricky to develop on because it's both a web server and a React app. You need to run the CLI in "API" model and then the React app in dev mode, as well as the whole monorepo in watch mode.
-
-## Starting the API Server
-
-Let's start off with how to run the CLI in "API" mode. Here we are running the CLI in an empty directory in app creation mode.
+Watch framework files and auto-rebuild:
 
 ```bash
-CTA_DISABLE_UI=true node ../create-tsrouter-app/cli/create-tsrouter-app/dist/index.js --ui
+rm -rf test-app && node packages/cli/dist/index.js create \
+  --dev-watch ./packages/create/src/frameworks/react \
+  test-app --add-ons shadcn
 ```
 
-If this is working you will see the following output:
+## Developing Create UI
 
-```
-Create TanStack API is running on http://localhost:8080
-```
-
-Note that it say "Create TanStack **API**" and not "Create TanStack **App**". This is important. This means that the CLI is providing API endpoints, but **not** serving the static build files of the React app.
-
-Here is the same command for the `add` mode:
+The UI requires running three things:
 
 ```bash
-CTA_DISABLE_UI=true node ../create-tsrouter-app/cli/create-tsrouter-app/dist/index.js add --ui
-```
-
-## Starting the React App
-
-Now that we have the API server running, we can start the React app in dev mode.
-
-```bash
-cd packages/cta-ui
-pnpm dev:ui
-```
-
-Navigate to `http://localhost:3000` and see the React app connected to the API server on `http://localhost:8080`.
-
-## Running the Monorepo in Watch Mode
-
-At the top level of the monorepo, run the following command to start the build in watch mode.
-
-```bash
+# Terminal 1: Watch mode for packages
 pnpm dev
+
+# Terminal 2: API server (from empty directory)
+CTA_DISABLE_UI=true node ../cli/packages/cli/dist/index.js create --ui
+
+# Terminal 3: React dev server
+cd packages/create-ui && pnpm dev:ui
 ```
 
-This will build the monorepo and watch for changes in any of the libraries. (It will **not** build changes for the React app within the `cta-ui` package.)
+Navigate to `http://localhost:3000` to see the UI connected to the API at `http://localhost:8080`.
 
-This is important because you might need to change API endpoints in the CTA library, or in the engine. If you do make those kinds of changes then the you will need to re-run the CLI in "API" mode to pick up the changes.
+## Submitting Changes
+
+1. Run tests: `pnpm test`
+2. Run build: `pnpm build`
+3. Create a PR with a clear description
+
+## Project Structure
+
+```
+packages/
+├── cli/           # @tanstack/cli - CLI commands
+├── create/        # @tanstack/create - Engine + frameworks
+└── create-ui/     # @tanstack/create-ui - Visual builder
+```
+
+## Useful Scripts
+
+```bash
+pnpm build          # Build all packages
+pnpm test           # Run tests
+pnpm dev            # Watch mode
+pnpm cleanNodeModules  # Clean all node_modules
+```
