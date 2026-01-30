@@ -5,7 +5,7 @@
   "description": "Professional resume template with content-collections",
   "author": "Jane Smith <jane.smith@example.com>",
   "license": "MIT",
-  "link": "https://github.com/TanStack/create-tsrouter-app",
+  "link": "https://github.com/TanStack/cli",
   "shadcnComponents": [],
   "framework": "react-cra",
   "mode": "file-router",

@@ -5,7 +5,7 @@
   "description": "AI-powered e-commerce starter with TanStack Start",
   "author": "Jane Smith <jane.smith@example.com>",
   "license": "MIT",
-  "link": "https://github.com/TanStack/create-tsrouter-app",
+  "link": "https://github.com/TanStack/cli",
   "shadcnComponents": [],
   "framework": "react-cra",
   "mode": "file-router",

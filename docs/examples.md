@@ -3,73 +3,47 @@ id: examples
 title: Examples
 ---
 
-Common integration combinations.
-
-## Starters
+## Basic Usage
 
 ```bash
-# Minimal
-tanstack create my-app -y --no-tailwind
+# TanStack Start app (default, with SSR)
+tanstack create my-app -y
 
-# SaaS
-tanstack create my-app --integrations clerk,drizzle,neon,sentry,tanstack-query
+# Router-only SPA (no SSR)
+tanstack create my-app --router-only -y
 
-# Dashboard
-tanstack create my-app --integrations tanstack-query,tanstack-table,tanstack-form,shadcn
+# Interactive mode to pick add-ons
+tanstack create my-app --interactive
 
-# AI App
-tanstack create my-app --integrations ai,tanstack-query
-
-# API-First
-tanstack create my-app --integrations trpc,tanstack-query,drizzle,neon
-
-# Enterprise
-tanstack create my-app --integrations workos,drizzle,neon,sentry,eslint
+# Visual builder
+tanstack create --ui
 ```
 
-## Stack Choices
+## Using Add-ons
 
-**Database:**
 ```bash
---integrations drizzle,neon    # Postgres + Drizzle
---integrations prisma          # Prisma ORM
---integrations convex          # Realtime platform
-```
+# List available add-ons
+tanstack create --list-add-ons
 
-**Auth:**
-```bash
---integrations clerk           # Hosted auth
---integrations workos          # Enterprise SSO
---integrations better-auth     # Self-hosted
-```
+# See add-on details (dependencies, conflicts, options)
+tanstack create --addon-details <id>
 
-**Deploy:**
-```bash
---integrations vercel
---integrations cloudflare
---integrations netlify
---integrations nitro           # Any platform
+# Create with specific add-ons
+tanstack create my-app --add-ons <id1>,<id2>,<id3>
+
+# Add to existing project
+tanstack add <id1> <id2>
 ```
 
 ## Recipes
 
-### Authenticated Dashboard
+### Full-Stack App
 
 ```bash
-tanstack create admin --integrations clerk,tanstack-query,tanstack-table,drizzle,neon,shadcn
-cd admin
+tanstack create my-app
+cd my-app
 cp .env.example .env
-# Add CLERK_* and DATABASE_URL to .env
-pnpm db:push
-pnpm dev
-```
-
-### Realtime App
-
-```bash
-tanstack create realtime --integrations convex,tanstack-query
-cd realtime
-npx convex dev  # Creates project, adds CONVEX_URL
+# Edit .env with API keys
 pnpm dev
 ```
 
@@ -88,7 +62,7 @@ jobs:
   create:
     runs-on: ubuntu-latest
     steps:
-      - run: npx @tanstack/cli create ${{ inputs.name }} --integrations tanstack-query -y
+      - run: npx @tanstack/cli create ${{ inputs.name }} -y
 ```
 
 ### Docker
@@ -96,7 +70,7 @@ jobs:
 ```dockerfile
 FROM node:20-slim
 RUN npm install -g @tanstack/cli pnpm
-RUN tanstack create app -y --integrations tanstack-query
+RUN tanstack create app -y
 WORKDIR /app
 RUN pnpm install && pnpm build
 CMD ["pnpm", "start"]

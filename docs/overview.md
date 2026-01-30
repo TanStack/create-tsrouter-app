@@ -3,7 +3,7 @@ id: overview
 title: Overview
 ---
 
-Scaffold TanStack Start projects with integrations for auth, databases, deployment, and more.
+Scaffold TanStack Start & Router applications with add-ons for auth, databases, deployment, and more.
 
 ```bash
 npx @tanstack/cli create my-app
@@ -11,8 +11,8 @@ npx @tanstack/cli create my-app
 
 ## Features
 
-- **Integrations** - Auth, database, deployment, monitoring ([full list](./integrations.md))
-- **Templates** - Reusable project presets ([docs](./templates.md))
+- **Add-ons** - Auth, database, deployment, monitoring ([full list](./add-ons.md))
+- **Starters** - Reusable project presets ([docs](./starters.md))
 - **MCP Server** - AI agent support ([docs](./mcp/overview.md))
 
 ## Next Steps

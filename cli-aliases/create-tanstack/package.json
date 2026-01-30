@@ -1,6 +1,6 @@
 {
   "name": "create-tanstack",
-  "version": "0.43.2",
+  "version": "0.43.8",
   "description": "Tanstack Application Builder",
   "bin": "./dist/index.js",
   "type": "module",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TanStack/create-tsrouter-app.git",
+    "url": "git+https://github.com/TanStack/cli.git",
     "directory": "cli-aliases/create-tanstack"
   },
   "homepage": "https://tanstack.com/router",

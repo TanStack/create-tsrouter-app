@@ -9,16 +9,19 @@ title: Quick Start
 npx @tanstack/cli create my-app
 ```
 
-Interactive prompts guide you through project name, package manager, and integration selection.
+Interactive prompts guide you through project name, package manager, and add-on selection.
 
 ## Non-Interactive
 
 ```bash
-# Defaults only
+# Defaults only (TanStack Start + file-router)
 npx @tanstack/cli create my-app -y
 
-# With integrations
-npx @tanstack/cli create my-app --integrations tanstack-query,clerk,drizzle
+# With add-ons
+npx @tanstack/cli create my-app --add-ons tanstack-query,clerk,drizzle
+
+# Router-only SPA (no SSR)
+npx @tanstack/cli create my-app --router-only
 ```
 
 ## Run the Project
@@ -31,7 +34,7 @@ pnpm dev
 
 ## Environment Variables
 
-Some integrations require API keys. After creation:
+Some add-ons require API keys. After creation:
 
 ```bash
 cp .env.example .env
@@ -46,7 +49,7 @@ my-app/
 │   ├── routes/          # File-based routing
 │   │   ├── __root.tsx   # Root layout
 │   │   └── index.tsx    # Home page
-│   └── integrations/    # Integration code
+│   └── integrations/    # Add-on integration code
 ├── .tanstack.json       # CLI config
 └── .env.example         # Required env vars
 ```
@@ -54,4 +57,4 @@ my-app/
 ## Next Steps
 
 - [CLI Reference](./cli-reference.md) - All options
-- [Integrations](./integrations.md) - Available integrations
+- [Add-ons](./add-ons.md) - Available add-ons

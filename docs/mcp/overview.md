@@ -4,7 +4,7 @@ title: MCP Server
 ---
 
 The TanStack CLI includes a Model Context Protocol (MCP) server that enables AI assistants to:
-- Create TanStack Start projects with integrations
+- Create TanStack Start projects with add-ons
 - Search and fetch TanStack documentation
 - Explore the TanStack ecosystem (partners, libraries)
 
@@ -38,7 +38,7 @@ Or:
 tanstack mcp
 
 # HTTP/SSE
-tanstack mcp --sse --port 8080
+tanstack mcp --sse
 ```
 
 ## Tools
@@ -47,7 +47,7 @@ tanstack mcp --sse --port 8080
 
 | Tool | Description |
 |------|-------------|
-| `listTanStackIntegrations` | Get available integrations for project creation |
+| `listTanStackAddOns` | Get available add-ons for project creation |
 | `createTanStackApplication` | Create a new TanStack Start project |
 
 ### Documentation & Ecosystem
@@ -59,4 +59,4 @@ tanstack mcp --sse --port 8080
 | `tanstack_search_docs` | Search documentation via Algolia |
 | `tanstack_ecosystem` | Browse ecosystem partners by category or library |
 
-See [Tools Reference](./mcp-tools) for parameters and examples.
+See [Tools Reference](./tools.md) for parameters and examples.

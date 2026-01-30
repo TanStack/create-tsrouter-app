@@ -24,4 +24,5 @@ export interface CliOptions {
   install?: boolean
   addOnConfig?: string
   force?: boolean
+  routerOnly?: boolean
 }

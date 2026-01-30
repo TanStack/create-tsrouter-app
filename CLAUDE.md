@@ -1,192 +1,128 @@
-# TanStack CLI - Claude Code Assistant
+# TanStack CLI
 
-## Project Overview
-
-This monorepo contains the TanStack CLI (`@tanstack/cli`), a comprehensive tool for creating modern React and Solid applications with TanStack Router and TanStack Start.
-
-## Quick Start
+## Quick Reference
 
 ```bash
-# Create a new TanStack app (recommended)
-npx @tanstack/cli@latest create my-app
+# Create TanStack Start app (default)
+npx @tanstack/cli create my-app
 
-# Legacy CLI aliases (deprecated, will show warning)
-npx create-tsrouter-app@latest my-app
-npx create-start-app@latest my-app
-npx create-tanstack@latest my-app
-npx create-tanstack-app@latest my-app
-```
+# Create Router-only SPA (no SSR)
+npx @tanstack/cli create my-app --router-only
 
-## CLI Commands
+# With add-ons
+npx @tanstack/cli create my-app --add-ons clerk,drizzle,tanstack-query
 
-```bash
-tanstack create [project-name] [options]  # Create a new TanStack app
-tanstack add [add-ons...]                 # Add add-ons to existing project
-tanstack add-on init|compile              # Manage custom add-ons
-tanstack starter init|compile             # Manage custom starters
-tanstack mcp [--sse]                      # Start MCP server
-tanstack pin-versions                     # Pin package versions
-tanstack --version                        # Show version
+# Add to existing project
+npx @tanstack/cli add clerk drizzle
+
+# List available add-ons
+npx @tanstack/cli create --list-add-ons
 ```
 
 ## Monorepo Structure
 
 ```
-create-tsrouter-app/
+cli/
 ├── packages/
-│   ├── cli/                # @tanstack/cli - Main CLI with subcommands
-│   ├── create/             # @tanstack/create - Core engine + frameworks
-│   │   └── src/
-│   │       └── frameworks/
-│   │           ├── react-cra/  # React framework
-│   │           └── solid/      # Solid framework
-│   └── create-ui/          # @tanstack/create-ui - Web UI components
-├── cli-aliases/            # Deprecated thin wrapper CLIs
-│   ├── create-tsrouter-app/
-│   ├── create-start-app/
-│   ├── create-tanstack/
-│   ├── create-tanstack-app/
-│   └── ts-create-start/
-└── examples/               # Example projects and custom CLIs
+│   ├── cli/           # @tanstack/cli - Main CLI
+│   ├── create/        # @tanstack/create - Core engine + frameworks
+│   │   └── src/frameworks/
+│   │       ├── react/     # React framework + add-ons
+│   │       └── solid/     # Solid framework + add-ons
+│   └── create-ui/     # @tanstack/create-ui - Web UI
+└── cli-aliases/       # Deprecated wrappers (create-tsrouter-app, etc.)
 ```
 
-## Core Packages
-
-### @tanstack/cli
-
-- **Purpose**: Main CLI interface with subcommands
-- **Binary**: `tanstack`
-- **Key Dependencies**: `@clack/prompts`, `commander`, `express`, `chalk`
-- **Features**: `create`, `add`, `add-on`, `starter`, `mcp`, `pin-versions` subcommands
-
-### @tanstack/create
-
-- **Purpose**: Core engine, frameworks, add-ons, and starters
-- **Key Dependencies**: `ejs`, `execa`, `memfs`, `prettier`, `zod`
-- **Features**: Template processing, project generation, validation
-- **Contains**: React and Solid frameworks with all add-ons
-
-### @tanstack/create-ui
-
-- **Purpose**: Web interface for the application builder
-- **Key Dependencies**: `react`, `tailwindcss`, `next-themes`, `sonner`
-- **Scripts**: `build:ui`, `dev:ui` (React dev server)
-
-## Development Scripts
+## Development
 
 ```bash
-# Install dependencies
-pnpm install
+pnpm install && pnpm build    # Setup
+pnpm dev                       # Watch mode
 
-# Build all packages
-pnpm build
-
-# Start development mode (watch all packages)
-pnpm dev
-
-# Run tests
-pnpm test
-
-# Clean node_modules
-pnpm cleanNodeModules
+# Test from peer directory (not inside monorepo)
+node ../cli/packages/cli/dist/index.js create my-app
 ```
 
-## Key Development Commands
+## Key Terminology
 
-### Building Example Apps
+| Term | Definition | CLI Flag |
+|------|------------|----------|
+| Add-on | Plugin that extends apps (auth, DB, etc) | `--add-ons` |
+| Starter | Reusable preset of add-ons (config only) | `--starter` |
+| Framework | React or Solid | `--framework` |
+| Mode | `file-router` (default) or `code-router` | `--router-only` for code-router SPA |
 
-```bash
-# Build with CLI (outside monorepo)
-node packages/cli/dist/index.js create my-app
+## CLI Commands
 
-# Test with local add-ons
-node packages/cli/dist/index.js create my-app --add-ons http://localhost:9080/add-on.json
+| Command | Description |
+|---------|-------------|
+| `tanstack create [name]` | Create TanStack Start app |
+| `tanstack add [add-ons]` | Add to existing project |
+| `tanstack add-on init/compile` | Create custom add-on |
+| `tanstack starter init/compile` | Create custom starter |
+| `tanstack mcp [--sse]` | Start MCP server |
+| `tanstack pin-versions` | Pin TanStack packages |
 
-# Test with local starters
-node packages/cli/dist/index.js create my-app --starter http://localhost:9080/starter.json
-```
+## Create Options
 
-### Developing Create UI
-
-```bash
-# Start API server
-CTA_DISABLE_UI=true node packages/cli/dist/index.js create --ui
-
-# Start React dev server
-cd packages/create-ui && pnpm dev:ui
-
-# Run monorepo in watch mode
-pnpm dev
-```
-
-## Add-ons and Starters
-
-### Popular Add-ons
-
-- **Clerk**: Authentication integration
-- **Shadcn**: UI component library
-- **Neon**: PostgreSQL database integration
-- **TanStack Query**: Data fetching
-- **tRPC**: Type-safe APIs
-- **Form**: Form handling
-- **Store**: State management
-
-### Example Starters
-
-- **Events**: Conference/events website
-- **Resume**: Professional resume template
+| Flag | Description |
+|------|-------------|
+| `--add-ons <ids>` | Comma-separated add-on IDs |
+| `--router-only` | SPA without TanStack Start (no SSR) |
+| `--framework <name>` | React or Solid |
+| `--toolchain <id>` | Toolchain (use `--list-add-ons` to see options) |
+| `--deployment <id>` | Deployment target (use `--list-add-ons` to see options) |
+| `--starter <url>` | Use starter preset |
+| `--no-tailwind` | Skip Tailwind |
+| `--no-git` | Skip git init |
+| `--no-install` | Skip npm install |
+| `-y` | Accept defaults |
+| `-f, --force` | Overwrite existing |
+| `--ui` | Launch visual builder |
 
 ## EJS Template Variables
 
-The system uses EJS templates with these variables:
+| Variable | Type | Description |
+|----------|------|-------------|
+| `projectName` | string | Project name |
+| `typescript` | boolean | TypeScript enabled |
+| `tailwind` | boolean | Tailwind enabled |
+| `fileRouter` | boolean | File-based routing |
+| `codeRouter` | boolean | Code-based routing |
+| `addOnEnabled` | object | `{ [id]: boolean }` |
+| `addOnOption` | object | `{ [id]: options }` |
+| `packageManager` | string | npm/pnpm/yarn/bun/deno |
+| `js` | string | `ts` or `js` |
+| `jsx` | string | `tsx` or `jsx` |
 
-- `packageManager`: npm, yarn, pnpm, bun, deno
-- `projectName`: Project name
-- `typescript`: TypeScript enabled
-- `tailwind`: Tailwind CSS enabled
-- `fileRouter`: File-based routing
-- `codeRouter`: Code-based routing
-- `addOnEnabled`: Enabled add-ons object
-- `addOns`: Array of enabled add-ons
-- `routes`: Array of routes from add-ons
-
-## Testing
+## Testing Add-ons Locally
 
 ```bash
-# Run all tests
-pnpm test
+# Serve add-on
+npx serve .add-on -l 9080
 
-# Test specific package
-cd packages/create && pnpm test
-
-# Test with coverage
-pnpm test:coverage
+# Use in create
+node packages/cli/dist/index.js create test --add-ons http://localhost:9080/info.json
 ```
 
-## Contributing
+## MCP Server Config
 
-1. Clone: `gh repo clone TanStack/create-tsrouter-app`
-2. Install: `pnpm install`
-3. Build: `pnpm build`
-4. Develop: `pnpm dev`
-5. Test: `pnpm test`
+```json
+{
+  "mcpServers": {
+    "tanstack": {
+      "command": "npx",
+      "args": ["@tanstack/cli", "mcp"]
+    }
+  }
+}
+```
 
-## Architecture Notes
+## Key Files
 
-- **Monorepo**: Uses pnpm workspaces and Nx for task orchestration
-- **Package Manager**: Requires pnpm@9.15.5
-- **Node Version**: Requires Node.js (see .nvmrc if available)
-- **Build System**: TypeScript compilation, Vite for UI
-- **Testing**: Vitest for unit tests, ESLint for linting
-
-## Important Files
-
-- `package.json`: Root package configuration and workspace setup
-- `pnpm-workspace.yaml`: Workspace configuration
-- `nx.json`: Nx configuration for task orchestration
-- `ARCHITECTURE.md`: Detailed architecture documentation
-- `CONTRIBUTING.md`: Contribution guidelines
-
-## License
-
-MIT Licensed - see LICENSE file for details
+| File | Purpose |
+|------|---------|
+| `packages/cli/src/cli.ts` | CLI command definitions |
+| `packages/create/src/frameworks/` | Framework implementations |
+| `packages/create/src/app-*.ts` | App creation logic |
+| `.tanstack.json` | Generated project config |

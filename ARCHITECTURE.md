@@ -1,53 +1,133 @@
-## Nomenclature
+# Architecture
 
-- TanStack CLI - The command line interface for creating and managing TanStack applications
-- Framework - A framework that supports the creation of a TanStack Application using a specific technology (e.g. React, Solid)
-- `code-router` - One of two _modes_ of TanStack Application. The other is `file-router`. The code router is when the applications routes are defined in code.
-- `file-router` - One of two _modes_ of TanStack Application. The other is `code-router`. The file router is when the applications routes are defined in files (usually in the `src/routes` directory).
-- `add-on` - A plugin that extends the capabilities of a TanStack Application (e.g. the `tanstack-query` add-on integrates TanStack Query into the application).
-- custom `add-on` - An externalized `add-on` contained in a single JSON file that can integate technologies that aren't covered with the built-in add-ons.
-- `starter` - An application template that is constructed from an existing application that has been modified to the customers needs. The advantage of a starter over a cloneable git repo is that when a starter is used the add-ons and project will be created using the latest version of the framework and the add-ons. This reduces the versioning burden on the customer. This does come with a risk of potential breaking changes.
+## Terminology
 
-## CLI Applications
-
-- `tanstack` - The main CLI application (`@tanstack/cli`)
-- `create-tanstack` - Deprecated alias for `tanstack create`
-- `create-start-app` - Deprecated alias for `tanstack create`
-- `create-tsrouter-app` - Deprecated alias for `tanstack create`
+| Term | Definition |
+|------|------------|
+| **Add-on** | Plugin that extends apps (e.g., `clerk`, `drizzle`). Contains code, dependencies, and hooks. |
+| **Starter** | Reusable preset of add-ons. Contains only configuration, no code. |
+| **Framework** | React or Solid implementation in `packages/create/src/frameworks/` |
+| **Mode** | `file-router` (file-based routes) or `code-router` (routes defined in code) |
 
 ## Packages
 
-- `@tanstack/cli` - The command line interface for TanStack
-- `@tanstack/create` - The core engine that powers app creation
-- `@tanstack/create-ui` - The UI components for the visual app creator
+| Package | Purpose |
+|---------|---------|
+| `@tanstack/cli` | Main CLI with commands: `create`, `add`, `add-on`, `starter`, `mcp` |
+| `@tanstack/create` | Core engine, frameworks, and add-ons |
+| `@tanstack/create-ui` | Visual project builder web interface |
 
-## Frameworks
+## Framework Structure
 
-Frameworks are now bundled within `@tanstack/create`:
-- React framework (`packages/create/src/frameworks/react`)
-- Solid framework (`packages/create/src/frameworks/solid`)
+```
+packages/create/src/frameworks/
+├── react/
+│   ├── project/base/      # Base project template
+│   ├── add-ons/           # Add-on implementations
+│   ├── toolchains/        # eslint, biome
+│   ├── hosts/             # vercel, netlify, cloudflare
+│   └── examples/          # Demo projects
+└── solid/
+    └── (same structure)
+```
 
-## File Templates
+## EJS Template Variables
 
-The system uses EJS to render the files into the final application.
+Templates (`.ejs` files) have access to:
 
-Below are all of the variables that are available to the file templates.
+| Variable | Type | Description |
+|----------|------|-------------|
+| `projectName` | `string` | Project name |
+| `typescript` | `boolean` | TypeScript enabled |
+| `tailwind` | `boolean` | Tailwind enabled |
+| `fileRouter` | `boolean` | File-based routing mode |
+| `codeRouter` | `boolean` | Code-based routing mode |
+| `addOnEnabled` | `Record<string, boolean>` | Map of enabled add-on IDs |
+| `addOnOption` | `Record<string, object>` | Add-on configuration options |
+| `addOns` | `Array<AddOn>` | Full add-on objects |
+| `routes` | `Array<Route>` | All routes from enabled add-ons |
+| `integrations` | `Array<Integration>` | All integrations (providers, plugins) |
+| `packageManager` | `string` | `npm`, `pnpm`, `yarn`, `bun`, `deno` |
+| `js` | `string` | `ts` or `js` |
+| `jsx` | `string` | `tsx` or `jsx` |
 
-| Variable                     | Description                                                                                                                                                                                          |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `packageManager`             | The package manager that is being used (e.g. `npm`, `yarn`, `pnpm`)                                                                                                                                  |
-| `projectName`                | The name of the project                                                                                                                                                                              |
-| `typescript`                 | Boolean value that is `true` if TypeScript is being used, otherwise it is `false`                                                                                                                    |
-| `tailwind`                   | Boolean value that is `true` if Tailwind CSS is being used, otherwise it is `false`                                                                                                                  |
-| `js`                         | The file extension for files that do not include JSX. When in TypeScript mode it is `ts`. When in JavaScript mode it is `js`.                                                                        |
-| `jsx`                        | The file extension for files that include JSX. When in TypeScript mode it is `tsx`. When in JavaScript mode it is `jsx`.                                                                             |
-| `fileRouter`                 | Boolean value that is `true` if the file router is being used, otherwise it is `false`                                                                                                               |
-| `codeRouter`                 | Boolean value that is `true` if the code router is being used, otherwise it is `false`                                                                                                               |
-| `addOnEnabled`               | An object that contains the enabled add-ons. The keys are the `id` values of the add-ons. For example, if the tanstack-query add-on is enabled the `addOnEnabled]['tanstack-query']` will be `true`. |
-| `addOns`                     | An array of the enabled add-on objects                                                                                                                                                               |
-| `integrations`               | An array of the enabled integrations                                                                                                                                                                 |
-| `routes`                     | An array containing all of the routes from all of the add-ons. (Used by the header and the `code-router` setup.)                                                                                     |
-| `getPackageManagerAddScript` | A function that returns the script to add a dependency to the project.                                                                                                                               |
-| `getPackageManagerRunScript` | A function that returns the script to run a command in the project.                                                                                                                                  |
-| `relativePath`               | A function that returns the relative path from the current file to the specified target file.                                                                                                        |
-| `ignoreFile`                 | A function that if called will tell the engine to not include this file in the application.                                                                                                          |
+## Helper Functions
+
+| Function | Description |
+|----------|-------------|
+| `ignoreFile()` | Skip generating this file |
+| `relativePath(target, stripExt?)` | Calculate relative import path |
+| `getPackageManagerAddScript(pkg, isDev?)` | Get install command |
+| `getPackageManagerRunScript(script, args?)` | Get run command |
+
+## File Naming Conventions
+
+| Pattern | Result |
+|---------|--------|
+| `file.ts` | Copied as-is |
+| `file.ts.ejs` | EJS processed, outputs `file.ts` |
+| `_dot_gitignore` | Becomes `.gitignore` |
+| `file.ts.append` | Appended to existing file |
+| `__option__file.ts` | Only included if option selected |
+
+## Add-on info.json
+
+```json
+{
+  "name": "My Add-on",
+  "description": "What it does",
+  "type": "add-on",           // add-on | toolchain | deployment | example
+  "phase": "add-on",          // setup | add-on | example
+  "modes": ["file-router"],   // Supported modes
+  "priority": 100,            // Execution order (lower = earlier)
+  
+  "dependsOn": ["tanstack-query"],
+  "conflicts": ["other-addon"],
+  
+  "routes": [{
+    "url": "/demo/feature",
+    "name": "Feature Demo",
+    "path": "src/routes/demo.feature.tsx",
+    "jsName": "FeatureDemo"
+  }],
+  
+  "integrations": [{
+    "type": "provider",       // provider | root-provider | vite-plugin | devtools | header-user | layout
+    "jsName": "MyProvider",
+    "path": "src/integrations/my-addon/provider.tsx"
+  }],
+  
+  "options": {
+    "database": {
+      "type": "select",
+      "label": "Database",
+      "default": "postgres",
+      "options": [
+        { "value": "postgres", "label": "PostgreSQL" },
+        { "value": "sqlite", "label": "SQLite" }
+      ]
+    }
+  }
+}
+```
+
+## Integration Types
+
+| Type | Location | Purpose |
+|------|----------|---------|
+| `provider` | Wraps app in `__root.tsx` | Basic context providers |
+| `root-provider` | Wraps app, exports context | Providers with shared state |
+| `vite-plugin` | `vite.config.ts` | Vite plugins |
+| `devtools` | After app in `__root.tsx` | Developer tools |
+| `header-user` | Header component | Auth UI, user menus |
+| `layout` | Layout wrapper | Dashboard layouts |
+
+## Priority Ranges
+
+| Range | Use Case |
+|-------|----------|
+| 0-10 | Toolchains (eslint, biome) |
+| 20-30 | Core libraries (start, query) |
+| 30-50 | UI foundations (shadcn, form) |
+| 100-150 | Feature add-ons (clerk, sentry) |
+| 170-200 | Deployment (netlify, cloudflare) |
