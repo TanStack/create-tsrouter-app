@@ -1,37 +1,38 @@
 ---
-id: creating-integrations
-title: Creating Integrations
+id: creating-add-ons
+title: Creating Add-ons
 ---
 
-Integrations add files, dependencies, and code hooks to generated projects.
+Add-ons add files, dependencies, and code hooks to generated projects.
 
 ## Quick Start
 
 ```bash
 # 1. Create base project
-tanstack create my-integration-dev -y
+tanstack create my-addon-dev -y
 
 # 2. Add your code
 #    - src/integrations/my-feature/
 #    - src/routes/demo/my-feature.tsx
 #    - Update package.json
 
-# 3. Extract integration
-tanstack integration init
+# 3. Extract add-on
+tanstack add-on init
 
-# 4. Edit .integration/info.json
+# 4. Edit .add-on/info.json
 
 # 5. Compile
-tanstack integration compile
+tanstack add-on compile
 
-# 6. Test
-tanstack create test --integrations my-feature --integrations-path ./.integration
+# 6. Test locally
+npx serve .add-on -l 9080
+tanstack create test --add-ons http://localhost:9080/info.json
 ```
 
 ## Structure
 
 ```
-my-integration/
+.add-on/
 ├── info.json        # Metadata (required)
 ├── package.json     # Dependencies (optional)
 └── assets/          # Files to copy
@@ -48,8 +49,8 @@ Required fields:
 {
   "name": "My Feature",
   "description": "What it does",
-  "type": "integration",
-  "phase": "integration",
+  "type": "add-on",
+  "phase": "add-on",
   "category": "tooling",
   "modes": ["file-router"]
 }
@@ -57,8 +58,8 @@ Required fields:
 
 | Field | Values |
 |-------|--------|
-| `type` | `integration`, `toolchain`, `deployment`, `example` |
-| `phase` | `setup`, `integration`, `example` |
+| `type` | `add-on`, `toolchain`, `deployment`, `example` |
+| `phase` | `setup`, `add-on`, `example` |
 | `category` | `tanstack`, `auth`, `database`, `orm`, `deploy`, `tooling`, `monitoring`, `api`, `i18n`, `cms`, `other` |
 
 Optional fields:
@@ -72,13 +73,13 @@ Optional fields:
 }
 ```
 
-## Hooks
+## Hooks (Integrations)
 
 Inject code into generated projects:
 
 ```json
 {
-  "hooks": [
+  "integrations": [
     {
       "type": "root-provider",
       "jsName": "MyProvider",
@@ -91,9 +92,11 @@ Inject code into generated projects:
 | Type | Location | Use |
 |------|----------|-----|
 | `root-provider` | Wraps app in `__root.tsx` | Context providers |
+| `provider` | Same, but simpler | Basic providers |
 | `vite-plugin` | `vite.config.ts` | Vite plugins |
 | `devtools` | After app in `__root.tsx` | Devtools |
-| `entry-client` | `entry-client.tsx` | Client init |
+| `header-user` | Header component | User menu, auth UI |
+| `layout` | Layout wrapper | Dashboard layouts |
 
 ## Demo Routes
 
@@ -103,15 +106,16 @@ Inject code into generated projects:
     {
       "url": "/demo/my-feature",
       "name": "My Feature Demo",
-      "path": "src/routes/demo/my-feature.tsx"
+      "path": "src/routes/demo/my-feature.tsx",
+      "jsName": "MyFeatureDemo"
     }
   ]
 }
 ```
 
-## Integration Options
+## Add-on Options
 
-Let users configure the integration:
+Let users configure the add-on:
 
 ```json
 {
@@ -132,7 +136,7 @@ Let users configure the integration:
 Access in EJS templates:
 
 ```ejs
-<% if (integrationOption['my-feature']?.database === 'postgres') { %>
+<% if (addOnOption['my-feature']?.database === 'postgres') { %>
 // PostgreSQL code
 <% } %>
 ```
@@ -146,8 +150,8 @@ Files ending in `.ejs` are processed. Available variables:
 | `projectName` | string | Project name |
 | `typescript` | boolean | TS enabled |
 | `tailwind` | boolean | Tailwind enabled |
-| `integrationEnabled` | object | `{ [id]: boolean }` |
-| `integrationOption` | object | `{ [id]: options }` |
+| `addOnEnabled` | object | `{ [id]: boolean }` |
+| `addOnOption` | object | `{ [id]: options }` |
 
 File patterns:
 
@@ -160,10 +164,8 @@ File patterns:
 
 ## Distribution
 
-Host on GitHub or npm, then:
+Host on GitHub, npm, or any URL:
 
 ```bash
-tanstack create my-app --integrations-path ./path/to/integrations
+tanstack create my-app --add-ons https://example.com/my-addon/info.json
 ```
-
-To add to official catalog: PR to `integrations/` folder.

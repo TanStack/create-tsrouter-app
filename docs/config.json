@@ -31,12 +31,12 @@
           "to": "cli-reference"
         },
         {
-          "label": "Integrations",
-          "to": "integrations"
+          "label": "Add-ons",
+          "to": "add-ons"
         },
         {
-          "label": "Templates",
-          "to": "templates"
+          "label": "Starters",
+          "to": "starters"
         },
         {
           "label": "Examples",
@@ -48,8 +48,8 @@
       "label": "Authoring",
       "children": [
         {
-          "label": "Creating Integrations",
-          "to": "creating-integrations"
+          "label": "Creating Add-ons",
+          "to": "creating-add-ons"
         }
       ]
     },

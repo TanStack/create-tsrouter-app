@@ -40,24 +40,26 @@ nvm install 20  # Upgrade
 ```bash
 tanstack create my-app-v2              # Different name
 tanstack create my-app --target-dir ./new/path  # Different path
+tanstack create my-app -f              # Force overwrite
 ```
 
-### Integration fetch failed
+### Add-on fetch failed
 
 Check internet. Or use local:
 
 ```bash
 git clone https://github.com/TanStack/cli.git
-tanstack create my-app --integrations-path ./cli/integrations
+cd cli && pnpm install && pnpm build
+node packages/cli/dist/index.js create my-app
 ```
 
-### Conflicting integrations
+### Conflicting add-ons
 
-Choose one per group:
-- ORM: `drizzle` | `prisma` | `convex`
-- Auth: `clerk` | `better-auth` | `workos`
-- Lint: `eslint` | `biome`
-- Deploy: `vercel` | `netlify` | `cloudflare`
+Some add-ons conflict with each other (e.g., multiple ORMs, multiple auth providers). Use `--addon-details <id>` to see what conflicts with what:
+
+```bash
+tanstack create --addon-details clerk
+```
 
 ## Runtime
 
@@ -95,11 +97,11 @@ Check `.tanstack.json` has `"tailwind": true` and `styles.css` imports `@import 
 
 3. Restart Claude Desktop completely
 
-### SSE port conflict
+### SSE mode
 
 ```bash
-lsof -i :8080                    # Check port
-tanstack mcp --sse --port 3001   # Use different port
+tanstack mcp --sse
+# Connects at http://localhost:8080/sse
 ```
 
 ## Getting Help

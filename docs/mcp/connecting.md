@@ -3,7 +3,7 @@ id: mcp-connecting
 title: Connecting AI Clients
 ---
 
-The TanStack CLI MCP server runs locally and communicates via stdio (default) or HTTP/SSE.
+The TanStack CLI MCP server runs locally via stdio (default) or HTTP/SSE.
 
 ## Claude Desktop
 
@@ -22,7 +22,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 
 **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
-Restart Claude Desktop after editing the config.
+Restart Claude Desktop after editing.
 
 ## Claude Code
 
@@ -62,25 +62,25 @@ Add to `.vscode/mcp.json` or VS Code settings:
 
 ## Other MCP Clients
 
-For any MCP client that supports stdio transport:
+For any MCP client supporting stdio transport:
 
 - **Command:** `npx`
 - **Args:** `["@tanstack/cli", "mcp"]`
 
-Or if you have the CLI installed globally:
+Or with global install:
 
 - **Command:** `tanstack`
 - **Args:** `["mcp"]`
 
 ## HTTP/SSE Mode
 
-For clients that prefer HTTP transport:
+For clients preferring HTTP:
 
 ```bash
-tanstack mcp --sse --port 8080
+tanstack mcp --sse
 ```
 
-Then connect to `http://localhost:8080/sse`.
+Connect to `http://localhost:8080/sse`.
 
 ## MCP Inspector
 
@@ -96,4 +96,4 @@ After connecting, ask your AI assistant:
 
 > "List all available TanStack libraries"
 
-You should see output from the `tanstack_list_libraries` tool showing Query, Router, Table, and other libraries.
+You should see output from `tanstack_list_libraries` showing Query, Router, Table, and other libraries.

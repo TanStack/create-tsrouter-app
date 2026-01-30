@@ -20,36 +20,59 @@
 
 # TanStack CLI
 
-The official CLI for creating and managing TanStack applications.
-
-- Create TanStack Router & Start applications
-- Add integrations (auth, database, UI, etc.)
-- MCP server for AI-assisted development
-- Author custom add-ons and starters
-
-### <a href="https://tanstack.com/start/latest/docs/framework/react/quick-start">Read the docs →</a>
-
-## Quick Start
+Create and manage TanStack Router and Start applications.
 
 ```bash
 npx @tanstack/cli create my-app
 ```
 
+## Features
+
+- **TanStack Start** - Full-stack SSR framework (default)
+- **TanStack Router** - Type-safe routing (`--router-only` for SPA)
+- **Add-ons** - Auth, database, deployment, monitoring, and more
+- **MCP Server** - AI-assisted development
+
+## Quick Start
+
+```bash
+# Create TanStack Start app (recommended)
+npx @tanstack/cli create my-app
+
+# Create Router-only SPA (no SSR)
+npx @tanstack/cli create my-app --router-only
+
+# With add-ons
+npx @tanstack/cli create my-app --add-ons clerk,drizzle,tanstack-query
+
+# Add to existing project
+npx @tanstack/cli add clerk drizzle
+
+# List available add-ons
+npx @tanstack/cli create --list-add-ons
+```
+
+## Documentation
+
+- [CLI Reference](https://tanstack.com/start/latest/docs/framework/react/quick-start)
+- [TanStack Start](https://tanstack.com/start)
+- [TanStack Router](https://tanstack.com/router)
+
 ## Get Involved
 
-- We welcome issues and pull requests!
-- Participate in [GitHub discussions](https://github.com/TanStack/cli/discussions)
-- Chat with the community on [Discord](https://discord.com/invite/WrRKjPJ)
-- See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions
+- [GitHub Issues](https://github.com/TanStack/cli/issues)
+- [GitHub Discussions](https://github.com/TanStack/cli/discussions)
+- [Discord](https://discord.com/invite/WrRKjPJ)
+- [Contributing Guide](./CONTRIBUTING.md)
 
-## Explore the TanStack Ecosystem
+## TanStack Ecosystem
 
-- <a href="https://github.com/tanstack/query"><b>TanStack Query</b></a> – Async state & caching
-- <a href="https://github.com/tanstack/router"><b>TanStack Router</b></a> – Type-safe routing & URL state
-- <a href="https://github.com/tanstack/router"><b>TanStack Start</b></a> – Full-stack SSR & streaming
-- <a href="https://github.com/tanstack/form"><b>TanStack Form</b></a> – Type-safe form state
-- <a href="https://github.com/tanstack/table"><b>TanStack Table</b></a> – Headless datagrids
-- <a href="https://github.com/tanstack/store"><b>TanStack Store</b></a> – Reactive data store
-- <a href="https://github.com/tanstack/virtual"><b>TanStack Virtual</b></a> – Virtualized rendering
+- [TanStack Query](https://github.com/tanstack/query) - Async state & caching
+- [TanStack Router](https://github.com/tanstack/router) - Type-safe routing
+- [TanStack Start](https://github.com/tanstack/router) - Full-stack SSR
+- [TanStack Form](https://github.com/tanstack/form) - Type-safe forms
+- [TanStack Table](https://github.com/tanstack/table) - Headless datagrids
+- [TanStack Store](https://github.com/tanstack/store) - Reactive state
+- [TanStack Virtual](https://github.com/tanstack/virtual) - Virtualized rendering
 
-… and more at <a href="https://tanstack.com"><b>TanStack.com »</b></a>
+[More at TanStack.com](https://tanstack.com)

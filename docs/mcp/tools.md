@@ -5,22 +5,26 @@ title: MCP Tools Reference
 
 ## Project Creation Tools
 
-### listTanStackIntegrations
+### listTanStackAddOns
 
-Returns available integrations for project scaffolding.
+Returns available add-ons for project scaffolding.
 
-**Parameters:** None
+**Parameters:**
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `framework` | string | Yes | `React` or `Solid` |
 
 **Response:**
 
 ```typescript
-interface Integration {
+interface AddOn {
   id: string           // e.g., "tanstack-query"
   name: string         // e.g., "TanStack Query"
   description: string
   category: string     // "tanstack", "auth", "database", etc.
-  dependsOn: string[]  // Required integrations
-  conflicts: string[]  // Incompatible integrations
+  dependsOn: string[]  // Required add-ons
+  conflicts: string[]  // Incompatible add-ons
   hasOptions: boolean  // Has configurable options
 }
 ```
@@ -37,10 +41,10 @@ Creates a new TanStack Start project.
 |-------|------|----------|---------|
 | `projectName` | string | Yes | - |
 | `targetDir` | string | Yes | - |
-| `integrations` | string[] | No | `[]` |
-| `integrationOptions` | object | No | `{}` |
-| `tailwind` | boolean | No | `true` |
-| `packageManager` | string | No | `"pnpm"` |
+| `framework` | string | Yes | - |
+| `cwd` | string | Yes | - |
+| `addOns` | string[] | No | `[]` |
+| `addOnOptions` | object | No | `{}` |
 
 **Example:**
 
@@ -48,22 +52,13 @@ Creates a new TanStack Start project.
 {
   "projectName": "my-app",
   "targetDir": "/Users/me/projects/my-app",
-  "integrations": ["tanstack-query", "clerk", "drizzle"],
-  "integrationOptions": {
-    "drizzle": { "database": "postgres" }
-  }
+  "cwd": "/Users/me/projects",
+  "framework": "React",
+  "addOns": ["tanstack-query", "clerk"]
 }
 ```
 
-**Integration Options:**
-
-```json
-// Drizzle
-{ "drizzle": { "database": "postgres" | "mysql" | "sqlite" } }
-
-// Prisma
-{ "prisma": { "database": "postgresql" | "mysql" | "sqlite" | "mongodb" } }
-```
+Use `listTanStackAddOns` to discover available add-ons and their configuration options.
 
 ---
 
@@ -78,26 +73,6 @@ Lists TanStack libraries with metadata, frameworks, and documentation URLs.
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
 | `group` | string | No | Filter by group: `state`, `headlessUI`, `performance`, `tooling` |
-
-**Example Response:**
-
-```json
-{
-  "group": "All Libraries",
-  "count": 12,
-  "libraries": [
-    {
-      "id": "query",
-      "name": "TanStack Query",
-      "tagline": "Powerful asynchronous state management...",
-      "frameworks": ["react", "solid", "vue", "svelte", "angular"],
-      "latestVersion": "v5",
-      "docsUrl": "https://tanstack.com/query/latest/docs/framework/react/overview",
-      "githubUrl": "https://github.com/tanstack/query"
-    }
-  ]
-}
-```
 
 ---
 
@@ -118,20 +93,7 @@ Fetches a documentation page by library and path.
 ```json
 {
   "library": "router",
-  "path": "framework/react/guide/data-loading",
-  "version": "latest"
-}
-```
-
-**Response:**
-
-```json
-{
-  "title": "Data Loading",
-  "content": "# Data Loading\n\nTanStack Router provides...",
-  "url": "https://tanstack.com/router/latest/docs/framework/react/guide/data-loading",
-  "library": "TanStack Router",
-  "version": "v1"
+  "path": "framework/react/guide/data-loading"
 }
 ```
 
@@ -139,7 +101,7 @@ Fetches a documentation page by library and path.
 
 ### tanstack_search_docs
 
-Searches TanStack documentation via Algolia.
+Searches TanStack documentation.
 
 **Parameters:**
 
@@ -147,37 +109,8 @@ Searches TanStack documentation via Algolia.
 |-------|------|----------|-------------|
 | `query` | string | Yes | Search query |
 | `library` | string | No | Filter to specific library |
-| `framework` | string | No | Filter to specific framework (e.g., `react`, `vue`) |
+| `framework` | string | No | Filter to specific framework |
 | `limit` | number | No | Max results (default: 10, max: 50) |
-
-**Example:**
-
-```json
-{
-  "query": "useQuery mutations",
-  "library": "query",
-  "framework": "react",
-  "limit": 5
-}
-```
-
-**Response:**
-
-```json
-{
-  "query": "useQuery mutations",
-  "totalHits": 42,
-  "results": [
-    {
-      "title": "Mutations",
-      "url": "https://tanstack.com/query/latest/docs/framework/react/guides/mutations",
-      "snippet": "...use mutations to modify data on the server...",
-      "library": "query",
-      "breadcrumb": ["TanStack Query", "React", "Guides", "Mutations"]
-    }
-  ]
-}
-```
 
 ---
 
@@ -189,49 +122,8 @@ Browse ecosystem partners by category or library.
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
-| `category` | string | No | Filter by category (see below) |
-| `library` | string | No | Filter by TanStack library (e.g., `start`, `query`) |
-
-**Categories:**
-- `database` - PostgreSQL, real-time DBs, ORMs
-- `auth` - Authentication providers
-- `deployment` - Hosting and deployment platforms
-- `monitoring` - Error tracking and monitoring
-- `cms` - Content management systems
-- `api` - API management tools
-- `data-grid` - Data grid components
-- `code-review` - Code review tools
-- `learning` - Educational resources
-
-**Example:**
-
-```json
-{
-  "category": "database",
-  "library": "start"
-}
-```
-
-**Response:**
-
-```json
-{
-  "query": { "category": "database", "library": "start" },
-  "count": 4,
-  "partners": [
-    {
-      "id": "neon",
-      "name": "Neon",
-      "tagline": "Serverless Postgres",
-      "description": "Serverless PostgreSQL with instant branching...",
-      "category": "database",
-      "categoryLabel": "Databases",
-      "url": "https://neon.tech",
-      "libraries": ["start", "router"]
-    }
-  ]
-}
-```
+| `category` | string | No | Filter by category |
+| `library` | string | No | Filter by TanStack library |
 
 ---
 
@@ -249,6 +141,11 @@ const transport = new StdioClientTransport({
 const client = new Client({ name: 'my-client', version: '1.0.0' }, {})
 await client.connect(transport)
 
+// List available add-ons
+const addOns = await client.callTool('listTanStackAddOns', {
+  framework: 'React'
+})
+
 // Search documentation
 const results = await client.callTool('tanstack_search_docs', {
   query: 'server functions',
@@ -265,6 +162,8 @@ const doc = await client.callTool('tanstack_doc', {
 const result = await client.callTool('createTanStackApplication', {
   projectName: 'my-app',
   targetDir: '/path/to/my-app',
-  integrations: ['tanstack-query', 'clerk']
+  cwd: '/path/to',
+  framework: 'React',
+  addOns: ['tanstack-query']
 })
 ```
