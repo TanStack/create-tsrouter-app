@@ -55,10 +55,81 @@ function createServer({
                   id: addOn.id,
                   name: addOn.name,
                   description: addOn.description,
+                  type: addOn.type,
+                  category: addOn.category,
+                  link: addOn.link,
+                  warning: addOn.warning,
+                  exclusive: addOn.exclusive,
                   options: addOn.options,
                   dependsOn: addOn.dependsOn,
                 })),
             ),
+          },
+        ],
+      }
+    },
+  )
+
+  server.tool(
+    'getAddOnDetails',
+    'Get detailed information about a specific add-on including implementation patterns, routes, dependencies, and documentation',
+    {
+      framework: z
+        .string()
+        .describe(
+          `The framework to use. Available frameworks: ${frameworkNames.join(', ')}`,
+        ),
+      addOnId: z
+        .string()
+        .describe('The ID of the add-on to get details for'),
+    },
+    async ({ framework: frameworkName, addOnId }) => {
+      const framework = getFrameworkByName(frameworkName)!
+      const addOn = framework
+        .getAddOns()
+        .find((a) => a.id === addOnId)
+
+      if (!addOn) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify({ error: `Add-on '${addOnId}' not found` }),
+            },
+          ],
+        }
+      }
+
+      // Get file list for context
+      const files = await addOn.getFiles()
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              id: addOn.id,
+              name: addOn.name,
+              description: addOn.description,
+              type: addOn.type,
+              category: addOn.category,
+              phase: addOn.phase,
+              modes: addOn.modes,
+              link: addOn.link,
+              warning: addOn.warning,
+              exclusive: addOn.exclusive,
+              dependsOn: addOn.dependsOn,
+              options: addOn.options,
+              routes: addOn.routes,
+              packageAdditions: addOn.packageAdditions,
+              shadcnComponents: addOn.shadcnComponents,
+              integrations: addOn.integrations,
+              readme: addOn.readme,
+              files,
+              author: addOn.author,
+              version: addOn.version,
+              license: addOn.license,
+            }),
           },
         ],
       }
