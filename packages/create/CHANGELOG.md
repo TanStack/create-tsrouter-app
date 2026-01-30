@@ -1,5 +1,16 @@
 # @tanstack/create
 
+## 0.50.0
+
+### Minor Changes
+
+- feat(mcp): add getAddOnDetails tool and expand add-on metadata
+
+  Add new MCP tool to retrieve detailed add-on information including
+  routes, package additions, files, and documentation. Also expand
+  listTanStackAddOns to include type, category, link, warning, and
+  exclusive fields.
+
 ## 0.49.3
 
 ### Patch Changes
