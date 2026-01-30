@@ -1,5 +1,22 @@
 # create-tanstack
 
+## 0.44.0
+
+### Minor Changes
+
+- feat(mcp): add getAddOnDetails tool and expand add-on metadata
+
+  Add new MCP tool to retrieve detailed add-on information including
+  routes, package additions, files, and documentation. Also expand
+  listTanStackAddOns to include type, category, link, warning, and
+  exclusive fields.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @tanstack/cli@0.49.0
+  - @tanstack/create@0.50.0
+
 ## 0.43.8
 
 ### Patch Changes
