@@ -7,7 +7,7 @@
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "node -e \"const fs=require('fs');const path=require('path');function copyDir(src,dest){if(!fs.existsSync(dest))fs.mkdirSync(dest,{recursive:true});for(const entry of fs.readdirSync(src,{withFileTypes:true})){const srcPath=path.join(src,entry.name);const destPath=path.join(dest,entry.name);if(entry.isDirectory())copyDir(srcPath,destPath);else if(!entry.name.endsWith('.ts')||entry.name.endsWith('.d.ts'))fs.copyFileSync(srcPath,destPath)}}['react','solid'].forEach(fw=>{['add-ons','toolchains','hosts','examples','project'].forEach(dir=>{const src='src/frameworks/'+fw+'/'+dir;const dest='dist/frameworks/'+fw+'/'+dir;if(fs.existsSync(src))copyDir(src,dest)})})\"",
+    "copy-assets": "node -e \"const fs=require('fs');const path=require('path');function copyDir(src,dest){if(!fs.existsSync(dest))fs.mkdirSync(dest,{recursive:true});for(const entry of fs.readdirSync(src,{withFileTypes:true})){const srcPath=path.join(src,entry.name);const destPath=path.join(dest,entry.name);if(entry.isDirectory())copyDir(srcPath,destPath);else fs.copyFileSync(srcPath,destPath)}}['react','solid'].forEach(fw=>{['add-ons','toolchains','hosts','examples','project'].forEach(dir=>{const src='src/frameworks/'+fw+'/'+dir;const dest='dist/frameworks/'+fw+'/'+dir;if(fs.existsSync(src))copyDir(src,dest)})})\"",
     "dev": "tsc --watch",
     "test": "eslint ./src && vitest run",
     "test:watch": "vitest",
