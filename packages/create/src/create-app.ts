@@ -234,14 +234,24 @@ async function runCommandsAndInstallDependencies(
 
 function report(environment: Environment, options: Options) {
   const warnings: Array<string> = []
+  // TODO: nextSteps displays post-creation instructions for add-ons that require additional setup
+  // (e.g., starting a sibling server). Decide if this belongs in core or if add-ons should use README instead.
+  const nextSteps: Array<string> = []
   for (const addOn of options.chosenAddOns) {
     if (addOn.warning) {
       warnings.push(addOn.warning)
+    }
+    if (addOn.nextSteps) {
+      nextSteps.push(`${addOn.name}:\n${addOn.nextSteps}`)
     }
   }
 
   if (warnings.length > 0) {
     environment.warn('Warnings', warnings.join('\n'))
+  }
+
+  if (nextSteps.length > 0) {
+    environment.info('Next Steps', nextSteps.join('\n\n'))
   }
 
   // Format errors

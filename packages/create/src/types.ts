@@ -37,6 +37,10 @@ export const AddOnBaseSchema = z.object({
   link: z.string().optional(),
   license: z.string().optional(),
   warning: z.string().optional(),
+  // TODO: This property was added for add-ons that require post-creation setup steps
+  // (e.g., Strapi needs users to install/run a sibling server directory).
+  // Decide if this should be a core feature or if add-ons should document this in their README instead.
+  nextSteps: z.string().optional(),
   tailwind: z.boolean().optional().default(true),
   type: z.enum(['add-on', 'example', 'starter', 'toolchain', 'deployment']),
   category: z
