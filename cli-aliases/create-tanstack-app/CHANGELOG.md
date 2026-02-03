@@ -1,5 +1,17 @@
 # create-tanstack-app
 
+## 0.47.0
+
+### Minor Changes
+
+- force tailwind, force typescript ([`337eeba`](https://github.com/TanStack/cli/commit/337eebaafa190de96194910b6c8c9e550ca142fc))
+
+### Patch Changes
+
+- Updated dependencies [[`337eeba`](https://github.com/TanStack/cli/commit/337eebaafa190de96194910b6c8c9e550ca142fc)]:
+  - @tanstack/create@0.53.0
+  - @tanstack/cli@0.52.0
+
 ## 0.46.0
 
 ### Minor Changes
