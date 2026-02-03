@@ -69,13 +69,22 @@ describe('relativePath', () => {
       ),
     ).toBe('../integrations/tanstack-query/layout.tsx')
   })
-  it('windows', () => {
+  it('windows with ./ prefix', () => {
     expect(
       relativePath(
         '.\\src\\main.tsx.ejs',
         'src/integrations/tanstack-query/root-provider.tsx',
       ),
     ).toBe('./integrations/tanstack-query/root-provider.tsx')
+  })
+  it('windows without ./ prefix', () => {
+    expect(
+      relativePath(
+        'src\\routes\\__root.tsx.ejs',
+        'src/integrations/clerk/provider.tsx',
+        true,
+      ),
+    ).toBe('../integrations/clerk/provider')
   })
 })
 

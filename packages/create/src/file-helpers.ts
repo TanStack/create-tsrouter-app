@@ -54,12 +54,11 @@ export function relativePath(
   to: string,
   stripExtension: boolean = false,
 ) {
-  const fixedOnWindows = from.startsWith('.\\')
-    ? from.replace(/\\/g, '/')
-    : from
-  const cleanedFrom = fixedOnWindows.startsWith('./')
-    ? fixedOnWindows.slice(2)
-    : from
+  // Always normalize backslashes to forward slashes for Windows compatibility
+  const normalized = from.replace(/\\/g, '/')
+  const cleanedFrom = normalized.startsWith('./')
+    ? normalized.slice(2)
+    : normalized
   const cleanedTo = to.startsWith('./') ? to.slice(2) : to
 
   const fromSegments = cleanedFrom.split('/')
