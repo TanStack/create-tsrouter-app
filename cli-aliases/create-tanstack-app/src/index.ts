@@ -8,7 +8,5 @@ cli({
   name: 'create-tanstack-app',
   appName: 'TanStack',
   forcedDeployment: 'nitro',
-  defaultTemplate: 'file-router',
-  craCompatible: true,
   legacyAutoCreate: true,
 })

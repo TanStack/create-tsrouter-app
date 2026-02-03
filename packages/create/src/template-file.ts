@@ -99,10 +99,10 @@ export function createTemplateFile(environment: Environment, options: Options) {
     const templateValues = {
       packageManager: options.packageManager,
       projectName: options.projectName,
-      typescript: options.typescript,
-      tailwind: options.tailwind,
-      js: options.typescript ? 'ts' : 'js',
-      jsx: options.typescript ? 'tsx' : 'jsx',
+      typescript: true,
+      tailwind: true,
+      js: 'ts',
+      jsx: 'tsx',
       fileRouter: options.mode === 'file-router',
       codeRouter: options.mode === 'code-router',
       addOnEnabled,
@@ -167,10 +167,6 @@ export function createTemplateFile(environment: Environment, options: Options) {
         trailingComma: 'all',
         parser: 'typescript',
       })
-    }
-
-    if (!options.typescript) {
-      target = target.replace(/\.tsx$/, '.jsx').replace(/\.ts$/, '.js')
     }
 
     if (append) {

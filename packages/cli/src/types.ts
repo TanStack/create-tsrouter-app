@@ -1,11 +1,7 @@
 import type { PackageManager } from '@tanstack/create'
 
-export type TemplateOptions = 'typescript' | 'javascript' | 'file-router'
-
 export interface CliOptions {
-  template?: TemplateOptions
   framework?: string
-  tailwind?: boolean
   packageManager?: PackageManager
   toolchain?: string | false
   deployment?: string
@@ -24,5 +20,4 @@ export interface CliOptions {
   install?: boolean
   addOnConfig?: string
   force?: boolean
-  routerOnly?: boolean
 }

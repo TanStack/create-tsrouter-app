@@ -48,6 +48,7 @@ tanstack mcp --sse
 | Tool | Description |
 |------|-------------|
 | `listTanStackAddOns` | Get available add-ons for project creation |
+| `getAddOnDetails` | Get detailed info about a specific add-on |
 | `createTanStackApplication` | Create a new TanStack Start project |
 
 ### Documentation & Ecosystem

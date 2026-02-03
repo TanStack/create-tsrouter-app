@@ -24,6 +24,5 @@
       "jsName": "neon",
       "path": "neon-vite-plugin.ts"
     }
-  ],
-  "dependsOn": ["start"]
+  ]
 }

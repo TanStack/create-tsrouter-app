@@ -37,7 +37,7 @@ export const AddOnBaseSchema = z.object({
   link: z.string().optional(),
   license: z.string().optional(),
   warning: z.string().optional(),
-  tailwind: z.boolean().optional().default(true),
+  tailwind: z.boolean().optional(),
   type: z.enum(['add-on', 'example', 'starter', 'toolchain', 'deployment']),
   category: z
     .enum([
@@ -98,7 +98,6 @@ export const StarterSchema = AddOnBaseSchema.extend({
   framework: z.string(),
   mode: z.string(),
   typescript: z.boolean(),
-  tailwind: z.boolean(),
   banner: z.string().optional(),
 })
 

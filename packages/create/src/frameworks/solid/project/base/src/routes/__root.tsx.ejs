@@ -1,14 +1,12 @@
-<% if (!fileRouter) { ignoreFile() } %>import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/solid-router'
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/solid-router'
 import { TanStackRouterDevtools } from '@tanstack/solid-router-devtools'
 
 <% if (addOnEnabled['solid-ui']) { %>
 import "@fontsource/inter"
 <% } %>
 
-<% if (addOnEnabled.start) { %>
-  import { HydrationScript } from 'solid-js/web'
-  import { Suspense } from 'solid-js'
-<% } %>
+import { HydrationScript } from 'solid-js/web'
+import { Suspense } from 'solid-js'
 
 <% if (addOns.length || integrations.length || routes.length) { %>import Header from '../components/Header'
 <% } %>
@@ -26,7 +24,6 @@ export const Route = createRootRouteWithContext()({
   shellComponent: RootComponent,
 })
 
-<% if (addOnEnabled.start) { %>
 function RootComponent() {
     return (
       <html>
@@ -50,27 +47,3 @@ function RootComponent() {
       </html>
     );
 }
-<% } else { %>
-function RootComponent() {
-  return (
-    <>
-      <% for(const integration of integrations.filter(i => i.type === 'provider')) { %>
-        <<%= integration.jsName %>>
-      <% } %>
-      <HeadContent />
-      <% if (addOns.length || integrations.length || routes.length) { %>
-        <Header />
-      <% } %>
-      <Outlet />
-      <TanStackRouterDevtools />
-      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %>
-        <<%= integration.jsName %> />
-      <% } %>
-      <% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %>
-        </<%= integration.jsName %>>
-      <% } %>
-      <Scripts />
-    </>
-  )
-}
-<% } %>

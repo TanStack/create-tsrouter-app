@@ -27,10 +27,9 @@ import { promptForAddOns, promptForCreateOptions } from './options.js'
 import { normalizeOptions, validateDevWatchOptions } from './command-line.js'
 
 import { createUIEnvironment } from './ui-environment.js'
-import { convertTemplateToMode } from './utils.js'
 import { DevWatchManager } from './dev-watch.js'
 
-import type { CliOptions, TemplateOptions } from './types.js'
+import type { CliOptions } from './types.js'
 import type {
   FrameworkDefinition,
   Options,
@@ -45,12 +44,9 @@ const VERSION = packageJson.version
 export function cli({
   name,
   appName,
-  forcedMode,
   forcedAddOns = [],
-  defaultTemplate = 'javascript',
   forcedDeployment,
   defaultFramework,
-  craCompatible = false,
   webBase,
   frameworkDefinitionInitializers,
   showDeploymentOptions = false,
@@ -58,12 +54,9 @@ export function cli({
 }: {
   name: string
   appName: string
-  forcedMode?: string
   forcedAddOns?: Array<string>
   forcedDeployment?: string
-  defaultTemplate?: TemplateOptions
   defaultFramework?: string
-  craCompatible?: boolean
   webBase?: string
   frameworkDefinitionInitializers?: Array<() => FrameworkDefinition>
   showDeploymentOptions?: boolean
@@ -93,23 +86,8 @@ export function cli({
     }
   }
 
-  let defaultMode: string | undefined = forcedMode
-  const supportedModes = new Set<string>()
-  for (const framework of getFrameworks()) {
-    for (const mode of Object.keys(framework.supportedModes)) {
-      supportedModes.add(mode)
-    }
-  }
-  if (defaultMode && !supportedModes.has(defaultMode)) {
-    throw new InvalidArgumentError(
-      `Invalid mode: ${defaultMode}. The following are allowed: ${Array.from(
-        supportedModes,
-      ).join(', ')}`,
-    )
-  }
-  if (supportedModes.size < 2) {
-    defaultMode = Array.from(supportedModes)[0]
-  }
+  // Mode is always file-router (TanStack Start)
+  const defaultMode = 'file-router'
 
   program
     .name(name)
@@ -121,8 +99,7 @@ export function cli({
     if (options.listAddOns) {
       const addOns = await getAllAddOns(
         getFrameworkByName(options.framework || defaultFramework || 'React')!,
-        defaultMode ||
-          convertTemplateToMode(options.template || defaultTemplate),
+        defaultMode,
       )
       let hasConfigurableAddOns = false
       for (const addOn of addOns.filter((a) => !forcedAddOns.includes(a.id))) {
@@ -143,8 +120,7 @@ export function cli({
     if (options.addonDetails) {
       const addOns = await getAllAddOns(
         getFrameworkByName(options.framework || defaultFramework || 'React')!,
-        defaultMode ||
-          convertTemplateToMode(options.template || defaultTemplate),
+        defaultMode,
       )
       const addOn = addOns.find((a) => a.id === options.addonDetails)
       if (!addOn) {
@@ -239,7 +215,6 @@ export function cli({
           projectName,
           framework: framework.id,
         },
-        defaultMode,
         forcedAddOns,
       )
 
@@ -285,33 +260,12 @@ export function cli({
         options.framework || defaultFramework || 'React',
       )!.id
 
-      if (defaultMode) {
-        cliOptions.template = defaultMode as TemplateOptions
-      }
-
-      // Default to Start unless --router-only is specified
-      // Skip this if forcedAddOns already includes 'start' (e.g., from cli-aliases)
-      if (!options.routerOnly && !forcedAddOns.includes('start')) {
-        if (Array.isArray(cliOptions.addOns)) {
-          if (!cliOptions.addOns.includes('start')) {
-            cliOptions.addOns = [...cliOptions.addOns, 'start']
-          }
-        } else if (cliOptions.addOns !== true) {
-          cliOptions.addOns = ['start']
-        }
-        // Also set template to file-router for Start
-        if (!cliOptions.template) {
-          cliOptions.template = 'file-router'
-        }
-      }
-
       let finalOptions: Options | undefined
       if (cliOptions.interactive) {
         cliOptions.addOns = true
       } else {
         finalOptions = await normalizeOptions(
           cliOptions,
-          defaultMode,
           forcedAddOns,
           { forcedDeployment },
         )
@@ -320,7 +274,6 @@ export function cli({
       if (options.ui) {
         const optionsFromCLI = await normalizeOptions(
           cliOptions,
-          defaultMode,
           forcedAddOns,
           { disableNameCheck: true, forcedDeployment },
         )
@@ -346,7 +299,6 @@ export function cli({
       } else {
         intro(`Let's configure your ${appName} application`)
         finalOptions = await promptForCreateOptions(cliOptions, {
-          forcedMode: defaultMode,
           forcedAddOns,
           showDeploymentOptions,
         })
@@ -383,25 +335,6 @@ export function cli({
   // Helper to configure create command options
   function configureCreateCommand(cmd: Command) {
     cmd.argument('[project-name]', 'name of the project')
-
-    if (!defaultMode && craCompatible) {
-      cmd.option<'typescript' | 'javascript' | 'file-router'>(
-        '--template <type>',
-        'project template (typescript, javascript, file-router)',
-        (value) => {
-          if (
-            value !== 'typescript' &&
-            value !== 'javascript' &&
-            value !== 'file-router'
-          ) {
-            throw new InvalidArgumentError(
-              `Invalid template: ${value}. Only the following are allowed: typescript, javascript, file-router`,
-            )
-          }
-          return value
-        },
-      )
-    }
 
     if (!defaultFramework) {
       cmd.option<string>(
@@ -486,10 +419,7 @@ export function cli({
     }
 
     cmd
-      .option('--router-only', 'create a Router-only SPA without TanStack Start (SSR)', false)
       .option('--interactive', 'interactive mode', false)
-      .option('--tailwind', 'add Tailwind CSS')
-      .option('--no-tailwind', 'skip Tailwind CSS')
       .option<Array<string> | boolean>(
         '--add-ons [...add-ons]',
         'pick from a list of available add-ons (comma separated list)',
@@ -541,7 +471,6 @@ export function cli({
     .option('--sse', 'Run in SSE mode instead of stdio', false)
     .action(async (options: { sse: boolean }) => {
       await runMCPServer(options.sse, {
-        forcedMode: defaultMode,
         forcedAddOns,
         appName,
       })

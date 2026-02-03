@@ -21,7 +21,6 @@ import type { CliOptions } from './types.js'
 
 export async function normalizeOptions(
   cliOptions: CliOptions,
-  forcedMode?: string,
   forcedAddOns?: Array<string>,
   opts?: {
     disableNameCheck?: boolean
@@ -51,41 +50,23 @@ export async function normalizeOptions(
     }
   }
 
-  let tailwind = !!cliOptions.tailwind
-
-  let mode: string =
-    forcedMode ||
-    (cliOptions.template === 'file-router' ? 'file-router' : 'code-router')
+  // Mode is always file-router (TanStack Start)
+  let mode = 'file-router'
 
   const starter = cliOptions.starter
     ? await loadStarter(cliOptions.starter)
     : undefined
 
-  // TODO: Make this declarative
-  let typescript =
-    cliOptions.template === 'typescript' ||
-    cliOptions.template === 'file-router' ||
-    cliOptions.framework === 'solid'
+  // TypeScript and Tailwind are always enabled with TanStack Start
+  const typescript = true
+  const tailwind = true
 
   if (starter) {
-    tailwind = starter.tailwind
-    typescript = starter.typescript
     cliOptions.framework = starter.framework
     mode = starter.mode
   }
 
   const framework = getFrameworkById(cliOptions.framework || 'react-cra')!
-
-  if (
-    forcedMode &&
-    framework.supportedModes?.[forcedMode]?.forceTypescript !== undefined
-  ) {
-    typescript = true
-  }
-
-  if (cliOptions.framework === 'solid') {
-    tailwind = true
-  }
 
   async function selectAddOns() {
     // Edge case for Windows Powershell
@@ -130,28 +111,6 @@ export async function normalizeOptions(
   }
 
   const chosenAddOns = await selectAddOns()
-
-  if (chosenAddOns.length) {
-    typescript = true
-
-    // Check if any add-on explicitly requires tailwind
-    const addOnsRequireTailwind = chosenAddOns.some(
-      (addOn) => addOn.tailwind === true,
-    )
-
-    // Only set tailwind to true if:
-    // 1. An add-on explicitly requires it, OR
-    // 2. User explicitly set it via CLI
-    if (addOnsRequireTailwind) {
-      tailwind = true
-    } else if (cliOptions.tailwind === true) {
-      tailwind = true
-    } else if (cliOptions.tailwind === false) {
-      tailwind = false
-    }
-    // If cliOptions.tailwind is undefined and no add-ons require it,
-    // leave tailwind as is (will be prompted in interactive mode)
-  }
 
   // Handle add-on configuration option
   let addOnOptionsFromCLI = {}

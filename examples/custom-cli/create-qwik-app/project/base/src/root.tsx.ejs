@@ -29,7 +29,7 @@ export default component$(() => {
         )}
         <RouterHead />
       </head>
-      <body lang="en" <% if (tailwind) { %>class="bg-black text-white"<% } %>>
+      <body lang="en" class="bg-black text-white">
         <RouterOutlet />
         {!isDev && <ServiceWorkerRegister />}
       </body>

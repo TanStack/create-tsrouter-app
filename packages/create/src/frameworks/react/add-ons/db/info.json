@@ -8,7 +8,7 @@
   "priority": 48,
   "modes": ["file-router"],
   "link": "https://tanstack.com/db/latest",
-  "dependsOn": ["tanstack-query", "start"],
+  "dependsOn": ["tanstack-query"],
   "routes": [
     {
       "icon": "Database",

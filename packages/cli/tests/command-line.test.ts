@@ -67,46 +67,25 @@ describe('normalizeOptions', () => {
     expect(options?.targetDir).toBe(resolve(process.cwd()))
   })
 
-  it('should return enable typescript based on the framework', async () => {
-    const jsOptions = await normalizeOptions({
+  it('should always enable typescript (file-router/TanStack Start requires it)', async () => {
+    const options = await normalizeOptions({
       projectName: 'test',
-      template: 'javascript',
     })
-    expect(jsOptions?.typescript).toBe(false)
-    expect(jsOptions?.mode).toBe('code-router')
-
-    const tsOptions = await normalizeOptions({
-      projectName: 'test',
-      template: 'typescript',
-    })
-    expect(tsOptions?.typescript).toBe(true)
-    expect(tsOptions?.mode).toBe('code-router')
-
-    const frOptions = await normalizeOptions({
-      projectName: 'test',
-      template: 'file-router',
-    })
-    expect(frOptions?.typescript).toBe(true)
-    expect(frOptions?.mode).toBe('file-router')
+    expect(options?.typescript).toBe(true)
+    expect(options?.mode).toBe('file-router')
   })
 
-  it('should return enable tailwind if the framework is solid', async () => {
+  it('tailwind is always enabled', async () => {
+    const options = await normalizeOptions({
+      projectName: 'test',
+    })
+    expect(options?.tailwind).toBe(true)
+
     const solidOptions = await normalizeOptions({
       projectName: 'test',
       framework: 'solid',
     })
     expect(solidOptions?.tailwind).toBe(true)
-
-    const twOptions = await normalizeOptions({
-      projectName: 'test',
-      tailwind: true,
-    })
-    expect(twOptions?.tailwind).toBe(true)
-
-    const noOptions = await normalizeOptions({
-      projectName: 'test',
-    })
-    expect(noOptions?.tailwind).toBe(false)
   })
 
   it('should handle a starter url', async () => {
@@ -137,7 +116,6 @@ describe('normalizeOptions', () => {
     fetch.mockResponseOnce(
       JSON.stringify({
         id: 'https://github.com/cta-dev/cta-starter-solid',
-        tailwind: true,
         typescript: false,
         framework: 'solid',
         mode: 'file-router',
@@ -195,7 +173,6 @@ describe('normalizeOptions', () => {
         projectName: 'test',
         framework: 'react-cra',
       },
-      'file-router',
       ['foo'],
     )
     expect(options?.chosenAddOns.map((a) => a.id).includes('foo')).toBe(true)
@@ -229,16 +206,12 @@ describe('normalizeOptions', () => {
         projectName: 'test',
         addOns: ['baz'],
         framework: 'react-cra',
-        template: 'file-router',
       },
-      'file-router',
       ['foo'],
     )
     expect(options?.chosenAddOns.map((a) => a.id).includes('foo')).toBe(true)
     expect(options?.chosenAddOns.map((a) => a.id).includes('baz')).toBe(true)
-    // Tailwind is not automatically set to true unless an add-on explicitly requires it
-    // Since mock add-ons don't have tailwind: true, tailwind should be false
-    expect(options?.tailwind).toBe(false)
+    expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })
 
@@ -265,9 +238,7 @@ describe('normalizeOptions', () => {
       toolchain: 'biome',
     })
     expect(options?.chosenAddOns.map((a) => a.id).includes('biome')).toBe(true)
-    // Tailwind is not automatically set to true unless an add-on explicitly requires it
-    // Since mock add-ons don't have tailwind: true, tailwind should be false
-    expect(options?.tailwind).toBe(false)
+    expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })
 

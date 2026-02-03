@@ -50,7 +50,7 @@ export function templatize(routeCode: string, routeFile: string) {
   // Replace the import
   code = code.replace(
     /import { createFileRoute } from ['"]@tanstack\/react-router['"]/g,
-    `import { <% if (fileRouter) { %>createFileRoute<% } else { %>createRoute<% } %> } from '@tanstack/react-router'`,
+    `import { createFileRoute } from '@tanstack/react-router'`,
   )
 
   // Extract route path and definition, then transform the route declaration
@@ -66,23 +66,8 @@ export function templatize(routeCode: string, routeFile: string) {
     const routeDefinition = routeMatch[2]
     code = code.replace(
       fullMatch,
-      `<% if (codeRouter) { %>
-import type { RootRoute } from '@tanstack/react-router'
-import tailwind from '@tailwindcss/vite';
-<% } else { %>
-export const Route = createFileRoute('${path}')({${routeDefinition}})
-<% } %>`,
+      `export const Route = createFileRoute('${path}')({${routeDefinition}})`,
     )
-
-    code += `
-<% if (codeRouter) { %>
-export default (parentRoute: RootRoute) => createRoute({
-  path: '${path}',
-  ${routeDefinition}
-  getParentRoute: () => parentRoute,
-})
-<% } %>
-`
   } else {
     console.error(`No route found in the file: ${routeFile}`)
   }
@@ -108,20 +93,6 @@ export async function validateAddOnSetup(environment: Environment) {
     )
     process.exit(1)
   }
-  if (!options.tailwind) {
-    environment.error(
-      'This project is not using Tailwind CSS.',
-      'To create an add-on, the project must be created with Tailwind CSS.',
-    )
-    process.exit(1)
-  }
-  if (!options.typescript) {
-    environment.error(
-      'This project is not using TypeScript.',
-      'To create an add-on, the project must be created with TypeScript.',
-    )
-    process.exit(1)
-  }
 }
 
 export async function readOrGenerateAddOnInfo(
@@ -135,7 +106,6 @@ export async function readOrGenerateAddOnInfo(
         version: '0.0.1',
         description: 'Add-on',
         author: 'Jane Smith <jane.smith@example.com>',
-        tailwind: options.tailwind || true,
         license: 'MIT',
         link: `https://github.com/jane-smith/${options.projectName}-add-on`,
         shadcnComponents: [],
@@ -152,7 +122,6 @@ export async function readOrGenerateAddOnInfo(
         },
         dependsOn: options.chosenAddOns,
       } as AddOnInfo)
-  info.tailwind = options.tailwind || true
   return info
 }
 

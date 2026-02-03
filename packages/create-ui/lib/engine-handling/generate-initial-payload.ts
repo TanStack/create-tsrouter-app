@@ -65,7 +65,7 @@ export async function generateInitialPayload() {
         projectName: projectOptions.projectName || basename(projectPath),
         mode: forcedRouterMode || projectOptions.mode,
         typescript: projectOptions.typescript || true,
-        tailwind: projectOptions.tailwind || true,
+        tailwind: true,
         git: projectOptions.git || true,
         targetDir:
           projectOptions.targetDir ||

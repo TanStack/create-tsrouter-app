@@ -1,19 +1,14 @@
 <% if (codeRouter) { ignoreFile() } %>
 import { createFileRoute } from "@tanstack/react-router";
-<% if (!tailwind) { %>import "../App.css";<% } %>
 
 export const Route = createFileRoute("/")({
   component: App,
 });
 
 function App() {
-  return (<% if (tailwind) { %>
+  return (
     <div className="text-center">
       <h1>I'm a customized setup</h1>
     </div>
-<% } else { %>
-    <div className="App">
-      <h1>I'm a customized setup</h1>
-    </div>
-<% } %>  );
+  );
 }

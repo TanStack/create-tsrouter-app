@@ -16,10 +16,7 @@ import {
   selectDeployment,
   selectGit,
   selectPackageManager,
-  selectRouterType,
-  selectTailwind,
   selectToolchain,
-  selectTypescript,
 } from './ui-prompts.js'
 
 import {
@@ -35,11 +32,9 @@ export async function promptForCreateOptions(
   cliOptions: CliOptions,
   {
     forcedAddOns = [],
-    forcedMode,
     showDeploymentOptions = false,
   }: {
     forcedAddOns?: Array<string>
-    forcedMode?: string
     showDeploymentOptions?: boolean
   },
 ): Promise<Required<Options> | undefined> {
@@ -81,29 +76,11 @@ export async function promptForCreateOptions(
     }
   }
 
-  // Router type selection
-  if (forcedMode) {
-    options.mode = forcedMode
-  } else if (cliOptions.template) {
-    options.mode =
-      cliOptions.template === 'file-router' ? 'file-router' : 'code-router'
-  } else {
-    options.mode = await selectRouterType()
-  }
+  // Mode is always file-router (TanStack Start)
+  options.mode = 'file-router'
 
-  // TypeScript selection (if using Code Router)
-  // TODO: Make this declarative
-  options.typescript =
-    options.mode === 'file-router' || options.framework.id === 'solid'
-  if (
-    forcedMode &&
-    options.framework.supportedModes[forcedMode].forceTypescript
-  ) {
-    options.typescript = true
-  }
-  if (!options.typescript && options.mode === 'code-router') {
-    options.typescript = await selectTypescript()
-  }
+  // TypeScript is always enabled with file-router
+  options.typescript = true
 
   // Package manager selection
   if (cliOptions.packageManager) {
@@ -170,29 +147,8 @@ export async function promptForCreateOptions(
     await finalizeAddOns(options.framework, options.mode, Array.from(addOns)),
   )
 
-  if (options.chosenAddOns.length) {
-    options.typescript = true
-  }
-
-  // Tailwind selection
-  // Only treat add-ons as requiring tailwind if they explicitly have "tailwind": true
-  const addOnsRequireTailwind = options.chosenAddOns.some(
-    (addOn) => addOn.tailwind === true,
-  )
-
-  if (addOnsRequireTailwind) {
-    // If any add-on explicitly requires tailwind, enable it automatically
-    options.tailwind = true
-  } else if (cliOptions.tailwind !== undefined) {
-    // User explicitly provided a CLI flag, respect it
-    options.tailwind = !!cliOptions.tailwind
-  } else if (options.framework.id === 'react-cra') {
-    // Only show prompt for react-cra when no CLI flag and no add-ons require it
-    options.tailwind = await selectTailwind()
-  } else {
-    // For other frameworks (like solid), default to true
-    options.tailwind = true
-  }
+  // Tailwind is always enabled
+  options.tailwind = true
 
   // Prompt for add-on options in interactive mode
   if (Array.isArray(cliOptions.addOns)) {

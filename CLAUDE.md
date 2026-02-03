@@ -3,11 +3,8 @@
 ## Quick Reference
 
 ```bash
-# Create TanStack Start app (default)
+# Create TanStack Start app
 npx @tanstack/cli create my-app
-
-# Create Router-only SPA (no SSR)
-npx @tanstack/cli create my-app --router-only
 
 # With add-ons
 npx @tanstack/cli create my-app --add-ons clerk,drizzle,tanstack-query
@@ -50,7 +47,6 @@ node ../cli/packages/cli/dist/index.js create my-app
 | Add-on | Plugin that extends apps (auth, DB, etc) | `--add-ons` |
 | Starter | Reusable preset of add-ons (config only) | `--starter` |
 | Framework | React or Solid | `--framework` |
-| Mode | `file-router` (default) or `code-router` | `--router-only` for code-router SPA |
 
 ## CLI Commands
 
@@ -68,12 +64,10 @@ node ../cli/packages/cli/dist/index.js create my-app
 | Flag | Description |
 |------|-------------|
 | `--add-ons <ids>` | Comma-separated add-on IDs |
-| `--router-only` | SPA without TanStack Start (no SSR) |
 | `--framework <name>` | React or Solid |
 | `--toolchain <id>` | Toolchain (use `--list-add-ons` to see options) |
 | `--deployment <id>` | Deployment target (use `--list-add-ons` to see options) |
 | `--starter <url>` | Use starter preset |
-| `--no-tailwind` | Skip Tailwind |
 | `--no-git` | Skip git init |
 | `--no-install` | Skip npm install |
 | `-y` | Accept defaults |
@@ -85,15 +79,14 @@ node ../cli/packages/cli/dist/index.js create my-app
 | Variable | Type | Description |
 |----------|------|-------------|
 | `projectName` | string | Project name |
-| `typescript` | boolean | TypeScript enabled |
-| `tailwind` | boolean | Tailwind enabled |
-| `fileRouter` | boolean | File-based routing |
-| `codeRouter` | boolean | Code-based routing |
+| `typescript` | boolean | Always true (TanStack Start requires TS) |
+| `tailwind` | boolean | Always true (Tailwind always enabled) |
+| `fileRouter` | boolean | Always true |
 | `addOnEnabled` | object | `{ [id]: boolean }` |
 | `addOnOption` | object | `{ [id]: options }` |
 | `packageManager` | string | npm/pnpm/yarn/bun/deno |
-| `js` | string | `ts` or `js` |
-| `jsx` | string | `tsx` or `jsx` |
+| `js` | string | Always `ts` |
+| `jsx` | string | Always `tsx` |
 
 ## Testing Add-ons Locally
 

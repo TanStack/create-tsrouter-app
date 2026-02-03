@@ -9,8 +9,6 @@
   "priority": 26,
   "link": "https://www.better-auth.com",
   "modes": ["file-router"],
-  "tailwind": true,
-  "dependsOn": ["start"],
   "routes": [
     {
       "url": "/demo/better-auth",

@@ -43,6 +43,6 @@
       "jsName": "AiDevtools"
     }
   ],
-  "dependsOn": ["start", "store"],
+  "dependsOn": ["store"],
   "variables": []
 }

@@ -9,7 +9,6 @@
   "color": "#6C47FF",
   "priority": 150,
   "link": "https://clerk.com",
-  "tailwind": true,
   "routes": [
     {
       "url": "/demo/clerk",

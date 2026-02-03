@@ -34,14 +34,9 @@ export function createFrameworkDefinition(): FrameworkDefinition {
     basePackageJSON,
     optionalPackages,
     supportedModes: {
-      'code-router': {
-        displayName: 'Code Router',
-        description: 'TanStack Router using code to define routes',
-        forceTypescript: false,
-      },
       'file-router': {
         displayName: 'File Router',
-        description: 'TanStack Router using files to define routes',
+        description: 'TanStack Start with file-based routing',
         forceTypescript: true,
       },
     },

@@ -15,6 +15,5 @@
       "path": "src/routes/demo.sentry.testing.tsx",
       "jsName": "SentryDemo"
     }
-  ],
-  "dependsOn": ["start"]
+  ]
 }

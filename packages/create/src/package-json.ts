@@ -32,12 +32,8 @@ export function createPackageJSON(options: Options) {
   }
 
   const additions: Array<Record<string, any> | undefined> = [
-    options.typescript
-      ? options.framework.optionalPackages.typescript
-      : undefined,
-    options.tailwind
-      ? options.framework.optionalPackages.tailwindcss
-      : undefined,
+    options.framework.optionalPackages.typescript,
+    options.framework.optionalPackages.tailwindcss,
     options.mode ? options.framework.optionalPackages[options.mode] : undefined,
   ]
   for (const addition of additions.filter(Boolean)) {
@@ -52,10 +48,10 @@ export function createPackageJSON(options: Options) {
       const templateValues = {
         packageManager: options.packageManager,
         projectName: options.projectName,
-        typescript: options.typescript,
-        tailwind: options.tailwind,
-        js: options.typescript ? 'ts' : 'js',
-        jsx: options.typescript ? 'tsx' : 'jsx',
+        typescript: true,
+        tailwind: true,
+        js: 'ts',
+        jsx: 'tsx',
         fileRouter: options.mode === 'file-router',
         codeRouter: options.mode === 'code-router',
         addOnEnabled: options.chosenAddOns.reduce<Record<string, boolean>>(

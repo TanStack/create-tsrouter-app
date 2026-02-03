@@ -9,7 +9,7 @@
   "priority": 46,
   "link": "https://orm.drizzle.team/",
   "modes": ["file-router"],
-  "dependsOn": ["start"],
+  
   "options": {
     "database": {
       "type": "select",

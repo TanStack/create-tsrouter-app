@@ -7,8 +7,6 @@ import {
   selectAddOns,
   selectGit,
   selectPackageManager,
-  selectRouterType,
-  selectTailwind,
   selectToolchain,
 } from '../src/ui-prompts'
 
@@ -34,42 +32,6 @@ describe('getProjectName', () => {
     vi.spyOn(clack, 'isCancel').mockImplementation(() => true)
 
     await expect(getProjectName()).rejects.toThrowError(/exit/)
-  })
-})
-
-describe('selectRouterType', () => {
-  it('should select the file router', async () => {
-    vi.spyOn(clack, 'select').mockImplementation(async () => 'file-router')
-    vi.spyOn(clack, 'isCancel').mockImplementation(() => false)
-
-    const routerType = await selectRouterType()
-    expect(routerType).toBe('file-router')
-  })
-
-  it('should exit on cancel', async () => {
-    vi.spyOn(clack, 'select').mockImplementation(async () => 'Cancelled')
-    vi.spyOn(clack, 'isCancel').mockImplementation(() => true)
-
-    await expect(() => selectRouterType()).rejects.toThrowError(/exit/)
-  })
-})
-
-describe('selectTailwind', () => {
-  it('should select tailwind', async () => {
-    vi.spyOn(clack, 'confirm').mockImplementation(async () => true)
-    vi.spyOn(clack, 'isCancel').mockImplementation(() => false)
-
-    const tailwind = await selectTailwind()
-    expect(tailwind).toBe(true)
-  })
-
-  it('should exit on cancel', async () => {
-    vi.spyOn(clack, 'confirm').mockImplementation(async () =>
-      Symbol.for('cancel'),
-    )
-    vi.spyOn(clack, 'isCancel').mockImplementation(() => true)
-
-    await expect(selectTailwind()).rejects.toThrowError(/exit/)
   })
 })
 

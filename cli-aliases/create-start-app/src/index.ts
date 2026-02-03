@@ -11,11 +11,8 @@ import {
 cli({
   name: 'create-start-app',
   appName: 'TanStack Start',
-  forcedMode: 'file-router',
-  forcedAddOns: ['start'],
   showDeploymentOptions: true,
   forcedDeployment: 'nitro',
-  craCompatible: true,
   legacyAutoCreate: true,
   frameworkDefinitionInitializers: [
     createReactFrameworkDefinition,

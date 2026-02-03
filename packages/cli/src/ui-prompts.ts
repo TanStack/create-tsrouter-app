@@ -43,56 +43,6 @@ export async function getProjectName(): Promise<string> {
   return value
 }
 
-export async function selectRouterType(): Promise<string> {
-  const routerType = await select({
-    message: 'Select the router type:',
-    options: [
-      {
-        value: 'file-router',
-        label: 'File Router - File-based routing structure',
-      },
-      {
-        value: 'code-router',
-        label: 'Code Router - Traditional code-based routing',
-      },
-    ],
-    initialValue: 'file-router',
-  })
-
-  if (isCancel(routerType)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
-  }
-
-  return routerType
-}
-
-export async function selectTypescript(): Promise<boolean> {
-  const typescriptEnable = await confirm({
-    message: 'Would you like to use TypeScript?',
-    initialValue: true,
-  })
-  if (isCancel(typescriptEnable)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
-  }
-  return typescriptEnable
-}
-
-export async function selectTailwind(): Promise<boolean> {
-  const tailwind = await confirm({
-    message: 'Would you like to use Tailwind CSS?',
-    initialValue: true,
-  })
-
-  if (isCancel(tailwind)) {
-    cancel('Operation cancelled.')
-    process.exit(0)
-  }
-
-  return tailwind
-}
-
 export async function selectPackageManager(): Promise<PackageManager> {
   const packageManager = await select({
     message: 'Select package manager:',

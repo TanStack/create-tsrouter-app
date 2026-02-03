@@ -228,17 +228,8 @@ export const useModeEditable = () => {
 }
 
 export const useTypeScriptEditable = () => {
-  const ready = useReady()
-  const hasProjectStarter = useHasProjectStarter()
-  const routerMode = useRouterMode()
-  return ready ? hasProjectStarter && routerMode === 'code-router' : false
-}
-
-export const useTailwindEditable = () => {
-  const ready = useReady()
-  const hasProjectStarter = useHasProjectStarter()
-  const routerMode = useRouterMode()
-  return ready ? hasProjectStarter && routerMode === 'code-router' : false
+  // TypeScript is always enabled with TanStack Start
+  return false
 }
 
 export const useProjectName = () =>
@@ -360,12 +351,6 @@ export const setRouterMode = (mode: string) =>
 export function setTypeScript(typescript: boolean) {
   useProjectOptions.setState({
     typescript,
-  })
-}
-
-export function setTailwind(tailwind: boolean) {
-  useProjectOptions.setState({
-    tailwind,
   })
 }
 

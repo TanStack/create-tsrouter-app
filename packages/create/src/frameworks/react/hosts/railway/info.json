@@ -9,7 +9,6 @@
   "exclusive": ["deploy"],
   "color": "#9B4DCA",
   "priority": 160,
-  "tailwind": false,
   "integrations": [
     {
       "type": "vite-plugin",

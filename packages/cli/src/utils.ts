@@ -1,13 +1,5 @@
 import { basename } from 'node:path'
 import validatePackageName from 'validate-npm-package-name'
-import type { TemplateOptions } from './types.js'
-
-export function convertTemplateToMode(template: TemplateOptions): string {
-  if (template === 'typescript' || template === 'javascript') {
-    return 'code-router'
-  }
-  return 'file-router'
-}
 
 export function sanitizePackageName(name: string): string {
   return name

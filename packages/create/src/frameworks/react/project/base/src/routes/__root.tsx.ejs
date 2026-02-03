@@ -1,6 +1,6 @@
 <% let hasContext = addOnEnabled["apollo-client"] || addOnEnabled["tanstack-query"]; %>
-<% if (!fileRouter) { ignoreFile() } %>import { <% if (addOnEnabled.start) { %>
-  HeadContent<% } else { %>Outlet<% } %><% if (addOnEnabled.start) { %>, Scripts<% } %>, <% if (hasContext) { %>createRootRouteWithContext<% } else { %>createRootRoute<% } %><% if (addOnEnabled.paraglide) { %>, redirect<% } %> } from '@tanstack/react-router'
+import {
+  HeadContent, Scripts, <% if (hasContext) { %>createRootRouteWithContext<% } else { %>createRootRoute<% } %> } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools'
 <% if (addOns.length) { %>
@@ -8,11 +8,9 @@ import Header from '../components/Header'
 <% } %><% for(const integration of integrations.filter(i => i.type === 'layout' || i.type === 'provider' || i.type === 'devtools')) { %>
 import <%= integration.jsName %> from '<%= relativePath(integration.path, true) %>'
 <% } %><% if (addOnEnabled.paraglide) { %>
-import { getLocale, shouldRedirect } from '@/paraglide/runtime'
+import { getLocale } from '@/paraglide/runtime'
 <% } %>
-<% if (addOnEnabled.start) { %>
 import appCss from '../styles.css?url'
-<% } %>
 <% if (addOnEnabled["apollo-client"]) { %>
 import type { ApolloClientIntegration } from "@apollo/client-integration-tanstack-start";
 <% } %>
@@ -41,20 +39,9 @@ export const Route = <% if (hasContext) { %>createRootRouteWithContext<MyRouterC
     if (typeof document !== 'undefined') {
       document.documentElement.setAttribute('lang', getLocale())
     }
-
-    <% if (!addOnEnabled.start) { %>// Client-side fallback redirect for SPA/file-router builds. Start apps should
-    // prefer server-side paraglideMiddleware (see start template server.ts).
-    if (typeof window !== 'undefined') {
-      const decision = await shouldRedirect({ url: window.location.href })
-
-      if (decision.redirectUrl) {
-        throw redirect({ href: decision.redirectUrl.href })
-      }
-    }<% } %>
   },
 <% } %>
-<% if (addOnEnabled.start) { %>
-    head: () => ({
+  head: () => ({
     meta: [
       {
         charSet: 'utf-8',
@@ -74,35 +61,9 @@ export const Route = <% if (hasContext) { %>createRootRouteWithContext<MyRouterC
       },
     ],
   }),
-<% } %>
-<% if (addOnEnabled.start) { %>
   shellComponent: RootDocument
-<% } else { %>
-  component: () => (
-    <>
-  <% for(const integration of integrations.filter(i => i.type === 'provider')) { %><<%= integration.jsName %>>
-  <% } %><% if (addOns.length) { %><Header />  
-  <% } %><Outlet />
-        <TanStackDevtools
-        config={{
-          position: 'bottom-right',
-        }}
-        plugins={[
-          {
-            name: 'Tanstack Router',
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-          <% for(const integration of integrations.filter(i => i.type === 'devtools')) { %><%= integration.jsName %>,<% } %>
-        ]}
-      />
-      <% for(const integration of integrations.filter(i => i.type === 'layout')) { %><<%= integration.jsName %> />
-      <% } %><% for(const integration of integrations.filter(i => i.type === 'provider').reverse()) { %></<%= integration.jsName %>>
-    <% } %>
-    </>)
-<% } %>
 })
 
-<% if (addOnEnabled.start) { %>
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <% if (addOnEnabled.paraglide) { %><html lang={getLocale()}><% } else { %><html lang="en"><% } %>
@@ -132,4 +93,3 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     </html>
   )
 }
-<% } %>

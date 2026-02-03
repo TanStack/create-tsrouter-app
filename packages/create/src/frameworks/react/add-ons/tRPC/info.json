@@ -4,7 +4,7 @@
   "phase": "add-on",
   "modes": ["file-router"],
   "link": "https://trpc.io/",
-  "dependsOn": ["tanstack-query", "start"],
+  "dependsOn": ["tanstack-query"],
   "type": "add-on",
   "category": "api",
   "color": "#2596BE",

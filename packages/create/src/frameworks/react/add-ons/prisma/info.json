@@ -9,7 +9,7 @@
   "priority": 120,
   "link": "https://www.prisma.io/",
   "modes": ["file-router"],
-  "dependsOn": ["start"],
+  
   "postInitSpecialSteps": ["post-init-script"],
   "options": {
     "database": {

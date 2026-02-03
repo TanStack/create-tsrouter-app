@@ -9,7 +9,6 @@
   "color": "#6363F1",
   "priority": 160,
   "link": "https://workos.com",
-  "tailwind": true,
   "routes": [
     {
       "icon": "CircleUserRound",

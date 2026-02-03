@@ -227,7 +227,6 @@ export async function runMCPServer(
     appName,
     name,
   }: {
-    forcedMode?: string
     forcedAddOns?: Array<string>
     appName?: string
     name?: string

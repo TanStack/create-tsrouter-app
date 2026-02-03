@@ -17,6 +17,5 @@
       "path": "src/routes/demo.mcp-todos.tsx",
       "jsName": "MCPTodosDemo"
     }
-  ],
-  "dependsOn": ["start"]
+  ]
 }

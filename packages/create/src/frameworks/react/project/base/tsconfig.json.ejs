@@ -1,4 +1,4 @@
-<% if (!typescript) { ignoreFile() } %>{
+{
   <% if (addOnEnabled.eslint) { %>"include": ["**/*.ts", "**/*.tsx", "eslint.config.js", "prettier.config.js", "vite.config.js"],
   <% } else { %>"include": ["**/*.ts", "**/*.tsx"],<% } %>
   "compilerOptions": {

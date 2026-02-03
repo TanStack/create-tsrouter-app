@@ -22,10 +22,54 @@ interface AddOn {
   id: string           // e.g., "tanstack-query"
   name: string         // e.g., "TanStack Query"
   description: string
+  type: string         // "add-on", "toolchain", "deployment"
   category: string     // "tanstack", "auth", "database", etc.
+  link?: string        // Documentation URL
+  warning?: string     // Warning message for the add-on
+  exclusive?: string[] // Mutually exclusive add-ons
+  options?: object     // Configurable options
   dependsOn: string[]  // Required add-ons
-  conflicts: string[]  // Incompatible add-ons
-  hasOptions: boolean  // Has configurable options
+}
+```
+
+---
+
+### getAddOnDetails
+
+Returns detailed information about a specific add-on including implementation patterns, routes, dependencies, and documentation.
+
+**Parameters:**
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `framework` | string | Yes | `React` or `Solid` |
+| `addOnId` | string | Yes | The add-on ID (e.g., `clerk`, `drizzle`) |
+
+**Response:**
+
+```typescript
+interface AddOnDetails {
+  id: string
+  name: string
+  description: string
+  type: string
+  category: string
+  phase: string
+  modes: string[]
+  link?: string
+  warning?: string
+  exclusive?: string[]
+  dependsOn: string[]
+  options?: object
+  routes?: object[]           // Route definitions
+  packageAdditions?: object   // package.json additions
+  shadcnComponents?: string[] // Required shadcn components
+  integrations?: object[]     // Integration configs
+  readme?: string             // Add-on documentation
+  files: string[]             // List of files in the add-on
+  author?: string
+  version?: string
+  license?: string
 }
 ```
 

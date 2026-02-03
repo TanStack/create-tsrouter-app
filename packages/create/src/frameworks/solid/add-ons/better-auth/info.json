@@ -8,7 +8,7 @@
   "color": "#000000",
   "link": "https://www.better-auth.com/",
   "modes": ["file-router"],
-  "dependsOn": ["start"],
+  
   "routes": [
     {
       "url": "/demo/better-auth",

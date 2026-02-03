@@ -23,28 +23,23 @@ beforeEach(() => {
       {
         id: 'react-query',
         type: 'add-on',
-        modes: ['file-router', 'code-router'],
+        modes: ['file-router'],
       },
       {
         id: 'tanstack-chat',
         type: 'add-on',
-        modes: ['file-router', 'code-router'],
+        modes: ['file-router'],
       },
       {
         id: 'biome',
         type: 'toolchain',
-        modes: ['file-router', 'code-router'],
+        modes: ['file-router'],
       },
     ],
     supportedModes: {
-      'code-router': {
-        displayName: 'Code Router',
-        description: 'TanStack Router using code to define the routes',
-        forceTypescript: false,
-      },
       'file-router': {
         displayName: 'File Router',
-        description: 'TanStack Router using files to define the routes',
+        description: 'TanStack Start with file-based routing',
         forceTypescript: true,
       },
     },
@@ -67,11 +62,6 @@ const baseCliOptions: CliOptions = {
 
 function setBasicSpies() {
   vi.spyOn(prompts, 'getProjectName').mockImplementation(async () => 'hello')
-  vi.spyOn(prompts, 'selectRouterType').mockImplementation(
-    async () => 'file-router',
-  )
-  vi.spyOn(prompts, 'selectTypescript').mockImplementation(async () => true)
-  vi.spyOn(prompts, 'selectTailwind').mockImplementation(async () => true)
   vi.spyOn(prompts, 'selectPackageManager').mockImplementation(
     async () => 'npm',
   )
@@ -101,95 +91,22 @@ describe('promptForCreateOptions', () => {
     expect(options?.projectName).toBe('override')
   })
 
-  //// Mode (router type)
+  //// Mode is always file-router (TanStack Start)
 
-  it('forceMode should override template', async () => {
+  it('mode should always be file-router', async () => {
     setBasicSpies()
 
-    const options = await promptForCreateOptions(
-      { ...baseCliOptions, template: 'javascript' },
-      { forcedMode: 'file-router' },
-    )
+    const options = await promptForCreateOptions(baseCliOptions, {})
 
     expect(options?.mode).toBe('file-router')
     expect(options?.typescript).toBe(true)
   })
 
-  it('takes template from cli options - code-router', async () => {
+  //// Tailwind is always enabled
+
+  it('tailwind is always enabled', async () => {
     setBasicSpies()
-
-    vi.spyOn(prompts, 'selectRouterType').mockImplementation(
-      async () => 'code-router',
-    )
-
-    const options = await promptForCreateOptions(
-      { ...baseCliOptions, template: 'javascript' },
-      {},
-    )
-
-    expect(options?.mode).toBe('code-router')
-  })
-
-  it('takes template from cli options - file-router', async () => {
-    setBasicSpies()
-
-    vi.spyOn(prompts, 'selectRouterType').mockImplementation(
-      async () => 'code-router',
-    )
-
-    const options = await promptForCreateOptions(
-      { ...baseCliOptions, template: 'file-router' },
-      {},
-    )
-
-    expect(options?.mode).toBe('file-router')
-  })
-
-  it('prompt for router type when unspecified', async () => {
-    setBasicSpies()
-
-    vi.spyOn(prompts, 'selectRouterType').mockImplementation(
-      async () => 'code-router',
-    )
-
-    const options = await promptForCreateOptions(
-      { ...baseCliOptions, tailwind: false, framework: undefined },
-      {},
-    )
-
-    expect(options?.mode).toBe('code-router')
-  })
-
-  //// Tailwind
-
-  it('prompt for tailwind when unspecified in react-cra', async () => {
-    setBasicSpies()
-    vi.spyOn(prompts, 'selectTailwind').mockImplementation(async () => false)
-    const options = await promptForCreateOptions(
-      { ...baseCliOptions, tailwind: undefined },
-      {},
-    )
-
-    expect(options?.tailwind).toBe(false)
-  })
-
-  it('prompt for tailwind when unspecified in react-cra - true', async () => {
-    setBasicSpies()
-    vi.spyOn(prompts, 'selectTailwind').mockImplementation(async () => true)
-    const options = await promptForCreateOptions(
-      { ...baseCliOptions, tailwind: undefined },
-      {},
-    )
-
-    expect(options?.tailwind).toBe(true)
-  })
-
-  it('set tailwind when solid', async () => {
-    setBasicSpies()
-    const options = await promptForCreateOptions(
-      { ...baseCliOptions, tailwind: undefined, framework: 'solid' },
-      {},
-    )
+    const options = await promptForCreateOptions(baseCliOptions, {})
 
     expect(options?.tailwind).toBe(true)
   })
@@ -207,7 +124,7 @@ describe('promptForCreateOptions', () => {
     expect(options?.packageManager).toBe('bun')
   })
 
-  it('uses the package manager from the cli options', async () => {
+  it('detects package manager from environment', async () => {
     setBasicSpies()
 
     process.env.npm_config_userconfig = 'blarg'
@@ -257,7 +174,6 @@ describe('promptForCreateOptions', () => {
     expect(options?.chosenAddOns.map((a) => a.id).sort()).toEqual([
       'react-query',
     ])
-    // Tailwind should be prompted (and mock returns true) since no add-on explicitly requires it
     expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })
@@ -274,9 +190,6 @@ describe('promptForCreateOptions', () => {
       'biome',
       'react-query',
     ])
-    // In non-interactive mode with add-ons, tailwind defaults to false unless explicitly required
-    // But since we're in interactive mode (addOns is an array but we still prompt), tailwind is prompted
-    // The mock returns true, so tailwind should be true
     expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })
@@ -297,7 +210,6 @@ describe('promptForCreateOptions', () => {
       'biome',
       'react-query',
     ])
-    // Tailwind should be prompted (and mock returns true) since no add-on explicitly requires it
     expect(options?.tailwind).toBe(true)
     expect(options?.typescript).toBe(true)
   })

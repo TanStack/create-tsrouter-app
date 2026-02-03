@@ -56,7 +56,6 @@ export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
       const filePath = resolve(addOnsBase, dir, 'info.json')
       const fileContent = readFileSync(filePath, 'utf-8')
       const info = JSON.parse(fileContent)
-      info.tailwind = info.tailwind ?? true
 
       let packageAdditions: Record<string, any> = {}
       let packageTemplate: string | undefined = undefined

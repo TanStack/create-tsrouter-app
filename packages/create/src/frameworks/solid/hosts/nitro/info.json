@@ -8,7 +8,6 @@
   "category": "deploy",
   "exclusive": ["deploy"],
   "color": "#ECDC5A",
-  "tailwind": false,
   "integrations": [
     {
       "type": "vite-plugin",
