@@ -1,5 +1,11 @@
 # @tanstack/create
 
+## 0.53.1
+
+### Patch Changes
+
+- fix: resolve Windows path handling in relativePath causing incorrect Clerk imports ([`72049cb`](https://github.com/TanStack/cli/commit/72049cb134f9ecd169da161154899cc84a5c39b8))
+
 ## 0.53.0
 
 ### Minor Changes
