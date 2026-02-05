@@ -26,11 +26,23 @@ describe('toCleanPath', () => {
   it('should strip Windows-style leading backslash', () => {
     expect(
       toCleanPath('C:\\Projects\\my-app\\src\\file.ts', 'C:\\Projects\\my-app'),
-    ).toBe('src\\file.ts')
+    ).toBe('src/file.ts')
   })
 
   it('should handle paths without leading separator', () => {
     expect(toCleanPath('/projects/my-app', '/projects/my-app')).toBe('')
+  })
+
+  it('should handle mixed path separators (forward slash path, backslash base)', () => {
+    expect(
+      toCleanPath('C:/Projects/my-app/src/file.ts', 'C:\\Projects\\my-app'),
+    ).toBe('src/file.ts')
+  })
+
+  it('should handle mixed path separators (backslash path, forward slash base)', () => {
+    expect(
+      toCleanPath('C:\\Projects\\my-app\\src\\file.ts', 'C:/Projects/my-app'),
+    ).toBe('src/file.ts')
   })
 })
 

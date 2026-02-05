@@ -37,13 +37,15 @@ export function getBinaryFile(content: string): string | null {
 }
 
 /**
- * Convert an absolute path to a clean relative path by removing a base directory.
  * Returns a path without leading ./ or / prefix.
  */
 export function toCleanPath(absolutePath: string, baseDir: string): string {
-  let cleanPath = absolutePath.replace(baseDir, '')
-  // Handle both Unix (/) and Windows (\) path separators
-  if (cleanPath.startsWith('/') || cleanPath.startsWith('\\')) {
+  // Normalize both paths to use forward slashes for consistent comparison
+  const normalizedPath = absolutePath.replace(/\\/g, '/')
+  const normalizedBase = baseDir.replace(/\\/g, '/')
+  let cleanPath = normalizedPath.replace(normalizedBase, '')
+  // Handle leading path separator
+  if (cleanPath.startsWith('/')) {
     cleanPath = cleanPath.slice(1)
   }
   return cleanPath
