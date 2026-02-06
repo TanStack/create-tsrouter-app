@@ -4,6 +4,7 @@ import {
   getPackageManagerExecuteCommand,
   getPackageManagerInstallCommand,
   getPackageManagerScriptCommand,
+  translateExecuteCommand,
 } from '../src/package-manager.js'
 import { formatCommand } from '../src/utils.js'
 
@@ -150,5 +151,163 @@ describe('getPackageManagerInstallCommand', () => {
     expect(
       formatCommand(getPackageManagerInstallCommand('npm', 'vitest', true)),
     ).toBe('npm install vitest -D')
+  })
+})
+
+describe('translateExecuteCommand', () => {
+  it('should translate npx to bunx for bun', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('bun', {
+          command: 'npx',
+          args: ['shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('bunx --bun shadcn add button')
+  })
+  it('should translate npx to pnpm dlx for pnpm', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('pnpm', {
+          command: 'npx',
+          args: ['shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('pnpm dlx shadcn add button')
+  })
+  it('should translate npx to yarn dlx for yarn', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('yarn', {
+          command: 'npx',
+          args: ['shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('yarn dlx shadcn add button')
+  })
+  it('should translate npx to deno run for deno', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('deno', {
+          command: 'npx',
+          args: ['shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('deno run npm:shadcn add button')
+  })
+  it('should keep npx -y for npm', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('npm', {
+          command: 'npx',
+          args: ['shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('npx -y shadcn add button')
+  })
+  it('should pass through non-npx commands unchanged', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('bun', {
+          command: 'node',
+          args: ['script.js'],
+        }),
+      ),
+    ).toBe('node script.js')
+  })
+  it('should handle missing args gracefully', () => {
+    expect(
+      formatCommand(translateExecuteCommand('bun', { command: 'npx' })),
+    ).toBe('npx')
+  })
+  it('should strip -y flag from npx input', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('pnpm', {
+          command: 'npx',
+          args: ['-y', 'shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('pnpm dlx shadcn add button')
+  })
+  it('should translate bunx to target package manager', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('pnpm', {
+          command: 'bunx',
+          args: ['shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('pnpm dlx shadcn add button')
+  })
+  it('should strip --bun flag from bunx input', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('pnpm', {
+          command: 'bunx',
+          args: ['--bun', 'shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('pnpm dlx shadcn add button')
+  })
+  it('should translate pnpx to target package manager', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('yarn', {
+          command: 'pnpx',
+          args: ['shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('yarn dlx shadcn add button')
+  })
+  it('should translate pnpm dlx to target package manager', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('bun', {
+          command: 'pnpm',
+          args: ['dlx', 'shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('bunx --bun shadcn add button')
+  })
+  it('should translate yarn dlx to target package manager', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('npm', {
+          command: 'yarn',
+          args: ['dlx', 'shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('npx -y shadcn add button')
+  })
+  it('should translate deno run npm: to target package manager', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('pnpm', {
+          command: 'deno',
+          args: ['run', 'npm:shadcn', 'add', 'button'],
+        }),
+      ),
+    ).toBe('pnpm dlx shadcn add button')
+  })
+  it('should pass through non-execute pnpm commands unchanged', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('bun', {
+          command: 'pnpm',
+          args: ['install'],
+        }),
+      ),
+    ).toBe('pnpm install')
+  })
+  it('should pass through non-execute deno commands unchanged', () => {
+    expect(
+      formatCommand(
+        translateExecuteCommand('npm', {
+          command: 'deno',
+          args: ['task', 'dev'],
+        }),
+      ),
+    ).toBe('deno task dev')
   })
 })

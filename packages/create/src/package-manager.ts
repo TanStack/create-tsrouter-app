@@ -101,6 +101,43 @@ export function packageManagerInstall(
   return environment.execute(command, commandArgs, cwd)
 }
 
+export function translateExecuteCommand(
+  packageManager: PackageManager,
+  command: { command: string; args?: Array<string> },
+): { command: string; args: Array<string> } {
+  const args = command.args || []
+  const parsed = parseExecuteCommand(command.command, args)
+  if (parsed) {
+    return getPackageManagerExecuteCommand(packageManager, parsed.pkg, parsed.args)
+  }
+  return { command: command.command, args }
+}
+
+function parseExecuteCommand(
+  command: string,
+  args: Array<string>,
+): { pkg: string; args: Array<string> } | null {
+  if (command === 'npx') {
+    const filtered = args[0] === '-y' ? args.slice(1) : args
+    const [pkg, ...rest] = filtered
+    return pkg ? { pkg, args: rest } : null
+  }
+  if (command === 'pnpx' || command === 'bunx') {
+    const filtered = command === 'bunx' && args[0] === '--bun' ? args.slice(1) : args
+    const [pkg, ...rest] = filtered
+    return pkg ? { pkg, args: rest } : null
+  }
+  if ((command === 'pnpm' || command === 'yarn') && args[0] === 'dlx') {
+    const [, pkg, ...rest] = args
+    return pkg ? { pkg, args: rest } : null
+  }
+  if (command === 'deno' && args[0] === 'run' && args[1]?.startsWith('npm:')) {
+    const pkg = args[1].slice(4)
+    return pkg ? { pkg, args: args.slice(2) } : null
+  }
+  return null
+}
+
 export function packageManagerExecute(
   environment: Environment,
   cwd: string,

@@ -6,6 +6,7 @@ import { writeConfigFileToEnvironment } from './config-file.js'
 import {
   getPackageManagerScriptCommand,
   packageManagerInstall,
+  translateExecuteCommand,
 } from './package-manager.js'
 import { createPackageJSON } from './package-json.js'
 import { createTemplateFile } from './template-file.js'
@@ -181,18 +182,19 @@ async function runCommandsAndInstallDependencies(
         addOn.phase === phase && addOn.command && addOn.command.command,
     )) {
       s.start(`Running commands for ${addOn.name}...`)
-      const cmd = formatCommand({
+      const translated = translateExecuteCommand(options.packageManager, {
         command: addOn.command!.command,
         args: addOn.command!.args || [],
       })
+      const cmd = formatCommand(translated)
       environment.startStep({
         id: 'run-commands',
         type: 'command',
         message: cmd,
       })
       await environment.execute(
-        addOn.command!.command,
-        addOn.command!.args || [],
+        translated.command,
+        translated.args,
         options.targetDir,
         { inherit: true },
       )
@@ -208,10 +210,11 @@ async function runCommandsAndInstallDependencies(
     options.starter.command.command
   ) {
     s.start(`Setting up starter ${options.starter.name}...`)
-    const cmd = formatCommand({
+    const starterTranslated = translateExecuteCommand(options.packageManager, {
       command: options.starter.command.command,
       args: options.starter.command.args || [],
     })
+    const cmd = formatCommand(starterTranslated)
     environment.startStep({
       id: 'run-starter-command',
       type: 'command',
@@ -219,8 +222,8 @@ async function runCommandsAndInstallDependencies(
     })
 
     await environment.execute(
-      options.starter.command.command,
-      options.starter.command.args || [],
+      starterTranslated.command,
+      starterTranslated.args,
       options.targetDir,
       { inherit: true },
     )
