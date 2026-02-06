@@ -41,6 +41,12 @@
       "@tanstack/cli": "workspace:*",
       "@tanstack/create": "workspace:*",
       "@tanstack/create-ui": "workspace:*"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "nx",
+      "unrs-resolver"
+    ]
   }
 }
