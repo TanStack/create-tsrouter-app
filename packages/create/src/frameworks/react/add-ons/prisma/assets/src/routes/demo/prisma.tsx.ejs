@@ -1,14 +1,12 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { db } from '@/db/index'
-import { desc } from 'drizzle-orm'
-import { todos } from '@/db/schema'
+import { prisma } from '@/db'
 
 const getTodos = createServerFn({
   method: 'GET',
 }).handler(async () => {
-  return await db.query.todos.findMany({
-    orderBy: [desc(todos.createdAt)],
+  return await prisma.todo.findMany({
+    orderBy: { createdAt: 'desc' },
   })
 })
 
@@ -17,16 +15,17 @@ const createTodo = createServerFn({
 })
   .inputValidator((data: { title: string }) => data)
   .handler(async ({ data }) => {
-    await db.insert(todos).values({ title: data.title })
-    return { success: true }
+    return await prisma.todo.create({
+      data,
+    })
   })
 
-export const Route = createFileRoute('/demo/drizzle')({
-  component: DemoDrizzle,
+export const Route = createFileRoute('/demo/prisma')({
+  component: DemoPrisma,
   loader: async () => await getTodos(),
 })
 
-function DemoDrizzle() {
+function DemoPrisma() {
   const router = useRouter()
   const todos = Route.useLoaderData()
 
@@ -74,14 +73,14 @@ function DemoDrizzle() {
             <div className="absolute -inset-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 rounded-lg blur-lg opacity-60 group-hover:opacity-100 transition duration-500"></div>
             <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 p-3 rounded-lg">
               <img
-                src="/drizzle.svg"
-                alt="Drizzle Logo"
+                src="/prisma.svg"
+                alt="Prisma Logo"
                 className="w-8 h-8 transform group-hover:scale-110 transition-transform duration-300"
               />
             </div>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-300 text-transparent bg-clip-text">
-            Drizzle Database Demo
+            Prisma Database Demo
           </h1>
         </div>
 
@@ -145,7 +144,7 @@ function DemoDrizzle() {
           }}
         >
           <h3 className="text-lg font-semibold mb-2 text-indigo-200">
-            Powered by Drizzle ORM
+            Powered by Prisma ORM
           </h3>
           <p className="text-sm text-indigo-300/80 mb-4">
             Next-generation ORM for Node.js & TypeScript with PostgreSQL
@@ -163,19 +162,19 @@ function DemoDrizzle() {
               <li>
                 Run:{' '}
                 <code className="px-2 py-1 rounded bg-black/30 text-purple-300">
-                  npx drizzle-kit generate
+                  <%- getPackageManagerExecuteScript('prisma', ['generate']) %>
                 </code>
               </li>
               <li>
                 Run:{' '}
                 <code className="px-2 py-1 rounded bg-black/30 text-purple-300">
-                  npx drizzle-kit migrate
+                  <%- getPackageManagerExecuteScript('prisma', ['db', 'push']) %>
                 </code>
               </li>
               <li>
                 Optional:{' '}
                 <code className="px-2 py-1 rounded bg-black/30 text-purple-300">
-                  npx drizzle-kit studio
+                  <%- getPackageManagerExecuteScript('prisma', ['studio']) %>
                 </code>
               </li>
             </ol>

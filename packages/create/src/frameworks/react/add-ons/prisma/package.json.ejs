@@ -11,7 +11,7 @@
     "tsx": "^4.20.6"
   },
   "scripts": {<% if (addOnOption.prisma.database === 'postgres') { %>
-    "post-cta-init": "npx create-db@latest --user-agent tanstack/tsrouter",<% } %>
+    "post-cta-init": "<%- getPackageManagerExecuteScript('create-db@latest', ['--user-agent', 'tanstack/tsrouter']) %>",<% } %>
     "db:generate": "dotenv -e .env.local -- prisma generate",
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",

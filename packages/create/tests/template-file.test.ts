@@ -175,4 +175,17 @@ describe('createTemplateFile', () => {
     expect(output.files['/test/foo-dev.txt']).toEqual('pnpm add foo --dev')
     expect(output.files['/test/run-dev.txt']).toEqual('pnpm dev')
   })
+
+  it('should handle package manager execute script', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, simpleOptions)
+    environment.startRun()
+    await templateFile(
+      'exec.txt.ejs',
+      "<%= getPackageManagerExecuteScript('shadcn', ['add', 'button']) %>",
+    )
+    environment.finishRun()
+
+    expect(output.files['/test/exec.txt']).toEqual('pnpm dlx shadcn add button')
+  })
 })
