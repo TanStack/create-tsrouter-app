@@ -130,6 +130,10 @@ export function createTemplateFile(environment: Environment, options: Options) {
       integrationImportContent,
       integrationImportCode,
 
+      renderTemplate: (content: string) => {
+        return render(content, templateValues)
+      },
+
       ignoreFile: () => {
         throw new IgnoreFileError()
       },

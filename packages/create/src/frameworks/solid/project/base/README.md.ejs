@@ -31,7 +31,7 @@ If you prefer not to use Tailwind CSS:
 4. Uninstall the packages: `<%= getPackageManagerAddScript('@tailwindcss/vite tailwindcss', true) %>`
 
 <% for(const addon of addOns.filter(addon => addon.readme)) { %>
-<%- addon.readme %>
+<%- addon.readmeIsEjs ? renderTemplate(addon.readme) : addon.readme %>
 <% } %>
 
 ## Routing
