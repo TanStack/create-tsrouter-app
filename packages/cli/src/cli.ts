@@ -122,7 +122,12 @@ export function cli({
         getFrameworkByName(options.framework || defaultFramework || 'React')!,
         defaultMode,
       )
-      const addOn = addOns.find((a) => a.id === options.addonDetails)
+      const addOn =
+        addOns.find((a) => a.id === options.addonDetails) ??
+        addOns.find(
+          (a) =>
+            a.id.toLowerCase() === options.addonDetails!.toLowerCase(),
+        )
       if (!addOn) {
         console.error(`Add-on '${options.addonDetails}' not found`)
         process.exit(1)

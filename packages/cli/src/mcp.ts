@@ -85,9 +85,12 @@ function createServer({
     },
     async ({ framework: frameworkName, addOnId }) => {
       const framework = getFrameworkByName(frameworkName)!
-      const addOn = framework
-        .getAddOns()
-        .find((a) => a.id === addOnId)
+      const allAddOns = framework.getAddOns()
+      const addOn =
+        allAddOns.find((a) => a.id === addOnId) ??
+        allAddOns.find(
+          (a) => a.id.toLowerCase() === addOnId.toLowerCase(),
+        )
 
       if (!addOn) {
         return {
