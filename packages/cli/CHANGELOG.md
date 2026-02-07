@@ -1,5 +1,67 @@
 # @tanstack/cli
 
+## 0.54.0
+
+### Minor Changes
+
+- feat(mcp): add getAddOnDetails tool and expand add-on metadata
+
+  Add new MCP tool to retrieve detailed add-on information including
+  routes, package additions, files, and documentation. Also expand
+  listTanStackAddOns to include type, category, link, warning, and
+  exclusive fields.
+
+- feat: case-insensitive add-on lookup with typo suggestions
+
+- feat: force TanStack Start with Tailwind CSS always enabled
+
+  - Remove code-router mode and --router-only flag (TanStack Start only)
+  - Remove start add-on (baked into base templates)
+  - Remove module-federation add-on
+  - Force Tailwind CSS to always be enabled
+  - Remove --tailwind/--no-tailwind CLI flags
+  - Remove selectTailwind and selectTypescript prompts
+  - Remove forcedMode parameter (mode always file-router)
+  - Simplify template conditionals and hardcode typescript/tailwind values
+  - Update README.md.ejs with instructions for removing Tailwind
+  - Clean up dead code and unused functions
+  - Update all CLI wrappers to show deprecation warnings
+
+### Patch Changes
+
+- ci: Version Packages (#327)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#313)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- ci: Version Packages (#326)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#311)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#312)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#334)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#325)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- Updated dependencies []:
+  - @tanstack/create@0.55.0
+  - @tanstack/create-ui@0.54.0
+
 ## 0.53.0
 
 ### Minor Changes
