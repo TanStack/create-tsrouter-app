@@ -1,5 +1,89 @@
 # @tanstack/create
 
+## 0.57.0
+
+### Minor Changes
+
+- feat: force TanStack Start with Tailwind CSS always enabled
+
+  - Remove code-router mode and --router-only flag (TanStack Start only)
+  - Remove start add-on (baked into base templates)
+  - Remove module-federation add-on
+  - Force Tailwind CSS to always be enabled
+  - Remove --tailwind/--no-tailwind CLI flags
+  - Remove selectTailwind and selectTypescript prompts
+  - Remove forcedMode parameter (mode always file-router)
+  - Simplify template conditionals and hardcode typescript/tailwind values
+  - Update README.md.ejs with instructions for removing Tailwind
+  - Clean up dead code and unused functions
+  - Update all CLI wrappers to show deprecation warnings
+
+- feat: case-insensitive add-on lookup with typo suggestions
+
+- feat(mcp): add getAddOnDetails tool and expand add-on metadata
+
+  Add new MCP tool to retrieve detailed add-on information including
+  routes, package additions, files, and documentation. Also expand
+  listTanStackAddOns to include type, category, link, warning, and
+  exclusive fields.
+
+### Patch Changes
+
+- ci: Version Packages (#313)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- chore: remove unused Provider function from tanstack-query template (#272)
+
+- ci: Version Packages (#311)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#336)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix: normalize path separators in toCleanPath to fix missing tsconfig.json on Windows (#319)
+
+- ci: Version Packages (#327)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix: Update Paraglide JS url (#307)
+
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- ci: Version Packages (#325)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix(neon): use named import for postgresPlugin (#320)
+
+  The @neondatabase/vite-plugin-postgres package exports postgresPlugin as a
+  named export, not a default export. This fixes the SyntaxError when running
+  pnpm dev on projects created with the Neon add-on.
+
+  Fixes #318
+
+- ci: Version Packages (#334)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#326)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#335)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix: resolve Windows path handling in relativePath causing incorrect Clerk imports (#324)
+
+- ci: Version Packages (#312)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
 ## 0.56.0
 
 ### Minor Changes
