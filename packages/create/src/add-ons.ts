@@ -25,14 +25,24 @@ export async function finalizeAddOns(
 
   for (const addOnID of finalAddOnIDs) {
     let addOn: AddOn | undefined
-    const localAddOn = addOns.find((a) => a.id === addOnID)
+    const localAddOn =
+      addOns.find((a) => a.id === addOnID) ??
+      addOns.find((a) => a.id.toLowerCase() === addOnID.toLowerCase())
     if (localAddOn) {
       addOn = loadAddOn(localAddOn)
+      if (localAddOn.id !== addOnID) {
+        // Replace the mistyped ID with the canonical one
+        finalAddOnIDs.delete(addOnID)
+        finalAddOnIDs.add(localAddOn.id)
+      }
     } else if (addOnID.startsWith('http')) {
       addOn = await loadRemoteAddOn(addOnID)
       addOns.push(addOn)
     } else {
-      throw new Error(`Add-on ${addOnID} not found`)
+      const suggestion = findClosestAddOn(addOnID, addOns)
+      throw new Error(
+        `Add-on ${addOnID} not found${suggestion ? `. Did you mean "${suggestion}"?` : ''}`,
+      )
     }
 
     for (const dependsOn of addOn.dependsOn || []) {
@@ -53,6 +63,48 @@ export async function finalizeAddOns(
 
 function loadAddOn(addOn: AddOn): AddOn {
   return addOn
+}
+
+function findClosestAddOn(
+  input: string,
+  addOns: Array<AddOn>,
+): string | undefined {
+  const inputLower = input.toLowerCase()
+  let bestMatch: string | undefined
+  let bestDistance = Infinity
+
+  for (const addOn of addOns) {
+    const d = levenshtein(inputLower, addOn.id.toLowerCase())
+    if (d < bestDistance) {
+      bestDistance = d
+      bestMatch = addOn.id
+    }
+  }
+
+  // Only suggest if the distance is reasonable (less than half the input length)
+  if (bestMatch && bestDistance <= Math.max(Math.floor(input.length / 2), 2)) {
+    return bestMatch
+  }
+  return undefined
+}
+
+function levenshtein(a: string, b: string): number {
+  const m = a.length
+  const n = b.length
+  let prev = Array.from({ length: n + 1 }, (_, j) => j)
+
+  for (let i = 1; i <= m; i++) {
+    const curr = [i]
+    for (let j = 1; j <= n; j++) {
+      curr[j] =
+        a[i - 1] === b[j - 1]
+          ? prev[j - 1]
+          : 1 + Math.min(prev[j], curr[j - 1], prev[j - 1])
+    }
+    prev = curr
+  }
+
+  return prev[n]
 }
 
 export function populateAddOnOptionsDefaults(
