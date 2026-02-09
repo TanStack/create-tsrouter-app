@@ -1,5 +1,11 @@
 # @tanstack/create
 
+## 0.59.1
+
+### Patch Changes
+
+- Normalize add-on source filenames under `src/` to TypeScript extensions when TypeScript is enabled, converting `.js` to `.ts` and `.jsx` to `.tsx`. ([`0f2744e`](https://github.com/TanStack/cli/commit/0f2744ea4675dbc61ff14ebbe57f77438606b26b))
+
 ## 0.59.0
 
 ### Minor Changes
