@@ -24,6 +24,28 @@ function convertDotFilesAndPaths(path: string) {
     .join(sep)
 }
 
+function normalizeSourceExtension(target: string, typescript: boolean) {
+  if (!typescript) {
+    return target
+  }
+
+  const normalizedTarget = target.replace(/\\/g, '/')
+
+  if (!normalizedTarget.startsWith('src/')) {
+    return target
+  }
+
+  if (normalizedTarget.endsWith('.js')) {
+    return `${target.slice(0, -3)}.ts`
+  }
+
+  if (normalizedTarget.endsWith('.jsx')) {
+    return `${target.slice(0, -4)}.tsx`
+  }
+
+  return target
+}
+
 export function createTemplateFile(environment: Environment, options: Options) {
   function getPackageManagerAddScript(
     packageName: string,
@@ -146,6 +168,7 @@ export function createTemplateFile(environment: Environment, options: Options) {
     }
 
     let target = convertDotFilesAndPaths(file.replace('.ejs', ''))
+    target = normalizeSourceExtension(target, options.typescript)
 
     // Strip option prefixes from filename (e.g., __postgres__schema.prisma -> schema.prisma)
     const prefixMatch = target.match(/^(.+\/)?__([^_]+)__(.+)$/)

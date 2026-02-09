@@ -175,4 +175,32 @@ describe('createTemplateFile', () => {
     expect(output.files['/test/foo-dev.txt']).toEqual('pnpm add foo --dev')
     expect(output.files['/test/run-dev.txt']).toEqual('pnpm dev')
   })
+
+  it('should normalize src js files to ts when typescript is enabled', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, simpleOptions)
+
+    environment.startRun()
+    await templateFile('src/lib/auth.js', 'export const auth = true')
+    await templateFile('src/lib/auth-client.js', 'export const authClient = true')
+    await templateFile('src/db.js', 'export const db = true')
+    await templateFile('vite.config.js', 'export default {}')
+    environment.finishRun()
+
+    expect(output.files['/test/src/lib/auth.ts']).toBeDefined()
+    expect(output.files['/test/src/lib/auth-client.ts']).toBeDefined()
+    expect(output.files['/test/src/db.ts']).toBeDefined()
+    expect(output.files['/test/vite.config.js']).toBeDefined()
+  })
+
+  it('should normalize src jsx files to tsx when typescript is enabled', async () => {
+    const { environment, output } = createMemoryEnvironment()
+    const templateFile = createTemplateFile(environment, simpleOptions)
+
+    environment.startRun()
+    await templateFile('src/components/auth-button.jsx', 'export default function AuthButton() { return <button>Auth</button> }')
+    environment.finishRun()
+
+    expect(output.files['/test/src/components/auth-button.tsx']).toBeDefined()
+  })
 })
