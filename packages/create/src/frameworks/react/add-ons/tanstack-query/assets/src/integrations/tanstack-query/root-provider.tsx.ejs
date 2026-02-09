@@ -6,8 +6,6 @@ import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 
 import type { TRPCRouter } from "@/integrations/trpc/router";
 
-import { TRPCProvider } from "@/integrations/trpc/react";
-
 function getUrl() {
   const base = (() => {
     if (typeof window !== "undefined") return "";
@@ -42,39 +40,13 @@ export function getContext() {
     trpc: serverHelpers,
   };
 }
-
-export function Provider({
-  children,
-  queryClient,
-}: {
-  children: React.ReactNode;
-  queryClient: QueryClient;
-}) {
-  return (
-    <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-      {children}
-    </TRPCProvider>
-  );
-}
 <% } else { %>
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient } from '@tanstack/react-query'
 
 export function getContext() {
   const queryClient = new QueryClient();
   return {
     queryClient,
   };
-}
-
-export function Provider({
-  children,
-  queryClient,
-}: {
-  children: React.ReactNode;
-  queryClient: QueryClient;
-}) {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
 }
 <% } %>
