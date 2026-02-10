@@ -1,5 +1,11 @@
 # @tanstack/create
 
+## 0.59.3
+
+### Patch Changes
+
+- Update generated React and Solid app template dependencies to use `@tailwindcss/vite` and `tailwindcss` `^4.1.18`, fixing incompatibility with Vite 7. ([`a93d7e5`](https://github.com/TanStack/cli/commit/a93d7e5d43bc1db37f2251bf88de7681c9a7387d))
+
 ## 0.59.2
 
 ### Patch Changes
