@@ -1,5 +1,11 @@
 # @tanstack/create
 
+## 0.59.2
+
+### Patch Changes
+
+- Ignore transient `__unconfig*` files in generated React and Solid app `.gitignore` templates to prevent VS Code Vitest Explorer startup errors caused by temporary config files. ([`2f3c4d7`](https://github.com/TanStack/cli/commit/2f3c4d79b1ecdf8b8404d23e7b25bfbbbf77f48f))
+
 ## 0.59.1
 
 ### Patch Changes
