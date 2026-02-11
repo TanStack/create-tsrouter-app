@@ -19,6 +19,52 @@ import type { Options } from '@tanstack/create'
 
 import type { CliOptions } from './types.js'
 
+const SUPPORTED_LEGACY_TEMPLATES = new Set([
+  'file-router',
+  'typescript',
+  'tsx',
+])
+
+export function validateLegacyCreateFlags(cliOptions: CliOptions): {
+  warnings: Array<string>
+  error?: string
+} {
+  const warnings: Array<string> = []
+
+  if (cliOptions.routerOnly) {
+    warnings.push(
+      'The --router-only flag is deprecated and ignored. `tanstack create` already creates router-based apps.',
+    )
+  }
+
+  if (!cliOptions.template) {
+    return { warnings }
+  }
+
+  const template = cliOptions.template.toLowerCase().trim()
+
+  if (template === 'javascript' || template === 'js' || template === 'jsx') {
+    return {
+      warnings,
+      error:
+        'JavaScript/JSX templates are not supported. TanStack Start file-router templates are TypeScript-only.',
+    }
+  }
+
+  if (!SUPPORTED_LEGACY_TEMPLATES.has(template)) {
+    return {
+      warnings,
+      error: `Invalid --template value: ${cliOptions.template}. Supported values are: file-router, typescript, tsx.`,
+    }
+  }
+
+  warnings.push(
+    'The --template flag is deprecated. TypeScript/TSX is the default and only supported template.',
+  )
+
+  return { warnings }
+}
+
 export async function normalizeOptions(
   cliOptions: CliOptions,
   forcedAddOns?: Array<string>,

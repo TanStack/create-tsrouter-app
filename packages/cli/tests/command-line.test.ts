@@ -1,7 +1,10 @@
 import { basename, resolve } from 'node:path'
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { normalizeOptions } from '../src/command-line.js'
+import {
+  normalizeOptions,
+  validateLegacyCreateFlags,
+} from '../src/command-line.js'
 import {
   sanitizePackageName,
   getCurrentDirectoryName,
@@ -271,5 +274,35 @@ describe('normalizeOptions', () => {
     })
     expect(options?.chosenAddOns.map((a) => a.id).includes('foo')).toBe(true)
     expect(options?.chosenAddOns.map((a) => a.id).includes('baz')).toBe(true)
+  })
+})
+
+describe('validateLegacyCreateFlags', () => {
+  it('returns no warnings or errors without legacy flags', () => {
+    const result = validateLegacyCreateFlags({})
+    expect(result.warnings).toEqual([])
+    expect(result.error).toBeUndefined()
+  })
+
+  it('warns when --router-only is used', () => {
+    const result = validateLegacyCreateFlags({ routerOnly: true })
+    expect(result.error).toBeUndefined()
+    expect(result.warnings[0]).toContain('--router-only')
+  })
+
+  it('errors for JavaScript templates', () => {
+    const result = validateLegacyCreateFlags({ template: 'javascript' })
+    expect(result.error).toContain('JavaScript/JSX templates are not supported')
+  })
+
+  it('errors for unknown template values', () => {
+    const result = validateLegacyCreateFlags({ template: 'foo' })
+    expect(result.error).toContain('Invalid --template value')
+  })
+
+  it('warns for supported deprecated template values', () => {
+    const result = validateLegacyCreateFlags({ template: 'tsx' })
+    expect(result.error).toBeUndefined()
+    expect(result.warnings[0]).toContain('--template')
   })
 })
