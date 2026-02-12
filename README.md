@@ -54,7 +54,7 @@ npx @tanstack/cli create --list-add-ons
 
 ## Documentation
 
-- [CLI Reference](https://tanstack.com/start/latest/docs/framework/react/quick-start)
+- [CLI Reference](https://tanstack.com/cli/latest/docs/cli-reference)
 - [TanStack Start](https://tanstack.com/start)
 - [TanStack Router](https://tanstack.com/router)
 
