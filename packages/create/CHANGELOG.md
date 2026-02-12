@@ -1,5 +1,13 @@
 # @tanstack/create
 
+## 0.59.4
+
+### Patch Changes
+
+- Allow `better-sqlite3` build scripts in generated pnpm projects when using the React Drizzle or Prisma SQLite add-ons, preventing runtime native binding errors. ([`dbd3086`](https://github.com/TanStack/cli/commit/dbd308621464d14bbc03158b2972fd061ea6ccb1))
+
+- Fix `tanstack add` on Windows when generated output paths lose the drive letter, preventing duplicated project paths from being written. ([`4f7c925`](https://github.com/TanStack/cli/commit/4f7c9255f365b1993ec91ac447dfcbfe6dd4903d))
+
 ## 0.59.3
 
 ### Patch Changes
