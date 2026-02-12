@@ -18,5 +18,9 @@
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
     "db:studio": "drizzle-kit studio"
+  }<% if (addOnOption.drizzle.database === 'sqlite') { %>,
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3"]
   }
+  <% } %>
 }

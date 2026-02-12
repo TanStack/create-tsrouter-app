@@ -17,5 +17,9 @@
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:studio": "dotenv -e .env.local -- prisma studio",
     "db:seed": "dotenv -e .env.local -- prisma db seed"
+  }<% if (addOnOption.prisma.database === 'sqlite') { %>,
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3"]
   }
+  <% } %>
 }
