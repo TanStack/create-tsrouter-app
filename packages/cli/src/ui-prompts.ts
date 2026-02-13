@@ -86,15 +86,22 @@ export async function selectAddOns(
   }
 
   if (allowMultiple) {
+    const selectableAddOns = addOns.filter(
+      (addOn) => !forcedAddOns.includes(addOn.id),
+    )
+
+    if (selectableAddOns.length === 0) {
+      return []
+    }
+
     const value = await multiselect({
       message,
-      options: addOns
-        .filter((addOn) => !forcedAddOns.includes(addOn.id))
-        .map((addOn) => ({
+      options: selectableAddOns.map((addOn) => ({
           value: addOn.id,
           label: addOn.name,
           hint: addOn.description,
         })),
+      maxItems: selectableAddOns.length,
       required: false,
     })
 
