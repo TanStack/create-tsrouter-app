@@ -120,6 +120,7 @@ export const AddOnInfoSchema = AddOnBaseSchema.extend({
   integrations: z.array(IntegrationSchema).optional(),
   phase: z.enum(['setup', 'add-on']),
   readme: z.string().optional(),
+  readmeIsEjs: z.boolean().optional(),
 })
 
 export const AddOnCompiledSchema = AddOnInfoSchema.extend({

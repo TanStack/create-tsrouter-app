@@ -4,6 +4,7 @@ import { format } from 'prettier'
 
 import { formatCommand } from './utils.js'
 import {
+  getPackageManagerExecuteCommand,
   getPackageManagerInstallCommand,
   getPackageManagerScriptCommand,
 } from './package-manager.js'
@@ -68,6 +69,14 @@ export function createTemplateFile(environment: Environment, options: Options) {
         scriptName,
         ...args,
       ]),
+    )
+  }
+  function getPackageManagerExecuteScript(
+    pkg: string,
+    args: Array<string> = [],
+  ) {
+    return formatCommand(
+      getPackageManagerExecuteCommand(options.packageManager, pkg, args),
     )
   }
 
@@ -135,12 +144,17 @@ export function createTemplateFile(environment: Environment, options: Options) {
 
       getPackageManagerAddScript,
       getPackageManagerRunScript,
+      getPackageManagerExecuteScript,
 
       relativePath: (path: string, stripExtension: boolean = false) =>
         relativePath(file, path, stripExtension),
 
       integrationImportContent,
       integrationImportCode,
+
+      renderTemplate: (content: string) => {
+        return render(content, templateValues)
+      },
 
       ignoreFile: () => {
         throw new IgnoreFileError()

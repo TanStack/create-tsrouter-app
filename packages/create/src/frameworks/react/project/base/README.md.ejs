@@ -52,7 +52,7 @@ This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.
 ```
 <% } %>
 <% for(const addon of addOns.filter(addon => addon.readme)) { %>
-<%- addon.readme %>
+<%- addon.readmeIsEjs ? renderTemplate(addon.readme) : addon.readme %>
 <% } %>
 
 ## Routing

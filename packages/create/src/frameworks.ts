@@ -72,8 +72,15 @@ export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
       }
 
       let readme: string | undefined
+      let readmeIsEjs = false
       if (existsSync(resolve(addOnsBase, dir, 'README.md'))) {
         readme = readFileSync(resolve(addOnsBase, dir, 'README.md'), 'utf-8')
+      } else if (existsSync(resolve(addOnsBase, dir, 'README.md.ejs'))) {
+        readme = readFileSync(
+          resolve(addOnsBase, dir, 'README.md.ejs'),
+          'utf-8',
+        )
+        readmeIsEjs = true
       }
 
       let smallLogo: string | undefined
@@ -107,6 +114,7 @@ export function scanAddOnDirectories(addOnsDirectories: Array<string>) {
         packageAdditions,
         packageTemplate,
         readme,
+        readmeIsEjs,
         files,
         smallLogo,
         getFiles,
