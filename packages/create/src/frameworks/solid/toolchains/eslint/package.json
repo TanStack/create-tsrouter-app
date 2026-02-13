@@ -1,7 +1,7 @@
 {
   "scripts": {
     "lint": "eslint",
-    "format": "prettier",
+    "format": "prettier --check .",
     "check": "prettier --write . && eslint --fix"
   },
   "devDependencies": {
