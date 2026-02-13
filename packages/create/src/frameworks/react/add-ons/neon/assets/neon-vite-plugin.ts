@@ -6,5 +6,5 @@ export default postgresPlugin({
     path: 'db/init.sql',
   },
   referrer: 'create-tanstack',
-  dotEnvKey: 'VITE_DATABASE_URL',
+  dotEnvKey: 'DATABASE_URL',
 })
