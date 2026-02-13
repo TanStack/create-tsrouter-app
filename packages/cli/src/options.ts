@@ -118,6 +118,9 @@ export async function promptForCreateOptions(
 
   if (Array.isArray(cliOptions.addOns)) {
     for (const addOn of cliOptions.addOns) {
+      if (addOn.toLowerCase() === 'start') {
+        continue
+      }
       addOns.add(addOn)
     }
   } else {
