@@ -19,7 +19,7 @@
   ],
   "integrations": [
     {
-      "type": "root-provider",
+      "type": "provider",
       "path": "src/integrations/tanstack-query/root-provider.tsx",
       "jsName": "TanStackQueryProvider"
     },
