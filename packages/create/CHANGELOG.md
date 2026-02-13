@@ -1,5 +1,11 @@
 # @tanstack/create
 
+## 0.60.1
+
+### Patch Changes
+
+- Pin the React Sentry add-on to `@sentry/tanstackstart-react@10.34.0` to avoid a Nitro production build failure introduced in newer Sentry versions. ([`ab740ed`](https://github.com/TanStack/cli/commit/ab740ed2c5510a3266065aa98c8afe3093ea0034))
+
 ## 0.60.0
 
 ### Minor Changes
