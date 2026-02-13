@@ -88,6 +88,41 @@ export async function writeFiles(
   },
   forced: boolean,
 ) {
+  const toRelativePath = (filePath: string) => {
+    const normalizedFilePath = filePath.replace(/\\/g, '/')
+    const normalizedCwd = cwd.replace(/\\/g, '/')
+    const cwdWithoutDrive = normalizedCwd.replace(/^[a-zA-Z]:/, '')
+    const cwdWithoutDriveNoLeading = cwdWithoutDrive.replace(/^\/+/, '')
+
+    if (normalizedFilePath === normalizedCwd) {
+      return ''
+    }
+    if (normalizedFilePath.startsWith(`${normalizedCwd}/`)) {
+      return normalizedFilePath.slice(normalizedCwd.length + 1)
+    }
+    if (normalizedFilePath === cwdWithoutDrive) {
+      return ''
+    }
+    if (normalizedFilePath.startsWith(`${cwdWithoutDrive}/`)) {
+      return normalizedFilePath.slice(cwdWithoutDrive.length + 1)
+    }
+    if (normalizedFilePath === cwdWithoutDriveNoLeading) {
+      return ''
+    }
+    if (normalizedFilePath.startsWith(`${cwdWithoutDriveNoLeading}/`)) {
+      return normalizedFilePath.slice(cwdWithoutDriveNoLeading.length + 1)
+    }
+
+    return normalizedFilePath.replace(/^\/+/, '')
+  }
+
+  const relativeOutputFiles = Object.keys(output.files).reduce<
+    Record<string, string>
+  >((acc, filePath) => {
+    acc[toRelativePath(filePath)] = output.files[filePath]
+    return acc
+  }, {})
+
   const currentFiles = await recursivelyGatherFilesFromEnvironment(
     environment,
     cwd,
@@ -96,10 +131,9 @@ export async function writeFiles(
 
   const overwrittenFiles: Array<string> = []
   const changedFiles: Array<string> = []
-  for (const file of Object.keys(output.files)) {
-    const relativeFile = file.replace(cwd, '')
+  for (const relativeFile of Object.keys(relativeOutputFiles)) {
     if (currentFiles[relativeFile]) {
-      if (currentFiles[relativeFile] !== output.files[file]) {
+      if (currentFiles[relativeFile] !== relativeOutputFiles[relativeFile]) {
         overwrittenFiles.push(relativeFile)
       }
     } else {
@@ -118,9 +152,10 @@ export async function writeFiles(
     }
   }
 
-  for (const file of output.deletedFiles) {
-    if (environment.exists(resolve(cwd, file))) {
-      await environment.deleteFile(resolve(cwd, file))
+  for (const filePath of output.deletedFiles) {
+    const relativeFilePath = toRelativePath(filePath)
+    if (environment.exists(resolve(cwd, relativeFilePath))) {
+      await environment.deleteFile(resolve(cwd, relativeFilePath))
     }
   }
 
@@ -132,7 +167,7 @@ export async function writeFiles(
 
   for (const file of [...changedFiles, ...overwrittenFiles]) {
     const fName = basename(file)
-    const contents = output.files[file]
+    const contents = relativeOutputFiles[file]
     if (fName === 'package.json') {
       const currentJson = JSON.parse(
         await environment.readFile(resolve(cwd, file)),

@@ -31,6 +31,23 @@ Or:
 
 > "How do I use loaders in TanStack Router?"
 
+## OpenCode Desktop Setup
+
+Add to your [OpenCode JSON config file](https://opencode.ai/docs/config/):
+
+```json
+{
+	"$schema": "https://opencode.ai/config.json",
+	"mcp": {
+      "tanstack": {
+        "type": "remote",
+        "command": ["npx", "@tanstack/cli", "mcp"],
+        "enabled": true
+      },
+  }
+}
+```
+
 ## Manual Start
 
 ```bash

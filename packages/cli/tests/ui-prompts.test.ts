@@ -57,7 +57,9 @@ describe('selectPackageManager', () => {
 describe('selectAddOns', () => {
   it('should show keyboard shortcuts help and select add-ons', async () => {
     const noteSpy = vi.spyOn(clack, 'note').mockImplementation(() => {})
-    vi.spyOn(clack, 'multiselect').mockImplementation(async () => ['add-on-1'])
+    const multiselectSpy = vi
+      .spyOn(clack, 'multiselect')
+      .mockImplementation(async () => ['add-on-1'])
     vi.spyOn(clack, 'isCancel').mockImplementation(() => false)
 
     const packageManager = await selectAddOns(
@@ -82,6 +84,9 @@ describe('selectAddOns', () => {
     expect(noteSpy).toHaveBeenCalledWith(
       'Use ↑/↓ to navigate • Space to select/deselect • Enter to confirm',
       'Keyboard Shortcuts',
+    )
+    expect(multiselectSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ maxItems: 1 }),
     )
   })
 

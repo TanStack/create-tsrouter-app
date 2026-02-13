@@ -59,4 +59,36 @@ describe('createPackageJSON', () => {
     // Use JSON.stringify to test sorting order of dependencies
     expect(JSON.stringify(packageJSON)).toEqual(JSON.stringify(expected))
   })
+
+  it('should include sqlite build approval for pnpm templates', () => {
+    const packageJSON = createPackageJSON({
+      chosenAddOns: [
+        {
+          packageTemplate:
+            '{"pnpm": {<% if (addOnOption.prisma.database === "sqlite") { %>"onlyBuiltDependencies": ["better-sqlite3"]<% } %>}}',
+        },
+      ],
+      addOnOptions: {
+        prisma: {
+          database: 'sqlite',
+        },
+      },
+      mode: 'file-router',
+      typescript: true,
+      tailwind: true,
+      projectName: 'test',
+      framework: {
+        basePackageJSON: {},
+        optionalPackages: {
+          typescript: {},
+          tailwindcss: {},
+          'file-router': {},
+        },
+      } as unknown as Framework,
+    } as unknown as Options)
+
+    expect(packageJSON.pnpm).toEqual({
+      onlyBuiltDependencies: ['better-sqlite3'],
+    })
+  })
 })

@@ -24,7 +24,11 @@ import { launchUI } from '@tanstack/create-ui'
 import { runMCPServer } from './mcp.js'
 
 import { promptForAddOns, promptForCreateOptions } from './options.js'
-import { normalizeOptions, validateDevWatchOptions } from './command-line.js'
+import {
+  normalizeOptions,
+  validateDevWatchOptions,
+  validateLegacyCreateFlags,
+} from './command-line.js'
 
 import { createUIEnvironment } from './ui-environment.js'
 import { DevWatchManager } from './dev-watch.js'
@@ -96,6 +100,16 @@ export function cli({
 
   // Helper to create the create command action handler
   async function handleCreate(projectName: string, options: CliOptions) {
+    const legacyCreateFlags = validateLegacyCreateFlags(options)
+    if (legacyCreateFlags.error) {
+      log.error(legacyCreateFlags.error)
+      process.exit(1)
+    }
+
+    for (const warning of legacyCreateFlags.warnings) {
+      log.warn(warning)
+    }
+
     if (options.listAddOns) {
       const addOns = await getAllAddOns(
         getFrameworkByName(options.framework || defaultFramework || 'React')!,
@@ -386,6 +400,14 @@ export function cli({
         '--dev-watch <path>',
         'Watch a framework directory for changes and auto-rebuild',
       )
+      .option(
+        '--router-only',
+        'Deprecated: compatibility flag from create-tsrouter-app',
+      )
+      .option(
+        '--template <type>',
+        'Deprecated: compatibility flag from create-tsrouter-app',
+      )
 
     if (deployments.size > 0) {
       cmd.option<string>(
@@ -461,7 +483,7 @@ export function cli({
   }
 
   // === CREATE SUBCOMMAND ===
-  // By default creates a TanStack Start app. Use --router-only for SPA without Start.
+  // Creates a TanStack Start app (file-router mode).
   const createCommand = program
     .command('create')
     .description(`Create a new TanStack Start application`)

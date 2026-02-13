@@ -40,3 +40,11 @@ export function handleSpecialURL(url: string) {
   }
   return url
 }
+
+export function hasDrive(path: string) {
+  return /^[A-Za-z]:/.test(path)
+}
+
+export function stripDrive(path: string) {
+  return path.replace(/^[A-Za-z]:/, '')
+}

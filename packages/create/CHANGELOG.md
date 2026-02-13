@@ -1,5 +1,166 @@
 # @tanstack/create
 
+## 0.60.0
+
+### Minor Changes
+
+- feat(mcp): add getAddOnDetails tool and expand add-on metadata
+
+  Add new MCP tool to retrieve detailed add-on information including
+  routes, package additions, files, and documentation. Also expand
+  listTanStackAddOns to include type, category, link, warning, and
+  exclusive fields.
+
+- feat: case-insensitive add-on lookup with typo suggestions
+
+- feat: force TanStack Start with Tailwind CSS always enabled
+
+  - Remove code-router mode and --router-only flag (TanStack Start only)
+  - Remove start add-on (baked into base templates)
+  - Remove module-federation add-on
+  - Force Tailwind CSS to always be enabled
+  - Remove --tailwind/--no-tailwind CLI flags
+  - Remove selectTailwind and selectTypescript prompts
+  - Remove forcedMode parameter (mode always file-router)
+  - Simplify template conditionals and hardcode typescript/tailwind values
+  - Update README.md.ejs with instructions for removing Tailwind
+  - Clean up dead code and unused functions
+  - Update all CLI wrappers to show deprecation warnings
+
+### Patch Changes
+
+- fix(create): ignore transient vitest unconfig files in templates
+
+  Fixes #345
+
+- fix(create): bump Tailwind deps for Vite 7 compatibility
+
+  Fixes #332
+
+- ci: Version Packages (#346)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- ci: Version Packages (#339)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#311)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#313)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- ci: Version Packages (#327)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#312)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#349)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix: Update Paraglide JS url (#307)
+
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- ci: Version Packages (#341)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix: normalize path separators in toCleanPath to fix missing tsconfig.json on Windows (#319)
+
+- ci: Version Packages (#338)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#325)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix(create): allow better-sqlite3 builds in pnpm templates
+
+  Set pnpm.onlyBuiltDependencies for React Drizzle and Prisma SQLite templates so better-sqlite3 native bindings build correctly in generated apps.
+
+  Fixes #321
+
+- fix(create): normalize add-to-app output paths on Windows
+
+  Normalize generated and deleted output file paths to project-relative keys before compare/write/delete, preventing duplicated path segments when Windows drive letters are missing.
+
+  Fixes #329
+
+- chore: remove unused Provider function from tanstack-query template (#272)
+
+- fix: resolve Windows path handling in relativePath causing incorrect Clerk imports (#324)
+
+- ci: Version Packages (#335)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#347)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#334)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#336)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix(create): normalize generated src js/jsx extensions for TypeScript
+
+- ci: Version Packages (#326)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- fix(neon): use named import for postgresPlugin (#320)
+
+  The @neondatabase/vite-plugin-postgres package exports postgresPlugin as a
+  named export, not a default export. This fixes the SyntaxError when running
+  pnpm dev on projects created with the Neon add-on.
+
+  Fixes #318
+
+- ci: Version Packages (#337)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+## 0.59.4
+
+### Patch Changes
+
+- Allow `better-sqlite3` build scripts in generated pnpm projects when using the React Drizzle or Prisma SQLite add-ons, preventing runtime native binding errors. ([`dbd3086`](https://github.com/TanStack/cli/commit/dbd308621464d14bbc03158b2972fd061ea6ccb1))
+
+- Fix `tanstack add` on Windows when generated output paths lose the drive letter, preventing duplicated project paths from being written. ([`4f7c925`](https://github.com/TanStack/cli/commit/4f7c9255f365b1993ec91ac447dfcbfe6dd4903d))
+
+## 0.59.3
+
+### Patch Changes
+
+- Update generated React and Solid app template dependencies to use `@tailwindcss/vite` and `tailwindcss` `^4.1.18`, fixing incompatibility with Vite 7. ([`a93d7e5`](https://github.com/TanStack/cli/commit/a93d7e5d43bc1db37f2251bf88de7681c9a7387d))
+
+## 0.59.2
+
+### Patch Changes
+
+- Ignore transient `__unconfig*` files in generated React and Solid app `.gitignore` templates to prevent VS Code Vitest Explorer startup errors caused by temporary config files. ([`2f3c4d7`](https://github.com/TanStack/cli/commit/2f3c4d79b1ecdf8b8404d23e7b25bfbbbf77f48f))
+
+## 0.59.1
+
+### Patch Changes
+
+- Normalize add-on source filenames under `src/` to TypeScript extensions when TypeScript is enabled, converting `.js` to `.ts` and `.jsx` to `.tsx`. ([`0f2744e`](https://github.com/TanStack/cli/commit/0f2744ea4675dbc61ff14ebbe57f77438606b26b))
+
 ## 0.59.0
 
 ### Minor Changes

@@ -1,5 +1,145 @@
 # @tanstack/create-start
 
+## 0.59.0
+
+### Minor Changes
+
+- feat(mcp): add getAddOnDetails tool and expand add-on metadata
+
+  Add new MCP tool to retrieve detailed add-on information including
+  routes, package additions, files, and documentation. Also expand
+  listTanStackAddOns to include type, category, link, warning, and
+  exclusive fields.
+
+- feat: force TanStack Start with Tailwind CSS always enabled
+
+  - Remove code-router mode and --router-only flag (TanStack Start only)
+  - Remove start add-on (baked into base templates)
+  - Remove module-federation add-on
+  - Force Tailwind CSS to always be enabled
+  - Remove --tailwind/--no-tailwind CLI flags
+  - Remove selectTailwind and selectTypescript prompts
+  - Remove forcedMode parameter (mode always file-router)
+  - Simplify template conditionals and hardcode typescript/tailwind values
+  - Update README.md.ejs with instructions for removing Tailwind
+  - Clean up dead code and unused functions
+  - Update all CLI wrappers to show deprecation warnings
+
+### Patch Changes
+
+- ci: Version Packages (#346)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- ci: Version Packages (#348)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#339)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#311)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#313)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+  Co-authored-by: Tanner Linsley <tannerlinsley@gmail.com>
+
+- ci: Version Packages (#327)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#312)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#349)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#341)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#338)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#325)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#335)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#347)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#334)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#336)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#326)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- ci: Version Packages (#337)
+
+  Co-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+- Updated dependencies []:
+  - @tanstack/create@0.60.0
+  - @tanstack/cli@0.59.0
+
+## 0.58.5
+
+### Patch Changes
+
+- Updated dependencies [[`dbd3086`](https://github.com/TanStack/cli/commit/dbd308621464d14bbc03158b2972fd061ea6ccb1), [`4f7c925`](https://github.com/TanStack/cli/commit/4f7c9255f365b1993ec91ac447dfcbfe6dd4903d)]:
+  - @tanstack/create@0.59.4
+  - @tanstack/cli@0.58.5
+
+## 0.58.4
+
+### Patch Changes
+
+- Updated dependencies [[`0c0ee31`](https://github.com/TanStack/cli/commit/0c0ee318f78896f228623aa05e2a58cfb50e6f81)]:
+  - @tanstack/cli@0.58.4
+
+## 0.58.3
+
+### Patch Changes
+
+- Updated dependencies [[`a93d7e5`](https://github.com/TanStack/cli/commit/a93d7e5d43bc1db37f2251bf88de7681c9a7387d)]:
+  - @tanstack/create@0.59.3
+  - @tanstack/cli@0.58.3
+
+## 0.58.2
+
+### Patch Changes
+
+- Updated dependencies [[`2f3c4d7`](https://github.com/TanStack/cli/commit/2f3c4d79b1ecdf8b8404d23e7b25bfbbbf77f48f)]:
+  - @tanstack/create@0.59.2
+  - @tanstack/cli@0.58.2
+
+## 0.58.1
+
+### Patch Changes
+
+- Updated dependencies [[`0f2744e`](https://github.com/TanStack/cli/commit/0f2744ea4675dbc61ff14ebbe57f77438606b26b)]:
+  - @tanstack/create@0.59.1
+  - @tanstack/cli@0.58.1
+
 ## 0.58.0
 
 ### Minor Changes

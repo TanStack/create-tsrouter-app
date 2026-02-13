@@ -9,4 +9,5 @@ dist-ssr
 .wrangler
 .output
 .vinxi
+__unconfig*
 count.txt

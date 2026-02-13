@@ -44,6 +44,12 @@ describe('toCleanPath', () => {
       toCleanPath('C:\\Projects\\my-app\\src\\file.ts', 'C:/Projects/my-app'),
     ).toBe('src/file.ts')
   })
+
+  it('should handle missing drive letter in path against Windows base', () => {
+    expect(
+      toCleanPath('/Users/me/my-app/src/file.ts', 'C:\\Users\\me\\my-app'),
+    ).toBe('src/file.ts')
+  })
 })
 
 describe('relativePath', () => {

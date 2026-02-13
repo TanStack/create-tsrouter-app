@@ -297,6 +297,43 @@ describe('writeFiles', () => {
     environment.finishRun()
     expect(output.deletedFiles).toEqual(['bloop.txt'])
   })
+
+  it('should normalize windows-style output paths before writing', async () => {
+    const writePaths: Array<string> = []
+    const environment = {
+      readdir: async () => [],
+      isDirectory: () => false,
+      readFile: async () => '',
+      exists: () => false,
+      deleteFile: async () => {},
+      writeFileBase64: async () => {},
+      writeFile: async (path: string) => {
+        writePaths.push(path)
+      },
+      startStep: () => {},
+      finishStep: () => {},
+      warn: () => {},
+      confirm: async () => true,
+    } as any
+
+    await writeFiles(
+      environment,
+      'C:\\Users\\marv\\workspace\\fenbi-tanstack',
+      {
+        files: {
+          'Users/marv/workspace/fenbi-tanstack/src/components.json': '{}',
+        },
+        deletedFiles: [],
+      },
+      true,
+    )
+
+    expect(writePaths).toHaveLength(1)
+    expect(writePaths[0]).toMatch(/components\.json$/)
+    expect(writePaths[0]).not.toMatch(
+      /Users[\\/]marv[\\/]workspace[\\/]fenbi-tanstack[\\/]Users[\\/]marv[\\/]workspace[\\/]fenbi-tanstack/,
+    )
+  })
 })
 
 describe('runNewCommands', () => {
