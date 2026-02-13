@@ -1,5 +1,11 @@
 # @tanstack/create
 
+## 0.61.1
+
+### Patch Changes
+
+- add missing .js extensions to ESM imports ([#369](https://github.com/TanStack/cli/pull/369))
+
 ## 0.61.0
 
 ### Minor Changes
