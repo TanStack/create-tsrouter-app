@@ -7,7 +7,6 @@
     "@tanstack/ai-ollama": "latest",
     "@tanstack/ai-openai": "latest",
     "@tanstack/ai-react": "latest",
-    "@tanstack/react-ai-devtools": "latest",
     "highlight.js": "^11.11.1",
     "streamdown": "^1.6.5",
     "lucide-react": "^0.544.0",
