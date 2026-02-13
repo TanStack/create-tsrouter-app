@@ -1,5 +1,15 @@
 # @tanstack/cli
 
+## 0.59.1
+
+### Patch Changes
+
+- Prevent add-on multiselect options from rendering with pagination markers by showing the full list, which avoids a Clack navigation glitch that could duplicate the second-to-last entry while moving between the bottom options. ([`e384620`](https://github.com/TanStack/cli/commit/e384620ff642be8d4fe78726f0cbe087b9b10556))
+
+- Updated dependencies [[`ab740ed`](https://github.com/TanStack/cli/commit/ab740ed2c5510a3266065aa98c8afe3093ea0034)]:
+  - @tanstack/create@0.60.1
+  - @tanstack/create-ui@0.59.1
+
 ## 0.59.0
 
 ### Minor Changes
