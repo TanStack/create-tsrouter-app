@@ -136,6 +136,9 @@ export async function normalizeOptions(
       ])
       if (cliOptions.addOns && Array.isArray(cliOptions.addOns)) {
         for (const a of cliOptions.addOns) {
+          if (a.toLowerCase() === 'start') {
+            continue
+          }
           selectedAddOns.add(a)
         }
       }

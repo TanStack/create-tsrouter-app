@@ -218,6 +218,35 @@ describe('normalizeOptions', () => {
     expect(options?.typescript).toBe(true)
   })
 
+  it('should ignore legacy start add-on id from exported commands', async () => {
+    __testRegisterFramework({
+      id: 'react-cra',
+      name: 'react',
+      getAddOns: () => [
+        {
+          id: 'tanstack-query',
+          name: 'TanStack Query',
+          modes: ['file-router'],
+        },
+        {
+          id: 'nitro',
+          name: 'nitro',
+          modes: ['file-router'],
+          default: true,
+        },
+      ],
+    })
+
+    const options = await normalizeOptions({
+      projectName: 'test',
+      addOns: ['start', 'tanstack-query'],
+      framework: 'react-cra',
+    })
+
+    expect(options?.chosenAddOns.map((a) => a.id)).toContain('tanstack-query')
+    expect(options?.chosenAddOns.map((a) => a.id)).not.toContain('start')
+  })
+
   it('should handle toolchain as an addon', async () => {
     __testRegisterFramework({
       id: 'react-cra',
