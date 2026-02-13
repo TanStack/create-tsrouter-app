@@ -4,6 +4,7 @@ import { basename, extname, resolve } from 'node:path'
 import parseGitignore from 'parse-gitignore'
 import ignore from 'ignore'
 
+import { hasDrive, stripDrive } from './utils'
 import type { Environment } from './types'
 
 const BINARY_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico']
@@ -43,7 +44,17 @@ export function toCleanPath(absolutePath: string, baseDir: string): string {
   // Normalize both paths to use forward slashes for consistent comparison
   const normalizedPath = absolutePath.replace(/\\/g, '/')
   const normalizedBase = baseDir.replace(/\\/g, '/')
-  let cleanPath = normalizedPath.replace(normalizedBase, '')
+  let cleanPath = normalizedPath
+  if (normalizedPath.startsWith(normalizedBase)) {
+    cleanPath = normalizedPath.slice(normalizedBase.length)
+  } else if (hasDrive(normalizedPath) !== hasDrive(normalizedBase)) {
+    // Handle paths that are missing the Windows drive letter (e.g. memfs on Windows)
+    const pathNoDrive = stripDrive(normalizedPath)
+    const baseNoDrive = stripDrive(normalizedBase)
+    if (pathNoDrive.startsWith(baseNoDrive)) {
+      cleanPath = pathNoDrive.slice(baseNoDrive.length)
+    }
+  }
   // Handle leading path separator
   if (cleanPath.startsWith('/')) {
     cleanPath = cleanPath.slice(1)
