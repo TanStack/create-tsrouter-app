@@ -280,7 +280,7 @@ export function cli({
       )!.id
 
       let finalOptions: Options | undefined
-      if (cliOptions.interactive) {
+      if (cliOptions.interactive || cliOptions.addOns === true) {
         cliOptions.addOns = true
       } else {
         finalOptions = await normalizeOptions(
