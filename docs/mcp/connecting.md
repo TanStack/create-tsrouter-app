@@ -30,6 +30,23 @@ Restart Claude Desktop after editing.
 claude mcp add tanstack -- npx @tanstack/cli mcp
 ```
 
+## OpenCode
+
+Add to your [OpenCode JSON config file](https://opencode.ai/docs/config/):
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "tanstack": {
+      "type": "local",
+      "command": ["npx", "@tanstack/cli", "mcp"],
+      "enabled": true
+    }
+  }
+}
+```
+
 ## Cursor
 
 Add to your Cursor MCP config:

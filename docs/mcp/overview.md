@@ -40,7 +40,7 @@ Add to your [OpenCode JSON config file](https://opencode.ai/docs/config/):
 	"$schema": "https://opencode.ai/config.json",
 	"mcp": {
       "tanstack": {
-        "type": "remote",
+        "type": "local",
         "command": ["npx", "@tanstack/cli", "mcp"],
         "enabled": true
       },
