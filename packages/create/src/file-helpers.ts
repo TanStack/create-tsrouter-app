@@ -4,8 +4,8 @@ import { basename, extname, resolve } from 'node:path'
 import parseGitignore from 'parse-gitignore'
 import ignore from 'ignore'
 
-import { hasDrive, stripDrive } from './utils'
-import type { Environment } from './types'
+import { hasDrive, stripDrive } from './utils.js'
+import type { Environment } from './types.js'
 
 const BINARY_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico']
 
@@ -232,10 +232,10 @@ const PROJECT_FILES = ['package.json']
 export function createIgnore(path: string, includeProjectFiles = true) {
   const ignoreList = existsSync(resolve(path, '.gitignore'))
     ? (
-        parseGitignore(
-          readFileSync(resolve(path, '.gitignore')),
-        ) as unknown as { patterns: Array<string> }
-      ).patterns
+      parseGitignore(
+        readFileSync(resolve(path, '.gitignore')),
+      ) as unknown as { patterns: Array<string> }
+    ).patterns
     : []
   const ig = ignore().add(ignoreList)
   return (filePath: string) => {
