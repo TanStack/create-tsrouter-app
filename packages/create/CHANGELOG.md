@@ -1,5 +1,11 @@
 # @tanstack/create
 
+## 0.61.0
+
+### Minor Changes
+
+- Add PostHog add-on ([#317](https://github.com/TanStack/cli/pull/317))
+
 ## 0.60.1
 
 ### Patch Changes
