@@ -1,14 +1,19 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 <% if (addOnEnabled['tanstack-query']) { %>
+import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { getContext } from './integrations/tanstack-query/root-provider'
 <% } %>
 
 export function getRouter() {
+<% if (addOnEnabled['tanstack-query']) { %>
+  const { queryClient, ...rest } = getContext()
+<% } %>
+
   const router = createTanStackRouter({
     routeTree,
 <% if (addOnEnabled['tanstack-query']) { %>
-    context: getContext(),
+    context: { queryClient, ...rest },
 <% } else if (addOnEnabled['apollo-client']) { %>
     context: {} as any,
 <% } %>
@@ -16,6 +21,13 @@ export function getRouter() {
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
   })
+
+<% if (addOnEnabled['tanstack-query']) { %>
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+  })
+<% } %>
 
   return router
 }

@@ -1,10 +1,12 @@
 <% if (addOnEnabled.tRPC) { %>
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import superjson from "superjson";
 import { createTRPCClient, httpBatchStreamLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 
 import type { TRPCRouter } from "@/integrations/trpc/router";
+
+import { TRPCProvider } from "@/integrations/trpc/react";
 
 function getUrl() {
   const base = (() => {
@@ -40,6 +42,19 @@ export function getContext() {
     trpc: serverHelpers,
   };
 }
+
+export default function Provider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const queryClient = useQueryClient();
+  return (
+    <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+      {children}
+    </TRPCProvider>
+  );
+}
 <% } else { %>
 import { QueryClient } from '@tanstack/react-query'
 
@@ -48,5 +63,13 @@ export function getContext() {
   return {
     queryClient,
   };
+}
+
+export default function Provider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return children;
 }
 <% } %>
