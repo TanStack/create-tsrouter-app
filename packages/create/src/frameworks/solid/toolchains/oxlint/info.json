@@ -1,0 +1,12 @@
+{
+  "name": "Oxlint",
+  "description": "Oxlint + Oxfmt toolchain support.",
+  "phase": "setup",
+  "type": "toolchain",
+  "category": "tooling",
+  "exclusive": ["linter"],
+  "color": "#32f3e9",
+  "priority": 3,
+  "modes": ["code-router", "file-router"],
+  "link": "https://oxc.rs/"
+}
